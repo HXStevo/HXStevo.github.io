@@ -112,6 +112,18 @@
             margin-bottom: 1rem;
         }
         .philosophy p:last-child { margin-bottom: 0; }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+        }
+        .gallery img {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            aspect-ratio: 4/3;
+        }
         .back-link {
             display: inline-block;
             margin-top: 2rem;
@@ -200,11 +212,27 @@
 
         <h2 class="section-title">Past Rides</h2>
         <div class="bike-card">
-            <h2>Yamaha YZF-R1</h2>
-            <p class="bike-type">Superbike</p>
-            <img src="r1.jpg" alt="Yamaha R1" style="width:100%;border-radius:12px;margin-bottom:1.2rem;">
+            <h2>Yamaha YZF-R1 (Black &amp; Gold)</h2>
+            <p class="bike-type">Superbike — Track Prepped</p>
+            <div class="gallery">
+                <img src="r1-black-gold.jpg" alt="R1 Black and Gold side profile">
+                <img src="r1.jpg" alt="R1 Black and Gold rear">
+                <img src="r1-track-stevo.jpg" alt="Stevo on the R1 at a track day">
+            </div>
             <p>
-                The R1 that started it all. Pirelli Diablos, Motul on the swingarm, and that crossplane crank growl. A proper weapon in black and orange livery — the bike that got the addiction going.
+                The black and gold R1 — fully track-prepped with Öhlins suspension, Motul on the swingarm, and gold wheels that meant business. This thing lived on paddock stands more than it did on the road. A proper trackday weapon.
+            </p>
+        </div>
+
+        <div class="bike-card">
+            <h2>Yamaha YZF-R1 (Santander Livery)</h2>
+            <p class="bike-type">Superbike — Race Replica</p>
+            <div class="gallery">
+                <img src="r1-santander-350z.jpg" alt="R1 Santander livery with 350Z">
+                <img src="r1-meetup.jpg" alt="R1 Santander at fuel stop with mates">
+            </div>
+            <p>
+                The red Santander race livery R1 — loud, proud, and impossible to miss. Yamaha Racing stickers, Dainese leathers, fuel stops with mates, and that unmistakable crossplane crank rumble echoing off petrol station canopies. This was the one for the group rides.
             </p>
         </div>
 
