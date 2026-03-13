@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatwick Airport Hotels — Compare & Book | Steven Hill</title>
+    <meta name="description" content="Compare 10 Gatwick Airport hotels from £40/night. On-airport and off-airport options with detailed reviews, prices, and instant booking via Holiday Extras.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Hotels page-specific styles */
+        .hero-hotels { padding: 3.5rem 2rem 3rem; }
+        .hero-hotels .subtitle { color: rgba(255,255,255,0.75); font-size: 1.1rem; margin-top: 0.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        /* Booking form */
+        .booking-form-wrap { background: var(--yellow); border-radius: 16px; padding: 2rem; margin: 2rem 0; }
+        .booking-form-wrap h3 { color: var(--purple); margin-bottom: 1rem; font-size: 1.2rem; }
+        .booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .booking-grid label { font-size: 0.85rem; font-weight: 600; color: var(--purple); display: block; margin-bottom: 0.3rem; }
+        .booking-grid input, .booking-grid select { width: 100%; padding: 0.6rem 0.8rem; border: 2px solid var(--purple); border-radius: 8px; font-size: 0.95rem; background: var(--white); }
+        .booking-grid input:focus, .booking-grid select:focus { outline: none; border-color: var(--purple-dark); box-shadow: 0 0 0 3px rgba(92,45,145,0.15); }
+        .btn-search { grid-column: 1 / -1; background: var(--purple); color: var(--white); border: none; padding: 0.9rem 2rem; border-radius: 8px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+        .btn-search:hover { background: var(--purple-dark); }
+
+        /* Hotel cards */
+        .hotel-card { background: var(--white); border: 1px solid var(--mid-grey); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; transition: all 0.3s; }
+        .hotel-card:hover { border-color: var(--purple); box-shadow: 0 4px 20px rgba(92,45,145,0.1); transform: translateY(-2px); }
+        .hotel-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+        .hotel-header h3 { font-size: 1.3rem; color: var(--purple); margin: 0; }
+        .hotel-stars { color: var(--yellow); font-size: 1.1rem; letter-spacing: 2px; }
+        .hotel-meta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .hotel-tag { display: inline-block; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+        .tag-terminal-south { background: #fce4ec; color: #c62828; }
+        .tag-terminal-north { background: #e3f2fd; color: #1565c0; }
+        .tag-on-airport { background: #e8f5e9; color: #2e7d32; }
+        .tag-off-airport { background: #fff3e0; color: #e65100; }
+        .tag-airside { background: #f3e5f5; color: #6a1b9a; }
+        .hotel-body p { color: var(--text-light); line-height: 1.75; margin-bottom: 0.75rem; font-size: 0.95rem; }
+        .hotel-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--mid-grey); }
+        .hotel-price { font-size: 1.4rem; font-weight: 800; color: var(--purple); }
+        .hotel-price small { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); }
+        .hotel-rating { display: flex; align-items: center; gap: 0.4rem; }
+        .rating-badge { background: var(--purple); color: var(--white); padding: 0.3rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.9rem; }
+        .rating-text { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Comparison table */
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; border-radius: 12px; border: 1px solid var(--mid-grey); }
+        .compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 900px; }
+        .compare-table th { background: var(--purple); color: var(--white); padding: 0.8rem 0.6rem; text-align: left; font-weight: 600; font-size: 0.8rem; white-space: nowrap; }
+        .compare-table td { padding: 0.7rem 0.6rem; border-bottom: 1px solid var(--mid-grey); }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .compare-table tr:hover td { background: #f8f4ff; }
+        .compare-table .hotel-name { font-weight: 600; color: var(--purple); white-space: nowrap; }
+
+        /* Reviews */
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+        .review-card { background: var(--light-grey); border-radius: 12px; padding: 1.5rem; }
+        .review-stars { color: var(--yellow); font-size: 1rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
+        .review-text { color: var(--text-light); font-size: 0.9rem; line-height: 1.7; font-style: italic; margin-bottom: 0.75rem; }
+        .review-author { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+
+        /* Departures */
+        .departures-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .filter-btn { padding: 0.4rem 1rem; border-radius: 20px; border: 2px solid var(--mid-grey); background: var(--white); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .filter-btn:hover, .filter-btn.active { background: var(--purple); color: var(--white); border-color: var(--purple); }
+        .dep-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--mid-grey); }
+        .dep-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        .dep-table th { background: var(--purple); color: var(--white); padding: 0.7rem 0.8rem; text-align: left; font-weight: 600; }
+        .dep-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--mid-grey); }
+        .dep-table tr:last-child td { border-bottom: none; }
+        .dep-table tr:hover td { background: #f8f4ff; }
+        .terminal-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.75rem; font-weight: 700; }
+        .terminal-north { background: #e3f2fd; color: #1565c0; }
+        .terminal-south { background: #fce4ec; color: #c62828; }
+
+        /* FAQ */
+        .faq-item { border-bottom: 1px solid var(--mid-grey); }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question { width: 100%; text-align: left; background: none; border: none; padding: 1.2rem 0; font-size: 1rem; font-weight: 600; color: var(--purple); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question:hover { color: var(--purple-dark); }
+        .faq-question::after { content: '+'; font-size: 1.5rem; font-weight: 300; transition: transform 0.2s; }
+        .faq-item.open .faq-question::after { content: '−'; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-answer-inner { padding: 0 0 1.2rem; color: var(--text-light); line-height: 1.75; font-size: 0.95rem; }
+        .faq-item.open .faq-answer { max-height: 500px; }
+
+        /* Intro content */
+        .intro-content { line-height: 1.8; color: var(--text-light); }
+        .intro-content p { margin-bottom: 1rem; }
+        .intro-content strong { color: var(--text); }
+
+        @media (max-width: 600px) {
+            .booking-grid { grid-template-columns: 1fr; }
+            .hotel-header { flex-direction: column; }
+            .hotel-footer { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+
+    <!-- Schema: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://stevenhill.co.uk/" },
+            { "@type": "ListItem", "position": 2, "name": "Gatwick Airport Hotels", "item": "https://stevenhill.co.uk/gatwick-hotels.html" }
+        ]
+    }
+    </script>
+
+    <!-- Schema: Hotels -->
+    <script type="application/ld+json">
+    [
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Sofitel London Gatwick",
+            "starRating": { "@type": "Rating", "ratingValue": "5" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Gatwick Airport", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.3", "bestRating": "5", "reviewCount": "2840" },
+            "priceRange": "£150+",
+            "numberOfRooms": 518,
+            "amenityFeature": [
+                { "@type": "LocationFeatureSpecification", "name": "Spa", "value": true },
+                { "@type": "LocationFeatureSpecification", "name": "Restaurant", "value": true },
+                { "@type": "LocationFeatureSpecification", "name": "Gym", "value": true }
+            ]
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Hilton London Gatwick Airport",
+            "starRating": { "@type": "Rating", "ratingValue": "4" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Gatwick Airport", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.0", "bestRating": "5", "reviewCount": "3620" },
+            "priceRange": "£120+",
+            "numberOfRooms": 821,
+            "amenityFeature": [
+                { "@type": "LocationFeatureSpecification", "name": "Pool", "value": true },
+                { "@type": "LocationFeatureSpecification", "name": "Restaurant", "value": true },
+                { "@type": "LocationFeatureSpecification", "name": "Gym", "value": true }
+            ]
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "BLOC Hotel Gatwick",
+            "starRating": { "@type": "Rating", "ratingValue": "3" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Gatwick Airport South Terminal", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.1", "bestRating": "5", "reviewCount": "1450" },
+            "priceRange": "£80+",
+            "numberOfRooms": 245
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Hampton by Hilton London Gatwick Airport",
+            "starRating": { "@type": "Rating", "ratingValue": "3" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Gatwick Airport North Terminal", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.2", "bestRating": "5", "reviewCount": "2100" },
+            "priceRange": "£95+",
+            "numberOfRooms": 168
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Yotel Gatwick Airport",
+            "starRating": { "@type": "Rating", "ratingValue": "2" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Gatwick Airport South Terminal", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "3.8", "bestRating": "5", "reviewCount": "1850" },
+            "priceRange": "£50+"
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Courtyard by Marriott London Gatwick Airport",
+            "starRating": { "@type": "Rating", "ratingValue": "4" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Crawley", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.2", "bestRating": "5", "reviewCount": "1980" },
+            "priceRange": "£90+"
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Premier Inn London Gatwick Airport Manor Royal",
+            "starRating": { "@type": "Rating", "ratingValue": "3" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Crawley", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.0", "bestRating": "5", "reviewCount": "2450" },
+            "priceRange": "£55+"
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Travelodge London Gatwick Airport Central",
+            "starRating": { "@type": "Rating", "ratingValue": "2" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Crawley", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "3.5", "bestRating": "5", "reviewCount": "1620" },
+            "priceRange": "£40+"
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Arora Hotel Gatwick/Crawley",
+            "starRating": { "@type": "Rating", "ratingValue": "4" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Crawley", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.1", "bestRating": "5", "reviewCount": "1740" },
+            "priceRange": "£85+",
+            "amenityFeature": [
+                { "@type": "LocationFeatureSpecification", "name": "Pool", "value": true },
+                { "@type": "LocationFeatureSpecification", "name": "Spa", "value": true }
+            ]
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "Gatwick Worth Hotel",
+            "starRating": { "@type": "Rating", "ratingValue": "3" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Crawley", "addressRegion": "West Sussex", "addressCountry": "GB" },
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "3.9", "bestRating": "5", "reviewCount": "920" },
+            "priceRange": "£70+"
+        }
+    ]
+    </script>
+
+    <!-- Schema: FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Which Gatwick airport hotels are directly connected to the terminal?",
+                "acceptedAnswer": { "@type": "Answer", "text": "The Sofitel London Gatwick and Hilton London Gatwick are both connected to South Terminal via covered walkways. BLOC Hotel and Yotel are actually inside South Terminal airside. Hampton by Hilton is connected to North Terminal." }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I book a day room at Gatwick airport hotels?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Yes. Yotel specialises in day rooms with pods bookable by the hour. The Sofitel, Hilton, and BLOC also offer day-use rooms, typically from around £50 for a few hours. Perfect for long layovers." }
+            },
+            {
+                "@type": "Question",
+                "name": "Do Gatwick airport hotels include parking?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Most on-airport hotels offer hotel-and-parking packages. The Sofitel and Hilton have their own car parks. Off-airport hotels often include free parking for the duration of your stay when booked as a package through Holiday Extras." }
+            },
+            {
+                "@type": "Question",
+                "name": "Which is the cheapest hotel near Gatwick Airport?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Travelodge London Gatwick Airport Central typically offers the lowest rates, starting from around £40 per night. Yotel pods are also budget-friendly from £50, and Premier Inn Manor Royal starts around £55." }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I get from off-airport hotels to Gatwick terminals?",
+                "acceptedAnswer": { "@type": "Answer", "text": "All off-airport hotels listed here provide free shuttle bus transfers to both North and South terminals. Journey time is typically 5-15 minutes. Shuttles run regularly, usually every 15-30 minutes." }
+            },
+            {
+                "@type": "Question",
+                "name": "Which Gatwick hotel has a swimming pool?",
+                "acceptedAnswer": { "@type": "Answer", "text": "The Hilton London Gatwick has an indoor swimming pool, gym, and sauna. The Arora Hotel Gatwick also features a pool and spa facilities. Both are great options for families or anyone wanting to relax before a flight." }
+            },
+            {
+                "@type": "Question",
+                "name": "Are Gatwick airport hotels suitable for families?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. The Hilton is a popular family choice with its pool and family rooms. Hampton by Hilton offers free breakfast including kids' options. Premier Inn has family rooms at budget prices. Most hotels offer cots and extra beds on request." }
+            },
+            {
+                "@type": "Question",
+                "name": "What time is check-in at Gatwick airport hotels?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Standard check-in is typically 3pm, with check-out at 11am-12pm. However, most hotels offer early check-in from 2pm subject to availability, and Yotel offers flexible check-in times with their pod bookings." }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I stay at BLOC or Yotel without flying?",
+                "acceptedAnswer": { "@type": "Answer", "text": "BLOC Hotel is airside (past security), so you need a valid boarding pass. Yotel has cabins both landside and airside at South Terminal — landside cabins are available to anyone, airside requires a boarding pass." }
+            },
+            {
+                "@type": "Question",
+                "name": "Which terminal is best for hotel access at Gatwick?",
+                "acceptedAnswer": { "@type": "Answer", "text": "South Terminal has the most hotel options: Sofitel, Hilton, BLOC, and Yotel are all connected or inside. North Terminal has Hampton by Hilton. A free shuttle train connects both terminals in about 3 minutes." }
+            },
+            {
+                "@type": "Question",
+                "name": "Is it worth staying at an on-airport hotel vs off-airport?",
+                "acceptedAnswer": { "@type": "Answer", "text": "On-airport hotels offer maximum convenience — walk to check-in within minutes. Off-airport hotels are typically 30-50% cheaper and still provide free shuttles. For early morning flights, on-airport is worth the premium. For evening arrivals or budget travel, off-airport delivers better value." }
+            },
+            {
+                "@type": "Question",
+                "name": "Do Gatwick hotels offer airport transfer services?",
+                "acceptedAnswer": { "@type": "Answer", "text": "On-airport hotels don't need transfers — you walk. Off-airport hotels all provide complimentary shuttle buses running every 15-30 minutes. Some also offer private taxi transfers on request. Holiday Extras packages include shuttle details in your booking confirmation." }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/bikes.html">🏍️ The Garage</a>
+            <a href="/parking.html">🅿️ Ride & Fly</a>
+            <a href="/insurance.html">🛡️ Insurance</a>
+            <a href="/gatwick-hotels.html" class="active">🏨 Hotels</a>
+        </div>
+    </nav>
+
+    <div class="hero hero-hotels">
+        <h1>🏨 Gatwick Airport Hotels</h1>
+        <p class="subtitle">Compare 10 hotels from £40/night. On-airport luxury to budget pods — every option covered.</p>
+    </div>
+
+    <div class="banner">Book hotel + parking packages and save up to 60% vs gate prices 💰</div>
+
+    <div class="container">
+
+        <!-- Intro Content -->
+        <div class="intro-content">
+            <h2 class="section-title">Finding the Right Gatwick Hotel</h2>
+            <p><strong>Flying from Gatwick? A pre-flight hotel stay removes the stress entirely.</strong> No 3am alarm. No M25 anxiety. Just a good night's sleep and a short walk (or shuttle) to check-in. Whether you're after five-star luxury or a budget pod, there's a Gatwick hotel for every traveller and every budget.</p>
+
+            <p>The big decision is <strong>on-airport vs off-airport</strong>. On-airport hotels sit within or directly connected to the terminals. You're talking a 2-minute walk to departures. The trade-off? Higher prices — typically £80-£150+ per night. But for early morning flights or late arrivals, that convenience is hard to beat.</p>
+
+            <p>Off-airport hotels are located in nearby Crawley or along the Manor Royal business district, usually 5-15 minutes by free shuttle bus. Rates start from just £40/night, and many include parking for the duration of your trip. If you're budget-conscious or don't mind a short transfer, these deliver serious value.</p>
+
+            <p><strong>Here's what to consider:</strong> Flight time (early = on-airport), budget (off-airport saves 30-50%), terminal (South has more options), and extras like pools, parking, or family rooms. We've reviewed all 10 options below so you can make the right call.</p>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-form-wrap">
+            <h3>🔍 Search Gatwick Hotels</h3>
+            <form id="hotelSearchForm" class="booking-grid" onsubmit="searchHotels(event)">
+                <div>
+                    <label for="checkin">Check-in Date</label>
+                    <input type="date" id="checkin" required>
+                </div>
+                <div>
+                    <label for="checkinTime">Check-in Time</label>
+                    <select id="checkinTime">
+                        <option value="1200">12:00</option>
+                        <option value="1300">13:00</option>
+                        <option value="1400" selected>14:00</option>
+                        <option value="1500">15:00</option>
+                        <option value="1600">16:00</option>
+                        <option value="1700">17:00</option>
+                        <option value="1800">18:00</option>
+                        <option value="1900">19:00</option>
+                        <option value="2000">20:00</option>
+                        <option value="2100">21:00</option>
+                        <option value="2200">22:00</option>
+                        <option value="2300">23:00</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="checkout">Check-out Date</label>
+                    <input type="date" id="checkout" required>
+                </div>
+                <div>
+                    <label for="checkoutTime">Check-out Time</label>
+                    <select id="checkoutTime">
+                        <option value="0400">04:00</option>
+                        <option value="0500">05:00</option>
+                        <option value="0600">06:00</option>
+                        <option value="0700">07:00</option>
+                        <option value="0800" selected>08:00</option>
+                        <option value="0900">09:00</option>
+                        <option value="1000">10:00</option>
+                        <option value="1100">11:00</option>
+                        <option value="1200">12:00</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-search">Search Hotels →</button>
+            </form>
+        </div>
+
+        <!-- On-Airport Hotels -->
+        <h2 class="section-title">On-Airport Hotels</h2>
+        <p style="color:var(--text-light); margin-bottom:1.5rem;">Walk to the terminal. No shuttle. No stress. These hotels are directly connected to (or inside) Gatwick's terminals.</p>
+
+        <!-- Sofitel -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Sofitel London Gatwick</h3>
+                    <div class="hotel-stars">★★★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-terminal-south">South Terminal</span>
+                <span class="hotel-tag tag-on-airport">On-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>The only 5-star hotel at Gatwick, and it shows. The Sofitel is connected directly to South Terminal via a covered walkway — you're at check-in within 2 minutes. With 518 rooms, a full-service spa, and three restaurants, this is premium pre-flight living.</p>
+                <p>Rooms are soundproofed (essential at an airport), with luxury bedding, rainfall showers, and Hermès toiletries. The La Terrasse restaurant serves excellent French-Mediterranean cuisine, while the cocktail bar is perfect for a pre-holiday drink. Business travellers love the executive lounge.</p>
+                <p><strong>Best for:</strong> Business travellers, couples, anyone wanting a luxury start to their trip. The spa alone is worth arriving early for.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£150 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.3</span>
+                    <span class="rating-text">/ 5 · 518 rooms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hilton -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Hilton London Gatwick Airport</h3>
+                    <div class="hotel-stars">★★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-terminal-south">South Terminal</span>
+                <span class="hotel-tag tag-on-airport">On-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>Gatwick's largest hotel with 821 rooms, the Hilton is connected to South Terminal by a covered walkway. It's the go-to for families thanks to its indoor swimming pool, kids' menu, and spacious family rooms. The Amy's Bar & Kitchen serves comfort food that actually delivers.</p>
+                <p>Rooms are modern Hilton standard — clean, reliable, well-equipped. Executive rooms add lounge access with complimentary drinks and snacks. The gym and sauna round out the leisure offering. Underground car park available for hotel-and-parking packages.</p>
+                <p><strong>Best for:</strong> Families, group travellers, anyone wanting the pool. The hotel-and-parking packages are some of the best value at Gatwick.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£120 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.0</span>
+                    <span class="rating-text">/ 5 · 821 rooms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BLOC -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>BLOC Hotel Gatwick</h3>
+                    <div class="hotel-stars">★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-terminal-south">South Terminal</span>
+                <span class="hotel-tag tag-on-airport">On-Airport</span>
+                <span class="hotel-tag tag-airside">Airside</span>
+            </div>
+            <div class="hotel-body">
+                <p>This is unique. BLOC sits <strong>inside</strong> South Terminal, past security. Check in to your room, sleep, wake up, and you're already airside — walk straight to your gate. No queues. No stress. It's the ultimate convenience play.</p>
+                <p>Rooms are compact but smart. Think pod-hotel-meets-boutique: mood lighting controlled by a bedside tablet, powerful rain showers, blackout blinds, and surprisingly comfortable beds. No restaurant, but you've got the terminal's food options right outside.</p>
+                <p><strong>Best for:</strong> Solo travellers, early flights, transit passengers. You need a valid boarding pass to access the hotel — remember, it's airside.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£80 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.1</span>
+                    <span class="rating-text">/ 5 · 245 rooms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hampton by Hilton -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Hampton by Hilton London Gatwick Airport</h3>
+                    <div class="hotel-stars">★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-terminal-north">North Terminal</span>
+                <span class="hotel-tag tag-on-airport">On-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>North Terminal's only on-airport hotel. Connected via a covered walkway, the Hampton delivers Hilton quality at a mid-range price. The big draw? <strong>Free hot breakfast</strong> included with every booking. That alone saves £10-15 per person.</p>
+                <p>Rooms are modern, clean, and functional. Not flashy, but everything works. King and twin rooms available, plus accessible options. Free WiFi, a small gym, and a 24-hour snack area. The location is unbeatable for North Terminal flyers.</p>
+                <p><strong>Best for:</strong> North Terminal passengers, budget-conscious travellers who still want on-airport convenience, families who appreciate free breakfast.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£95 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.2</span>
+                    <span class="rating-text">/ 5 · 168 rooms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yotel -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Yotel Gatwick</h3>
+                    <div class="hotel-stars">★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-terminal-south">South Terminal</span>
+                <span class="hotel-tag tag-on-airport">On-Airport</span>
+                <span class="hotel-tag tag-airside">Airside</span>
+            </div>
+            <div class="hotel-body">
+                <p>Not a hotel in the traditional sense — Yotel offers compact pods (or "cabins") inside South Terminal. Available both landside and airside, bookable by the hour or overnight. It's the cheapest on-airport sleep at Gatwick.</p>
+                <p>Cabins are tiny but clever. A fold-down bed, ensuite shower, TV, WiFi, and adjustable mood lighting. The monster power shower is genuinely impressive for the space. Self check-in kiosks mean zero waiting. Landside cabins don't need a boarding pass.</p>
+                <p><strong>Best for:</strong> Budget travellers, layover naps, early flights where you just need a few hours. Hourly rates start from around £30 for a 4-hour block.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£50 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">3.8</span>
+                    <span class="rating-text">/ 5 · Pods</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Off-Airport Hotels -->
+        <h2 class="section-title">Off-Airport Hotels</h2>
+        <p style="color:var(--text-light); margin-bottom:1.5rem;">Lower prices, free shuttle buses, and often free parking included. A 5-15 minute transfer to the terminal — great value for money.</p>
+
+        <!-- Courtyard by Marriott -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Courtyard by Marriott London Gatwick</h3>
+                    <div class="hotel-stars">★★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-off-airport">Off-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>The best off-airport option if you want Marriott reliability without the premium price. Located on the Manor Royal business estate, it's a 10-minute shuttle ride to both terminals. Modern rooms with Marriott's signature bedding — consistently comfortable.</p>
+                <p>The Bistro restaurant serves decent international food, and the bar is well-stocked. Free parking available when booked as a hotel-and-parking package. The lobby has a relaxed coworking vibe that suits business travellers. Shuttle runs every 20 minutes.</p>
+                <p><strong>Best for:</strong> Business travellers, Marriott loyalists, anyone wanting 4-star quality at off-airport prices.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£90 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.2</span>
+                    <span class="rating-text">/ 5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premier Inn -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Premier Inn London Gatwick Airport (Manor Royal)</h3>
+                    <div class="hotel-stars">★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-off-airport">Off-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>You know what you're getting with Premier Inn. Clean rooms, the famous Hypnos beds, and a hot breakfast next door at the Beefeater restaurant. It's reliable, consistent, and won't break the bank. The shuttle to both terminals runs every 20 minutes.</p>
+                <p>Family rooms sleep two adults and two kids. Parking packages available. The rooms are a decent size, WiFi is free, and the blackout curtains actually work. It's not glamorous, but it does the job brilliantly.</p>
+                <p><strong>Best for:</strong> Families on a budget, anyone who values reliability over frills, Premier Inn regulars.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£55 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.0</span>
+                    <span class="rating-text">/ 5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Travelodge -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Travelodge London Gatwick Airport Central</h3>
+                    <div class="hotel-stars">★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-off-airport">Off-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>The cheapest option near Gatwick. From £40 a night, you get a clean room, a comfortable bed, and a shuttle to the airport. That's it. And honestly? For a pre-flight sleep, that's all you need.</p>
+                <p>Rooms are basic but functional. King-size beds in every room, power shower, TV, and free WiFi. Breakfast isn't included but can be added for around £9. The café next door is a cheaper alternative. Shuttle service to both terminals.</p>
+                <p><strong>Best for:</strong> Budget travellers who just need a bed, solo travellers, anyone who'd rather spend money at the destination.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£40 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">3.5</span>
+                    <span class="rating-text">/ 5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arora -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Arora Hotel Gatwick/Crawley</h3>
+                    <div class="hotel-stars">★★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-off-airport">Off-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>A hidden gem. The Arora offers genuine 4-star facilities at off-airport prices — including an indoor pool, spa, and well-equipped gym. That's a combination you won't find at this price point anywhere else near Gatwick.</p>
+                <p>Rooms are spacious and well-appointed. The restaurant serves solid British and international cuisine, and the bar has a decent cocktail menu. Free shuttle to both terminals every 15-20 minutes. Parking packages available for the duration of your trip.</p>
+                <p><strong>Best for:</strong> Families wanting a pool, couples wanting spa time before a flight, anyone wanting 4-star at 3-star prices.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£85 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">4.1</span>
+                    <span class="rating-text">/ 5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gatwick Worth -->
+        <div class="hotel-card">
+            <div class="hotel-header">
+                <div>
+                    <h3>Gatwick Worth Hotel</h3>
+                    <div class="hotel-stars">★★★</div>
+                </div>
+            </div>
+            <div class="hotel-meta">
+                <span class="hotel-tag tag-off-airport">Off-Airport</span>
+            </div>
+            <div class="hotel-body">
+                <p>Character over convenience. The Worth Hotel is a charming period building set in its own grounds — a world away from the usual airport hotel feel. If you want something with personality, this is it.</p>
+                <p>Rooms blend period features with modern comforts. The restaurant uses local produce, and the gardens are a genuine draw in summer. Free shuttle to both terminals. Parking available. It's slightly further out than other off-airport options, but the atmosphere makes up for it.</p>
+                <p><strong>Best for:</strong> Couples, anyone wanting character, travellers who'd rather not feel like they're in an airport hotel.</p>
+            </div>
+            <div class="hotel-footer">
+                <div class="hotel-price">£70 <small>/ night (avg)</small></div>
+                <div class="hotel-rating">
+                    <span class="rating-badge">3.9</span>
+                    <span class="rating-text">/ 5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <h2 class="section-title">Hotel Comparison</h2>
+        <div class="table-wrap">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Hotel</th>
+                        <th>Stars</th>
+                        <th>Location</th>
+                        <th>Terminal</th>
+                        <th>Pool</th>
+                        <th>Gym</th>
+                        <th>Restaurant</th>
+                        <th>Parking</th>
+                        <th>WiFi</th>
+                        <th>From</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="hotel-name">Sofitel London Gatwick</td>
+                        <td>★★★★★</td>
+                        <td>On-Airport</td>
+                        <td>South</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£150</strong></td>
+                        <td>4.3</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Hilton London Gatwick</td>
+                        <td>★★★★</td>
+                        <td>On-Airport</td>
+                        <td>South</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£120</strong></td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">BLOC Hotel Gatwick</td>
+                        <td>★★★</td>
+                        <td>On-Airport</td>
+                        <td>South (Airside)</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td><strong>£80</strong></td>
+                        <td>4.1</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Hampton by Hilton</td>
+                        <td>★★★</td>
+                        <td>On-Airport</td>
+                        <td>North</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£95</strong></td>
+                        <td>4.2</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Yotel Gatwick</td>
+                        <td>★★</td>
+                        <td>On-Airport</td>
+                        <td>South (Airside)</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td><strong>£50</strong></td>
+                        <td>3.8</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Courtyard by Marriott</td>
+                        <td>★★★★</td>
+                        <td>Off-Airport</td>
+                        <td>Both</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£90</strong></td>
+                        <td>4.2</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Premier Inn Manor Royal</td>
+                        <td>★★★</td>
+                        <td>Off-Airport</td>
+                        <td>Both</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£55</strong></td>
+                        <td>4.0</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Travelodge Central</td>
+                        <td>★★</td>
+                        <td>Off-Airport</td>
+                        <td>Both</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£40</strong></td>
+                        <td>3.5</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Arora Hotel</td>
+                        <td>★★★★</td>
+                        <td>Off-Airport</td>
+                        <td>Both</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£85</strong></td>
+                        <td>4.1</td>
+                    </tr>
+                    <tr>
+                        <td class="hotel-name">Gatwick Worth Hotel</td>
+                        <td>★★★</td>
+                        <td>Off-Airport</td>
+                        <td>Both</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td><strong>£70</strong></td>
+                        <td>3.9</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Reviews -->
+        <h2 class="section-title">Guest Reviews</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"Stayed at the Sofitel before our 6am flight to Nice. Walked to South Terminal in 2 minutes. Room was spotless, bed was incredible. The spa session the evening before was the perfect way to start a holiday."</p>
+                <p class="review-author">— Sarah T. · Sofitel · March 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★</div>
+                <p class="review-text">"Hilton pool was a hit with the kids. They were exhausted by bedtime, which meant we actually got some sleep before a 7am departure. Room was spacious and the breakfast buffet is excellent. Would book again."</p>
+                <p class="review-author">— Mark & Julie R. · Hilton · February 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"BLOC is genius. Checked in, went through security once, slept like a log, and walked to my gate in the morning. No alarm stress. No queues. Just rolled out of bed and onto the plane. Absolutely doing this again."</p>
+                <p class="review-author">— David K. · BLOC Hotel · January 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★</div>
+                <p class="review-text">"Hampton breakfast is seriously underrated. Full English, pastries, fruit — all included. The room was basic but comfortable. Connected to North Terminal which saved us the shuttle hassle. Good value."</p>
+                <p class="review-author">— Emma W. · Hampton by Hilton · March 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★</div>
+                <p class="review-text">"Yotel pod was tiny but perfect for what I needed — 5 hours of sleep before a red-eye connection. Shower was surprisingly powerful. Self check-in took about 30 seconds. You get exactly what you pay for."</p>
+                <p class="review-author">— James L. · Yotel · February 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★</div>
+                <p class="review-text">"Arora was a pleasant surprise. Didn't expect a pool and spa at that price. Shuttle was quick and ran on time. The room was proper 4-star. We felt like we'd already started our holiday the night before."</p>
+                <p class="review-author">— Lisa & Tom P. · Arora Hotel · December 2025</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★</div>
+                <p class="review-text">"Premier Inn does what it always does — delivers a clean room and a good night's sleep. The Hypnos bed is genuinely comfortable. Kids loved the Beefeater next door. Shuttle was every 20 mins, no issues."</p>
+                <p class="review-author">— Chris M. · Premier Inn · January 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★</div>
+                <p class="review-text">"Courtyard by Marriott had the best room of any airport hotel I've stayed in. Quiet, modern, proper workspace. Shuttle was reliable. Parking for 2 weeks included in the package — saved us a fortune."</p>
+                <p class="review-author">— Rachel S. · Courtyard by Marriott · March 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★</div>
+                <p class="review-text">"Worth Hotel has real character. Period building, nice gardens. Felt more like a country hotel than an airport stop. Shuttle took about 12 minutes. Good value at £70 and the restaurant was a pleasant surprise."</p>
+                <p class="review-author">— Angela H. · Gatwick Worth Hotel · February 2026</p>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★</div>
+                <p class="review-text">"Travelodge did the job for £42. Nothing fancy but the bed was comfortable and the room was clean. We only needed somewhere to crash before a 5am flight. Saved the cash for cocktails in Tenerife instead."</p>
+                <p class="review-author">— Dan & Sophie F. · Travelodge · January 2026</p>
+            </div>
+        </div>
+
+        <!-- Live Departures -->
+        <h2 class="section-title">✈️ Tonight's Departures from Gatwick</h2>
+        <p style="color:var(--text-light); margin-bottom:1rem;">Planning your hotel check-in around your flight? Here are this evening's departures.</p>
+
+        <div class="departures-filters">
+            <button class="filter-btn active" onclick="filterFlights('all')">All Flights</button>
+            <button class="filter-btn" onclick="filterFlights('North')">North Terminal</button>
+            <button class="filter-btn" onclick="filterFlights('South')">South Terminal</button>
+            <button class="filter-btn" onclick="filterFlights('easyJet')">easyJet</button>
+            <button class="filter-btn" onclick="filterFlights('BA')">British Airways</button>
+            <button class="filter-btn" onclick="filterFlights('TUI')">TUI</button>
+        </div>
+
+        <div class="dep-table-wrap">
+            <table class="dep-table" id="departuresTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Destination</th>
+                        <th>Flight</th>
+                        <th>Airline</th>
+                        <th>Terminal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-terminal="North" data-airline="easyJet"><td>21:35</td><td>Amsterdam</td><td>EZY8686</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="South" data-airline="easyJet"><td>21:45</td><td>Athens</td><td>EZY6406</td><td>easyJet</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>21:45</td><td>Milan</td><td>EZY8314</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="South" data-airline="BA"><td>21:50</td><td>Malaga</td><td>BA2643</td><td>British Airways</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="South" data-airline="Vueling"><td>22:00</td><td>Barcelona</td><td>VY7842</td><td>Vueling</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:00</td><td>Glasgow</td><td>EZY870</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:05</td><td>Lyon</td><td>EZY8433</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:05</td><td>Munich</td><td>EZY8642</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:10</td><td>Basel</td><td>EZY8480</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="South" data-airline="easyJet"><td>22:15</td><td>Funchal</td><td>EZY6492</td><td>easyJet</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:25</td><td>Edinburgh</td><td>EZY816</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:25</td><td>Reykjavik</td><td>EZY8844</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:30</td><td>Lanzarote</td><td>EZY8124</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="South" data-airline="easyJet"><td>22:30</td><td>Rome</td><td>EZY6414</td><td>easyJet</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="South" data-airline="Turkish"><td>22:35</td><td>Istanbul</td><td>TK1929</td><td>Turkish Airlines</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:35</td><td>Lisbon</td><td>EZY8518</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:40</td><td>Madrid</td><td>EZY8026</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:40</td><td>Malaga</td><td>EZY8076</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:45</td><td>Antalya</td><td>EZY8556</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:45</td><td>Belfast</td><td>EZY832</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>22:50</td><td>Valencia</td><td>EZY8014</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="TUI"><td>23:00</td><td>Boa Vista</td><td>TOM579</td><td>TUI</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="South" data-airline="BA"><td>23:00</td><td>Turin</td><td>BA2599</td><td>British Airways</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>23:10</td><td>Alicante</td><td>EZY8112</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="TUI"><td>23:25</td><td>Sharm El Sheikh</td><td>TOM571</td><td>TUI</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="North" data-airline="easyJet"><td>23:30</td><td>Tenerife South</td><td>EZY8038</td><td>easyJet</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FAQ -->
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div id="faqSection">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Which Gatwick airport hotels are directly connected to the terminal?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">The Sofitel London Gatwick and Hilton London Gatwick are both connected to South Terminal via covered walkways — a 2-minute walk. BLOC Hotel and Yotel are actually <strong>inside</strong> South Terminal airside (boarding pass required for airside). Hampton by Hilton is connected to North Terminal. All other hotels use free shuttle buses.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Can I book a day room at Gatwick airport hotels?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Yes. Yotel specialises in day rooms with pods bookable by the hour (from around £30 for 4 hours). The Sofitel, Hilton, and BLOC also offer day-use rooms, typically from £50-£80 for a few hours. Perfect for long layovers or if you just need to freshen up between flights.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Do Gatwick airport hotels include parking?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Most hotels offer hotel-and-parking packages when booked through Holiday Extras. The Sofitel and Hilton have their own car parks at South Terminal. Off-airport hotels often include free parking for the duration of your trip. This can save you a huge amount compared to booking parking separately at the terminal — we're talking potential savings of £50-100+ for a week's stay.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Which is the cheapest hotel near Gatwick Airport?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Travelodge London Gatwick Airport Central offers the lowest rates, starting from around £40 per night. Yotel pods start from £50 overnight (or £30 for a 4-hour block). Premier Inn Manor Royal is also great value from £55. All three include free shuttle transfers to both terminals.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">How do I get from off-airport hotels to the terminals?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">All off-airport hotels provide free shuttle bus transfers to both North and South terminals. Journey time is typically 5-15 minutes depending on the hotel. Shuttles run regularly, usually every 15-30 minutes from early morning until late evening. Your booking confirmation will include shuttle timetable details.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Which Gatwick hotel has a swimming pool?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Two options: the <strong>Hilton London Gatwick</strong> (on-airport, South Terminal) has an indoor pool, gym, and sauna. The <strong>Arora Hotel</strong> (off-airport) also has a pool and full spa facilities. Both are excellent choices for families or anyone wanting to relax before flying.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Are Gatwick airport hotels suitable for families?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Absolutely. The Hilton is the most popular family choice with its pool and spacious family rooms. Hampton by Hilton offers free breakfast including kids' options. Premier Inn has dedicated family rooms at budget prices. Most hotels offer cots and extra beds on request — just mention it when booking.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">What time is check-in and check-out at Gatwick hotels?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Standard check-in is typically 3pm (2pm at some hotels), with check-out at 11am-12pm. Yotel offers flexible check-in with their pod bookings. Most hotels will try to accommodate early check-in subject to availability — worth calling ahead. Late check-out can sometimes be arranged for a small fee.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Can I stay at BLOC or Yotel without flying?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">BLOC Hotel is airside (past security), so you need a valid boarding pass to access it. Yotel has cabins both landside and airside at South Terminal — landside cabins are available to anyone, no boarding pass required. Airside Yotel cabins do require a boarding pass.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Which terminal has the most hotel options?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">South Terminal wins easily. The Sofitel, Hilton, BLOC, and Yotel are all connected to or inside South Terminal. North Terminal has Hampton by Hilton as its only on-airport option. However, a free shuttle train connects both terminals in about 3 minutes, so it's not a major issue either way. Off-airport hotels serve both terminals equally.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Is it worth paying more for an on-airport hotel?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">For early morning flights (before 8am), absolutely. Rolling out of bed and walking to check-in is worth every penny at 5am. For evening arrivals or less time-sensitive travel, off-airport hotels save 30-50% and still get you to the terminal in 10-15 minutes via free shuttle. It depends on your flight time and budget.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Do hotels offer airport transfer services?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">On-airport hotels don't need transfers — you walk directly to the terminal. Off-airport hotels all provide complimentary shuttle buses running every 15-30 minutes to both terminals. Some also offer private taxi transfers on request. Holiday Extras packages include full shuttle details in your booking confirmation.</div></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">Can I book a hotel and parking package together?</button>
+                <div class="faq-answer"><div class="faq-answer-inner">Yes — and it's often the smartest way to book. Hotel-and-parking packages through Holiday Extras combine one night's stay with parking for the duration of your trip. You can save up to 60% compared to booking separately. Just use our search form above, and packages will appear in the results alongside room-only options.</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
+
+    <script>
+    // Set default dates (tomorrow check-in, day after check-out)
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayAfter = new Date(today);
+    dayAfter.setDate(dayAfter.getDate() + 2);
+
+    function toInputDate(d) {
+        return d.toISOString().split('T')[0];
+    }
+    document.getElementById('checkin').value = toInputDate(tomorrow);
+    document.getElementById('checkout').value = toInputDate(dayAfter);
+
+    // Format date as DD/MM/YY
+    function formatDDMMYY(dateStr) {
+        const d = new Date(dateStr);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yy = String(d.getFullYear()).slice(-2);
+        return dd + '%2F' + mm + '%2F' + yy;
+    }
+
+    // Format human-readable date like "Sat+15+Mar+2026"
+    function formatHumanDate(dateStr) {
+        const d = new Date(dateStr);
+        const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return days[d.getDay()] + '+' + d.getDate() + '+' + months[d.getMonth()] + '+' + d.getFullYear();
+    }
+
+    function searchHotels(e) {
+        e.preventDefault();
+        const checkin = document.getElementById('checkin').value;
+        const checkout = document.getElementById('checkout').value;
+        const checkinTime = document.getElementById('checkinTime').value;
+        const checkoutTime = document.getElementById('checkoutTime').value;
+
+        if (!checkin || !checkout) { alert('Please select check-in and check-out dates.'); return; }
+
+        const url = 'https://www.holidayextras.com/static/?'
+            + 'Referer=https%3A%2F%2Fwww.holidayextras.com%2F'
+            + '&agent=WEB1'
+            + '&domain=www.holidayextras.com'
+            + '&lang=en'
+            + '&product=ho'
+            + '&request=1'
+            + '&rule_set=hx'
+            + '&selectProduct=ho'
+            + '&tc=1'
+            + '&search='
+            + '&Location=LGW'
+            + '&ArrivalDate=' + formatDDMMYY(checkin)
+            + '&ArrivalTime=' + checkinTime
+            + '&Arrival=' + formatHumanDate(checkin)
+            + '&DepartDate=' + formatDDMMYY(checkout)
+            + '&DepartTime=' + checkoutTime
+            + '&Depart=' + formatHumanDate(checkout)
+            + '&flightTime='
+            + '&flight_number=default'
+            + '&terminal='
+            + '&CampaignID=65642';
+
+        window.open(url, '_blank');
+    }
+
+    // Departures filter
+    function filterFlights(filter) {
+        const rows = document.querySelectorAll('#departuresTable tbody tr');
+        const btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        rows.forEach(row => {
+            if (filter === 'all') {
+                row.style.display = '';
+            } else if (filter === 'North' || filter === 'South') {
+                row.style.display = row.dataset.terminal === filter ? '' : 'none';
+            } else {
+                row.style.display = row.dataset.airline === filter ? '' : 'none';
+            }
+        });
+    }
+
+    // FAQ toggle
+    function toggleFaq(btn) {
+        const item = btn.parentElement;
+        item.classList.toggle('open');
+    }
+    </script>
+</body>
+</html>
