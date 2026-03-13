@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gatwick Departures — Live Flights, Terminals & Tips | Steven Hill</title>
+    <meta name="description" content="Live Gatwick departure times, terminal guides for North and South, and tips to make your journey smoother. Updated March 2026.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .flights-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .flights-table thead {
+            background: var(--purple);
+            color: var(--white);
+        }
+        .flights-table th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .flights-table td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--mid-grey);
+            color: var(--text);
+        }
+        .flights-table tbody tr:hover {
+            background: #f8f4ff;
+        }
+        .status-departed { color: #2d7a2d; font-weight: 600; }
+        .status-delayed { color: #c0392b; font-weight: 600; }
+        .status-gate { color: var(--purple); font-weight: 600; }
+        .status-cancelled { color: #c0392b; font-weight: 700; text-transform: uppercase; }
+        .status-scheduled { color: var(--text-muted); }
+        .terminal-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .terminal-north { background: #e6f0ff; color: #1a5276; }
+        .terminal-south { background: #fce4ec; color: #8e2244; }
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--mid-grey);
+            border-radius: 8px;
+            background: var(--white);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover { border-color: var(--purple); color: var(--purple); }
+        .filter-btn.active { background: var(--purple); color: var(--white); border-color: var(--purple); }
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--mid-grey);
+        }
+        .update-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0 1rem;
+        }
+        .terminal-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 700px) {
+            .terminal-cards { grid-template-columns: 1fr; }
+            .flights-table { font-size: 0.8rem; }
+            .flights-table th, .flights-table td { padding: 0.5rem 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/bikes.html">🏍️ The Garage</a>
+            <a href="/parking.html">🅿️ Ride & Fly</a>
+            <a href="/gatwick-departures.html" class="active">✈️ Gatwick</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>✈️ Gatwick Departures</h1>
+        <p class="tagline">Live flights, terminal info, and everything you need before you fly</p>
+    </div>
+
+    <div class="banner">📍 London Gatwick Airport (LGW) — the UK's second busiest airport, serving over 40 million passengers a year</div>
+
+    <div class="container">
+
+        <p style="color:var(--text-light);line-height:1.8;margin-bottom:1rem;font-size:1.05rem;">
+            Gatwick handles flights from two terminals, each with its own character and airline mix. Whether you're heading to the Canaries with easyJet or catching a BA flight to the Med, knowing your terminal makes everything smoother.
+        </p>
+        <p style="color:var(--text-light);line-height:1.8;margin-bottom:1rem;font-size:1.05rem;">
+            Below you'll find a full guide to both terminals, followed by today's live departure board. Less hassle. More holiday.
+        </p>
+
+        <h2 class="section-title">The Terminals</h2>
+
+        <div class="terminal-cards">
+            <div class="card">
+                <span class="badge badge-purple">North Terminal</span>
+                <h3>North Terminal</h3>
+                <p class="meta" style="margin-bottom:1rem;">Opened 1988 — Home to easyJet, Swiss, China Eastern & more</p>
+                <p>The North Terminal is easyJet's main Gatwick hub. If you're flying short-haul to Europe on a budget, chances are you'll depart from here. It's also home to Swiss, China Eastern (Shanghai direct), and several other carriers.</p>
+                <p style="margin-top:0.75rem;">The terminal underwent a major refurbishment and offers a solid selection of shops and restaurants airside. Security queues tend to move quickly, and the gate areas are well-spaced. If you're driving, the North Terminal has its own multi-storey car park and Meet & Greet options.</p>
+                <p style="margin-top:0.75rem;"><strong>Key airlines:</strong> easyJet, SWISS, China Eastern, Aurigny</p>
+            </div>
+
+            <div class="card">
+                <span class="badge badge-red">South Terminal</span>
+                <h3>South Terminal</h3>
+                <p class="meta" style="margin-bottom:1rem;">Opened 1958 — Home to British Airways, Ryanair, Vueling, Turkish Airlines & more</p>
+                <p>The South Terminal is the original Gatwick terminal — the one connected directly to the train station. British Airways operates most of its Gatwick flights from here, alongside Ryanair, Vueling, Turkish Airlines, Norwegian, and Wizz Air.</p>
+                <p style="margin-top:0.75rem;">If you're arriving by train or Gatwick Express, the South Terminal is right there — no transit needed. It's generally busier than the North, but the recent upgrades to security (with new CT scanners) have sped things up considerably.</p>
+                <p style="margin-top:0.75rem;"><strong>Key airlines:</strong> British Airways, Ryanair, Vueling, Turkish Airlines, Norwegian, Wizz Air</p>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <p><strong>Getting between terminals:</strong> A free shuttle train runs between North and South every few minutes. Journey time is about two minutes. If you're at the wrong terminal, don't panic — it's a quick fix. Just allow 15-20 minutes to be safe.</p>
+        </div>
+
+        <h2 class="section-title">Live Departures — 13 March 2026</h2>
+        <p class="update-time">Last updated: Fri 13 Mar 16:34 GMT — Data sourced from Gatwick Airport</p>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterFlights('all')">All Flights</button>
+            <button class="filter-btn" onclick="filterFlights('north')">North Terminal</button>
+            <button class="filter-btn" onclick="filterFlights('south')">South Terminal</button>
+        </div>
+
+        <div class="table-wrap">
+            <table class="flights-table" id="flightsTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Destination</th>
+                        <th>Flight</th>
+                        <th>Airline</th>
+                        <th>Status</th>
+                        <th>Gate</th>
+                        <th>Terminal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-terminal="north"><td>16:05</td><td>Casablanca</td><td>AT803</td><td>Royal Air Maroc</td><td class="status-departed">Taxied 16:27</td><td>50</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>16:10</td><td>Dublin</td><td>FR121</td><td>Ryanair</td><td class="status-delayed">Delayed to 18:10</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>16:10</td><td>Malaga</td><td>EZY8075</td><td>easyJet</td><td class="status-departed">Departed 16:28</td><td>55F</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>16:20</td><td>Belfast</td><td>EZY821</td><td>easyJet</td><td class="status-departed">Departed 16:31</td><td>55E</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>16:20</td><td>Seville</td><td>EZY8007</td><td>easyJet</td><td class="status-departed">Taxied 16:29</td><td>567</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>16:20</td><td>Venice</td><td>EZY8295</td><td>easyJet</td><td class="status-departed">Departed 16:24</td><td>49</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>16:25</td><td>Barcelona</td><td>BA8059</td><td>British Airways</td><td class="status-gate">Gate closed</td><td>28</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>16:25</td><td>Barcelona</td><td>VY7829</td><td>Vueling</td><td class="status-gate">Gate closed</td><td>28</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>16:25</td><td>Lisbon</td><td>EZY8517</td><td>easyJet</td><td class="status-departed">Taxied 16:25</td><td>55D</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>16:25</td><td>Naples</td><td>EZY8341</td><td>easyJet</td><td class="status-departed">Departed 16:25</td><td>53</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>16:30</td><td>Guernsey</td><td>GR607</td><td>Aurigny</td><td class="status-gate">Gate closes 16:34</td><td>3</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>16:35</td><td>Larnaca</td><td>W64558</td><td>Wizz Air</td><td class="status-departed">Taxied 16:27</td><td>17</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>16:35</td><td>Rome</td><td>EZY6413</td><td>easyJet</td><td class="status-departed">Taxied 16:31</td><td>22</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>16:35</td><td>Shannon</td><td>FR1183</td><td>Ryanair</td><td class="status-gate">Gate closed</td><td>5</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>16:35</td><td>Zurich</td><td>EZY8473</td><td>easyJet</td><td class="status-departed">Taxied 16:27</td><td>690</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>16:40</td><td>Lisbon</td><td>TP1337</td><td>TAP Portugal</td><td class="status-gate">Gate closed</td><td>21</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>16:45</td><td>Marseille</td><td>EZY8439</td><td>easyJet</td><td class="status-delayed">Delayed to 18:40</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>16:50</td><td>Erbil</td><td>UD116</td><td>UD Airlines</td><td class="status-scheduled">Enquire Airline</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>16:50</td><td>Jeddah</td><td>W95605</td><td>Wizz Air Abu Dhabi</td><td class="status-gate">Gate closed</td><td>1</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>16:50</td><td>Medina</td><td>W95611</td><td>Wizz Air Abu Dhabi</td><td class="status-gate">Gate closed</td><td>15</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>16:55</td><td>Bordeaux</td><td>BA2572</td><td>British Airways</td><td class="status-gate">Gate closes 16:35</td><td>36</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:00</td><td>Faro</td><td>EZY8533</td><td>easyJet</td><td class="status-gate">Gate closed</td><td>572</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>17:00</td><td>Madrid</td><td>EZY8025</td><td>easyJet</td><td class="status-gate">Go to gate</td><td>574</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>17:00</td><td>Shanghai</td><td>MU214</td><td>China Eastern</td><td class="status-gate">Gate closes 16:40</td><td>558</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:00</td><td>Stockholm</td><td>D84458</td><td>Norwegian</td><td class="status-gate">Go to gate</td><td>18</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>17:05</td><td>Istanbul</td><td>TK1998</td><td>Turkish Airlines</td><td class="status-gate">Go to gate</td><td>10</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>17:05</td><td>Palma de Mallorca</td><td>EZY6317</td><td>easyJet</td><td class="status-gate">Gate closes 16:35</td><td>14</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:10</td><td>Montpellier</td><td>EZY8389</td><td>easyJet</td><td class="status-gate">Gate closes 16:40</td><td>688</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>17:10</td><td>Nice</td><td>EZY8417</td><td>easyJet</td><td class="status-gate">Gate closes 16:40</td><td>685</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>17:20</td><td>Alicante</td><td>EZY8111</td><td>easyJet</td><td class="status-gate">Go to gate</td><td>55F</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>17:20</td><td>Valencia</td><td>EZY8013</td><td>easyJet</td><td class="status-gate">Go to gate</td><td>560</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:25</td><td>Jersey</td><td>BA2524</td><td>British Airways</td><td class="status-gate">Go to gate</td><td>34</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>17:25</td><td>Madrid</td><td>UX1016</td><td>Air Europa</td><td class="status-gate">Go to gate</td><td>19</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:25</td><td>Milan</td><td>EZY8311</td><td>easyJet</td><td class="status-gate">Go to gate</td><td>682</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="north"><td>17:30</td><td>Isle of Man</td><td>EZY841</td><td>easyJet</td><td class="status-gate">Go to gate</td><td>45L</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:30</td><td>Verona</td><td>BA2592</td><td>British Airways</td><td class="status-scheduled">Gate info at 17:29</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:35</td><td>Hamburg</td><td>EZY8635</td><td>easyJet</td><td class="status-delayed">Delayed to 18:06</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:35</td><td>Riga</td><td>BT654</td><td>airBaltic</td><td class="status-scheduled">Gate info at 16:35</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>17:35</td><td>Riga</td><td>BA2242</td><td>British Airways</td><td class="status-scheduled">Gate info at 16:35</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:40</td><td>Munich</td><td>EZY8641</td><td>easyJet</td><td class="status-scheduled">Gate info at 16:40</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:40</td><td>Nice</td><td>EZY6475</td><td>easyJet</td><td class="status-delayed">Delayed to 17:59</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>17:40</td><td>Oslo</td><td>DY1309</td><td>Norwegian</td><td class="status-scheduled">Gate info at 16:52</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:45</td><td>Amsterdam</td><td>EZY8681</td><td>easyJet</td><td class="status-scheduled">Gate info at 16:45</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:45</td><td>Dublin</td><td>FR123</td><td>Ryanair</td><td class="status-delayed">Delayed to 18:20</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:45</td><td>Edinburgh</td><td>EZY813</td><td>easyJet</td><td class="status-delayed">Delayed to 18:46</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:55</td><td>Geneva</td><td>BA2558</td><td>British Airways</td><td class="status-scheduled">Gate info at 16:59</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="north"><td>17:55</td><td>Jersey</td><td>EZY885</td><td>easyJet</td><td class="status-scheduled">Gate info at 16:55</td><td>—</td><td><span class="terminal-badge terminal-north">North</span></td></tr>
+                    <tr data-terminal="south"><td>17:55</td><td>Newquay</td><td>8Y753</td><td>Eastern Airways</td><td class="status-scheduled">Gate info at 18:45</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                    <tr data-terminal="south"><td>18:00</td><td>Cork</td><td>FR7722</td><td>Ryanair</td><td class="status-scheduled">Gate info at 17:05</td><td>—</td><td><span class="terminal-badge terminal-south">South</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-top:1rem;text-align:center;">
+            Flight data sourced from <a href="https://www.gatwickairport.com/flights/#/departures" target="_blank" style="color:var(--purple);">gatwickairport.com</a> — check there for the most up-to-date information.
+        </p>
+
+        <h2 class="section-title">Planning Your Departure</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>⏰ When to Arrive</h3>
+                <p>Gatwick recommends arriving at least two hours before short-haul flights and three hours before long-haul. During peak times (early morning and late afternoon), security queues can build up — arriving early gives you breathing room and time to grab a coffee airside.</p>
+            </div>
+            <div class="card">
+                <h3>🅿️ Parking Options</h3>
+                <p>Both terminals have short-stay, long-stay, and Meet & Greet parking. Pre-booking saves up to 60% compared to turning up on the day. Long-stay car parks connect to the terminals via free shuttle buses running every few minutes.</p>
+                <p style="margin-top:0.5rem;"><a href="/parking.html" style="color:var(--purple);font-weight:600;">→ Search Gatwick parking deals</a></p>
+            </div>
+            <div class="card">
+                <h3>🚂 By Train</h3>
+                <p>The Gatwick Express from London Victoria takes 30 minutes and drops you right at the South Terminal. Thameslink and Southern services also stop at Gatwick. If you're heading to the North Terminal, it's a quick shuttle ride from the station.</p>
+            </div>
+            <div class="card">
+                <h3>🛍️ Airside Shopping</h3>
+                <p>Both terminals have World Duty Free, a solid selection of high-street brands, and plenty of food options. The North Terminal's refurbished departures lounge is particularly good — if you've got time to kill, you won't be bored.</p>
+            </div>
+        </div>
+
+        <a href="/" class="back-link">← Back home</a>
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
+
+    <script>
+        function filterFlights(terminal) {
+            const rows = document.querySelectorAll('#flightsTable tbody tr');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            rows.forEach(row => {
+                if (terminal === 'all' || row.dataset.terminal === terminal) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
