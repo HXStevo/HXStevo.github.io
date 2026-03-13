@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Insurance Quote — Get Covered in Minutes | Steven Hill</title>
+    <meta name="description" content="Get a travel insurance quote in minutes. Annual and single trip cover for Europe, worldwide, and cruises. Powered by Holiday Extras.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wizard { max-width: 640px; margin: 0 auto; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .step-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .step-header h2 {
+            font-size: 1.5rem;
+            color: var(--purple);
+        }
+        .step-header p {
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+        .option-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+        .option-card {
+            background: var(--white);
+            border: 2px solid var(--mid-grey);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-card:hover { border-color: var(--purple); }
+        .option-card.selected { border-color: var(--purple); background: #f8f4ff; }
+        .option-card h4 { color: var(--text); font-size: 1rem; margin-bottom: 0.25rem; }
+        .option-card .sub { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
+        .option-note {
+            background: #fff8d6;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            color: #8a6d00;
+            margin-top: 0.75rem;
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--mid-grey);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: var(--text);
+            font-family: inherit;
+            background: var(--white);
+        }
+        .form-group select:focus,
+        .form-group input:focus { outline: none; border-color: var(--purple); }
+        .btn-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+        .btn-next {
+            flex: 1;
+            padding: 1rem;
+            background: var(--purple);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-next:hover { background: var(--purple-dark); transform: translateY(-1px); }
+        .btn-next:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-back {
+            padding: 1rem 1.5rem;
+            background: var(--white);
+            color: var(--text);
+            border: 2px solid var(--mid-grey);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-back:hover { border-color: var(--purple); color: var(--purple); }
+        .btn-skip {
+            display: block;
+            text-align: center;
+            margin-top: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            text-decoration: underline;
+        }
+        .progress-bar {
+            height: 4px;
+            background: var(--mid-grey);
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--purple);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        .eligibility-list {
+            background: var(--light-grey);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .eligibility-list h4 { color: var(--purple); margin-bottom: 0.5rem; }
+        .eligibility-list ul { padding-left: 1.25rem; color: var(--text-light); line-height: 1.8; }
+        .medical-body { color: var(--text-light); line-height: 1.7; margin: 1rem 0; }
+        .medical-body strong { color: var(--text); }
+        .hard-stop {
+            background: #fce4ec;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .hard-stop h3 { color: #c0392b; margin-bottom: 1rem; }
+        .hard-stop p { color: var(--text-light); line-height: 1.7; margin-bottom: 0.75rem; }
+        .summary-section {
+            background: var(--light-grey);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--mid-grey);
+        }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-label { color: var(--text-muted); font-size: 0.85rem; }
+        .summary-value { color: var(--text); font-weight: 600; font-size: 0.9rem; }
+        .traveller-card {
+            background: var(--light-grey);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .traveller-card h4 { color: var(--purple); margin-bottom: 1rem; }
+        .error-msg {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .loading { text-align: center; padding: 2rem; }
+        .loading .spinner {
+            display: inline-block;
+            width: 40px; height: 40px;
+            border: 4px solid var(--mid-grey);
+            border-top-color: var(--purple);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/bikes.html">🏍️ The Garage</a>
+            <a href="/parking.html">🅿️ Ride & Fly</a>
+            <a href="/insurance.html" class="active">🛡️ Insurance</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>🛡️ Travel Insurance</h1>
+        <p class="tagline">Get covered in minutes. Single trip or annual — we've got your back.</p>
+    </div>
+
+    <div class="banner">Powered by Holiday Extras — the UK's #1 for travel extras. Less hassle. More holiday.</div>
+
+    <div class="container">
+        <div class="wizard">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:6%"></div></div>
+
+            <!-- STEP 1: Cover Type -->
+            <div class="step active" id="step1">
+                <div class="step-header">
+                    <div class="step-label">Step 1 of 16</div>
+                    <h2>How many trips are you planning in the next 12 months?</h2>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="annual" onclick="selectOption(this,'tripType')">
+                        <h4>Annual Cover</h4>
+                        <div class="sub">Unlimited trips for 12 months. Usually better value and more convenient if you travel more than once in the UK or abroad.</div>
+                    </div>
+                    <div class="option-card" data-value="single" onclick="selectOption(this,'tripType')">
+                        <h4>Single Trip Cover</h4>
+                        <div class="sub">One trip only. You'll still see the annual price to compare before you decide.</div>
+                    </div>
+                </div>
+                <div class="option-note">Annual cover renews automatically each year — we'll remind you before it does, and you can opt out at any time.</div>
+                <div class="btn-row">
+                    <button class="btn-next" onclick="goStep(2)" id="btn1" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Destination -->
+            <div class="step" id="step2">
+                <div class="step-header">
+                    <div class="step-label">Step 2 of 16</div>
+                    <h2>Travelling to</h2>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="europe-inc" onclick="selectOption(this,'destination')">
+                        <h4>Europe <em>including</em></h4>
+                        <div class="sub">Spain, Cyprus, Malta, Turkey, Greece</div>
+                    </div>
+                    <div class="option-card" data-value="europe-exc" onclick="selectOption(this,'destination')">
+                        <h4>Europe <em>excluding</em></h4>
+                        <div class="sub">Spain, Cyprus, Malta, Turkey, Greece</div>
+                    </div>
+                    <div class="option-card" data-value="aus-nz" onclick="selectOption(this,'destination')">
+                        <h4>Australia &amp; New Zealand</h4>
+                    </div>
+                    <div class="option-card" data-value="worldwide-inc" onclick="selectOption(this,'destination')">
+                        <h4>Worldwide <em>including</em></h4>
+                        <div class="sub">USA, Canada, Mexico and Caribbean</div>
+                    </div>
+                    <div class="option-card" data-value="worldwide-exc" onclick="selectOption(this,'destination')">
+                        <h4>Worldwide <em>excluding</em></h4>
+                        <div class="sub">USA, Canada, Mexico and Caribbean</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(1)">Back</button>
+                    <button class="btn-next" onclick="goStep(3)" id="btn2" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Cruise -->
+            <div class="step" id="step3">
+                <div class="step-header">
+                    <div class="step-label">Step 3 of 16</div>
+                    <h2>Going on a sea cruise?</h2>
+                    <p>From missed ports to cabin confinement and itinerary changes, our cruise cover helps with the extras.</p>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="false" onclick="selectOption(this,'cruise')">
+                        <h4>No</h4>
+                        <div class="sub">Cruise cover not required</div>
+                    </div>
+                    <div class="option-card" data-value="true" onclick="selectOption(this,'cruise')">
+                        <h4>Yes</h4>
+                        <div class="sub">Add Cruise Cover</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(2)">Back</button>
+                    <button class="btn-next" onclick="goStep(4)" id="btn3" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Cancellation Cover -->
+            <div class="step" id="step4">
+                <div class="step-header">
+                    <div class="step-label">Step 4 of 16</div>
+                    <h2>Cancellation cover</h2>
+                    <p>Choose the amount that's closest to your total holiday cost per person.</p>
+                </div>
+                <div class="option-cards" id="cancellationCards"></div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(3)">Back</button>
+                    <button class="btn-next" onclick="goStep(5)" id="btn4" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 5: Start Date -->
+            <div class="step" id="step5">
+                <div class="step-header">
+                    <div class="step-label">Step 5 of 16</div>
+                    <h2 id="startDateHeading">Cover to start</h2>
+                </div>
+                <div class="form-group">
+                    <label for="holidayStart">Select a date</label>
+                    <input type="date" id="holidayStart" onchange="onStartDateChange()">
+                </div>
+                <div id="startDateNote" class="option-note" style="display:none;"></div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(4)">Back</button>
+                    <button class="btn-next" onclick="goStep(6)" id="btn5" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 6: End Date -->
+            <div class="step" id="step6">
+                <div class="step-header">
+                    <div class="step-label">Step 6 of 16</div>
+                    <h2>Holiday ends</h2>
+                </div>
+                <div class="form-group">
+                    <label for="holidayEnd">Select a date</label>
+                    <input type="date" id="holidayEnd" onchange="onEndDateChange()">
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(5)">Back</button>
+                    <button class="btn-next" onclick="goStep(7)" id="btn6" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 7: Travellers -->
+            <div class="step" id="step7">
+                <div class="step-header">
+                    <div class="step-label">Step 7 of 16</div>
+                    <h2>Travellers</h2>
+                    <p>How many people are travelling?</p>
+                </div>
+                <div class="form-group">
+                    <label for="travellerCount">Number of travellers</label>
+                    <select id="travellerCount" onchange="onTravellerCountChange()">
+                        <option value="">Select...</option>
+                        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                    </select>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(payload.tripType==='annual'?5:6)">Back</button>
+                    <button class="btn-next" onclick="goStep(8)" id="btn7" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 8: Relationship -->
+            <div class="step" id="step8">
+                <div class="step-header">
+                    <div class="step-label">Step 8 of 16</div>
+                    <h2>Relationship</h2>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="couple" onclick="selectOption(this,'relationship')">
+                        <h4>Couple</h4>
+                        <div class="sub">Two adults living together.</div>
+                    </div>
+                    <div class="option-card" data-value="family" onclick="selectOption(this,'relationship')">
+                        <h4>Family</h4>
+                        <div class="sub">Parents and up to five children under 18 in the same household.</div>
+                    </div>
+                    <div class="option-card" data-value="group" onclick="selectOption(this,'relationship')">
+                        <h4>Group</h4>
+                        <div class="sub">Anyone travelling together.</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(7)">Back</button>
+                    <button class="btn-next" onclick="goStep(9)" id="btn8" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 9: Traveller Details -->
+            <div class="step" id="step9">
+                <div class="step-header">
+                    <div class="step-label">Step 9 of 16</div>
+                    <h2 id="travellerHeading">Traveller</h2>
+                </div>
+                <div id="travellerForms"></div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goBackFromTravellers()">Back</button>
+                    <button class="btn-next" onclick="nextTraveller()" id="btn9">Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 10: Email -->
+            <div class="step" id="step10">
+                <div class="step-header">
+                    <div class="step-label">Step 10 of 16</div>
+                    <h2>Send me a copy of my quote to</h2>
+                </div>
+                <div class="form-group">
+                    <label for="emailInput">Email address</label>
+                    <input type="email" id="emailInput" placeholder="you@example.com">
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(9);currentTravellerIdx=payload.travellerCount-1;showTravellerForm()">Back</button>
+                    <button class="btn-next" onclick="saveEmail();goStep(11)">Continue</button>
+                </div>
+                <button class="btn-skip" onclick="payload.email=null;goStep(11)">Skip this step</button>
+            </div>
+
+            <!-- STEP 11: Eligibility -->
+            <div class="step" id="step11">
+                <div class="step-header">
+                    <div class="step-label">Step 11 of 16</div>
+                    <h2>Eligibility Criteria</h2>
+                </div>
+                <div class="eligibility-list">
+                    <h4>You must</h4>
+                    <ul>
+                        <li>Live in the UK, the Channel Islands or the Isle of Man and have lived there for at least 6 of the last 12 months</li>
+                        <li>Be registered with a General Practitioner in that location</li>
+                        <li>Follow the latest Foreign, Commonwealth and Development Office (FCDO) travel advice</li>
+                        <li>Start and end your trip in the UK</li>
+                        <li>Be in the UK when you buy your policy</li>
+                    </ul>
+                </div>
+                <div class="eligibility-list">
+                    <h4>When cover doesn't apply:</h4>
+                    <ul>
+                        <li>If buying insurance with the intention of making a claim</li>
+                        <li>If you are already aware of something that's likely to lead to a claim</li>
+                        <li>If you are travelling against medical advice, or travelling specifically to receive medical treatment</li>
+                    </ul>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(10)">Back</button>
+                    <button class="btn-next" onclick="goStep(12)">Agree and continue</button>
+                </div>
+                <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:0.5rem;">I have read the above criteria</p>
+            </div>
+
+            <!-- STEP 12: Medical Q1 -->
+            <div class="step" id="step12">
+                <div class="step-header">
+                    <div class="step-label">Medical question 1 of 4</div>
+                    <h2>Is anyone travelling</h2>
+                </div>
+                <div class="medical-body">
+                    <ul style="padding-left:1.25rem;line-height:1.8;">
+                        <li>Currently undergoing or awaiting surgery, a procedure, hospital treatment, dialysis or cancer treatment</li>
+                        <li>Awaiting tests, test results or investigations for a diagnosed condition</li>
+                        <li>Diagnosed with a terminal illness</li>
+                        <li>Previously treated for alcohol or drug addiction in the last five years</li>
+                    </ul>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="false" onclick="selectOption(this,'medicalSurgeryTreatment')">
+                        <h4>No</h4><div class="sub">None of these apply</div>
+                    </div>
+                    <div class="option-card" data-value="true" onclick="selectOption(this,'medicalSurgeryTreatment')">
+                        <h4>Yes</h4><div class="sub">Applies to someone</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(11)">Back</button>
+                    <button class="btn-next" onclick="handleMedQ1()" id="btn12" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- HARD STOP -->
+            <div class="step" id="stepHardStop">
+                <div class="hard-stop">
+                    <h3>Sorry, Holiday Extras are unable to provide you a quote on this occasion</h3>
+                    <p>Sorry Holiday Extras are unable to provide you a quote on this occasion.</p>
+                    <p>Please use the Money Helper directory to find other travel insurance providers who might be able to provide you a quote.</p>
+                    <p><strong>Money Helper contact details are:</strong></p>
+                    <p><strong>By Phone</strong> — call 0800 138 7777, Mon–Fri 8am to 6pm</p>
+                    <p><strong>Online</strong> — <a href="https://traveldirectory.moneyhelper.org.uk" target="_blank" style="color:var(--purple);">traveldirectory.moneyhelper.org.uk</a></p>
+                    <p><strong>By Email</strong> — <a href="mailto:traveldirectory@maps.org.uk" style="color:var(--purple);">traveldirectory@maps.org.uk</a></p>
+                    <p style="margin-top:1rem;">The directory exists to bring together specialist firms who can provide you with specialist medical insurance that you may not be able to get elsewhere. All providers are authorised and regulated by the Financial Conduct Authority.</p>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(12)">Go back and change your answer</button>
+                </div>
+            </div>
+
+            <!-- STEP 13: Medical Q2 -->
+            <div class="step" id="step13">
+                <div class="step-header">
+                    <div class="step-label">Medical question 2 of 4</div>
+                    <h2>Is anyone travelling</h2>
+                    <p>Currently experiencing symptoms that have not yet been diagnosed?</p>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="false" onclick="selectOption(this,'medicalUndiagnosedSymptoms')">
+                        <h4>No</h4><div class="sub">Doesn't apply to anyone</div>
+                    </div>
+                    <div class="option-card" data-value="true" onclick="selectOption(this,'medicalUndiagnosedSymptoms')">
+                        <h4>Yes</h4><div class="sub">Applies to someone</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(12)">Back</button>
+                    <button class="btn-next" onclick="goStep(14)" id="btn13" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 14: Medical Q3 -->
+            <div class="step" id="step14">
+                <div class="step-header">
+                    <div class="step-label">Medical question 3 of 4</div>
+                    <h2>Has any traveller ever had any of the following conditions?</h2>
+                </div>
+                <div class="medical-body">
+                    <p><strong>Heart or circulation condition</strong><br>Heart attack, angina, high blood pressure, blood clots, raised cholesterol, aneurysm, or other circulatory conditions.</p>
+                    <p style="margin-top:0.75rem;"><strong>Brain or nervous system condition</strong><br>Stroke, mini-stroke (TIA), or brain haemorrhage.</p>
+                    <p style="margin-top:0.75rem;"><strong>Lung condition</strong><br>Any lung or respiratory condition (excluding stable, well-controlled asthma).</p>
+                    <p style="margin-top:0.75rem;"><strong>Digestive system condition</strong><br>Bowel or abdominal conditions such as gallstones, diverticulitis, IBS or Crohn's disease.</p>
+                    <p style="margin-top:0.75rem;"><strong>Cancer</strong><br>Any form of cancer, whether in remission or not.</p>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="false" onclick="selectOption(this,'medicalListedConditions')">
+                        <h4>No</h4><div class="sub">None of these apply</div>
+                    </div>
+                    <div class="option-card" data-value="true" onclick="selectOption(this,'medicalListedConditions')">
+                        <h4>Yes</h4><div class="sub">Applies to someone</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(13)">Back</button>
+                    <button class="btn-next" onclick="goStep(15)" id="btn14" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 15: Medical Q4 -->
+            <div class="step" id="step15">
+                <div class="step-header">
+                    <div class="step-label">Medical question 4 of 4</div>
+                    <h2>Recent physical or psychological conditions</h2>
+                    <p>In the last two years, has anyone travelling had any physical or psychological conditions that required treatment, consultations, investigations or medication?</p>
+                </div>
+                <div class="option-cards">
+                    <div class="option-card" data-value="false" onclick="selectOption(this,'medicalRecentConditions')">
+                        <h4>No</h4><div class="sub">None of these apply</div>
+                    </div>
+                    <div class="option-card" data-value="true" onclick="selectOption(this,'medicalRecentConditions')">
+                        <h4>Yes</h4><div class="sub">Applies to someone</div>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(14)">Back</button>
+                    <button class="btn-next" onclick="goStep(16)" id="btn15" disabled>Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 16: Summary -->
+            <div class="step" id="step16">
+                <div class="step-header">
+                    <div class="step-label">Step 16 of 16</div>
+                    <h2>Your quote summary</h2>
+                    <p>Check everything looks right, then hit the button to see your price.</p>
+                </div>
+                <div id="summaryContent"></div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(15)">Back</button>
+                    <button class="btn-next" onclick="submitQuote()" id="btnSubmit">Get my quote</button>
+                </div>
+                <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:0.5rem;">Submit to see your price</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="step" id="stepLoading">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top:1rem;color:var(--text-light);">Getting your quote...</p>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div class="step" id="stepError">
+                <div class="hard-stop" style="background:#fff3e0;">
+                    <h3 style="color:#e65100;">Something went wrong</h3>
+                    <p id="errorMessage"></p>
+                    <p>You can try again or call Holiday Extras on <strong>0800 093 0408</strong>.</p>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(16)">Go back</button>
+                    <button class="btn-next" onclick="submitQuote()">Try again</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:3rem;text-align:center;">
+            <p style="color:var(--text-muted);font-size:0.85rem;">Insurance quotes powered by <a href="https://www.holidayextras.com" target="_blank" style="color:var(--purple);font-weight:600;">Holiday Extras</a></p>
+        </div>
+
+        <a href="/" class="back-link">← Back home</a>
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
+
+    <script>
+    const AGENT_CODE = 'WY992';
+    const API_URL = 'https://www.holidayextras.com/insurance-wizard/api/insurance/quote';
+
+    const payload = {
+        agentCode: AGENT_CODE,
+        tripType: null, destination: null, cruise: null,
+        winterSports: false, carHireExcess: false,
+        cancellationCover: null, holidayStart: null, holidayEnd: null,
+        travellerCount: null, relationship: null, partyType: null,
+        email: null,
+        medicalSurgeryTreatment: false, medicalUndiagnosedSymptoms: false,
+        medicalListedConditions: false, medicalRecentConditions: false,
+        travellers: []
+    };
+
+    let currentStep = 1;
+    let currentTravellerIdx = 0;
+    const totalSteps = 16;
+
+    const cancellationOptions = [
+        {label:'£500 per person',value:500},{label:'£1,000 per person',value:1000},
+        {label:'£2,500 per person',value:2500},{label:'£5,000 per person',value:5000},
+        {label:'£6,000 per person',value:6000},{label:'£7,000 per person',value:7000},
+        {label:'£8,000 per person',value:8000},{label:'£9,000 per person',value:9000},
+        {label:'£10,000 per person',value:10000},{label:'£10,000+ per person',value:10001}
+    ];
+
+    // Init cancellation cards
+    const cc = document.getElementById('cancellationCards');
+    cancellationOptions.forEach(o => {
+        cc.innerHTML += `<div class="option-card" data-value="${o.value}" onclick="selectOption(this,'cancellationCover')"><h4>${o.label}</h4></div>`;
+    });
+
+    // Set min date
+    document.getElementById('holidayStart').min = new Date().toISOString().split('T')[0];
+
+    function selectOption(el, field) {
+        el.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        let val = el.dataset.value;
+        if (val === 'true') val = true;
+        else if (val === 'false') val = false;
+        else if (!isNaN(val) && val !== '') val = parseInt(val);
+        payload[field] = val;
+        if (field === 'relationship') payload.partyType = val;
+        // Enable continue
+        const stepNum = currentStep;
+        const btn = document.getElementById('btn' + stepNum);
+        if (btn) btn.disabled = false;
+    }
+
+    function goStep(n) {
+        // Skip logic
+        if (n === 6 && payload.tripType === 'annual') {
+            payload.holidayEnd = null;
+            n = 7;
+        }
+        if (n === 8 && payload.travellerCount === 1) {
+            payload.relationship = null;
+            payload.partyType = 'solo';
+            n = 9;
+        }
+
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+
+        // Step-specific setup
+        if (n === 5) {
+            document.getElementById('startDateHeading').textContent = payload.tripType === 'annual' ? 'Cover to start' : 'Holiday starts';
+        }
+        if (n === 6 && payload.holidayStart) {
+            document.getElementById('holidayEnd').min = payload.holidayStart;
+        }
+        if (n === 9) {
+            currentTravellerIdx = 0;
+            payload.travellers = [];
+            showTravellerForm();
+        }
+        if (n === 16) buildSummary();
+
+        const stepId = n === 'hardstop' ? 'stepHardStop' : (n === 'loading' ? 'stepLoading' : (n === 'error' ? 'stepError' : 'step' + n));
+        document.getElementById(stepId).classList.add('active');
+        currentStep = n;
+
+        // Progress
+        const pct = Math.min(100, Math.round((n / totalSteps) * 100));
+        document.getElementById('progressFill').style.width = pct + '%';
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function onStartDateChange() {
+        const val = document.getElementById('holidayStart').value;
+        payload.holidayStart = val;
+        document.getElementById('btn5').disabled = !val;
+
+        const note = document.getElementById('startDateNote');
+        if (val) {
+            const today = new Date().toISOString().split('T')[0];
+            const isToday = val === today;
+            const isAnnual = payload.tripType === 'annual';
+            let msg = '';
+            if (isToday && isAnnual) msg = 'Starting today? Cancellation cover will start from this date.';
+            else if (isToday) msg = "Travelling today? If you've already left you won't have cancellation cover for this trip.";
+            else if (isAnnual) msg = 'Cancellation cover will start from this date.';
+            else msg = 'Cancellation cover starts as soon as your policy has been issued.';
+            note.textContent = msg;
+            note.style.display = 'block';
+        }
+    }
+
+    function onEndDateChange() {
+        payload.holidayEnd = document.getElementById('holidayEnd').value;
+        document.getElementById('btn6').disabled = !payload.holidayEnd;
+    }
+
+    function onTravellerCountChange() {
+        const val = parseInt(document.getElementById('travellerCount').value);
+        payload.travellerCount = val || null;
+        document.getElementById('btn7').disabled = !val;
+    }
+
+    function showTravellerForm() {
+        const total = payload.travellerCount;
+        const idx = currentTravellerIdx;
+        const heading = total === 1 ? 'Traveller' : `Traveller ${idx + 1} of ${total}`;
+        document.getElementById('travellerHeading').textContent = heading;
+
+        const existing = payload.travellers[idx] || {};
+        document.getElementById('travellerForms').innerHTML = `
+            <div class="traveller-card">
+                <div class="form-group">
+                    <label>Title</label>
+                    <select id="tTitle">
+                        <option value="">Select...</option>
+                        <option value="Mr" ${existing.title==='Mr'?'selected':''}>Mr</option>
+                        <option value="Mrs" ${existing.title==='Mrs'?'selected':''}>Mrs</option>
+                        <option value="Miss" ${existing.title==='Miss'?'selected':''}>Miss</option>
+                        <option value="Ms" ${existing.title==='Ms'?'selected':''}>Ms</option>
+                        <option value="Mx" ${existing.title==='Mx'?'selected':''}>Mx</option>
+                        <option value="Dr" ${existing.title==='Dr'?'selected':''}>Dr</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="tFirstName" value="${existing.firstName||''}" placeholder="First name">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="tLastName" value="${existing.lastName||''}" placeholder="Last name">
+                </div>
+                <div class="form-group">
+                    <label>Date of birth</label>
+                    <input type="date" id="tDob" value="${existing._rawDob||''}">
+                </div>
+                <div class="error-msg" id="travellerError"></div>
+            </div>
+        `;
+    }
+
+    function nextTraveller() {
+        const title = document.getElementById('tTitle').value;
+        const firstName = document.getElementById('tFirstName').value.trim();
+        const lastName = document.getElementById('tLastName').value.trim();
+        const dobRaw = document.getElementById('tDob').value;
+        const errEl = document.getElementById('travellerError');
+
+        if (!title || !firstName || !lastName || !dobRaw) {
+            errEl.textContent = 'Please fill in all fields.';
+            errEl.style.display = 'block';
+            return;
+        }
+        errEl.style.display = 'none';
+
+        // Format DOB as DD / MM / YYYY
+        const [y, m, d] = dobRaw.split('-');
+        const dob = `${d} / ${m} / ${y}`;
+
+        payload.travellers[currentTravellerIdx] = { title, firstName, lastName, dob, _rawDob: dobRaw };
+        currentTravellerIdx++;
+
+        if (currentTravellerIdx < payload.travellerCount) {
+            showTravellerForm();
+        } else {
+            goStep(10);
+        }
+    }
+
+    function goBackFromTravellers() {
+        if (currentTravellerIdx > 0) {
+            currentTravellerIdx--;
+            showTravellerForm();
+        } else {
+            goStep(payload.travellerCount === 1 ? 7 : 8);
+        }
+    }
+
+    function saveEmail() {
+        const val = document.getElementById('emailInput').value.trim();
+        payload.email = val || null;
+    }
+
+    function handleMedQ1() {
+        if (payload.medicalSurgeryTreatment === true) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('stepHardStop').classList.add('active');
+        } else {
+            goStep(13);
+        }
+    }
+
+    function buildSummary() {
+        const destLabels = {
+            'europe-inc':'Europe (inc Spain, Cyprus, Malta, Turkey, Greece)',
+            'europe-exc':'Europe (exc Spain, Cyprus, Malta, Turkey, Greece)',
+            'aus-nz':'Australia & New Zealand',
+            'worldwide-inc':'Worldwide (inc USA, Canada, Mexico, Caribbean)',
+            'worldwide-exc':'Worldwide (exc USA, Canada, Mexico, Caribbean)'
+        };
+        const cancLabels = {};
+        cancellationOptions.forEach(o => cancLabels[o.value] = o.label);
+
+        let html = `<div class="summary-section">
+            <div class="summary-row"><span class="summary-label">Cover type</span><span class="summary-value">${payload.tripType==='annual'?'Annual':'Single Trip'}</span></div>
+            <div class="summary-row"><span class="summary-label">Destination</span><span class="summary-value">${destLabels[payload.destination]||payload.destination}</span></div>
+            <div class="summary-row"><span class="summary-label">Cruise cover</span><span class="summary-value">${payload.cruise?'Yes':'No'}</span></div>
+            <div class="summary-row"><span class="summary-label">Cancellation cover</span><span class="summary-value">${cancLabels[payload.cancellationCover]||payload.cancellationCover}</span></div>
+            <div class="summary-row"><span class="summary-label">${payload.tripType==='annual'?'Cover starts':'Holiday starts'}</span><span class="summary-value">${payload.holidayStart}</span></div>
+            ${payload.holidayEnd ? `<div class="summary-row"><span class="summary-label">Holiday ends</span><span class="summary-value">${payload.holidayEnd}</span></div>` : ''}
+            <div class="summary-row"><span class="summary-label">Travellers</span><span class="summary-value">${payload.travellerCount} (${payload.partyType})</span></div>
+            <div class="summary-row"><span class="summary-label">Email</span><span class="summary-value">${payload.email||'Not provided'}</span></div>
+        </div>`;
+
+        payload.travellers.forEach((t, i) => {
+            const dobParts = t._rawDob.split('-');
+            const birthYear = parseInt(dobParts[0]);
+            const age = new Date().getFullYear() - birthYear;
+            html += `<div class="summary-section">
+                <div class="summary-row"><span class="summary-label">Traveller ${i+1}</span><span class="summary-value">${t.title} ${t.firstName} ${t.lastName}</span></div>
+                <div class="summary-row"><span class="summary-label">Date of birth</span><span class="summary-value">${t.dob} (age ~${age})</span></div>
+            </div>`;
+        });
+
+        html += `<div class="summary-section">
+            <div class="summary-row"><span class="summary-label">Medical Q1 (surgery/treatment)</span><span class="summary-value">No</span></div>
+            <div class="summary-row"><span class="summary-label">Medical Q2 (undiagnosed symptoms)</span><span class="summary-value">${payload.medicalUndiagnosedSymptoms?'Yes':'No'}</span></div>
+            <div class="summary-row"><span class="summary-label">Medical Q3 (listed conditions)</span><span class="summary-value">${payload.medicalListedConditions?'Yes':'No'}</span></div>
+            <div class="summary-row"><span class="summary-label">Medical Q4 (recent conditions)</span><span class="summary-value">${payload.medicalRecentConditions?'Yes':'No'}</span></div>
+        </div>`;
+
+        document.getElementById('summaryContent').innerHTML = html;
+    }
+
+    async function submitQuote() {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('stepLoading').classList.add('active');
+
+        // Clean travellers (remove _rawDob)
+        const cleanTravellers = payload.travellers.map(({_rawDob, ...rest}) => rest);
+        const body = { ...payload, travellers: cleanTravellers };
+        delete body._rawDob;
+
+        try {
+            const res = await fetch(`${API_URL}?agent=${AGENT_CODE}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+            } else if (data.error) {
+                document.getElementById('errorMessage').textContent = data.error;
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                document.getElementById('stepError').classList.add('active');
+            }
+        } catch (e) {
+            document.getElementById('errorMessage').textContent = 'Could not connect to Holiday Extras. Please check your internet connection and try again.';
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('stepError').classList.add('active');
+        }
+    }
+    </script>
+</body>
+</html>
