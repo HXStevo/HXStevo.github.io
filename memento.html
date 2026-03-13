@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memento — Steven Hill</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            background: linear-gradient(180deg, #0a1628 0%, #0a0a0a 100%);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #5ba3d9;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            font-style: italic;
+        }
+        .hero .year {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .intro p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+        .polaroid {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 4px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            color: #5ba3d9;
+            font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
+            transform: rotate(-1deg);
+        }
+        .polaroid::before {
+            content: '📸';
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            font-size: 1.2rem;
+        }
+        .polaroid .note {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .stat {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #5ba3d9;
+        }
+        .stat .label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.3rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            color: #fff;
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #222;
+        }
+        .card {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s ease;
+        }
+        .card:hover { border-color: #5ba3d9; }
+        .card h3 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+        .card .actor {
+            color: #5ba3d9;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .card p {
+            color: #aaa;
+            line-height: 1.7;
+        }
+        .structure-box {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+        .structure-box p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .structure-box p:last-child { margin-bottom: 0; }
+        .colour-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tag-colour { background: #1a2a3a; color: #5ba3d9; }
+        .tag-bw { background: #222; color: #999; }
+        .quote-block {
+            background: #141414;
+            border-left: 4px solid #5ba3d9;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .quote-block p {
+            color: #ccc;
+            font-style: italic;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+        .quote-block .attribution {
+            color: #5ba3d9;
+            font-style: normal;
+            font-weight: 600;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .trivia-list {
+            list-style: none;
+            padding: 0;
+        }
+        .trivia-list li {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #aaa;
+            line-height: 1.6;
+            transition: border-color 0.3s ease;
+        }
+        .trivia-list li:hover { border-color: #333; }
+        .trivia-list li strong { color: #fff; }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            color: #5ba3d9;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: #fff; }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Memento</h1>
+        <p class="subtitle">"We all need mirrors to remind ourselves who we are."</p>
+        <p class="year">Written & Directed by Christopher Nolan — 2000</p>
+    </div>
+
+    <div class="container">
+
+        <div class="intro">
+            <p>
+                Before Batman, before Inception, before Oppenheimer — Christopher Nolan made a $9 million indie thriller that broke people's brains. Memento tells its story backwards. Literally. Each scene takes you further back in time, putting you inside the fractured mind of a man who can't form new memories.
+            </p>
+            <p>
+                It's a film about trust, identity, and the lies we tell ourselves. You can't trust the narrator. You can't trust the timeline. By the end — or the beginning — you're not even sure you can trust the truth. It's the kind of film that demands a second watch, and rewards you with a completely different experience when you do.
+            </p>
+        </div>
+
+        <div class="polaroid">
+            Remember Sammy Jankis.
+            <div class="note">— tattooed on Leonard's hand</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="value">$40M</div>
+                <div class="label">Box Office</div>
+            </div>
+            <div class="stat">
+                <div class="value">$9M</div>
+                <div class="label">Budget</div>
+            </div>
+            <div class="stat">
+                <div class="value">113</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="stat">
+                <div class="value">2</div>
+                <div class="label">Oscar Noms</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">The Characters</h2>
+
+        <div class="card">
+            <h3>Leonard Shelby</h3>
+            <p class="actor">Guy Pearce</p>
+            <p>Former insurance investigator with anterograde amnesia — he can't make new memories since the attack that killed his wife. He uses Polaroids, notes, and tattoos to track his investigation. The question isn't whether he'll find his wife's killer. It's whether he already has. Guy Pearce delivers a masterclass in playing a man who's both the detective and the mystery.</p>
+        </div>
+
+        <div class="card">
+            <h3>Teddy (John Edward Gammell)</h3>
+            <p class="actor">Joe Pantoliano</p>
+            <p>Leonard's "friend" — an undercover cop who may be helping, manipulating, or both. Every time Leonard forgets, Teddy gets a clean slate to rewrite the story. He's the guy grinning in the Polaroid marked "Don't believe his lies." But whose lies are we really talking about?</p>
+        </div>
+
+        <div class="card">
+            <h3>Natalie</h3>
+            <p class="actor">Carrie-Anne Moss</p>
+            <p>A bartender with her own agenda. She uses Leonard's condition to her advantage in one of the film's most infuriating scenes — provoking him, leaving, and returning minutes later as his saviour. Trinity with a dark side. You'll hate her and feel sorry for her in the same breath.</p>
+        </div>
+
+        <h2 class="section-title">The Structure</h2>
+
+        <div class="structure-box">
+            <p>
+                Memento uses two timelines running in opposite directions. The <span class="colour-tag tag-colour">colour sequences</span> run in reverse chronological order — each scene shows what happened before the previous one. The <span class="colour-tag tag-bw">black & white sequences</span> run forward, showing Leonard in a motel room, talking on the phone.
+            </p>
+            <p>
+                The two timelines converge at the end of the film — which is the middle of the story. It's the moment everything clicks into place, and the moment you realise everything you thought you knew was wrong.
+            </p>
+            <p>
+                Nolan designed this structure so you experience Leonard's condition firsthand. Each colour scene starts with no context — just like Leonard, you have no memory of what came before. You're forced to piece together the truth from fragments, and every new piece changes the picture.
+            </p>
+        </div>
+
+        <h2 class="section-title">Iconic Quotes</h2>
+
+        <div class="quote-block">
+            <p>"I have to believe in a world outside my own mind. I have to believe that my actions still have meaning, even if I can't remember them."</p>
+            <p class="attribution">— Leonard Shelby</p>
+        </div>
+
+        <div class="quote-block">
+            <p>"Memory can change the shape of a room; it can change the color of a car. And memories can be distorted. They're just an interpretation, they're not a record."</p>
+            <p class="attribution">— Leonard Shelby</p>
+        </div>
+
+        <div class="quote-block">
+            <p>"So you lie to yourself to be happy. There's nothing wrong with that. We all do it."</p>
+            <p class="attribution">— Teddy</p>
+        </div>
+
+        <div class="quote-block">
+            <p>"Do I lie to myself to be happy? In your case, Teddy, yes I will."</p>
+            <p class="attribution">— Leonard Shelby</p>
+        </div>
+
+        <h2 class="section-title">The Big Question</h2>
+
+        <div class="structure-box">
+            <p>
+                <strong>Did Leonard kill his own wife?</strong> The film leaves enough breadcrumbs to suggest that Leonard — not the mysterious "John G." — may have been responsible for his wife's insulin overdose, just like Sammy Jankis. The twist is that Sammy's story might be Leonard's story, rewritten to protect himself from a truth he can't bear.
+            </p>
+            <p>
+                Teddy says it outright in the final scene. But can you trust Teddy? Can you trust anyone in this film? That's the point. Memento doesn't give you answers — it gives you the tools to build your own, and then makes you question those too.
+            </p>
+        </div>
+
+        <h2 class="section-title">Trivia</h2>
+
+        <ul class="trivia-list">
+            <li><strong>Based on a short story</strong> — "Memento Mori" by Jonathan Nolan (Christopher's brother), published in Esquire. The short story is told in second person and is even more unsettling than the film.</li>
+            <li><strong>The DVD Easter egg</strong> — The special edition DVD let you watch the film in chronological order. It's a completely different experience — and somehow even more disturbing.</li>
+            <li><strong>Brad Pitt nearly starred</strong> — He was attached early on but dropped out. Guy Pearce stepped in and delivered a career-defining performance.</li>
+            <li><strong>Shot in 25 days</strong> — On a shoestring budget with no studio backing initially. Newmarket Films picked it up after Nolan screened it at festivals.</li>
+            <li><strong>The tattoos are real(ish)</strong> — Guy Pearce spent hours in makeup each day. The tattoo continuity across scenes shot out of order was one of the production's biggest challenges.</li>
+            <li><strong>Nolan's breakthrough</strong> — This was only his second feature after <em>Following</em> (made for $6,000). It launched him into the Hollywood stratosphere and directly led to <em>Insomnia</em> and then <em>Batman Begins</em>.</li>
+            <li><strong>The motel room number</strong> — Leonard stays in Room 21. The clerk quietly moves him between rooms to charge double. A tiny detail that says everything about how people exploit his condition.</li>
+        </ul>
+
+        <a href="/" class="back-link">← Back home</a>
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
+</body>
+</html>
