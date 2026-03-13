@@ -4,94 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steven Hill</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            max-width: 600px;
-            padding: 2rem;
-            text-align: center;
-        }
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0 auto 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #fff;
-        }
-        .tagline {
-            font-size: 1.1rem;
-            color: #888;
-            margin-bottom: 2rem;
-        }
-        .bio {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #aaa;
-            margin-bottom: 2.5rem;
-        }
-        .links {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .links a {
-            display: inline-block;
-            padding: 0.7rem 1.5rem;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #e0e0e0;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        .links a:hover {
-            border-color: #667eea;
-            color: #fff;
-            background: rgba(102, 126, 234, 0.1);
-        }
-        .footer {
-            margin-top: 4rem;
-            font-size: 0.8rem;
-            color: #444;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="avatar"><img src="stevo-track.jpg" alt="Stevo on track" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
-        <h1>Steven Hill</h1>
-        <p class="tagline">London, UK</p>
-        <p class="bio">
-            Welcome to my corner of the internet. More coming soon.
-        </p>
-        <div class="links">
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/" class="active">Home</a>
             <a href="/bikes.html">🏍️ The Garage</a>
             <a href="/pulp-fiction.html">🎬 Pulp Fiction</a>
             <a href="/memento.html">🧠 Memento</a>
-            <a href="mailto:steven.hill@holidayextras.com">Email</a>
-            <a href="https://github.com/HXStevo" target="_blank">GitHub</a>
         </div>
-        <p class="footer">© 2026 Steven Hill</p>
+    </nav>
+
+    <div class="hero">
+        <img src="stevo-track.jpg" alt="Steven Hill" class="hero-avatar">
+        <h1>Steven Hill</h1>
+        <p class="tagline">London, UK</p>
     </div>
+
+    <div class="banner">Welcome to my corner of the internet. More coming soon. 🚀</div>
+
+    <div class="container">
+        <h2 class="section-title">Explore</h2>
+        <div class="cards">
+            <a href="/bikes.html" class="card" style="text-decoration:none;">
+                <span class="badge badge-green">Bikes</span>
+                <h3>🏍️ The Garage</h3>
+                <p>Two bikes. Two personalities. One addiction. From the ZXR 400 to the S1000RR — the full collection.</p>
+            </a>
+            <a href="/pulp-fiction.html" class="card" style="text-decoration:none;">
+                <span class="badge badge-yellow">Film</span>
+                <h3>🎬 Pulp Fiction</h3>
+                <p>Tarantino's masterpiece. Characters, quotes, the non-linear structure, and trivia you didn't know.</p>
+            </a>
+            <a href="/memento.html" class="card" style="text-decoration:none;">
+                <span class="badge badge-purple">Film</span>
+                <h3>🧠 Memento</h3>
+                <p>Nolan's backwards thriller. The structure, the twist, and why you need to watch it twice.</p>
+            </a>
+        </div>
+
+        <h2 class="section-title">Get in Touch</h2>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem;">
+            <a href="mailto:steven.hill@holidayextras.com" class="btn btn-purple">📧 Email</a>
+            <a href="https://github.com/HXStevo" target="_blank" class="btn btn-outline">💻 GitHub</a>
+        </div>
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
 </body>
 </html>

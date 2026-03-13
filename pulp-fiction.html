@@ -4,212 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pulp Fiction — Steven Hill</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            min-height: 100vh;
-        }
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem 2rem;
-            background: linear-gradient(180deg, #2a1a0a 0%, #0a0a0a 100%);
-        }
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #f5c518;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #888;
-            font-style: italic;
-        }
-        .hero .year {
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 0.5rem;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .quote-block {
-            background: #141414;
-            border-left: 4px solid #f5c518;
-            padding: 1.5rem 2rem;
-            margin: 2rem 0;
-            border-radius: 0 12px 12px 0;
-        }
-        .quote-block p {
-            color: #ccc;
-            font-style: italic;
-            line-height: 1.7;
-            font-size: 1.1rem;
-        }
-        .quote-block .attribution {
-            color: #f5c518;
-            font-style: normal;
-            font-weight: 600;
-            margin-top: 0.75rem;
-            font-size: 0.9rem;
-        }
-        .section-title {
-            font-size: 1.4rem;
-            color: #fff;
-            margin: 3rem 0 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #222;
-        }
-        .card {
-            background: #141414;
-            border: 1px solid #222;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: border-color 0.3s ease;
-        }
-        .card:hover { border-color: #f5c518; }
-        .card h3 {
-            font-size: 1.3rem;
-            color: #fff;
-            margin-bottom: 0.3rem;
-        }
-        .card .actor {
-            color: #f5c518;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-        }
-        .card p {
-            color: #aaa;
-            line-height: 1.7;
-        }
-        .intro p {
-            color: #aaa;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-            font-size: 1.05rem;
-        }
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-            margin: 1.5rem 0;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #333;
-        }
-        .timeline-item {
-            position: relative;
-            margin-bottom: 1.5rem;
-            padding-left: 1rem;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -2.35rem;
-            top: 0.5rem;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #f5c518;
-        }
-        .timeline-item h4 {
-            color: #fff;
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
-        .timeline-item p {
-            color: #888;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-        .stat {
-            background: #141414;
-            border: 1px solid #222;
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .stat .value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #f5c518;
-        }
-        .stat .label {
-            font-size: 0.8rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.3rem;
-        }
-        .trivia-list {
-            list-style: none;
-            padding: 0;
-        }
-        .trivia-list li {
-            background: #141414;
-            border: 1px solid #222;
-            border-radius: 12px;
-            padding: 1.2rem 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #aaa;
-            line-height: 1.6;
-            transition: border-color 0.3s ease;
-        }
-        .trivia-list li:hover { border-color: #333; }
-        .trivia-list li strong { color: #fff; }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            color: #f5c518;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .back-link:hover { color: #fff; }
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            color: #444;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/bikes.html">🏍️ The Garage</a>
+            <a href="/pulp-fiction.html" class="active">🎬 Pulp Fiction</a>
+            <a href="/memento.html">🧠 Memento</a>
+        </div>
+    </nav>
+
     <div class="hero">
-        <h1>Pulp Fiction</h1>
-        <p class="subtitle">"Just because you are a character doesn't mean that you have character."</p>
-        <p class="year">Written & Directed by Quentin Tarantino — 1994</p>
+        <h1>🎬 Pulp Fiction</h1>
+        <p class="tagline">"Just because you are a character doesn't mean that you have character."</p>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.5);margin-top:0.5rem;">Written & Directed by Quentin Tarantino — 1994</p>
     </div>
 
     <div class="container">
 
-        <div class="intro">
-            <p>
-                Pulp Fiction isn't just a film — it's a cultural reset. Quentin Tarantino's magnum opus smashed the rules of storytelling, jumbled timelines like a shuffled deck, and proved that gangsters talking about cheeseburgers could be the most gripping cinema ever made.
-            </p>
-            <p>
-                It won the Palme d'Or at Cannes, resurrected John Travolta's career, made Samuel L. Jackson a household name, and permanently embedded a dozen quotes into everyday conversation. Thirty years later, it still hits different.
-            </p>
-        </div>
+        <p style="color:var(--text-light);line-height:1.8;margin-bottom:1rem;font-size:1.05rem;">
+            Pulp Fiction isn't just a film — it's a cultural reset. Quentin Tarantino's magnum opus smashed the rules of storytelling, jumbled timelines like a shuffled deck, and proved that gangsters talking about cheeseburgers could be the most gripping cinema ever made.
+        </p>
+        <p style="color:var(--text-light);line-height:1.8;margin-bottom:1rem;font-size:1.05rem;">
+            It won the Palme d'Or at Cannes, resurrected John Travolta's career, made Samuel L. Jackson a household name, and permanently embedded a dozen quotes into everyday conversation. Thirty years later, it still hits different.
+        </p>
 
         <div class="stats">
             <div class="stat">
@@ -232,45 +53,45 @@
 
         <h2 class="section-title">The Characters</h2>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:1.5rem;">
             <h3>Vincent Vega</h3>
-            <p class="actor">John Travolta</p>
+            <p class="meta">John Travolta</p>
             <p>Heroin-dabbling hitman with a thing for milkshakes and an unfortunate habit of leaving his gun on the kitchen counter. His night out with Mia Wallace is one of cinema's most tense dinner dates. Coolest guy in the room — until he isn't.</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:1.5rem;">
             <h3>Jules Winnfield</h3>
-            <p class="actor">Samuel L. Jackson</p>
+            <p class="meta">Samuel L. Jackson</p>
             <p>Bible-quoting assassin having an existential crisis mid-hit. The Ezekiel 25:17 speech is legendary, but it's the quiet diner scene at the end where Jules really shines. A cold-blooded killer who chooses to walk away. The coolest character arc in film.</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:1.5rem;">
             <h3>Mia Wallace</h3>
-            <p class="actor">Uma Thurman</p>
+            <p class="meta">Uma Thurman</p>
             <p>Gangster's wife, failed TV pilot actress, and the reason the twist at Jack Rabbit Slim's became iconic. Sharp, dangerous, and effortlessly cool — right up until the overdose scene that still makes people flinch.</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:1.5rem;">
             <h3>Butch Coolidge</h3>
-            <p class="actor">Bruce Willis</p>
+            <p class="meta">Bruce Willis</p>
             <p>Washed-up boxer who double-crosses Marsellus Wallace and then — in one of cinema's wildest plot turns — ends up saving him with a samurai sword. His storyline is the most conventionally "action movie" of the lot, and it's glorious.</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:1.5rem;">
             <h3>Marsellus Wallace</h3>
-            <p class="actor">Ving Rhames</p>
+            <p class="meta">Ving Rhames</p>
             <p>The big boss. You never see his face until you do, and when you do, you understand why everyone's terrified. Commands respect through presence alone. Does NOT look like a bitch.</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:1.5rem;">
             <h3>Winston "The Wolf" Wolfe</h3>
-            <p class="actor">Harvey Keitel</p>
+            <p class="meta">Harvey Keitel</p>
             <p>The fixer. Shows up in a tuxedo at 8am, solves an impossible problem in 40 minutes, and leaves for breakfast. Nine minutes of screen time and he steals the entire film. "I'm Winston Wolfe. I solve problems."</p>
         </div>
 
         <h2 class="section-title">The Structure</h2>
 
-        <p style="color:#aaa;line-height:1.7;margin-bottom:1.5rem;">Tarantino tells three interlocking stories out of chronological order. The genius is that each story stands alone, but together they create something much bigger. Here's how it actually unfolds on screen:</p>
+        <p style="color:var(--text-light);line-height:1.7;margin-bottom:1.5rem;">Tarantino tells three interlocking stories out of chronological order. The genius is that each story stands alone, but together they create something much bigger:</p>
 
         <div class="timeline">
             <div class="timeline-item">

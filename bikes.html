@@ -3,161 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bikes — Steven Hill</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            min-height: 100vh;
-        }
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem 2rem;
-            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a0a 100%);
-        }
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #888;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .bike-card {
-            background: #141414;
-            border: 1px solid #222;
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            transition: border-color 0.3s ease;
-        }
-        .bike-card:hover {
-            border-color: #444;
-        }
-        .bike-card .badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-        }
-        .badge-track { background: #1a3a2a; color: #4ade80; }
-        .badge-street { background: #3a1a1a; color: #f87171; }
-        .bike-card h2 {
-            font-size: 1.8rem;
-            color: #fff;
-            margin-bottom: 0.3rem;
-        }
-        .bike-card .bike-type {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 1.2rem;
-        }
-        .bike-card p {
-            color: #aaa;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-        .specs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #222;
-        }
-        .spec {
-            text-align: center;
-        }
-        .spec .value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-        }
-        .spec .label {
-            font-size: 0.8rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .section-title {
-            font-size: 1.4rem;
-            color: #fff;
-            margin: 3rem 0 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #222;
-        }
-        .philosophy {
-            background: #141414;
-            border: 1px solid #222;
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-        }
-        .philosophy p {
-            color: #aaa;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-        .philosophy p:last-child { margin-bottom: 0; }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1.2rem;
-        }
-        .gallery img {
-            width: 100%;
-            border-radius: 12px;
-            object-fit: cover;
-            aspect-ratio: 4/3;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .back-link:hover { color: #fff; }
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            color: #444;
-        }
-    </style>
+    <title>The Garage — Steven Hill</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/bikes.html" class="active">🏍️ The Garage</a>
+            <a href="/pulp-fiction.html">🎬 Pulp Fiction</a>
+            <a href="/memento.html">🧠 Memento</a>
+        </div>
+    </nav>
+
     <div class="hero">
-        <img src="stevo-track.jpg" alt="Stevo on track" style="width:280px;height:280px;object-fit:cover;border-radius:16px;margin-bottom:1.5rem;">
+        <img src="stevo-track.jpg" alt="Stevo on track" style="width:280px;height:280px;object-fit:cover;border-radius:16px;border:4px solid var(--yellow);margin-bottom:1.5rem;">
         <h1>🏍️ The Garage</h1>
-        <p class="subtitle">Two bikes. Two personalities. One addiction.</p>
+        <p class="tagline">Two bikes. Two personalities. One addiction.</p>
     </div>
 
     <div class="container">
 
-        <div class="bike-card">
-            <span class="badge badge-track">Track Weapon</span>
-            <h2>BMW S1000RR</h2>
-            <p class="bike-type">Superbike</p>
+        <h2 class="section-title">Current Bikes</h2>
+
+        <div class="card" style="margin-bottom:1.5rem;">
+            <span class="badge badge-red">Track Weapon</span>
+            <h3>BMW S1000RR</h3>
+            <p class="meta">Superbike</p>
             <p>
                 The S1000RR is pure precision engineering. BMW took everything they knew about making things go fast and poured it into an inline-four that screams to the redline. It's the kind of bike that makes you a better rider — or humbles you trying. Razor-sharp on turn-in, relentless on the straights, and packed with enough electronics to keep things (mostly) civilised.
             </p>
-            <p>
+            <p style="margin-top:0.75rem;">
                 Whether it's a trackday at Brands Hatch or a Sunday blast through the Kent lanes, the RR delivers that addictive cocktail of fear and euphoria that keeps you coming back.
             </p>
             <div class="specs">
@@ -180,14 +57,14 @@
             </div>
         </div>
 
-        <div class="bike-card">
-            <span class="badge badge-street">Street Beast</span>
-            <h2>KTM 1290 Super Duke R</h2>
-            <p class="bike-type">Hyper Naked</p>
+        <div class="card" style="margin-bottom:1.5rem;">
+            <span class="badge badge-yellow">Street Beast</span>
+            <h3>KTM 1290 Super Duke R</h3>
+            <p class="meta">Hyper Naked</p>
             <p>
                 KTM call it "The Beast" and that's not marketing fluff — it's a genuine warning label. The 1290 Super Duke is a V-twin muscle bike with the manners of a cage fighter. Massive torque from idle, a chassis that begs to be thrown into corners, and a presence on the road that makes everything else feel apologetic.
             </p>
-            <p>
+            <p style="margin-top:0.75rem;">
                 It's the everyday hooligan. Commuting? Entertaining. Country roads? Devastating. Traffic? That V-twin rumble makes even the boring bits feel good. It's the bike that makes you take the long way home every single time.
             </p>
             <div class="specs">
@@ -212,10 +89,10 @@
 
         <h2 class="section-title">Past Rides</h2>
 
-        <div class="bike-card">
-            <span class="badge badge-track">First Bike</span>
-            <h2>Kawasaki ZXR 400</h2>
-            <p class="bike-type">Sportbike — Where It All Began</p>
+        <div class="card" style="margin-bottom:1.5rem;">
+            <span class="badge badge-green">First Bike</span>
+            <h3>Kawasaki ZXR 400</h3>
+            <p class="meta">Sportbike — Where It All Began</p>
             <div class="gallery">
                 <img src="zxr400.jpg" alt="Kawasaki ZXR 400 blue and orange">
             </div>
@@ -223,9 +100,10 @@
                 The one that started everything. A Kawasaki ZXR 400 in blue with orange wheels — peak 90s sportbike energy. Four-cylinder screamer that taught you how to ride properly, rev-happy and eager to please. Every biker remembers their first, and this one set the tone for everything that followed.
             </p>
         </div>
-        <div class="bike-card">
-            <h2>Yamaha YZF-R1 (Black &amp; Gold)</h2>
-            <p class="bike-type">Superbike — Track Prepped</p>
+
+        <div class="card" style="margin-bottom:1.5rem;">
+            <h3>Yamaha YZF-R1 (Black &amp; Gold)</h3>
+            <p class="meta">Superbike — Track Prepped</p>
             <div class="gallery">
                 <img src="r1-black-gold.jpg" alt="R1 Black and Gold side profile">
                 <img src="r1.jpg" alt="R1 Black and Gold rear">
@@ -236,9 +114,9 @@
             </p>
         </div>
 
-        <div class="bike-card">
-            <h2>Yamaha YZF-R1 (Santander Livery)</h2>
-            <p class="bike-type">Superbike — Race Replica</p>
+        <div class="card" style="margin-bottom:1.5rem;">
+            <h3>Yamaha YZF-R1 (Santander Livery)</h3>
+            <p class="meta">Superbike — Race Replica</p>
             <div class="gallery">
                 <img src="r1-santander-350z.jpg" alt="R1 Santander livery with 350Z">
                 <img src="r1-meetup.jpg" alt="R1 Santander at fuel stop with mates">
@@ -248,9 +126,9 @@
             </p>
         </div>
 
-        <div class="bike-card">
-            <h2>Yamaha YZF-R1 (Red &amp; White)</h2>
-            <p class="bike-type">Superbike — 2018</p>
+        <div class="card" style="margin-bottom:1.5rem;">
+            <h3>Yamaha YZF-R1 (Red &amp; White)</h3>
+            <p class="meta">Superbike — 2018</p>
             <div class="gallery">
                 <img src="r1-red-white.jpg" alt="Yamaha R1 red and white 2018">
             </div>
@@ -260,7 +138,7 @@
         </div>
 
         <h2 class="section-title">Why Two Bikes?</h2>
-        <div class="philosophy">
+        <div class="content-box">
             <p>
                 Because one bike can't do everything — and why would you want it to? The S1000RR is for those days when you want surgical precision and to chase lap times. The Super Duke is for when you want raw character, torque, and to feel every bit of the road beneath you.
             </p>
