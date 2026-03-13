@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bikes — Steven Hill</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a0a 100%);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .bike-card {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: border-color 0.3s ease;
+        }
+        .bike-card:hover {
+            border-color: #444;
+        }
+        .bike-card .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        .badge-track { background: #1a3a2a; color: #4ade80; }
+        .badge-street { background: #3a1a1a; color: #f87171; }
+        .bike-card h2 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+        .bike-card .bike-type {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+        .bike-card p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #222;
+        }
+        .spec {
+            text-align: center;
+        }
+        .spec .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .spec .label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            color: #fff;
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #222;
+        }
+        .philosophy {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .philosophy p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .philosophy p:last-child { margin-bottom: 0; }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: #fff; }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🏍️ The Garage</h1>
+        <p class="subtitle">Two bikes. Two personalities. One addiction.</p>
+    </div>
+
+    <div class="container">
+
+        <div class="bike-card">
+            <span class="badge badge-track">Track Weapon</span>
+            <h2>BMW S1000RR</h2>
+            <p class="bike-type">Superbike</p>
+            <p>
+                The S1000RR is pure precision engineering. BMW took everything they knew about making things go fast and poured it into an inline-four that screams to the redline. It's the kind of bike that makes you a better rider — or humbles you trying. Razor-sharp on turn-in, relentless on the straights, and packed with enough electronics to keep things (mostly) civilised.
+            </p>
+            <p>
+                Whether it's a trackday at Brands Hatch or a Sunday blast through the Kent lanes, the RR delivers that addictive cocktail of fear and euphoria that keeps you coming back.
+            </p>
+            <div class="specs">
+                <div class="spec">
+                    <div class="value">999cc</div>
+                    <div class="label">Engine</div>
+                </div>
+                <div class="spec">
+                    <div class="value">205</div>
+                    <div class="label">BHP</div>
+                </div>
+                <div class="spec">
+                    <div class="value">197</div>
+                    <div class="label">kg (wet)</div>
+                </div>
+                <div class="spec">
+                    <div class="value">Inline-4</div>
+                    <div class="label">Layout</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bike-card">
+            <span class="badge badge-street">Street Beast</span>
+            <h2>KTM 1290 Super Duke R</h2>
+            <p class="bike-type">Hyper Naked</p>
+            <p>
+                KTM call it "The Beast" and that's not marketing fluff — it's a genuine warning label. The 1290 Super Duke is a V-twin muscle bike with the manners of a cage fighter. Massive torque from idle, a chassis that begs to be thrown into corners, and a presence on the road that makes everything else feel apologetic.
+            </p>
+            <p>
+                It's the everyday hooligan. Commuting? Entertaining. Country roads? Devastating. Traffic? That V-twin rumble makes even the boring bits feel good. It's the bike that makes you take the long way home every single time.
+            </p>
+            <div class="specs">
+                <div class="spec">
+                    <div class="value">1,301cc</div>
+                    <div class="label">Engine</div>
+                </div>
+                <div class="spec">
+                    <div class="value">180</div>
+                    <div class="label">BHP</div>
+                </div>
+                <div class="spec">
+                    <div class="value">189</div>
+                    <div class="label">kg (dry)</div>
+                </div>
+                <div class="spec">
+                    <div class="value">V-Twin</div>
+                    <div class="label">Layout</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Why Two Bikes?</h2>
+        <div class="philosophy">
+            <p>
+                Because one bike can't do everything — and why would you want it to? The S1000RR is for those days when you want surgical precision and to chase lap times. The Super Duke is for when you want raw character, torque, and to feel every bit of the road beneath you.
+            </p>
+            <p>
+                One's a scalpel. The other's a sledgehammer. Both are addictive. Both get ridden hard. The perfect two-bike garage.
+            </p>
+        </div>
+
+        <a href="/" class="back-link">← Back home</a>
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
+</body>
+</html>
