@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride & Fly — Airport Parking for Bikers</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1f3d 50%, #1a1a1a 100%);
+            padding: 3rem 2rem;
+        }
+        .hero h1 { font-size: 2.8rem; }
+        .hero h1 .accent { color: var(--yellow); }
+
+        .search-panel {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 700px;
+            margin: -2rem auto 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            position: relative;
+            z-index: 2;
+        }
+        .search-panel h2 {
+            color: var(--purple);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+        .form-group select,
+        .form-group input {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--mid-grey);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: var(--text);
+            background: var(--white);
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--purple);
+        }
+        .search-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--purple);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+        .search-btn:hover {
+            background: var(--purple-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(92,45,145,0.3);
+        }
+        .search-btn .emoji { margin-right: 0.5rem; }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .feature {
+            text-align: center;
+            padding: 2rem 1.5rem;
+        }
+        .feature .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .feature h3 {
+            color: var(--purple);
+            margin-bottom: 0.5rem;
+        }
+        .feature p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .airport-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .airport-card {
+            background: var(--light-grey);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .airport-card:hover {
+            border-color: var(--purple);
+            background: #f0e6ff;
+            transform: translateY(-2px);
+        }
+        .airport-card .code {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--purple);
+        }
+        .airport-card .name {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .biker-tips {
+            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            color: var(--white);
+        }
+        .biker-tips h2 {
+            color: var(--yellow);
+            margin-bottom: 1.5rem;
+        }
+        .biker-tips ul {
+            list-style: none;
+            padding: 0;
+        }
+        .biker-tips li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+        .biker-tips li:last-child { border-bottom: none; }
+        .biker-tips li strong { color: var(--yellow); }
+
+        .powered-by {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .powered-by a {
+            color: var(--purple);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .search-panel { padding: 1.5rem; margin: -1rem 1rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav-brand">steven<span>hill</span></a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/bikes.html">🏍️ The Garage</a>
+            <a href="/parking.html" class="active">🅿️ Ride & Fly</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>🏍️ <span class="accent">Ride & Fly</span></h1>
+        <p class="tagline">Park your car. Catch your flight. Get back to riding sooner.</p>
+    </div>
+
+    <div class="search-panel">
+        <h2>🅿️ Find Airport Parking</h2>
+        <form id="searchForm" class="form-grid">
+            <div class="form-group">
+                <label for="airport">Airport</label>
+                <select id="airport" required>
+                    <option value="">Choose your airport...</option>
+                    <option value="LHR">✈️ London Heathrow (LHR)</option>
+                    <option value="LGW">✈️ London Gatwick (LGW)</option>
+                    <option value="STN">✈️ London Stansted (STN)</option>
+                    <option value="LTN">✈️ London Luton (LTN)</option>
+                    <option value="MAN">✈️ Manchester (MAN)</option>
+                    <option value="BHX">✈️ Birmingham (BHX)</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dropoffDate">Drop-off Date</label>
+                    <input type="date" id="dropoffDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="dropoffTime">Drop-off Time</label>
+                    <select id="dropoffTime" required>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="returnDate">Return Date</label>
+                    <input type="date" id="returnDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="returnTime">Return Time</label>
+                    <select id="returnTime" required>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="search-btn">
+                <span class="emoji">🔍</span> Search Parking Deals
+            </button>
+        </form>
+    </div>
+
+    <div class="container">
+
+        <h2 class="section-title">Quick Pick — Choose Your Airport</h2>
+        <div class="airport-grid">
+            <div class="airport-card" onclick="selectAirport('LHR')">
+                <div class="code">LHR</div>
+                <div class="name">Heathrow</div>
+            </div>
+            <div class="airport-card" onclick="selectAirport('LGW')">
+                <div class="code">LGW</div>
+                <div class="name">Gatwick</div>
+            </div>
+            <div class="airport-card" onclick="selectAirport('STN')">
+                <div class="code">STN</div>
+                <div class="name">Stansted</div>
+            </div>
+            <div class="airport-card" onclick="selectAirport('LTN')">
+                <div class="code">LTN</div>
+                <div class="name">Luton</div>
+            </div>
+            <div class="airport-card" onclick="selectAirport('MAN')">
+                <div class="code">MAN</div>
+                <div class="name">Manchester</div>
+            </div>
+            <div class="airport-card" onclick="selectAirport('BHX')">
+                <div class="code">BHX</div>
+                <div class="name">Birmingham</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Why Book Ahead?</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="icon">💰</div>
+                <h3>Save Up To 60%</h3>
+                <p>Pre-booking beats turn-up prices every time. More money for fuel and track days.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🔒</div>
+                <h3>Secured Parking</h3>
+                <p>Park n' Ride, Meet & Greet, and on-airport options. Your car's safe while you're away.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">⚡</div>
+                <h3>Instant Confirmation</h3>
+                <p>Book in 60 seconds. Get your confirmation. Done. Back to planning the ride.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🏍️</div>
+                <h3>Get Back Faster</h3>
+                <p>The quicker you park, the quicker you fly, the quicker you're back on two wheels.</p>
+            </div>
+        </div>
+
+        <div class="biker-tips">
+            <h2>🏍️ Biker's Airport Survival Guide</h2>
+            <ul>
+                <li><strong>Book Meet & Greet</strong> — Hand over the keys, walk to the terminal. No bus transfers, no faff. Maximum efficiency, minimum time away from the bike.</li>
+                <li><strong>Early morning flight?</strong> — Book the night before at an airport hotel with parking included. Sleep in, stroll to check-in.</li>
+                <li><strong>Travelling light?</strong> — Bring your helmet bag as carry-on. Makes a surprisingly good travel bag and confuses everyone at security.</li>
+                <li><strong>Return day tip</strong> — Book the latest return time slot you can. Delays happen, and you don't want parking stress on top of a delayed flight.</li>
+                <li><strong>Group rides abroad?</strong> — Some car parks do multi-car deals. Get the crew to book together and split the savings.</li>
+            </ul>
+        </div>
+
+        <div class="powered-by">
+            Parking search powered by <a href="https://www.holidayextras.com" target="_blank">Holiday Extras</a> — the UK's #1 for airport parking
+        </div>
+
+        <a href="/" class="back-link">← Back home</a>
+    </div>
+
+    <div class="footer">© 2026 Steven Hill</div>
+
+    <script>
+        // Populate time dropdowns
+        function populateTimeDropdowns() {
+            const times = document.querySelectorAll('#dropoffTime, #returnTime');
+            times.forEach(select => {
+                select.innerHTML = '<option value="">Select time...</option>';
+                for (let h = 0; h < 24; h++) {
+                    const label = `${String(h).padStart(2, '0')}:00`;
+                    const opt = document.createElement('option');
+                    opt.value = h;
+                    opt.textContent = label;
+                    if (h === 12) opt.selected = (select.id === 'dropoffTime');
+                    if (h === 14) opt.selected = (select.id === 'returnTime');
+                    select.appendChild(opt);
+                }
+            });
+        }
+
+        // Set default dates (1 week from now, returning 1 week + 7 days)
+        function setDefaultDates() {
+            const today = new Date();
+            const dropoff = new Date(today);
+            dropoff.setDate(today.getDate() + 7);
+            const returnD = new Date(dropoff);
+            returnD.setDate(dropoff.getDate() + 7);
+
+            document.getElementById('dropoffDate').value = toISO(dropoff);
+            document.getElementById('returnDate').value = toISO(returnD);
+        }
+
+        function toISO(d) {
+            return d.toISOString().split('T')[0];
+        }
+
+        // Holiday Extras URL formatters
+        function toDDMMYY(d) {
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = String(d.getFullYear()).slice(2);
+            return encodeURIComponent(`${day}/${month}/${year}`);
+        }
+
+        function toHumanDate(d) {
+            const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const day = d.getDate();
+            const suffixes = ['th','st','nd','rd'];
+            const suffix = suffixes[day % 10 > 3 ? 0 : (day % 100 - day % 10 !== 10) * (day % 10)] || 'th';
+            return `${DAY_NAMES[d.getDay()]}+${day}${suffix}+${MONTH_NAMES[d.getMonth()]}+${String(d.getFullYear()).slice(2)}`;
+        }
+
+        function toHHMM(h) {
+            return `${String(h).padStart(2, '0')}00`;
+        }
+
+        // Build search URL
+        function buildSearchURL(location, dropoffDate, dropoffHour, returnDate, returnHour) {
+            const params = new URLSearchParams();
+            params.set('Referer', 'https://www.holidayextras.com/');
+            params.set('agent', 'WEB1');
+            params.set('domain', 'www.holidayextras.com');
+            params.set('lang', 'en');
+            params.set('product', 'cp');
+            params.set('request', '1');
+            params.set('rule_set', 'hx');
+            params.set('selectProduct', 'cp');
+            params.set('tc', '1');
+            params.set('search', '');
+            params.set('Location', location);
+            params.set('ArrivalDate', `${String(dropoffDate.getDate()).padStart(2,'0')}/${String(dropoffDate.getMonth()+1).padStart(2,'0')}/${String(dropoffDate.getFullYear()).slice(2)}`);
+            params.set('ArrivalTime', toHHMM(dropoffHour));
+            params.set('Arrival', toHumanDate(dropoffDate).replace(/\+/g, ' '));
+            params.set('DepartDate', `${String(returnDate.getDate()).padStart(2,'0')}/${String(returnDate.getMonth()+1).padStart(2,'0')}/${String(returnDate.getFullYear()).slice(2)}`);
+            params.set('DepartTime', toHHMM(returnHour));
+            params.set('Depart', toHumanDate(returnDate).replace(/\+/g, ' '));
+            params.set('flightTime', '');
+            params.set('flight_number', 'default');
+            params.set('terminal', '');
+            params.set('CampaignID', '65642');
+
+            return `https://www.holidayextras.com/static/?${params.toString()}`;
+        }
+
+        // Airport quick pick
+        function selectAirport(code) {
+            document.getElementById('airport').value = code;
+            document.getElementById('airport').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Form submit
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const location = document.getElementById('airport').value;
+            const dropoffDateStr = document.getElementById('dropoffDate').value;
+            const dropoffHour = parseInt(document.getElementById('dropoffTime').value);
+            const returnDateStr = document.getElementById('returnDate').value;
+            const returnHour = parseInt(document.getElementById('returnTime').value);
+
+            if (!location || !dropoffDateStr || isNaN(dropoffHour) || !returnDateStr || isNaN(returnHour)) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const dropoffDate = new Date(dropoffDateStr + 'T00:00:00');
+            const returnDate = new Date(returnDateStr + 'T00:00:00');
+
+            if (returnDate <= dropoffDate) {
+                alert('Return date must be after drop-off date');
+                return;
+            }
+
+            const url = buildSearchURL(location, dropoffDate, dropoffHour, returnDate, returnHour);
+            window.open(url, '_blank');
+        });
+
+        // Init
+        populateTimeDropdowns();
+        setDefaultDates();
+    </script>
+</body>
+</html>
