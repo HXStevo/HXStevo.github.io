@@ -280,25 +280,10 @@ a{color:var(--purple-light);text-decoration:none}
           <button class="btn btn-purple" onclick="nav('editor');newPage()">+ New Page</button>
         </div>
       </div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="num" id="s-pages">—</div><div class="lbl">HTML Pages</div></div>
-        <div class="stat-card"><div class="num" id="s-imgs">—</div><div class="lbl">Images</div></div>
-        <div class="stat-card"><div class="num" id="s-size">—</div><div class="lbl">Repo Size</div></div>
-        <div class="stat-card"><div class="num" id="s-seo">—</div><div class="lbl">Avg SEO Score</div></div>
-      </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Pages</div><button class="btn btn-surface btn-sm" onclick="nav('pages')">View All</button></div>
         <table class="tbl"><thead><tr><th>File</th><th>Size</th><th>SEO</th><th>Actions</th></tr></thead>
         <tbody id="dashTbl"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px">Loading...</td></tr></tbody></table>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Site Health</div></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px">
-          <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">Title Tags</div><div class="progress"><div class="prog-bar" id="hp-t" style="background:var(--green)"></div></div><div style="font-size:.72rem;color:var(--muted);margin-top:4px" id="hp-t-l">—</div></div>
-          <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">Meta Descriptions</div><div class="progress"><div class="prog-bar" id="hp-d" style="background:var(--yellow)"></div></div><div style="font-size:.72rem;color:var(--muted);margin-top:4px" id="hp-d-l">—</div></div>
-          <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">H1 Tags</div><div class="progress"><div class="prog-bar" id="hp-h" style="background:var(--blue)"></div></div><div style="font-size:.72rem;color:var(--muted);margin-top:4px" id="hp-h-l">—</div></div>
-          <div><div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">Image Alt Tags</div><div class="progress"><div class="prog-bar" id="hp-a" style="background:var(--purple-light)"></div></div><div style="font-size:.72rem;color:var(--muted);margin-top:4px" id="hp-a-l">—</div></div>
-        </div>
       </div>
     </div>
 
@@ -548,9 +533,6 @@ async function loadSite() {
     const imgs = files.filter(f => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f.name));
     const size = files.reduce((s,f) => s+(f.size||0), 0);
 
-    document.getElementById('s-pages').textContent = html.length;
-    document.getElementById('s-imgs').textContent = imgs.length;
-    document.getElementById('s-size').textContent = (size/1024).toFixed(0)+' KB';
     document.getElementById('pgCount').textContent = html.length;
     document.getElementById('dashSub').textContent = `${STATE.repo} — ${html.length} pages`;
     document.getElementById('cnamTarget').textContent = `${STATE.username.toLowerCase()}.github.io`;
@@ -561,7 +543,6 @@ async function loadSite() {
 
     renderDashTable(html);
     renderPgsTable(html);
-    await auditAll(html);
     toast('Site loaded!', 'success');
   } catch(e) { toast('Error: '+e.message, 'error'); }
 }
@@ -618,14 +599,8 @@ async function auditAll(files) {
       if (a.title) tt++; if (a.desc) td++; if (a.h1) th++; if (a.altPct===100) ta++;
     } catch(e) {}
   }
-  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
-  document.getElementById('s-seo').textContent = avg;
-  const n = Math.min(files.length, 12);
-  const p = x => n ? Math.round(x/n*100) : 0;
-  [['t',tt],['d',td],['h',th],['a',ta]].forEach(([k,v]) => {
-    document.getElementById('hp-'+k).style.width = p(v)+'%';
-    document.getElementById('hp-'+k+'-l').textContent = `${v}/${n} pages (${p(v)}%)`;
-  });
+  // scores available if needed for future use
+  void scores;
 }
 
 async function runAudit() {
