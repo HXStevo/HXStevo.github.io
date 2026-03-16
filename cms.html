@@ -482,15 +482,11 @@ a{color:var(--purple-light);text-decoration:none}
 
 <script>
 // ── AUTH ──
-const USERS = { stevo: { pass: btoa('admin'), name: 'Stevo' } };
-
 function doLogin() {
   const u = document.getElementById('lgUser').value.trim().toLowerCase();
-  const p = document.getElementById('lgPass').value;
+  const p = document.getElementById('lgPass').value.trim();
 
-  if (!u || !p) { showErr('Please enter username and password'); return; }
-
-  if (!USERS[u] || btoa(p) !== USERS[u].pass) { showErr('Invalid username or password'); return; }
+  if (u !== 'stevo' || p !== 'admin') { showErr('Invalid username or password'); return; }
 
   STATE.token = localStorage.getItem('cms_gh_token') || '';
   STATE.username = 'HXStevo'; STATE.user = USERS[u].name;
