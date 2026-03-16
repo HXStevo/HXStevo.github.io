@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CXK – Inspiring People to Thrive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       DESIGN TOKENS
+       Primary purple:  #7b2d8b  (logo / brand)
+       Light purple:    #9b59b6  (dot cluster accents)
+       Teal/green:      #33b48c  (primary CTA colour)
+       Dark teal:       #28957a  (hover)
+       Link blue:       #2150d1  (secondary links / hover)
+       Dark text:       #333333
+       Mid grey:        #666666
+       Light grey bg:   #f5f5f5
+       White:           #ffffff
+       Footer bg:       #2d2d2d (dark charcoal)
+       Nav bg:          #4a4a4a (dark grey)
+    ============================================= */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 16px;
+      color: #333333;
+      line-height: 1.6;
+      background: #ffffff;
+    }
+
+    a { color: #33b48c; text-decoration: none; }
+    a:hover { color: #2150d1; text-decoration: underline; }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* =============================================
+       TOP BAR (social + small contact strip)
+    ============================================= */
+    .top-bar {
+      background: #4a4a4a;
+      color: #cccccc;
+      font-size: 13px;
+      padding: 6px 0;
+    }
+    .top-bar .container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+    }
+    .top-bar a { color: #cccccc; }
+    .top-bar a:hover { color: #ffffff; text-decoration: none; }
+    .social-icons { display: flex; gap: 10px; align-items: center; }
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .social-icons a:hover { background: #33b48c; }
+
+    /* =============================================
+       HEADER / MAIN NAV
+    ============================================= */
+    .site-header {
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+    .site-logo img { height: 70px; width: auto; }
+    .site-logo .logo-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1;
+    }
+    .site-logo .logo-text .logo-cxk {
+      font-size: 48px;
+      font-weight: 800;
+      color: #7b2d8b;
+      letter-spacing: -2px;
+    }
+    .site-logo .logo-text .logo-tagline {
+      font-size: 13px;
+      font-weight: 600;
+      color: #9b59b6;
+      letter-spacing: 0.5px;
+    }
+
+    /* Primary nav */
+    .primary-nav { list-style: none; display: flex; gap: 4px; align-items: center; }
+    .primary-nav > li { position: relative; }
+    .primary-nav > li > a {
+      display: block;
+      padding: 10px 14px;
+      color: #333333;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .primary-nav > li > a:hover,
+    .primary-nav > li:hover > a {
+      background: #7b2d8b;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    /* Dropdown */
+    .primary-nav .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #ffffff;
+      min-width: 220px;
+      border-top: 3px solid #7b2d8b;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      list-style: none;
+      z-index: 999;
+      border-radius: 0 0 6px 6px;
+    }
+    .primary-nav > li:hover .dropdown-menu { display: block; }
+    .dropdown-menu li a {
+      display: block;
+      padding: 10px 18px;
+      color: #333333;
+      font-size: 14px;
+      font-weight: 600;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .dropdown-menu li:last-child a { border-bottom: none; }
+    .dropdown-menu li a:hover {
+      background: #f8f0fc;
+      color: #7b2d8b;
+      text-decoration: none;
+    }
+
+    /* Container utility */
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    .hero {
+      position: relative;
+      min-height: 540px;
+      background:
+        linear-gradient(135deg, rgba(123,45,139,0.82) 0%, rgba(51,180,140,0.70) 100%),
+        url('https://www.cxk.org/wp-content/themes/wp-cxk-2019/assets/img/back.png') center center / cover no-repeat;
+      background-color: #5a1f6e;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    /* decorative dot cluster top-right */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 260px;
+      height: 260px;
+      background: url('https://www.cxk.org/wp-content/themes/wp-cxk-2019/assets/img/back.png') center / contain no-repeat;
+      opacity: 0.25;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 60px 0;
+    }
+    .hero-content h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .hero-content p {
+      font-size: 22px;
+      color: rgba(255,255,255,0.92);
+      font-weight: 600;
+      margin-bottom: 36px;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    }
+    .hero-btn {
+      display: inline-block;
+      background: #33b48c;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 14px 36px;
+      border-radius: 9999px;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .hero-btn:hover {
+      background: #28957a;
+      color: #ffffff;
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    /* =============================================
+       CHOOSE A SERVICE SECTION
+    ============================================= */
+    .choose-service {
+      background: #ffffff;
+      padding: 60px 0 50px;
+      text-align: center;
+    }
+    .choose-service h2 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #7b2d8b;
+      margin-bottom: 36px;
+    }
+    .service-cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      background: #f8f0fc;
+      border: 2px solid #e0c8eb;
+      border-radius: 12px;
+      padding: 30px 24px;
+      width: 180px;
+      text-decoration: none;
+      color: #7b2d8b;
+      font-weight: 800;
+      font-size: 15px;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+    }
+    .service-card:hover {
+      background: #7b2d8b;
+      color: #ffffff;
+      border-color: #7b2d8b;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(123,45,139,0.25);
+      text-decoration: none;
+    }
+    .service-card .service-icon {
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    /* =============================================
+       ABOUT / INTRO SECTION
+    ============================================= */
+    .about-strip {
+      background: #33b48c;
+      color: #ffffff;
+      padding: 50px 0;
+    }
+    .about-strip .container {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .about-strip .dot-decoration {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      background: url('https://www.cxk.org/wp-content/themes/wp-cxk-2019/assets/img/back.png') center / contain no-repeat;
+      opacity: 0.5;
+    }
+    .about-strip h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .about-strip p {
+      font-size: 16px;
+      opacity: 0.95;
+      max-width: 700px;
+    }
+
+    /* =============================================
+       TESTIMONIALS SECTION
+    ============================================= */
+    .testimonials {
+      background: #f5f5f5;
+      padding: 70px 0;
+      text-align: center;
+    }
+    .testimonials h2 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #7b2d8b;
+      margin-bottom: 40px;
+    }
+    .testimonials-carousel {
+      position: relative;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .testimonial-slide {
+      background: #ffffff;
+      border-left: 5px solid #33b48c;
+      border-radius: 8px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      margin-bottom: 28px;
+    }
+    .testimonial-slide p {
+      font-size: 18px;
+      font-style: italic;
+      color: #444444;
+      line-height: 1.7;
+      position: relative;
+    }
+    .testimonial-slide p::before {
+      content: '\201C';
+      font-size: 60px;
+      color: #33b48c;
+      position: absolute;
+      top: -20px;
+      left: -10px;
+      line-height: 1;
+      font-style: normal;
+    }
+    .testimonial-dots { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+    .testimonial-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cccccc;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .testimonial-dots span.active { background: #33b48c; }
+
+    /* =============================================
+       NEWS / BLOG SECTION
+    ============================================= */
+    .news-section {
+      padding: 70px 0;
+      background: #ffffff;
+    }
+    .news-section h2 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #7b2d8b;
+      margin-bottom: 36px;
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+    .news-card {
+      border: 1px solid #eeeeee;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .news-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      transform: translateY(-3px);
+    }
+    .news-card-image {
+      height: 200px;
+      background: linear-gradient(135deg, #7b2d8b 0%, #33b48c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .news-card-image .news-label {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      background: #33b48c;
+      color: #ffffff;
+      padding: 4px 14px;
+      border-radius: 9999px;
+    }
+    .news-card-body { padding: 22px; }
+    .news-card-body .category {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #33b48c;
+      margin-bottom: 8px;
+    }
+    .news-card-body h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #333333;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .news-card-body a {
+      font-size: 14px;
+      font-weight: 700;
+      color: #7b2d8b;
+    }
+    .news-card-body a:hover { color: #33b48c; text-decoration: underline; }
+
+    /* =============================================
+       EVENTS SECTION
+    ============================================= */
+    .events-section {
+      background: #f8f0fc;
+      padding: 60px 0;
+    }
+    .events-section h2 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #7b2d8b;
+      margin-bottom: 32px;
+    }
+    .event-item {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .event-date {
+      flex-shrink: 0;
+      background: #7b2d8b;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: center;
+      min-width: 64px;
+    }
+    .event-date .month { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .event-date .day { font-size: 28px; font-weight: 800; line-height: 1; }
+    .event-info h3 { font-size: 18px; font-weight: 800; color: #333333; margin-bottom: 6px; }
+    .event-info p { font-size: 14px; color: #666666; }
+    .event-info a { color: #33b48c; font-weight: 700; }
+
+    /* =============================================
+       NEWSLETTER SECTION
+    ============================================= */
+    .newsletter-section {
+      background: #7b2d8b;
+      padding: 60px 0;
+      text-align: center;
+    }
+    .newsletter-section h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+    .newsletter-section p {
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 28px;
+      font-size: 16px;
+    }
+    .newsletter-form {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .newsletter-form input[type="email"] {
+      flex: 1;
+      padding: 14px 20px;
+      font-size: 15px;
+      border: none;
+      border-radius: 9999px 0 0 9999px;
+      outline: none;
+      font-family: 'Nunito', sans-serif;
+    }
+    .newsletter-form button {
+      background: #33b48c;
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 800;
+      border-radius: 0 9999px 9999px 0;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: background 0.2s;
+    }
+    .newsletter-form button:hover { background: #28957a; }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    .site-footer {
+      background: #2d2d2d;
+      color: #bbbbbb;
+      padding: 60px 0 0;
+      font-size: 14px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+    .footer-col h4 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .footer-col p { margin-bottom: 10px; color: #aaaaaa; line-height: 1.7; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 9px; }
+    .footer-col ul li a { color: #aaaaaa; font-size: 14px; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: #33b48c; text-decoration: none; }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+    .footer-contact-item .icon { color: #33b48c; font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+    .footer-contact-item a { color: #aaaaaa; }
+    .footer-contact-item a:hover { color: #33b48c; text-decoration: none; }
+
+    /* Footer logo area */
+    .footer-logo-text .logo-cxk {
+      font-size: 42px;
+      font-weight: 800;
+      color: #7b2d8b;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+    .footer-logo-text .logo-tagline {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9b59b6;
+      letter-spacing: 0.5px;
+    }
+
+    /* Accreditation badges row */
+    .accreditations {
+      border-top: 1px solid #444444;
+      padding: 30px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+    .accreditations img {
+      height: 52px;
+      width: auto;
+      filter: grayscale(30%) brightness(1.1);
+      transition: filter 0.2s;
+    }
+    .accreditations img:hover { filter: none; }
+
+    /* Copyright bar */
+    .footer-bottom {
+      background: #1e1e1e;
+      text-align: center;
+      padding: 16px 0;
+      color: #777777;
+      font-size: 13px;
+    }
+    .footer-bottom a { color: #777777; }
+    .footer-bottom a:hover { color: #33b48c; text-decoration: none; }
+
+    /* Footer social icons */
+    .footer-social { display: flex; gap: 10px; margin-top: 16px; }
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      color: #bbbbbb;
+      font-size: 15px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .footer-social a:hover {
+      background: #33b48c;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-content h1 { font-size: 36px; }
+      .hero-content p { font-size: 18px; }
+      .about-strip .container { flex-direction: column; gap: 20px; }
+    }
+    @media (max-width: 640px) {
+      .primary-nav { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .service-cards { gap: 12px; }
+      .service-card { width: 140px; padding: 20px 16px; }
+      .newsletter-form { flex-direction: column; }
+      .newsletter-form input[type="email"],
+      .newsletter-form button {
+        border-radius: 9999px;
+        width: 100%;
+      }
+      .hero-content h1 { font-size: 28px; }
+    }
+
+    /* =============================================
+       TESTIMONIALS – simple JS-free show
+    ============================================= */
+    .testimonial-slide { display: none; }
+    .testimonial-slide:first-child { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- =======================================
+       TOP BAR
+  ======================================== -->
+  <div class="top-bar">
+    <div class="container">
+      <span>Tel: <a href="tel:01233224244">01233 224244</a></span>
+      <span>|</span>
+      <span><a href="mailto:info@cxk.org">info@cxk.org</a></span>
+      <div class="social-icons">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/CXKcharity" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/company/cxk" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/cxkcharity" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================
+       SITE HEADER + NAV
+  ======================================== -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+
+        <!-- Logo -->
+        <a href="/" class="site-logo" style="text-decoration:none;">
+          <img
+            src="https://www.cxk.org/wp-content/themes/wp-cxk-2019/assets/img/logo.png"
+            alt="CXK – Inspiring People to Thrive"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="logo-text" style="display:none;">
+            <span class="logo-cxk">CXK</span>
+            <span class="logo-tagline">inspiring people to thrive</span>
+          </div>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav aria-label="Primary navigation">
+          <ul class="primary-nav">
+            <li><a href="/">Home</a></li>
+
+            <li>
+              <a href="/about-us/">About Us ▾</a>
+              <ul class="dropdown-menu">
+                <li><a href="/about-us/our-impact/">Our Impact</a></li>
+                <li><a href="/about-us/mission-vision-values/">Mission, Vision and Values</a></li>
+                <li><a href="/about-us/management-trustees/">Management &amp; Trustees</a></li>
+                <li><a href="/about-us/financial-statements/">Financial Statements</a></li>
+                <li><a href="/about-us/policies/">Policies</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/services/">Services ▾</a>
+              <ul class="dropdown-menu">
+                <li><a href="/services/adults/">Services for Adults</a></li>
+                <li><a href="/services/employers/">Services for Employers</a></li>
+                <li><a href="/services/schools-colleges/">Services for Schools &amp; Colleges</a></li>
+                <li><a href="/services/young-people/">Services for Young People</a></li>
+                <li><a href="/services/prisons/">Work In Custody</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/get-involved/">Get Involved ▾</a>
+              <ul class="dropdown-menu">
+                <li><a href="/get-involved/donate/">Donate</a></li>
+                <li><a href="/get-involved/fundraise/">Fundraise</a></li>
+                <li><a href="/get-involved/work-for-us/">Work for us</a></li>
+                <li><a href="/get-involved/volunteers/">Volunteers</a></li>
+                <li><a href="/get-involved/work-experience/">Work Experience</a></li>
+                <li><a href="/get-involved/employers/">Employers</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/partners/">Partners ▾</a>
+              <ul class="dropdown-menu">
+                <li><a href="/partners/current-opportunities/">Current Partner Opportunities</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/news-events/">News &amp; Events ▾</a>
+              <ul class="dropdown-menu">
+                <li><a href="/news/">News</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/events/">Events</a></li>
+                <li><a href="/case-studies/">Case Studies</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/resources/">Resources</a></li>
+            <li>
+              <a href="/contact-us/">Contact Us ▾</a>
+              <ul class="dropdown-menu">
+                <li><a href="/contact-us/our-locations/">Our Locations</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================
+       HERO SECTION
+  ======================================== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Inspiring People to Thrive</h1>
+        <p>Supporting young people and adults to find employment</p>
+        <a href="/services/" class="hero-btn">Find a Service</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================
+       CHOOSE A SERVICE
+  ======================================== -->
+  <section class="choose-service">
+    <div class="container">
+      <h2>Choose a service</h2>
+      <div class="service-cards">
+
+        <a href="/services/adults/" class="service-card">
+          <span class="service-icon">👤</span>
+          <span>Adults</span>
+        </a>
+
+        <a href="/services/young-people/" class="service-card">
+          <span class="service-icon">🎓</span>
+          <span>Young People</span>
+        </a>
+
+        <a href="/services/schools-colleges/" class="service-card">
+          <span class="service-icon">🏫</span>
+          <span>Schools &amp; Colleges</span>
+        </a>
+
+        <a href="/services/employers/" class="service-card">
+          <span class="service-icon">🏢</span>
+          <span>Employers</span>
+        </a>
+
+        <a href="/services/prisons/" class="service-card">
+          <span class="service-icon">🔐</span>
+          <span>Prisons</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================
+       ABOUT STRIP
+  ======================================== -->
+  <section class="about-strip">
+    <div class="container">
+      <div>
+        <h2>Supporting young people &amp; adults with career guidance &amp; vocational training</h2>
+        <p>CXK is a charity that delivers career guidance &amp; training programmes to support individuals to build the skills &amp; confidence they need.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================
+       TESTIMONIALS
+  ======================================== -->
+  <section class="testimonials">
+    <div class="container">
+      <h2>What People Say</h2>
+      <div class="testimonials-carousel">
+
+        <div class="testimonial-slide">
+          <p>CXK's programme was a really important first step for me in building the confidence and communication skills to find employment.</p>
+        </div>
+
+        <div class="testimonial-slide">
+          <p>CXK have helped my confidence and my ability to socialise properly. I couldn't have asked for better teachers.</p>
+        </div>
+
+        <div class="testimonial-slide">
+          <p>The Elevate course was an amazing experience and is a great stepping stone into college.</p>
+        </div>
+
+        <div class="testimonial-slide">
+          <p>CXK really helped me to work out what I wanted out of life, and helped me build my confidence so I could get into work.</p>
+        </div>
+
+        <div class="testimonial-slide">
+          <p>CXK got me ready for situations that I might come across, like interviews, jobs and volunteering. They helped me to find my next steps.</p>
+        </div>
+
+        <div class="testimonial-slide">
+          <p>CXK have helped me feel confident in an interview situation and in applying for jobs.</p>
+        </div>
+
+      </div>
+      <div class="testimonial-dots">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================
+       NEWS, BLOG & CASE STUDIES
+  ======================================== -->
+  <section class="news-section">
+    <div class="container">
+      <h2>Latest News &amp; Stories</h2>
+      <div class="news-grid">
+
+        <!-- Julia Inshaw feature news item -->
+        <article class="news-card">
+          <div class="news-card-image" style="background: linear-gradient(135deg, #7b2d8b 0%, #33b48c 100%); position:relative; overflow:hidden;">
+            <span class="news-label">Staff News</span>
+            <div style="position:absolute;bottom:12px;left:12px;right:12px;background:rgba(0,0,0,0.35);border-radius:6px;padding:8px 10px;">
+              <span style="color:#fff;font-size:13px;font-weight:700;">Julia Inshaw · New Arrival</span>
+            </div>
+          </div>
+          <div class="news-card-body">
+            <div class="category">Staff News</div>
+            <h3>Julia Inshaw Arrives in Style — New Black &amp; White Citroën C3</h3>
+            <p style="font-size:14px;color:#666;margin:8px 0 14px;">CXK's very own Julia Inshaw has been turning heads this week, arriving at the office in her brand new Citroën C3 — finished in a striking black with a white roof. A bold choice that perfectly matches her equally bold commitment to inspiring people to thrive.</p>
+            <a href="/news/">Read more &rarr;</a>
+          </div>
+        </article>
+
+        <!-- News item -->
+        <article class="news-card">
+          <div class="news-card-image">
+            <span class="news-label">News</span>
+          </div>
+          <div class="news-card-body">
+            <div class="category">News</div>
+            <h3>CXK, Suez and Surrey County Council launch 'Upcycle Your Skills' to support unemployed young people in Surrey</h3>
+            <a href="/news/">Read more &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Blog post 1 -->
+        <article class="news-card">
+          <div class="news-card-image" style="background: linear-gradient(135deg, #33b48c 0%, #7b2d8b 100%);">
+            <span class="news-label">Blog</span>
+          </div>
+          <div class="news-card-body">
+            <div class="category">Blog</div>
+            <h3>A Level Results Day 2025: Be Prepared</h3>
+            <a href="/blog/">Read more &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Blog post 2 -->
+        <article class="news-card">
+          <div class="news-card-image" style="background: linear-gradient(135deg, #5a1f6e 0%, #33b48c 100%);">
+            <span class="news-label">Blog</span>
+          </div>
+          <div class="news-card-body">
+            <div class="category">Blog</div>
+            <h3>GCSE Results Day 2025: How to Prepare &amp; Next Steps</h3>
+            <a href="/blog/">Read more &rarr;</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================
+       CASE STUDIES
+  ======================================== -->
+  <section class="news-section" style="background:#f5f5f5; padding-top:0;">
+    <div class="container" style="padding-top:50px;">
+      <h2>Case Studies</h2>
+      <div class="news-grid">
+
+        <article class="news-card">
+          <div class="news-card-image" style="background: linear-gradient(135deg, #9b59b6 0%, #33b48c 100%);">
+            <span class="news-label">Case Study</span>
+          </div>
+          <div class="news-card-body">
+            <div class="category">Case Study</div>
+            <h3>Hassan's Story</h3>
+            <a href="/case-studies/">Read Hassan's story &rarr;</a>
+          </div>
+        </article>
+
+        <article class="news-card">
+          <div class="news-card-image" style="background: linear-gradient(135deg, #7b2d8b 0%, #33b48c 100%);">
+            <span class="news-label">Case Study</span>
+          </div>
+          <div class="news-card-body">
+            <div class="category">Case Study</div>
+            <h3>Sarah's Story</h3>
+            <a href="/case-studies/">Read Sarah's story &rarr;</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================
+       EVENTS
+  ======================================== -->
+  <section class="events-section">
+    <div class="container">
+      <h2>Upcoming Events</h2>
+
+      <div class="event-item">
+        <div class="event-date">
+          <div class="month">Apr</div>
+          <div class="day">14</div>
+        </div>
+        <div class="event-info">
+          <h3>Civil Service Webinar</h3>
+          <p>Tuesday 14th and Wednesday 15th April 2026</p>
+          <a href="/events/">Find out more &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =======================================
+       NEWSLETTER
+  ======================================== -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h2>Subscribe to our Newsletter to Receive Updates</h2>
+      <p>Stay up to date with CXK news, events and opportunities</p>
+      <form class="newsletter-form" action="#" method="post">
+        <input type="email" name="email" placeholder="Your email address" required aria-label="Email address" />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- =======================================
+       FOOTER
+  ======================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Col 1: About + logo -->
+        <div class="footer-col">
+          <div class="footer-logo-text" style="margin-bottom:16px;">
+            <div class="logo-cxk">CXK</div>
+            <div class="logo-tagline">inspiring people to thrive</div>
+          </div>
+          <p>CXK is a charity that delivers career guidance &amp; training programmes to support individuals to build the skills &amp; confidence they need.</p>
+          <div class="footer-contact-item">
+            <span class="icon">&#9742;</span>
+            <a href="tel:01233224244">01233 224244</a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon">&#9993;</span>
+            <a href="mailto:info@cxk.org">info@cxk.org</a>
+          </div>
+          <div class="footer-contact-item">
+            <span class="icon">&#9679;</span>
+            <span>The Old Court, Tufton Street, Ashford, Kent, TN23 1QN</span>
+          </div>
+          <div class="footer-social">
+            <a href="https://www.facebook.com/CXKcharity" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/cxk" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/cxkcharity" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Services -->
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/services/adults/">Services for Adults</a></li>
+            <li><a href="/services/young-people/">Services for Young People</a></li>
+            <li><a href="/services/schools-colleges/">Services for Schools &amp; Colleges</a></li>
+            <li><a href="/services/employers/">Services for Employers</a></li>
+            <li><a href="/services/prisons/">Work In Custody</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: About -->
+        <div class="footer-col">
+          <h4>About Us</h4>
+          <ul>
+            <li><a href="/about-us/our-impact/">Our Impact</a></li>
+            <li><a href="/about-us/mission-vision-values/">Mission, Vision &amp; Values</a></li>
+            <li><a href="/about-us/management-trustees/">Management &amp; Trustees</a></li>
+            <li><a href="/about-us/financial-statements/">Financial Statements</a></li>
+            <li><a href="/about-us/policies/">Policies</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Get Involved -->
+        <div class="footer-col">
+          <h4>Get Involved</h4>
+          <ul>
+            <li><a href="/get-involved/donate/">Donate</a></li>
+            <li><a href="/get-involved/fundraise/">Fundraise</a></li>
+            <li><a href="/get-involved/work-for-us/">Work for us</a></li>
+            <li><a href="/get-involved/volunteers/">Volunteers</a></li>
+            <li><a href="/get-involved/work-experience/">Work Experience</a></li>
+          </ul>
+          <h4 style="margin-top:24px;">Quick Links</h4>
+          <ul>
+            <li><a href="/news/">News</a></li>
+            <li><a href="/events/">Events</a></li>
+            <li><a href="/resources/">Resources</a></li>
+            <li><a href="/contact-us/">Contact Us</a></li>
+            <li><a href="/contact-us/our-locations/">Our Locations</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Accreditation badges -->
+      <div class="accreditations">
+        <img src="https://www.cxk.org/wp-content/uploads/2022/07/cyberessentials_certification-mark-plus_colour-250x300.png" alt="Cyber Essentials Plus" />
+        <img src="https://www.cxk.org/wp-content/uploads/2018/05/merlin-e1528292275386-300x51.jpg" alt="Merlin Standard Accreditation" />
+        <img src="https://www.cxk.org/wp-content/uploads/2018/02/Matrix-Logo-e1528292308109-300x134.jpg" alt="Matrix Quality Standard" />
+        <img src="https://www.cxk.org/wp-content/uploads/2018/05/ofsted-good-e1527687107314-300x276.jpg" alt="Ofsted Good" />
+        <img src="https://www.cxk.org/wp-content/uploads/2022/07/FR_Fundraising-Badge_Primary_300ppi-300x92.png" alt="Fundraising Regulator" />
+        <img src="https://www.cxk.org/wp-content/uploads/2018/05/CDI-Logo.jpg" alt="CDI Member" />
+        <img src="https://www.cxk.org/wp-content/uploads/2023/04/Disability-Confident-Employer-badge-300x145.png" alt="Disability Confident Employer" />
+        <img src="https://www.cxk.org/wp-content/uploads/2023/04/Living-Wage-Employer-badge-300x237.jpg" alt="Living Wage Employer" />
+        <img src="https://www.cxk.org/wp-content/uploads/2025/10/25-26-BASE-Membership-Logo-002-300x300.png" alt="BASE Membership" />
+      </div>
+
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-bottom">
+      <div class="container">
+        &copy; Copyright CXK &nbsp;|&nbsp;
+        Registered Charity Number: 1120755 &nbsp;|&nbsp;
+        Registered in England &nbsp;|&nbsp;
+        The Old Court, Tufton Street, Ashford, Kent, TN23 1QN
+      </div>
+    </div>
+  </footer>
+
+  <!-- =======================================
+       TESTIMONIALS CAROUSEL JS (lightweight)
+  ======================================== -->
+  <script>
+    (function () {
+      var slides = document.querySelectorAll('.testimonial-slide');
+      var dots = document.querySelectorAll('.testimonial-dots span');
+      var current = 0;
+
+      function show(n) {
+        slides[current].style.display = 'none';
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].style.display = 'block';
+        dots[current].classList.add('active');
+      }
+
+      // Show first
+      slides[0].style.display = 'block';
+
+      // Dot click
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { show(i); });
+      });
+
+      // Auto-rotate every 5 s
+      setInterval(function () { show(current + 1); }, 5000);
+    })();
+  </script>
+
+</body>
+</html>
