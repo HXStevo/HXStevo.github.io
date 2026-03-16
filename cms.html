@@ -482,21 +482,15 @@ a{color:var(--purple-light);text-decoration:none}
 
 <script>
 // ── AUTH ──
-const USERS = { stevo: { hash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', name: 'Stevo' } };
+const USERS = { stevo: { pass: btoa('admin'), name: 'Stevo' } };
 
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-async function doLogin() {
+function doLogin() {
   const u = document.getElementById('lgUser').value.trim().toLowerCase();
   const p = document.getElementById('lgPass').value;
 
   if (!u || !p) { showErr('Please enter username and password'); return; }
 
-  const hash = await sha256(p);
-  if (!USERS[u] || USERS[u].hash !== hash) { showErr('Invalid username or password'); return; }
+  if (!USERS[u] || btoa(p) !== USERS[u].pass) { showErr('Invalid username or password'); return; }
 
   STATE.token = localStorage.getItem('cms_gh_token') || '';
   STATE.username = 'HXStevo'; STATE.user = USERS[u].name;
