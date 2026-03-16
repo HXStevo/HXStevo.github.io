@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andy CMS — Site Manager</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#23263a;--border:#2e3146;
+  --purple:#7C3AED;--purple-light:#9b5cf6;--green:#10b981;--red:#ef4444;
+  --yellow:#f59e0b;--blue:#3b82f6;--text:#e2e8f0;--text-muted:#8892a4;
+  --white:#fff;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+a{color:var(--purple-light);text-decoration:none}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{overflow-y:auto;padding:28px}
+
+/* SIDEBAR */
+.sidebar-logo{padding:20px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sidebar-logo svg{color:var(--purple-light)}
+.sidebar-logo span{font-size:1.1rem;font-weight:700;color:var(--white)}
+.sidebar-logo small{font-size:0.7rem;color:var(--text-muted);display:block;margin-top:1px}
+.sidebar-section{padding:8px 0}
+.sidebar-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:8px 18px 4px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;border-radius:0;transition:background .15s,color .15s;color:var(--text-muted);font-size:0.88rem;border:none;background:none;width:100%;text-align:left}
+.sidebar-item:hover{background:var(--surface2);color:var(--text)}
+.sidebar-item.active{background:rgba(124,58,237,.15);color:var(--purple-light);border-right:2px solid var(--purple-light)}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0}
+.sidebar-item .badge{margin-left:auto;background:var(--purple);color:#fff;font-size:0.65rem;font-weight:700;padding:2px 6px;border-radius:10px}
+.site-picker{padding:10px 12px;margin:8px 10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);cursor:pointer}
+.site-picker select{background:none;border:none;color:var(--text);font-family:inherit;font-size:0.85rem;width:100%;cursor:pointer;outline:none}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.topbar h1{font-size:1.4rem;font-weight:700;color:var(--white)}
+.topbar .actions{display:flex;gap:10px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-purple{background:var(--purple);color:#fff}.btn-purple:hover{background:var(--purple-light)}
+.btn-surface{background:var(--surface2);color:var(--text);border:1px solid var(--border)}.btn-surface:hover{border-color:var(--purple-light);color:var(--purple-light)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{opacity:.9}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{opacity:.9}
+.btn-sm{padding:5px 11px;font-size:0.78rem}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:1rem;font-weight:700;color:var(--white)}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.stat-card .num{font-size:1.8rem;font-weight:800;color:var(--white)}
+.stat-card .lbl{font-size:0.78rem;color:var(--text-muted);margin-top:2px}
+.stat-card .chg{font-size:0.75rem;margin-top:6px}
+.chg.up{color:var(--green)}.chg.down{color:var(--red)}
+
+/* TABLE */
+.table{width:100%;border-collapse:collapse}
+.table th{text-align:left;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);padding:8px 12px;border-bottom:1px solid var(--border)}
+.table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:0.85rem;vertical-align:middle}
+.table tr:hover td{background:var(--surface2)}
+.table tr:last-child td{border-bottom:none}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:0.72rem;font-weight:700}
+.tag-green{background:rgba(16,185,129,.15);color:var(--green)}
+.tag-yellow{background:rgba(245,158,11,.15);color:var(--yellow)}
+.tag-red{background:rgba(239,68,68,.15);color:var(--red)}
+.tag-blue{background:rgba(59,130,246,.15);color:var(--blue)}
+.tag-purple{background:rgba(124,58,237,.15);color:var(--purple-light)}
+
+/* EDITOR */
+.editor-grid{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:0.78rem;font-weight:700;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.form-input,.form-textarea,.form-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;color:var(--text);font-family:inherit;font-size:0.9rem;transition:border .15s;outline:none}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--purple-light)}
+.form-textarea{min-height:320px;resize:vertical;line-height:1.6}
+.char-count{font-size:0.72rem;margin-top:4px;text-align:right}
+.char-ok{color:var(--green)}.char-warn{color:var(--yellow)}.char-bad{color:var(--red)}
+
+/* SEO PANEL */
+.seo-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:sticky;top:20px}
+.seo-panel h3{font-size:.9rem;font-weight:700;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.seo-score-ring{text-align:center;margin-bottom:18px}
+.seo-score-circle{width:80px;height:80px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;border:4px solid}
+.seo-checks{display:flex;flex-direction:column;gap:8px}
+.seo-check{display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;line-height:1.4}
+.seo-check .icon{width:16px;height:16px;flex-shrink:0;margin-top:1px}
+.seo-check .icon.pass{color:var(--green)}.seo-check .icon.fail{color:var(--red)}.seo-check .icon.warn{color:var(--yellow)}
+.seo-check .msg{color:var(--text-muted)}
+.seo-check.active .msg{color:var(--text)}
+.seo-tip{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:7px;padding:10px;font-size:0.78rem;color:var(--text-muted);margin-top:14px;line-height:1.5}
+.seo-tip strong{color:var(--purple-light)}
+
+/* REDIRECTS */
+.redirect-row{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:center;padding:10px;background:var(--surface2);border-radius:7px;margin-bottom:8px}
+.redirect-arrow{color:var(--text-muted);font-size:1.1rem;text-align:center}
+
+/* PROGRESS BAR */
+.progress{background:var(--surface2);border-radius:4px;height:6px;overflow:hidden;margin-top:8px}
+.progress-bar{height:100%;border-radius:4px;transition:width .3s}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.modal h2{font-size:1.1rem;font-weight:700;margin-bottom:16px;color:var(--white)}
+
+/* LOGIN */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-box h1{font-size:1.5rem;font-weight:800;color:var(--white);margin-bottom:4px}
+.login-box p{color:var(--text-muted);font-size:.88rem;margin-bottom:24px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--surface2);padding:4px;border-radius:8px;width:fit-content}
+.tab{padding:7px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--text-muted);transition:all .15s;border:none;background:none;font-family:inherit}
+.tab.active{background:var(--purple);color:#fff}
+
+/* NOTIFICATIONS */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:.85rem;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:9999;display:none;align-items:center;gap:10px;max-width:340px}
+.toast.show{display:flex}
+.toast.success{border-color:var(--green)}.toast.error{border-color:var(--red)}
+
+/* SITE HEALTH */
+.health-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.health-card{background:var(--surface2);border-radius:10px;padding:14px;border:1px solid var(--border)}
+.health-card h4{font-size:.82rem;font-weight:700;color:var(--text-muted);margin-bottom:8px}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--text-muted)}
+.empty svg{width:48px;height:48px;margin:0 auto 12px;opacity:.4}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .editor-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h1>Andy CMS</h1>
+    <p>Multi-site content manager with built-in SEO tools</p>
+    <div class="form-group">
+      <label class="form-label">GitHub Token</label>
+      <input type="password" class="form-input" id="tokenInput" placeholder="ghp_..." autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">GitHub Username</label>
+      <input type="text" class="form-input" id="usernameInput" value="HXStevo">
+    </div>
+    <button class="btn btn-purple" style="width:100%;justify-content:center;padding:11px" onclick="doLogin()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      Connect &amp; Enter CMS
+    </button>
+    <p style="font-size:.75rem;color:var(--text-muted);margin-top:12px;text-align:center">Token stored in session only — never saved to disk</p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="appScreen" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:var(--purple-light)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      <div><span>Andy CMS</span><small id="sidebarUser">Loading...</small></div>
+    </div>
+
+    <div class="site-picker">
+      <select id="siteSelect" onchange="switchSite()">
+        <option value="HXStevo.github.io">hxstevo.github.io</option>
+        <option value="hx-replica">hx-replica</option>
+        <option value="hx-weather">hx-weather</option>
+        <option value="greenparking-zaventem">greenparking-zaventem</option>
+      </select>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Content</div>
+      <button class="sidebar-item active" id="nav-dashboard" onclick="showView('dashboard')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Dashboard
+      </button>
+      <button class="sidebar-item" id="nav-pages" onclick="showView('pages')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        Pages
+        <span class="badge" id="pageCount">0</span>
+      </button>
+      <button class="sidebar-item" id="nav-editor" onclick="showView('editor')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        Page Editor
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">SEO Tools</div>
+      <button class="sidebar-item" id="nav-seo" onclick="showView('seo')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        SEO Overview
+      </button>
+      <button class="sidebar-item" id="nav-redirects" onclick="showView('redirects')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        301 Redirects
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Publish</div>
+      <button class="sidebar-item" id="nav-publish" onclick="showView('publish')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        Publish to GitHub
+      </button>
+    </div>
+
+    <div style="padding:16px;margin-top:auto;border-top:1px solid var(--border)">
+      <button class="btn btn-surface btn-sm" style="width:100%;justify-content:center" onclick="logout()">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard">
+      <div class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p style="color:var(--text-muted);font-size:.85rem;margin-top:2px">Overview of <span id="dashSiteName">your site</span></p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-surface" onclick="loadSiteData()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            Refresh
+          </button>
+          <button class="btn btn-purple" onclick="showView('editor')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            New Page
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row" id="dashStats">
+        <div class="stat-card"><div class="num" id="stat-pages">—</div><div class="lbl">Total Pages</div></div>
+        <div class="stat-card"><div class="num" id="stat-html">—</div><div class="lbl">HTML Files</div></div>
+        <div class="stat-card"><div class="num" id="stat-images">—</div><div class="lbl">Images</div></div>
+        <div class="stat-card"><div class="num" id="stat-size">—</div><div class="lbl">Repo Size</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Site Files</div>
+          <button class="btn btn-surface btn-sm" onclick="showView('pages')">View All</button>
+        </div>
+        <table class="table">
+          <thead><tr><th>File</th><th>Type</th><th>Size</th><th>SEO</th><th>Actions</th></tr></thead>
+          <tbody id="dashFilesTable"><tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">Loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Site Health Checklist</div></div>
+        <div class="health-grid" id="healthGrid">
+          <div class="health-card"><h4>Title Tags</h4><div class="progress"><div class="progress-bar" id="hp-title" style="width:0%;background:var(--green)"></div></div><p style="font-size:.78rem;color:var(--text-muted);margin-top:6px" id="hp-title-txt">—</p></div>
+          <div class="health-card"><h4>Meta Descriptions</h4><div class="progress"><div class="progress-bar" id="hp-meta" style="width:0%;background:var(--yellow)"></div></div><p style="font-size:.78rem;color:var(--text-muted);margin-top:6px" id="hp-meta-txt">—</p></div>
+          <div class="health-card"><h4>H1 Tags</h4><div class="progress"><div class="progress-bar" id="hp-h1" style="width:0%;background:var(--blue)"></div></div><p style="font-size:.78rem;color:var(--text-muted);margin-top:6px" id="hp-h1-txt">—</p></div>
+          <div class="health-card"><h4>Image Alt Tags</h4><div class="progress"><div class="progress-bar" id="hp-alt" style="width:0%;background:var(--purple-light)"></div></div><p style="font-size:.78rem;color:var(--text-muted);margin-top:6px" id="hp-alt-txt">—</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGES -->
+    <div id="view-pages" style="display:none">
+      <div class="topbar">
+        <h1>Pages</h1>
+        <div class="actions">
+          <input type="text" class="form-input" style="width:220px" placeholder="Search pages..." id="pageSearch" oninput="filterPages()">
+          <button class="btn btn-purple" onclick="newPage()">+ New Page</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="table">
+          <thead><tr><th>Page / Filename</th><th>Title Tag</th><th>Meta Desc</th><th>H1</th><th>SEO Score</th><th>Actions</th></tr></thead>
+          <tbody id="pagesTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EDITOR -->
+    <div id="view-editor" style="display:none">
+      <div class="topbar">
+        <div>
+          <h1 id="editorTitle">New Page</h1>
+          <p style="color:var(--text-muted);font-size:.85rem;margin-top:2px" id="editorFilename">Untitled</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-surface" onclick="showView('pages')">Cancel</button>
+          <button class="btn btn-purple" onclick="savePage()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+            Save &amp; Publish
+          </button>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <div>
+          <div class="tabs">
+            <button class="tab active" onclick="switchTab('content',this)">Content</button>
+            <button class="tab" onclick="switchTab('meta',this)">SEO Meta</button>
+            <button class="tab" onclick="switchTab('preview',this)">Preview</button>
+          </div>
+
+          <div id="tab-content">
+            <div class="form-group">
+              <label class="form-label">Filename</label>
+              <input type="text" class="form-input" id="editFilename" placeholder="about-us.html" oninput="updateSeoLive()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Page Content (HTML)</label>
+              <textarea class="form-textarea" id="editContent" placeholder="Write your HTML content here..." oninput="updateSeoLive()" style="min-height:400px;font-family:monospace;font-size:.82rem"></textarea>
+            </div>
+          </div>
+
+          <div id="tab-meta" style="display:none">
+            <div class="form-group">
+              <label class="form-label">Page Title (50–60 chars ideal)</label>
+              <input type="text" class="form-input" id="editMetaTitle" placeholder="Page Title | Site Name" oninput="updateSeoLive(); updateCharCount(this,'countTitle',50,60)">
+              <div class="char-count" id="countTitle">0 characters</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Meta Description (150–160 chars ideal)</label>
+              <textarea class="form-textarea" id="editMetaDesc" placeholder="Compelling description for search results..." oninput="updateSeoLive(); updateCharCount(this,'countDesc',150,160)" style="min-height:100px"></textarea>
+              <div class="char-count" id="countDesc">0 characters</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Focus Keyword</label>
+              <input type="text" class="form-input" id="editKeyword" placeholder="e.g. gatwick airport parking" oninput="updateSeoLive()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Canonical URL</label>
+              <input type="text" class="form-input" id="editCanonical" placeholder="https://hxstevo.github.io/page.html">
+            </div>
+            <div class="form-group">
+              <label class="form-label">OG Image URL</label>
+              <input type="text" class="form-input" id="editOGImage" placeholder="https://...image.jpg">
+            </div>
+          </div>
+
+          <div id="tab-preview" style="display:none">
+            <div style="background:var(--white);border-radius:10px;overflow:hidden">
+              <!-- Google SERP preview -->
+              <div style="padding:20px;border-bottom:1px solid #eee">
+                <div style="font-size:.75rem;color:#666;margin-bottom:4px;font-family:arial">Google Search Preview:</div>
+                <div style="font-size:1.05rem;color:#1a0dab;font-family:arial" id="prevTitle">Page Title</div>
+                <div style="font-size:.8rem;color:#006621;font-family:arial;margin:2px 0" id="prevUrl">https://hxstevo.github.io/page.html</div>
+                <div style="font-size:.85rem;color:#545454;font-family:arial;line-height:1.4" id="prevDesc">Meta description will appear here...</div>
+              </div>
+              <iframe id="previewFrame" style="width:100%;height:500px;border:none" srcdoc=""></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO PANEL -->
+        <div>
+          <div class="seo-panel">
+            <h3>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              SEO Score
+            </h3>
+            <div class="seo-score-ring">
+              <div class="seo-score-circle" id="seoScoreCircle" style="border-color:var(--text-muted);color:var(--text-muted)">—</div>
+              <div style="font-size:.78rem;color:var(--text-muted)" id="seoScoreLabel">Enter content to analyse</div>
+            </div>
+            <div class="seo-checks" id="seoChecks"></div>
+            <div class="seo-tip" id="seoTip">
+              <strong>Tip:</strong> Start by adding a focus keyword to get personalised SEO recommendations.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO OVERVIEW -->
+    <div id="view-seo" style="display:none">
+      <div class="topbar"><h1>SEO Overview</h1></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Page-by-page SEO Audit</div></div>
+        <table class="table">
+          <thead><tr><th>Page</th><th>Title</th><th>Meta Desc</th><th>H1</th><th>Images w/Alt</th><th>Score</th><th>Issues</th></tr></thead>
+          <tbody id="seoTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 301 REDIRECTS -->
+    <div id="view-redirects" style="display:none">
+      <div class="topbar">
+        <div>
+          <h1>301 Redirects</h1>
+          <p style="color:var(--text-muted);font-size:.85rem;margin-top:2px">Manage permanent redirects — auto-generates redirect.js for your site</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-purple" onclick="addRedirect()">+ Add Redirect</button>
+          <button class="btn btn-green" onclick="publishRedirects()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Publish Redirects
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);padding:4px 0 8px">
+          <span>From (old URL)</span><span>To (new URL)</span><span>Type</span><span></span>
+        </div>
+        <div id="redirectsList"></div>
+        <button class="btn btn-surface btn-sm" style="margin-top:12px" onclick="addRedirect()">+ Add Another</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Generated redirect.js</div><button class="btn btn-surface btn-sm" onclick="copyRedirectJs()">Copy</button></div>
+        <pre id="redirectJsPreview" style="font-size:.75rem;color:var(--text-muted);line-height:1.6;overflow-x:auto;white-space:pre-wrap;background:var(--surface2);padding:14px;border-radius:8px">Add redirects above to generate code...</pre>
+      </div>
+    </div>
+
+    <!-- PUBLISH -->
+    <div id="view-publish" style="display:none">
+      <div class="topbar"><h1>Publish to GitHub</h1></div>
+      <div class="card" style="max-width:600px">
+        <div class="card-header"><div class="card-title">Deploy Changes</div></div>
+        <div class="form-group">
+          <label class="form-label">Commit Message</label>
+          <input type="text" class="form-input" id="commitMsg" value="Content update via Andy CMS">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Files to Publish</label>
+          <div id="pendingFiles" style="background:var(--surface2);border-radius:8px;padding:12px;min-height:60px;font-size:.85rem;color:var(--text-muted)">No pending changes</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-green" onclick="publishChanges()" style="flex:1;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            Publish Now
+          </button>
+          <button class="btn btn-surface" onclick="clearPending()">Clear</button>
+        </div>
+        <div id="publishLog" style="margin-top:16px;font-size:.8rem;color:var(--text-muted);display:none"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" id="toastIcon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+// ── STATE ──
+const state = {
+  token: '', username: '', repo: '',
+  files: [], redirects: JSON.parse(localStorage.getItem('cms_redirects')||'[]'),
+  pendingChanges: [], editingFile: null
+};
+
+// ── LOGIN ──
+function doLogin() {
+  const token = document.getElementById('tokenInput').value.trim();
+  const username = document.getElementById('usernameInput').value.trim();
+  if (!token || !username) return toast('Please enter token and username', 'error');
+  state.token = token;
+  state.username = username;
+  state.repo = document.getElementById('siteSelect').value;
+  document.getElementById('sidebarUser').textContent = username;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display = 'grid';
+  loadSiteData();
+}
+
+function logout() {
+  state.token = ''; state.username = '';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('tokenInput').value = '';
+}
+
+// ── GITHUB API ──
+async function ghGet(path) {
+  const r = await fetch(`https://api.github.com/repos/${state.username}/${state.repo}${path}`, {
+    headers: { Authorization: `token ${state.token}` }
+  });
+  return r.json();
+}
+
+async function ghPut(path, payload) {
+  const r = await fetch(`https://api.github.com/repos/${state.username}/${state.repo}${path}`, {
+    method: 'PUT',
+    headers: { Authorization: `token ${state.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  return r.json();
+}
+
+// ── LOAD SITE ──
+async function loadSiteData() {
+  toast('Loading site data...', 'info');
+  try {
+    const files = await ghGet('/contents/');
+    if (!Array.isArray(files)) { toast('Could not load repo — check token', 'error'); return; }
+    state.files = files;
+    const html = files.filter(f => f.name.endsWith('.html'));
+    const imgs = files.filter(f => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f.name));
+    const totalSize = files.reduce((s, f) => s + (f.size||0), 0);
+
+    document.getElementById('stat-pages').textContent = html.length;
+    document.getElementById('stat-html').textContent = html.length;
+    document.getElementById('stat-images').textContent = imgs.length;
+    document.getElementById('stat-size').textContent = (totalSize/1024).toFixed(0) + ' KB';
+    document.getElementById('pageCount').textContent = html.length;
+    document.getElementById('dashSiteName').textContent = state.repo;
+
+    renderDashTable(html);
+    renderPagesTable(html);
+    await runSeoAudit(html);
+    toast('Site loaded!', 'success');
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+function switchSite() {
+  state.repo = document.getElementById('siteSelect').value;
+  loadSiteData();
+}
+
+// ── RENDER TABLES ──
+function renderDashTable(files) {
+  const tbody = document.getElementById('dashFilesTable');
+  if (!files.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">No HTML files found</td></tr>'; return; }
+  tbody.innerHTML = files.slice(0,8).map(f => `
+    <tr>
+      <td><a href="https://${state.username.toLowerCase()}.github.io/${f.name}" target="_blank" style="color:var(--purple-light)">${f.name}</a></td>
+      <td><span class="tag tag-blue">HTML</span></td>
+      <td>${(f.size/1024).toFixed(1)} KB</td>
+      <td><span class="tag ${f.size > 2000 ? 'tag-green' : 'tag-yellow'}">${f.size > 2000 ? 'Good' : 'Short'}</span></td>
+      <td>
+        <button class="btn btn-surface btn-sm" onclick="editFile('${f.name}','${f.download_url}','${f.sha}')">Edit</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderPagesTable(files) {
+  const tbody = document.getElementById('pagesTable');
+  tbody.innerHTML = files.map(f => `
+    <tr>
+      <td><strong>${f.name}</strong><br><span style="color:var(--text-muted);font-size:.75rem">${(f.size/1024).toFixed(1)} KB</span></td>
+      <td><span id="seo-title-${f.name}" style="color:var(--text-muted);font-size:.78rem">—</span></td>
+      <td><span id="seo-desc-${f.name}" style="color:var(--text-muted);font-size:.78rem">—</span></td>
+      <td><span id="seo-h1-${f.name}">—</span></td>
+      <td><span id="seo-score-${f.name}" class="tag tag-yellow">?</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-surface btn-sm" onclick="editFile('${f.name}','${f.download_url}','${f.sha}')">Edit</button>
+        <a href="https://${state.username.toLowerCase()}.github.io/${f.name}" target="_blank" class="btn btn-surface btn-sm">View</a>
+      </td>
+    </tr>`).join('');
+}
+
+async function runSeoAudit(files) {
+  const tbody = document.getElementById('seoTable');
+  tbody.innerHTML = '';
+  let totalTitle=0, totalDesc=0, totalH1=0, totalAlt=0;
+
+  for (const f of files.slice(0,10)) {
+    try {
+      const resp = await fetch(f.download_url);
+      const html = await resp.text();
+      const audit = auditHtml(html);
+
+      if (audit.hasTitle) totalTitle++;
+      if (audit.hasDesc) totalDesc++;
+      if (audit.hasH1) totalH1++;
+      if (audit.altScore === 100) totalAlt++;
+
+      const score = calcScore(audit);
+      const scoreClass = score >= 80 ? 'tag-green' : score >= 50 ? 'tag-yellow' : 'tag-red';
+
+      // Update pages table
+      const titleEl = document.getElementById(`seo-title-${f.name}`);
+      const descEl = document.getElementById(`seo-desc-${f.name}`);
+      const h1El = document.getElementById(`seo-h1-${f.name}`);
+      const scoreEl = document.getElementById(`seo-score-${f.name}`);
+      if (titleEl) titleEl.textContent = audit.title ? audit.title.substring(0,35)+'…' : 'Missing';
+      if (descEl) descEl.textContent = audit.desc ? '✓ ' + audit.desc.length + ' chars' : 'Missing';
+      if (h1El) h1El.innerHTML = `<span class="tag ${audit.hasH1?'tag-green':'tag-red'}">${audit.hasH1?'Yes':'No'}</span>`;
+      if (scoreEl) { scoreEl.textContent = score; scoreEl.className = 'tag ' + scoreClass; }
+
+      tbody.innerHTML += `<tr>
+        <td><strong>${f.name}</strong></td>
+        <td>${audit.title ? `<span class="tag ${audit.titleLen>=50&&audit.titleLen<=60?'tag-green':'tag-yellow'}">${audit.titleLen} chars</span>` : '<span class="tag tag-red">Missing</span>'}</td>
+        <td>${audit.desc ? `<span class="tag ${audit.descLen>=150&&audit.descLen<=160?'tag-green':'tag-yellow'}">${audit.descLen} chars</span>` : '<span class="tag tag-red">Missing</span>'}</td>
+        <td><span class="tag ${audit.hasH1?'tag-green':'tag-red'}">${audit.hasH1?'Present':'Missing'}</span></td>
+        <td>${audit.imgCount > 0 ? `${audit.imgWithAlt}/${audit.imgCount}` : 'N/A'}</td>
+        <td><span class="tag ${scoreClass}">${score}/100</span></td>
+        <td style="font-size:.78rem;color:var(--yellow)">${audit.issues.join(', ') || '✓ All good'}</td>
+      </tr>`;
+    } catch(e) {}
+  }
+
+  const total = Math.min(files.length, 10);
+  const pct = n => total ? Math.round(n/total*100) : 0;
+  ['title','meta','h1','alt'].forEach((k,i) => {
+    const vals = [totalTitle, totalDesc, totalH1, totalAlt];
+    const p = pct(vals[i]);
+    document.getElementById(`hp-${k}`).style.width = p+'%';
+    document.getElementById(`hp-${k}-txt`).textContent = `${vals[i]} of ${total} pages (${p}%)`;
+  });
+}
+
+function auditHtml(html) {
+  const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+  const descMatch = html.match(/name=["']description["'][^>]*content=["']([^"']*)/i) || html.match(/content=["']([^"']*)["'][^>]*name=["']description["']/i);
+  const h1Match = html.match(/<h1[\s>]/i);
+  const imgs = (html.match(/<img\s/gi)||[]).length;
+  const imgAlts = (html.match(/<img[^>]+alt=["'][^"']+["']/gi)||[]).length;
+  const title = titleMatch ? titleMatch[1].trim() : '';
+  const desc = descMatch ? descMatch[1].trim() : '';
+  const issues = [];
+  if (!title) issues.push('No title tag');
+  else if (title.length < 50) issues.push('Title too short');
+  else if (title.length > 60) issues.push('Title too long');
+  if (!desc) issues.push('No meta description');
+  else if (desc.length < 150) issues.push('Description too short');
+  if (!h1Match) issues.push('No H1 tag');
+  if (imgs > 0 && imgAlts < imgs) issues.push(`${imgs-imgAlts} images missing alt`);
+  return {
+    title, desc, hasTitle:!!title, hasDesc:!!desc, hasH1:!!h1Match,
+    titleLen:title.length, descLen:desc.length,
+    imgCount:imgs, imgWithAlt:imgAlts, altScore:imgs?Math.round(imgAlts/imgs*100):100, issues
+  };
+}
+
+function calcScore(a) {
+  let s = 0;
+  if (a.hasTitle) s += 25;
+  if (a.titleLen >= 50 && a.titleLen <= 60) s += 10;
+  if (a.hasDesc) s += 25;
+  if (a.descLen >= 150 && a.descLen <= 160) s += 10;
+  if (a.hasH1) s += 20;
+  if (a.altScore === 100) s += 10;
+  return s;
+}
+
+// ── EDITOR ──
+async function editFile(name, url, sha) {
+  showView('editor');
+  document.getElementById('editorTitle').textContent = 'Editing: ' + name;
+  document.getElementById('editorFilename').textContent = name;
+  document.getElementById('editFilename').value = name;
+  state.editingFile = { name, sha };
+  toast('Loading file...', 'info');
+  try {
+    const r = await fetch(url);
+    const html = await r.text();
+    document.getElementById('editContent').value = html;
+    // Extract meta
+    const titleM = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+    const descM = html.match(/name=["']description["'][^>]*content=["']([^"']*)/i);
+    if (titleM) document.getElementById('editMetaTitle').value = titleM[1];
+    if (descM) document.getElementById('editMetaDesc').value = descM[1];
+    updateSeoLive();
+    toast('File loaded!', 'success');
+  } catch(e) { toast('Error loading file', 'error'); }
+}
+
+function newPage() {
+  state.editingFile = null;
+  document.getElementById('editorTitle').textContent = 'New Page';
+  document.getElementById('editorFilename').textContent = 'Untitled';
+  document.getElementById('editFilename').value = '';
+  document.getElementById('editContent').value = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title | Site Name</title>
+  <meta name="description" content="Add a compelling description between 150-160 characters for best SEO results.">
+</head>
+<body>
+  <h1>Your Main Heading</h1>
+  <p>Start writing your content here...</p>
+</body>
+</html>`;
+  document.getElementById('editMetaTitle').value = '';
+  document.getElementById('editMetaDesc').value = '';
+  document.getElementById('editKeyword').value = '';
+  updateSeoLive();
+  showView('editor');
+}
+
+async function savePage() {
+  const filename = document.getElementById('editFilename').value.trim();
+  if (!filename) return toast('Please enter a filename', 'error');
+  let content = document.getElementById('editContent').value;
+  const title = document.getElementById('editMetaTitle').value;
+  const desc = document.getElementById('editMetaDesc').value;
+  const canonical = document.getElementById('editCanonical').value;
+  const ogImg = document.getElementById('editOGImage').value;
+
+  // Inject/update meta tags
+  if (title) content = content.replace(/<title[^>]*>[^<]*<\/title>/i, `<title>${title}</title>`);
+  if (desc) {
+    if (content.includes('name="description"') || content.includes("name='description'")) {
+      content = content.replace(/(name=["']description["'][^>]*content=["'])[^"']*(["'])/i, `$1${desc}$2`);
+    } else {
+      content = content.replace('</head>', `  <meta name="description" content="${desc}">\n</head>`);
+    }
+  }
+  if (canonical && !content.includes('rel="canonical"')) {
+    content = content.replace('</head>', `  <link rel="canonical" href="${canonical}">\n</head>`);
+  }
+  if (ogImg && !content.includes('og:image')) {
+    content = content.replace('</head>', `  <meta property="og:image" content="${ogImg}">\n</head>`);
+  }
+
+  // Push to GitHub
+  toast('Publishing...', 'info');
+  const payload = {
+    message: `Update ${filename} via Andy CMS`,
+    content: btoa(unescape(encodeURIComponent(content)))
+  };
+  if (state.editingFile && state.editingFile.name === filename) {
+    payload.sha = state.editingFile.sha;
+  }
+  const res = await ghPut(`/contents/${filename}`, payload);
+  if (res.commit) {
+    toast(`${filename} published!`, 'success');
+    loadSiteData();
+  } else {
+    toast('Publish failed: ' + (res.message || 'Unknown error'), 'error');
+  }
+}
+
+// ── SEO LIVE ANALYSIS ──
+function updateSeoLive() {
+  const content = document.getElementById('editContent').value;
+  const metaTitle = document.getElementById('editMetaTitle').value;
+  const metaDesc = document.getElementById('editMetaDesc').value;
+  const keyword = document.getElementById('editKeyword').value.toLowerCase();
+
+  // Build full HTML for analysis
+  const fullHtml = content + `<title>${metaTitle}</title><meta name="description" content="${metaDesc}">`;
+  const audit = auditHtml(fullHtml);
+
+  // Override with explicit meta fields
+  const title = metaTitle || audit.title;
+  const desc = metaDesc || audit.desc;
+  const titleLen = title.length;
+  const descLen = desc.length;
+
+  const checks = [
+    { id:'title', pass: titleLen >= 50 && titleLen <= 60, warn: titleLen > 0 && (titleLen < 50 || titleLen > 60),
+      msg: titleLen === 0 ? 'Add a title tag (50–60 chars)' : titleLen < 50 ? `Title too short (${titleLen}/50 chars min)` : titleLen > 60 ? `Title too long (${titleLen}/60 chars max)` : `Title length perfect (${titleLen} chars)` },
+    { id:'desc', pass: descLen >= 150 && descLen <= 160, warn: descLen > 0 && (descLen < 150 || descLen > 160),
+      msg: descLen === 0 ? 'Add a meta description (150–160 chars)' : descLen < 150 ? `Description too short (${descLen}/150 min)` : descLen > 160 ? `Description too long (${descLen}/160 max)` : `Description length perfect (${descLen} chars)` },
+    { id:'h1', pass: audit.hasH1, warn: false, msg: audit.hasH1 ? 'H1 tag present' : 'Add an H1 tag to the page' },
+    { id:'keyword', pass: keyword && title.toLowerCase().includes(keyword), warn: keyword && !title.toLowerCase().includes(keyword),
+      msg: !keyword ? 'Set a focus keyword above' : title.toLowerCase().includes(keyword) ? `Keyword "${keyword}" found in title` : `Keyword "${keyword}" missing from title` },
+    { id:'kw-desc', pass: keyword && desc.toLowerCase().includes(keyword), warn: keyword && !desc.toLowerCase().includes(keyword),
+      msg: !keyword ? '' : desc.toLowerCase().includes(keyword) ? `Keyword in meta description` : `Add keyword to meta description` },
+    { id:'alt', pass: audit.altScore === 100, warn: audit.imgCount > 0 && audit.altScore < 100,
+      msg: audit.imgCount === 0 ? 'No images found' : audit.altScore === 100 ? `All ${audit.imgCount} images have alt tags` : `${audit.imgCount - audit.imgWithAlt} images missing alt tags` },
+    { id:'length', pass: content.replace(/<[^>]+>/g,'').length > 300, warn: false,
+      msg: content.replace(/<[^>]+>/g,'').length > 300 ? `Content length good (${content.replace(/<[^>]+>/g,'').length} chars)` : 'Add more content (300+ chars recommended)' },
+  ];
+
+  const score = calcScore({ hasTitle: titleLen > 0, titleLen, hasDesc: descLen > 0, descLen, hasH1: audit.hasH1, altScore: audit.altScore });
+  const adjScore = Math.min(100, score + (keyword && title.toLowerCase().includes(keyword) ? 5 : 0) + (content.replace(/<[^>]+>/g,'').length > 300 ? 5 : 0));
+
+  const circle = document.getElementById('seoScoreCircle');
+  const label = document.getElementById('seoScoreLabel');
+  circle.textContent = adjScore;
+  if (adjScore >= 80) { circle.style.borderColor = 'var(--green)'; circle.style.color = 'var(--green)'; label.textContent = 'Great SEO!'; }
+  else if (adjScore >= 50) { circle.style.borderColor = 'var(--yellow)'; circle.style.color = 'var(--yellow)'; label.textContent = 'Needs improvement'; }
+  else { circle.style.borderColor = 'var(--red)'; circle.style.color = 'var(--red)'; label.textContent = 'Poor SEO'; }
+
+  const checksHtml = checks.filter(c => c.msg).map(c => `
+    <div class="seo-check ${c.pass||c.warn?'active':''}">
+      <svg class="icon ${c.pass?'pass':c.warn?'warn':'fail'}" viewBox="0 0 24 24" fill="currentColor">
+        ${c.pass ? '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>' : c.warn ? '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>' : '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>'}
+      </svg>
+      <span class="msg">${c.msg}</span>
+    </div>`).join('');
+  document.getElementById('seoChecks').innerHTML = checksHtml;
+
+  // Tips
+  const tips = [];
+  if (!keyword) tips.push('Set a <strong>focus keyword</strong> to get keyword-specific suggestions');
+  if (descLen > 160) tips.push('Shorten your meta description to <strong>160 characters</strong> max to avoid truncation in search results');
+  if (!audit.hasH1) tips.push('Every page should have exactly <strong>one H1 tag</strong> — make it descriptive and include your keyword');
+  if (audit.imgCount > 0 && audit.altScore < 100) tips.push('Add <strong>descriptive alt text</strong> to all images — include your keyword where relevant');
+  document.getElementById('seoTip').innerHTML = tips.length ? `<strong>Tip:</strong> ${tips[0]}` : '<strong>Looking good!</strong> Keep creating quality, keyword-focused content.';
+
+  // Update preview
+  document.getElementById('prevTitle').textContent = title || 'Page Title';
+  document.getElementById('prevUrl').textContent = `https://${state.username.toLowerCase()}.github.io/${document.getElementById('editFilename').value}`;
+  document.getElementById('prevDesc').textContent = desc || 'Meta description will appear here...';
+}
+
+function updateCharCount(el, id, min, max) {
+  const len = el.value.length;
+  const el2 = document.getElementById(id);
+  el2.textContent = `${len} characters`;
+  el2.className = 'char-count ' + (len >= min && len <= max ? 'char-ok' : len > 0 ? 'char-warn' : '');
+}
+
+// ── REDIRECTS ──
+function renderRedirects() {
+  const list = document.getElementById('redirectsList');
+  if (!state.redirects.length) {
+    list.innerHTML = '<p style="color:var(--text-muted);font-size:.85rem;padding:12px 0">No redirects yet. Add one above.</p>';
+  } else {
+    list.innerHTML = state.redirects.map((r, i) => `
+      <div class="redirect-row">
+        <input class="form-input" value="${r.from}" onchange="state.redirects[${i}].from=this.value;genRedirectJs()" placeholder="/old-page">
+        <input class="form-input" value="${r.to}" onchange="state.redirects[${i}].to=this.value;genRedirectJs()" placeholder="/new-page">
+        <select class="form-select" style="width:90px" onchange="state.redirects[${i}].type=this.value">
+          <option ${r.type==='301'?'selected':''}>301</option>
+          <option ${r.type==='302'?'selected':''}>302</option>
+        </select>
+        <button class="btn btn-red btn-sm" onclick="removeRedirect(${i})">Remove</button>
+      </div>`).join('');
+  }
+  genRedirectJs();
+  localStorage.setItem('cms_redirects', JSON.stringify(state.redirects));
+}
+
+function addRedirect() {
+  state.redirects.push({ from: '', to: '', type: '301' });
+  renderRedirects();
+}
+
+function removeRedirect(i) {
+  state.redirects.splice(i, 1);
+  renderRedirects();
+}
+
+function genRedirectJs() {
+  const rules = state.redirects.filter(r => r.from && r.to);
+  const js = `// Auto-generated 301 Redirects by Andy CMS
+// Include this script in the <head> of every page
+(function(){
+  var redirects = ${JSON.stringify(rules, null, 2)};
+  var path = window.location.pathname;
+  for(var i=0;i<redirects.length;i++){
+    if(path === redirects[i].from || path === redirects[i].from + '/'){
+      window.location.replace(redirects[i].to);
+      break;
+    }
+  }
+})();`;
+  document.getElementById('redirectJsPreview').textContent = rules.length ? js : 'Add redirects above to generate code...';
+}
+
+function copyRedirectJs() {
+  navigator.clipboard.writeText(document.getElementById('redirectJsPreview').textContent);
+  toast('Redirect JS copied!', 'success');
+}
+
+async function publishRedirects() {
+  const rules = state.redirects.filter(r => r.from && r.to);
+  if (!rules.length) return toast('No redirects to publish', 'error');
+  genRedirectJs();
+  const js = document.getElementById('redirectJsPreview').textContent;
+  // Check for existing file
+  let sha = '';
+  try { const ex = await ghGet('/contents/redirects.js'); sha = ex.sha || ''; } catch(e){}
+  const payload = { message: 'Update 301 redirects via Andy CMS', content: btoa(js) };
+  if (sha) payload.sha = sha;
+  const res = await ghPut('/contents/redirects.js', payload);
+  if (res.commit) toast('Redirects published as redirects.js!', 'success');
+  else toast('Publish failed', 'error');
+}
+
+// ── NAVIGATION ──
+function showView(name) {
+  ['dashboard','pages','editor','seo','redirects','publish'].forEach(v => {
+    document.getElementById(`view-${v}`).style.display = v === name ? 'block' : 'none';
+    const nav = document.getElementById(`nav-${v}`);
+    if (nav) nav.classList.toggle('active', v === name);
+  });
+  if (name === 'redirects') renderRedirects();
+}
+
+function switchTab(name, el) {
+  ['content','meta','preview'].forEach(t => document.getElementById(`tab-${t}`).style.display = t === name ? 'block' : 'none');
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (name === 'preview') {
+    document.getElementById('previewFrame').srcdoc = document.getElementById('editContent').value;
+  }
+}
+
+function filterPages() {
+  const q = document.getElementById('pageSearch').value.toLowerCase();
+  document.querySelectorAll('#pagesTable tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ── TOAST ──
+function toast(msg, type = 'info') {
+  const el = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  el.className = 'toast show ' + (type === 'success' ? 'success' : type === 'error' ? 'error' : '');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── INIT ──
+document.getElementById('tokenInput').addEventListener('keydown', e => e.key === 'Enter' && doLogin());
+genRedirectJs();
+
+// Pre-fill token if available
+const saved = sessionStorage.getItem('cms_token');
+if (saved) document.getElementById('tokenInput').value = saved;
+</script>
+</body>
+</html>
