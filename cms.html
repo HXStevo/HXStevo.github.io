@@ -323,61 +323,76 @@ a{color:var(--purple-light);text-decoration:none}
 
     <!-- EDITOR -->
     <div id="view-editor" class="hidden">
-      <div class="topbar">
-        <div><h1 id="edTitle">New Page</h1><p id="edFile">unsaved</p></div>
-        <div class="actions">
-          <button class="btn btn-surface" onclick="nav('pages')">Cancel</button>
+      <!-- Top bar -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0;padding:0 0 12px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+        <button class="btn btn-surface btn-sm" onclick="nav('pages')">← Back</button>
+        <input class="fi" id="eFile" placeholder="page-name.html" style="width:180px;flex-shrink:0" oninput="updateUrlBar()">
+        <select class="fs" id="eTpl" onchange="applyTemplate()" style="width:160px;padding:7px 10px;flex-shrink:0">
+          <option value="0">📄 Blank</option>
+          <option value="1">🚀 Landing Page</option>
+          <option value="2">✍️ Blog Post</option>
+          <option value="3">🔍 SEO Landing</option>
+        </select>
+        <div style="margin-left:auto;display:flex;gap:8px;flex-shrink:0">
+          <button class="btn btn-surface btn-sm" onclick="toggleSeoPanel()" id="seoPanelBtn">SEO ▶</button>
           <button class="btn btn-purple" onclick="savePage()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>Save &amp; Publish
           </button>
         </div>
       </div>
-      <div class="editor-grid">
-        <div>
-          <div class="tabs">
-            <button class="tab active" onclick="showTab('tc',this)">Content</button>
-            <button class="tab" onclick="showTab('tm',this)">SEO Meta</button>
-            <button class="tab" onclick="showTab('tp',this)">Preview</button>
-          </div>
-          <div id="tc">
-            <div class="fg"><label class="fl">Filename</label><input class="fi" id="eFile" placeholder="page-name.html" oninput="seoLive()"></div>
-            <div class="fg"><label class="fl">HTML Content</label><textarea class="ft" id="eContent" oninput="seoLive()" style="min-height:420px;font-family:monospace;font-size:.8rem"></textarea></div>
-          </div>
-          <div id="tm" class="hidden">
-            <div class="fg"><label class="fl">Title Tag (50–60 chars ideal)</label><input class="fi" id="eTitle" oninput="seoLive();cc(this,'cct',50,60)" placeholder="Page Title | Site Name"><div class="char-count" id="cct">0 chars</div></div>
-            <div class="fg"><label class="fl">Meta Description (150–160 chars)</label><textarea class="ft" id="eDesc" oninput="seoLive();cc(this,'ccd',150,160)" style="min-height:80px" placeholder="Compelling search result description..."></textarea><div class="char-count" id="ccd">0 chars</div></div>
-            <div class="fg"><label class="fl">Focus Keyword</label><input class="fi" id="eKw" oninput="seoLive()" placeholder="e.g. gatwick airport parking"></div>
-            <div class="fg"><label class="fl">Canonical URL</label><input class="fi" id="eCanon" placeholder="https://hxstevo.github.io/page.html"></div>
-            <div class="fg"><label class="fl">OG Image URL</label><input class="fi" id="eOG" placeholder="https://...image.jpg"></div>
-            <div class="fg"><label class="fl">Schema Type</label>
-              <select class="fs" id="eSchema">
-                <option value="">None</option>
-                <option value="WebPage">WebPage</option>
-                <option value="Article">Article</option>
-                <option value="FAQPage">FAQPage</option>
-                <option value="Product">Product</option>
-                <option value="LocalBusiness">LocalBusiness</option>
-              </select>
+      <!-- Formatting toolbar -->
+      <div style="display:flex;align-items:center;gap:3px;padding:8px 0;border-bottom:1px solid var(--border);flex-wrap:wrap">
+        <button class="btn btn-surface btn-sm" onclick="fmt('bold')" title="Bold" style="font-weight:800;min-width:30px">B</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('italic')" title="Italic" style="font-style:italic;min-width:30px">I</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('underline')" title="Underline" style="text-decoration:underline;min-width:30px">U</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+        <button class="btn btn-surface btn-sm" onclick="fmt('formatBlock','H1')" title="Heading 1">H1</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('formatBlock','H2')" title="Heading 2">H2</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('formatBlock','H3')" title="Heading 3">H3</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('formatBlock','P')" title="Paragraph">¶</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+        <button class="btn btn-surface btn-sm" onclick="fmt('insertUnorderedList')" title="Bullet list">• List</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('insertOrderedList')" title="Numbered list">1. List</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+        <button class="btn btn-surface btn-sm" onclick="insertLink()" title="Insert link">Link</button>
+        <button class="btn btn-surface btn-sm" onclick="insertImg()" title="Insert image">Image</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+        <button class="btn btn-surface btn-sm" onclick="fmt('undo')" title="Undo">↩</button>
+        <button class="btn btn-surface btn-sm" onclick="fmt('redo')" title="Redo">↪</button>
+      </div>
+      <!-- Editor + SEO panel -->
+      <div style="display:flex;gap:16px;margin-top:16px;align-items:flex-start">
+        <!-- Browser-chrome preview wrapper -->
+        <div style="flex:1;min-width:0;background:white;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.3)">
+          <div style="background:#f1f3f4;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #ddd">
+            <div style="display:flex;gap:5px;flex-shrink:0">
+              <div style="width:10px;height:10px;border-radius:50%;background:#ff5f57"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#ffbd2e"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#28c840"></div>
             </div>
+            <div style="flex:1;background:white;border-radius:20px;padding:3px 12px;font-size:.72rem;color:#666;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" id="edUrlBar">hxstevo.github.io/page.html</div>
           </div>
-          <div id="tp" class="hidden">
-            <div style="background:var(--white);border-radius:10px;overflow:hidden">
-              <div style="padding:16px 20px;border-bottom:1px solid #eee">
-                <div style="font-size:.7rem;color:#666;margin-bottom:6px;font-family:arial">Google SERP Preview</div>
-                <div style="font-size:1rem;color:#1a0dab;font-family:arial" id="pTitle">Page Title</div>
-                <div style="font-size:.75rem;color:#006621;font-family:arial;margin:2px 0" id="pUrl">https://hxstevo.github.io/page.html</div>
-                <div style="font-size:.82rem;color:#545454;font-family:arial;line-height:1.4" id="pDesc">Meta description...</div>
-              </div>
-              <iframe id="previewFr" style="width:100%;height:460px;border:none" srcdoc=""></iframe>
-            </div>
-          </div>
+          <iframe id="editFrame" style="width:100%;height:620px;border:none;display:block"></iframe>
         </div>
-        <div>
+        <!-- SEO panel -->
+        <div id="seoPanelWrap" style="width:270px;flex-shrink:0;display:none">
           <div class="seo-panel">
             <h3>SEO Score</h3>
-            <div class="seo-score"><div class="seo-circle" id="seoCircle" style="border-color:var(--muted);color:var(--muted)">—</div><div style="font-size:.72rem;color:var(--muted)" id="seoLbl">Enter content to analyse</div></div>
+            <div class="seo-score"><div class="seo-circle" id="seoCircle" style="border-color:var(--muted);color:var(--muted)">—</div><div style="font-size:.72rem;color:var(--muted);margin-top:6px" id="seoLbl">Edit content to score</div></div>
             <div class="seo-checks" id="seoChecks"></div>
-            <div class="seo-tip" id="seoTip">Set a focus keyword to get personalised recommendations.</div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <div class="card-header"><div class="card-title" style="font-size:.82rem">SEO Meta</div></div>
+            <div class="fg"><label class="fl">Title Tag</label><input class="fi" id="eTitle" placeholder="Page Title | Brand" oninput="seoLive();cc(this,'cct',50,60)"><div class="char-count" id="cct">0</div></div>
+            <div class="fg"><label class="fl">Meta Description</label><textarea class="ft" id="eDesc" placeholder="Compelling description..." style="min-height:70px" oninput="seoLive();cc(this,'ccd',150,160)"></textarea><div class="char-count" id="ccd">0</div></div>
+            <div class="fg"><label class="fl">Focus Keyword</label><input class="fi" id="eKw" placeholder="main keyword" oninput="seoLive()"></div>
+          </div>
+          <!-- SERP preview -->
+          <div class="card" style="margin-top:12px">
+            <div class="card-title" style="font-size:.82rem;margin-bottom:10px">SERP Preview</div>
+            <div style="font-size:.88rem;color:#1a0dab;font-family:arial;font-weight:400" id="pTitle">Page Title</div>
+            <div style="font-size:.72rem;color:#006621;font-family:arial;margin:2px 0" id="pUrl">hxstevo.github.io/</div>
+            <div style="font-size:.78rem;color:#545454;font-family:arial;line-height:1.4" id="pDesc">Meta description will appear here...</div>
           </div>
         </div>
       </div>
@@ -721,68 +736,105 @@ function score(a) {
 }
 
 // ── EDITOR ──
+// ── EDITOR IFRAME ──
+function loadEditorFrame(html) {
+  const frame = document.getElementById('editFrame');
+  frame.srcdoc = html;
+  frame.onload = function() {
+    try {
+      frame.contentDocument.designMode = 'on';
+      frame.contentDocument.addEventListener('input', seoLive);
+      frame.contentDocument.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); savePage(); }
+      });
+    } catch(e) {}
+  };
+}
+
+function fmt(cmd, val) {
+  const frame = document.getElementById('editFrame');
+  try {
+    frame.contentDocument.execCommand(cmd, false, val || null);
+    frame.contentDocument.body.focus();
+    seoLive();
+  } catch(e) {}
+}
+
+function insertLink() {
+  const url = prompt('Enter URL:');
+  if (url) fmt('createLink', url);
+}
+
+function insertImg() {
+  const url = prompt('Enter image URL:');
+  if (url) fmt('insertImage', url);
+}
+
+function toggleSeoPanel() {
+  const p = document.getElementById('seoPanelWrap');
+  const btn = document.getElementById('seoPanelBtn');
+  const shown = p.style.display !== 'none';
+  p.style.display = shown ? 'none' : 'block';
+  btn.textContent = shown ? 'SEO ▶' : 'SEO ✕';
+}
+
+function applyTemplate() {
+  const i = parseInt(document.getElementById('eTpl').value) || 0;
+  loadEditorFrame(TEMPLATES[i].html);
+}
+
+function updateUrlBar() {
+  const fn = document.getElementById('eFile').value || 'page.html';
+  document.getElementById('edUrlBar').textContent = `hxstevo.github.io/${fn}`;
+}
+
+function getEditorHTML() {
+  try {
+    const frame = document.getElementById('editFrame');
+    return '<!DOCTYPE html>\n' + frame.contentDocument.documentElement.outerHTML;
+  } catch(e) { return ''; }
+}
+
 async function editFile(name, url, sha) {
   nav('editor');
-  document.getElementById('edTitle').textContent = 'Editing: '+name;
-  document.getElementById('edFile').textContent = name;
   document.getElementById('eFile').value = name;
+  updateUrlBar();
   STATE.editFile = { name, sha };
   toast('Loading...', 'info');
   const html = await (await fetch(url)).text();
-  document.getElementById('eContent').value = html;
+  loadEditorFrame(html);
   const tm = html.match(/<title[^>]*>([^<]*)<\/title>/i);
   const dm = html.match(/name=["']description["'][^>]*content=["']([^"']*)/i);
   if (tm) document.getElementById('eTitle').value = tm[1];
   if (dm) document.getElementById('eDesc').value = dm[1];
-  seoLive(); toast('Loaded!', 'success');
+  seoLive(); toast('Loaded — click to edit!', 'success');
 }
 
 function newPage() {
   STATE.editFile = null;
-  document.getElementById('edTitle').textContent = 'New Page';
-  document.getElementById('edFile').textContent = 'unsaved';
   document.getElementById('eFile').value = '';
-  document.getElementById('eContent').value = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Title | Site Name</title>
-  <meta name="description" content="Add a compelling 150-160 character description for best SEO.">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Your Main Heading</h1>
-  <p>Start writing your content here...</p>
-</body>
-</html>`;
   document.getElementById('eTitle').value = '';
   document.getElementById('eDesc').value = '';
   document.getElementById('eKw').value = '';
+  document.getElementById('eTpl').value = '0';
+  updateUrlBar();
+  loadEditorFrame(TEMPLATES[0].html);
   seoLive();
 }
 
 async function savePage() {
   const fn = document.getElementById('eFile').value.trim();
-  if (!fn) return toast('Enter a filename', 'error');
-  let content = document.getElementById('eContent').value;
+  if (!fn) return toast('Enter a filename first', 'error');
+  let content = getEditorHTML();
+  if (!content) return toast('Nothing to save', 'error');
   const title = document.getElementById('eTitle').value;
   const desc = document.getElementById('eDesc').value;
-  const canon = document.getElementById('eCanon').value;
-  const og = document.getElementById('eOG').value;
-  const schema = document.getElementById('eSchema').value;
 
-  if (title) content = content.includes('<title') ? content.replace(/<title[^>]*>[^<]*<\/title>/i,`<title>${title}</title>`) : content.replace('</head>',`  <title>${title}</title>\n</head>`);
+  if (title) content = content.includes('<title') ? content.replace(/<title[^>]*>[^<]*<\/title>/i,`<title>${title}<\/title>`) : content.replace('</head>',`  <title>${title}<\/title>\n</head>`);
   if (desc) {
     if (content.includes('name="description"')||content.includes("name='description'"))
       content = content.replace(/(name=["']description["'][^>]*content=["'])[^"']*(["'])/i,`$1${desc}$2`);
     else content = content.replace('</head>',`  <meta name="description" content="${desc}">\n</head>`);
-  }
-  if (canon&&!content.includes('canonical')) content = content.replace('</head>',`  <link rel="canonical" href="${canon}">\n</head>`);
-  if (og&&!content.includes('og:image')) content = content.replace('</head>',`  <meta property="og:image" content="${og}">\n</head>`);
-  if (schema) {
-    const schemaJson = `<script type="application/ld+json">{"@context":"https://schema.org","@type":"${schema}","name":"${title}"}<\/script>`;
-    if (!content.includes('application/ld+json')) content = content.replace('</head>',`  ${schemaJson}\n</head>`);
   }
 
   toast('Publishing...', 'info');
@@ -800,38 +852,36 @@ async function savePage() {
 
 // ── SEO LIVE ──
 function seoLive() {
-  const content = document.getElementById('eContent').value;
+  let content = '';
+  try { content = document.getElementById('editFrame').contentDocument.body.innerHTML || ''; } catch(e) {}
   const title = document.getElementById('eTitle').value;
   const desc = document.getElementById('eDesc').value;
-  const kw = document.getElementById('eKw').value.toLowerCase();
+  const kw = (document.getElementById('eKw').value || '').toLowerCase();
   const a = parseHtml(content+`<title>${title}</title><meta name="description" content="${desc}">`);
   const tl = title.length, dl = desc.length;
+  const textLen = content.replace(/<[^>]+>/g,'').trim().length;
   const checks = [
-    {pass:tl>=50&&tl<=60,warn:tl>0&&(tl<50||tl>60),msg:tl===0?'Add title (50–60 chars)':tl<50?`Title short (${tl}/50)`:tl>60?`Title long (${tl}/60)`:`Title perfect (${tl}c)`},
-    {pass:dl>=150&&dl<=160,warn:dl>0&&(dl<150||dl>160),msg:dl===0?'Add meta description':dl<150?`Desc short (${dl}/150)`:dl>160?`Desc long (${dl}/160)`:`Description perfect (${dl}c)`},
-    {pass:a.h1,warn:false,msg:a.h1?'H1 tag present':'Add an H1 tag'},
-    {pass:kw&&title.toLowerCase().includes(kw),warn:kw&&!title.toLowerCase().includes(kw),msg:!kw?'Set a focus keyword':title.toLowerCase().includes(kw)?`Keyword in title ✓`:`Add "${kw}" to title`},
-    {pass:a.altPct===100,warn:a.imgs>0&&a.altPct<100,msg:a.imgs===0?'No images found':a.altPct===100?'All images have alt tags':`${a.imgs-a.alts} images missing alt`},
-    {pass:content.replace(/<[^>]+>/g,'').length>300,warn:false,msg:content.replace(/<[^>]+>/g,'').length>300?'Content length good':'Add more content (300+ chars)'},
+    {pass:tl>=50&&tl<=60,warn:tl>0&&(tl<50||tl>60),msg:tl===0?'Add a title (50–60 chars)':tl<50?`Title too short (${tl} chars)`:tl>60?`Title too long (${tl} chars)`:`Title length perfect ✓`},
+    {pass:dl>=150&&dl<=160,warn:dl>0&&(dl<150||dl>160),msg:dl===0?'Add meta description':dl<150?`Description short (${dl} chars)`:dl>160?`Description long (${dl} chars)`:`Description perfect ✓`},
+    {pass:!!a.h1,warn:false,msg:a.h1?'H1 tag found ✓':'No H1 tag — add one'},
+    {pass:!!(kw&&title.toLowerCase().includes(kw)),warn:!!(kw&&!title.toLowerCase().includes(kw)),msg:!kw?'Set a focus keyword':title.toLowerCase().includes(kw)?`Keyword in title ✓`:`Add "${kw}" to title`},
+    {pass:a.altPct===100,warn:a.imgs>0&&a.altPct<100,msg:a.imgs===0?'No images':a.altPct===100?'All images have alt ✓':`${a.imgs-a.alts} images missing alt`},
+    {pass:textLen>300,warn:false,msg:textLen>300?'Content length good ✓':'Add more content (300+ words)'},
   ];
-  const sc = Math.min(100, score({title:title||a.title,desc:desc||a.desc,h1:a.h1,tLen:tl||a.tLen,dLen:dl||a.dLen,altPct:a.altPct})+(kw&&title.toLowerCase().includes(kw)?5:0)+(content.replace(/<[^>]+>/g,'').length>300?5:0));
+  const sc = Math.min(100, score({title:title||a.title,desc:desc||a.desc,h1:a.h1,tLen:tl||a.tLen,dLen:dl||a.dLen,altPct:a.altPct})+(kw&&title.toLowerCase().includes(kw)?5:0)+(textLen>300?5:0));
   const c=document.getElementById('seoCircle'), l=document.getElementById('seoLbl');
   c.textContent=sc;
   c.style.borderColor=sc>=80?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';
   c.style.color=sc>=80?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';
-  l.textContent=sc>=80?'Great SEO!':sc>=50?'Needs improvement':'Poor SEO';
+  l.textContent=sc>=80?'Great SEO!':sc>=50?'Needs work':'Poor SEO';
   document.getElementById('seoChecks').innerHTML=checks.map(c=>`
     <div class="seo-chk">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="${c.pass?'chk-pass':c.warn?'chk-warn':'chk-fail'}">
         ${c.pass?'<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>':c.warn?'<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>':'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>'}
-      </svg>
-      <span>${c.msg}</span>
-    </div>`).join('');
-  const tips=[...(!kw?['Set a <strong>focus keyword</strong> to get specific recommendations']:[]),...(dl>160?['Shorten meta description to 160 chars max']:[]),...(!a.h1?['Add exactly one <strong>H1 tag</strong> per page']:[])];
-  document.getElementById('seoTip').innerHTML=tips.length?`<strong>Tip:</strong> ${tips[0]}`:'<strong>Looking good!</strong> Keep creating quality content.';
+      </svg><span>${c.msg}</span></div>`).join('');
   document.getElementById('pTitle').textContent=title||'Page Title';
-  document.getElementById('pUrl').textContent=`https://${STATE.username.toLowerCase()}.github.io/${document.getElementById('eFile').value}`;
-  document.getElementById('pDesc').textContent=desc||'Meta description...';
+  document.getElementById('pUrl').textContent=`hxstevo.github.io/${document.getElementById('eFile').value||''}`;
+  document.getElementById('pDesc').textContent=desc||'Meta description will appear here...';
 }
 
 function cc(el, id, min, max) {
@@ -933,9 +983,9 @@ function renderTemplates() {
 
 function useTemplate(i) {
   nav('editor'); newPage();
-  document.getElementById('eContent').value = TEMPLATES[i].html;
-  seoLive();
-  toast(`Template "${TEMPLATES[i].name}" loaded!`, 'success');
+  document.getElementById('eTpl').value = String(i);
+  loadEditorFrame(TEMPLATES[i].html);
+  toast(`Template "${TEMPLATES[i].name}" loaded — click to edit!`, 'success');
 }
 
 // ── REDIRECTS ──
@@ -1059,12 +1109,7 @@ function nav(v) {
   }
 }
 
-function showTab(id, el) {
-  ['tc','tm','tp'].forEach(t=>document.getElementById(t).classList.toggle('hidden',t!==id));
-  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  if(id==='tp') document.getElementById('previewFr').srcdoc=document.getElementById('eContent').value;
-}
+function showTab(id, el) { /* legacy - no-op */ }
 
 function filterPgs() {
   const q=document.getElementById('pgSearch').value.toLowerCase();
