@@ -193,10 +193,6 @@ a{color:var(--purple-light);text-decoration:none}
           </button>
         </div>
       </div>
-      <div class="fg">
-        <label class="fl">GitHub Token</label>
-        <input class="fi" id="lgToken" type="password" placeholder="ghp_..." autocomplete="off">
-      </div>
       <button class="btn btn-purple btn-full" onclick="doLogin()">Sign In</button>
       <p style="font-size:.72rem;color:var(--muted);margin-top:12px;text-align:center">Credentials stored in session only</p>
     </div>
@@ -257,6 +253,9 @@ a{color:var(--purple-light);text-decoration:none}
       <div class="sb-lbl">Infrastructure</div>
       <button class="sb-item" id="nav-domains" onclick="nav('domains')">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>Domain Manager
+      </button>
+      <button class="sb-item" id="nav-settings" onclick="nav('settings')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Settings
       </button>
     </div>
 
@@ -446,6 +445,35 @@ a{color:var(--purple-light);text-decoration:none}
       </div>
     </div>
 
+    <!-- SETTINGS -->
+    <div id="view-settings" class="hidden">
+      <div class="topbar">
+        <div><h1>Settings</h1><p>GitHub connection &amp; preferences</p></div>
+      </div>
+      <div class="card" style="max-width:520px">
+        <div class="card-header"><div class="card-title">GitHub Connection</div></div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">Your GitHub token is saved locally in your browser — it never leaves your device.</p>
+        <div class="fg">
+          <label class="fl">GitHub Personal Access Token</label>
+          <div class="pw-wrap">
+            <input class="fi" id="settingsToken" type="password" placeholder="ghp_..." autocomplete="off">
+            <button class="pw-toggle" type="button" onclick="document.getElementById('settingsToken').type=document.getElementById('settingsToken').type==='password'?'text':'password'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </button>
+          </div>
+          <p style="font-size:.7rem;color:var(--muted);margin-top:5px">Needs <code style="background:var(--surface2);padding:1px 5px;border-radius:3px">repo</code> scope. Generate at github.com/settings/tokens</p>
+        </div>
+        <button class="btn btn-purple" onclick="saveToken()">Save &amp; Connect</button>
+        <span id="tokenStatus" style="margin-left:10px;font-size:.8rem;color:var(--muted)"></span>
+      </div>
+    </div>
+
+    <!-- TOKEN SETUP BANNER -->
+    <div id="tokenBanner" class="hidden" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <span style="font-size:.85rem;color:var(--yellow)">⚠ GitHub token not configured — pages won't load until you connect.</span>
+      <button class="btn btn-surface btn-sm" onclick="nav('settings')">Connect GitHub →</button>
+    </div>
+
   </main>
 </div>
 
@@ -464,25 +492,41 @@ async function sha256(str) {
 async function doLogin() {
   const u = document.getElementById('lgUser').value.trim().toLowerCase();
   const p = document.getElementById('lgPass').value;
-  const t = document.getElementById('lgToken').value.trim();
-  const err = document.getElementById('loginErr');
 
-  if (!u || !p || !t) { showErr('Please fill in all fields'); return; }
+  if (!u || !p) { showErr('Please enter username and password'); return; }
 
   const hash = await sha256(p);
   if (!USERS[u] || USERS[u].hash !== hash) { showErr('Invalid username or password'); return; }
 
-  STATE.token = t; STATE.username = 'HXStevo'; STATE.user = USERS[u].name;
-  sessionStorage.setItem('cms_session', JSON.stringify({ token: t, user: u }));
+  STATE.token = localStorage.getItem('cms_gh_token') || '';
+  STATE.username = 'HXStevo'; STATE.user = USERS[u].name;
+  sessionStorage.setItem('cms_session', JSON.stringify({ user: u }));
 
   document.getElementById('sbUser').textContent = STATE.user;
   document.getElementById('sbUserName').textContent = STATE.user;
   document.getElementById('sbAvatar').textContent = STATE.user[0].toUpperCase();
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('appScreen').classList.remove('hidden');
-  loadSite();
+
+  // Show banner if no token saved yet
+  if (!STATE.token) {
+    document.getElementById('tokenBanner').classList.remove('hidden');
+  } else {
+    loadSite();
+  }
   renderTemplates();
   renderDomains();
+}
+
+function saveToken() {
+  const t = document.getElementById('settingsToken').value.trim();
+  if (!t) { document.getElementById('tokenStatus').textContent = 'Enter a token first'; return; }
+  localStorage.setItem('cms_gh_token', t);
+  STATE.token = t;
+  document.getElementById('tokenStatus').textContent = '✓ Saved!';
+  document.getElementById('tokenBanner').classList.add('hidden');
+  setTimeout(() => document.getElementById('tokenStatus').textContent = '', 2000);
+  loadSite();
 }
 
 function showErr(msg) {
@@ -894,7 +938,7 @@ function addRedir() { STATE.redirects.push({from:'',to:'',type:'301'}); renderRe
 function genRedir() {
   const rules = STATE.redirects.filter(r=>r.from&&r.to);
   document.getElementById('redirCode').textContent = rules.length
-    ? `// Auto-generated 301 Redirects — Andy CMS\n// Add <script src="redirects.js"></script> to your <head>\n(function(){\n  var rules=${JSON.stringify(rules,null,2)};\n  var p=window.location.pathname;\n  for(var i=0;i<rules.length;i++){\n    if(p===rules[i].from||p===rules[i].from+'/'){\n      window.location.replace(rules[i].to);\n      break;\n    }\n  }\n})();`
+    ? `// Auto-generated 301 Redirects — Andy CMS\n// Add <script src="redirects.js"><\/script> to your <head>\n(function(){\n  var rules=${JSON.stringify(rules,null,2)};\n  var p=window.location.pathname;\n  for(var i=0;i<rules.length;i++){\n    if(p===rules[i].from||p===rules[i].from+'/'){\n      window.location.replace(rules[i].to);\n      break;\n    }\n  }\n})();`
     : 'Add redirects above...';
 }
 
@@ -980,12 +1024,17 @@ async function verifyCNAME(i) {
 
 // ── NAV ──
 function nav(v) {
-  ['dashboard','pages','editor','templates','seo','cwv','redirects','domains'].forEach(n => {
+  ['dashboard','pages','editor','templates','seo','cwv','redirects','domains','settings'].forEach(n => {
     document.getElementById('view-'+n).classList.toggle('hidden', n!==v);
     const btn=document.getElementById('nav-'+n);
     if(btn) btn.classList.toggle('active',n===v);
   });
   if(v==='redirects') renderRedirs();
+  if(v==='settings') {
+    const saved = localStorage.getItem('cms_gh_token')||'';
+    document.getElementById('settingsToken').value = saved;
+    document.getElementById('tokenStatus').textContent = saved ? '✓ Token configured' : '';
+  }
 }
 
 function showTab(id, el) {
@@ -1014,7 +1063,6 @@ const sess = sessionStorage.getItem('cms_session');
 if(sess) {
   try {
     const s=JSON.parse(sess);
-    document.getElementById('lgToken').value=s.token||'';
     document.getElementById('lgUser').value=s.user||'stevo';
   } catch(e){}
 }
