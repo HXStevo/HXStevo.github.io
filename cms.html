@@ -168,8 +168,59 @@ a{color:var(--purple-light);text-decoration:none}
 </head>
 <body>
 
+<!-- ── CONNECT SCREEN ── -->
+<div id="connectScreen" class="hidden" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 60% 30%,rgba(124,58,237,.15) 0%,transparent 60%),var(--bg)">
+  <div style="width:100%;max-width:460px;padding:20px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-light));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem">🔗</div>
+      <h1 style="font-size:2rem;font-weight:800;color:var(--white);letter-spacing:-1px">Andy <span style="color:var(--purple-light)">CMS</span></h1>
+      <p style="color:var(--muted);font-size:.88rem;margin-top:6px">Connect your GitHub account to get started</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.4)">
+      <div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0">1</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600;color:var(--white)">Generate a GitHub token</div>
+            <div style="font-size:.75rem;color:var(--muted)">Click below — opens GitHub with the right settings pre-filled</div>
+          </div>
+        </div>
+        <a href="https://github.com/settings/tokens/new?scopes=repo&description=Andy+CMS" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#24292e;color:#fff;border:1px solid #444;border-radius:8px;padding:11px;font-size:.88rem;font-weight:600;text-decoration:none;width:100%;box-sizing:border-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Open GitHub → Create Token
+        </a>
+      </div>
+      <div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0">2</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600;color:var(--white)">Scroll down and click <em>Generate token</em></div>
+            <div style="font-size:.75rem;color:var(--muted)">Copy the token that appears (starts with ghp_)</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0">3</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600;color:var(--white)">Paste your token below</div>
+          </div>
+        </div>
+        <div style="position:relative">
+          <input id="connectToken" class="fi" type="password" placeholder="ghp_..." autocomplete="off" style="padding-right:40px" oninput="checkConnectToken()">
+          <button type="button" onclick="toggleConnectPw()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </button>
+        </div>
+        <div id="connectErr" style="font-size:.75rem;color:var(--red);margin-top:6px;display:none"></div>
+        <button type="button" id="connectBtn" class="btn btn-purple btn-full" style="margin-top:12px" onclick="connectGitHub()" disabled>Connect to GitHub</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── APP ── -->
-<div id="appScreen">
+<div id="appScreen" class="hidden">
   <aside class="sidebar">
     <div class="sb-logo">
       <div class="sb-logo-icon">
@@ -453,17 +504,51 @@ a{color:var(--purple-light);text-decoration:none}
 // ── AUTH ──
 function initApp() {
   STATE.token = localStorage.getItem('cms_gh_token') || '';
-  STATE.user = 'Stevo';
+  if (!STATE.token) {
+    document.getElementById('connectScreen').classList.remove('hidden');
+    return;
+  }
+  launchDashboard();
+}
+
+function launchDashboard() {
+  document.getElementById('connectScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.remove('hidden');
   document.getElementById('sbUser').textContent = 'Stevo';
   document.getElementById('sbUserName').textContent = 'Stevo';
   document.getElementById('sbAvatar').textContent = 'S';
-  if (!STATE.token) {
-    document.getElementById('tokenBanner').classList.remove('hidden');
-  } else {
-    loadSite();
-  }
+  loadSite();
   renderTemplates();
   renderDomains();
+}
+
+function checkConnectToken() {
+  const v = document.getElementById('connectToken').value.trim();
+  document.getElementById('connectBtn').disabled = v.length < 10;
+}
+
+function toggleConnectPw() {
+  const i = document.getElementById('connectToken');
+  i.type = i.type === 'password' ? 'text' : 'password';
+}
+
+async function connectGitHub() {
+  const t = document.getElementById('connectToken').value.trim();
+  const btn = document.getElementById('connectBtn');
+  const err = document.getElementById('connectErr');
+  btn.textContent = 'Connecting...'; btn.disabled = true; err.style.display = 'none';
+  try {
+    const res = await fetch('https://api.github.com/user', { headers: { Authorization: 'token ' + t } });
+    if (!res.ok) throw new Error('Invalid token — check it and try again');
+    const user = await res.json();
+    localStorage.setItem('cms_gh_token', t);
+    STATE.token = t;
+    STATE.username = user.login || 'HXStevo';
+    launchDashboard();
+  } catch(e) {
+    err.textContent = e.message; err.style.display = 'block';
+    btn.textContent = 'Connect to GitHub'; btn.disabled = false;
+  }
 }
 
 function saveToken() {
@@ -480,7 +565,10 @@ function saveToken() {
 function logout() {
   localStorage.removeItem('cms_gh_token');
   STATE.token = '';
-  toast('Signed out', 'info');
+  document.getElementById('appScreen').classList.add('hidden');
+  document.getElementById('connectScreen').classList.remove('hidden');
+  document.getElementById('connectToken').value = '';
+  document.getElementById('connectBtn').disabled = true;
 }
 
 // ── STATE ──
