@@ -182,7 +182,7 @@ a{color:var(--purple-light);text-decoration:none}
       <div class="login-error" id="loginErr"></div>
       <div class="fg">
         <label class="fl">Username</label>
-        <input class="fi" id="lgUser" type="text" placeholder="stevo" autocomplete="username">
+        <input class="fi" id="lgUser" type="text" placeholder="stevo" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
       </div>
       <div class="fg">
         <label class="fl">Password</label>
@@ -193,7 +193,7 @@ a{color:var(--purple-light);text-decoration:none}
           </button>
         </div>
       </div>
-      <button class="btn btn-purple btn-full" onclick="doLogin()">Sign In</button>
+      <button type="button" class="btn btn-purple btn-full" onclick="doLogin()">Sign In</button>
       <p style="font-size:.72rem;color:var(--muted);margin-top:12px;text-align:center">Credentials stored in session only</p>
     </div>
   </div>
@@ -489,7 +489,7 @@ function doLogin() {
   if (u !== 'stevo' || p !== 'admin') { showErr('Invalid username or password'); return; }
 
   STATE.token = localStorage.getItem('cms_gh_token') || '';
-  STATE.username = 'HXStevo'; STATE.user = USERS[u].name;
+  STATE.username = 'HXStevo'; STATE.user = 'Stevo';
   sessionStorage.setItem('cms_session', JSON.stringify({ user: u }));
 
   document.getElementById('sbUser').textContent = STATE.user;
@@ -531,7 +531,6 @@ function logout() {
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('appScreen').classList.add('hidden');
   document.getElementById('lgPass').value = '';
-  document.getElementById('lgToken').value = '';
 }
 
 function togglePw() {
