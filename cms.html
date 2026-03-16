@@ -600,7 +600,9 @@ async function gh(method, path, body) {
     method, headers: { Authorization: `token ${STATE.token}`, 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined
   });
-  return r.json();
+  const data = await r.json();
+  if (!r.ok && r.status === 401) { toast('GitHub token invalid — reconnect in Settings', 'error'); }
+  return data;
 }
 
 // ── LOAD SITE ──
@@ -823,31 +825,53 @@ function newPage() {
 }
 
 async function savePage() {
-  const fn = document.getElementById('eFile').value.trim();
-  if (!fn) return toast('Enter a filename first', 'error');
-  let content = getEditorHTML();
-  if (!content) return toast('Nothing to save', 'error');
-  const title = document.getElementById('eTitle').value;
-  const desc = document.getElementById('eDesc').value;
+  try {
+    if (!STATE.token) return toast('No GitHub token — go to Settings first', 'error');
+    const fn = document.getElementById('eFile').value.trim();
+    if (!fn) return toast('Enter a filename (e.g. my-page.html)', 'error');
+    if (!fn.endsWith('.html')) return toast('Filename must end in .html', 'error');
 
-  if (title) content = content.includes('<title') ? content.replace(/<title[^>]*>[^<]*<\/title>/i,`<title>${title}<\/title>`) : content.replace('</head>',`  <title>${title}<\/title>\n</head>`);
-  if (desc) {
-    if (content.includes('name="description"')||content.includes("name='description'"))
-      content = content.replace(/(name=["']description["'][^>]*content=["'])[^"']*(["'])/i,`$1${desc}$2`);
-    else content = content.replace('</head>',`  <meta name="description" content="${desc}">\n</head>`);
+    let content = getEditorHTML();
+    if (!content || content.length < 20) return toast('Editor is empty — add some content first', 'error');
+
+    const title = document.getElementById('eTitle').value;
+    const desc = document.getElementById('eDesc').value;
+
+    if (title) {
+      if (content.includes('<title')) content = content.replace(/<title[^>]*>[^<]*<\/title>/i, `<title>${title}<\/title>`);
+      else content = content.replace('</head>', `  <title>${title}<\/title>\n</head>`);
+    }
+    if (desc) {
+      if (content.includes('name="description"') || content.includes("name='description'"))
+        content = content.replace(/(name=["']description["'][^>]*content=["'])[^"']*(["'])/i, `$1${desc}$2`);
+      else content = content.replace('</head>', `  <meta name="description" content="${desc}">\n</head>`);
+    }
+
+    toast('Saving...', 'info');
+    let sha = '';
+    if (STATE.editFile && STATE.editFile.name === fn) {
+      sha = STATE.editFile.sha;
+    } else {
+      try { const ex = await gh('GET', `/contents/${fn}`); if (ex.sha) sha = ex.sha; } catch(e) {}
+    }
+
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+    const res = await gh('PUT', `/contents/${fn}`, {
+      message: `Update ${fn} via Andy CMS`,
+      content: encoded,
+      ...(sha ? { sha } : {})
+    });
+
+    if (res && res.commit) {
+      STATE.editFile = { name: fn, sha: res.content.sha };
+      toast(`✓ ${fn} saved and published!`, 'success');
+      loadSite();
+    } else {
+      toast('Save failed: ' + (res && res.message ? res.message : 'unknown error'), 'error');
+    }
+  } catch(err) {
+    toast('Error: ' + err.message, 'error');
   }
-
-  toast('Publishing...', 'info');
-  let sha = '';
-  if (STATE.editFile && STATE.editFile.name === fn) sha = STATE.editFile.sha;
-  else { try { const ex = await gh('GET',`/contents/${fn}`); sha = ex.sha||''; } catch(e){} }
-
-  const res = await gh('PUT', `/contents/${fn}`, {
-    message: `Update ${fn} via Andy CMS`, content: btoa(unescape(encodeURIComponent(content))),
-    ...(sha ? { sha } : {})
-  });
-  if (res.commit) { toast(`${fn} published!`, 'success'); loadSite(); }
-  else toast('Failed: '+(res.message||'error'), 'error');
 }
 
 // ── SEO LIVE ──
