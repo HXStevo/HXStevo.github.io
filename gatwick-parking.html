@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Breadcrumb + FAQ Schema -->
+  <!-- Breadcrumb Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -19,6 +19,73 @@
       { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hxstevo.github.io/" },
       { "@type": "ListItem", "position": 2, "name": "Airport Parking", "item": "https://www.holidayextras.com/airport-parking.html" },
       { "@type": "ListItem", "position": 3, "name": "Gatwick Parking", "item": "https://hxstevo.github.io/gatwick-parking.html" }
+    ]
+  }
+  </script>
+
+  <!-- Product + AggregateRating Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Gatwick Airport Parking",
+    "description": "Compare Gatwick airport parking from just £3.49/day. Meet and greet, park and ride and on-airport options with free cancellation.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Holiday Extras"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": "3.49",
+      "highPrice": "18.00",
+      "priceCurrency": "GBP",
+      "offerCount": "6"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "9.3",
+      "bestRating": "10",
+      "worstRating": "1",
+      "ratingCount": "5334",
+      "reviewCount": "5334"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "10", "bestRating": "10" },
+        "author": { "@type": "Person", "name": "Mr A Dorman" },
+        "reviewBody": "Directions were perfect and all the processes we had to follow to get parked worked seamlessly. Very happy so thank you."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "10", "bestRating": "10" },
+        "author": { "@type": "Person", "name": "Ms S Wicks" },
+        "reviewBody": "Have used Cophall car park several times and found the service from them very reliable. Booking through Holiday Extras was easy and more cost effective than booking direct or via any other company."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "9", "bestRating": "10" },
+        "author": { "@type": "Person", "name": "Mr M Clements" },
+        "reviewBody": "The drop-off location was very convenient, and communication was excellent throughout. The directions for both dropping off the car and collecting it on our return were clear and easy to follow, which made the whole process stress free."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "10", "bestRating": "10" },
+        "author": { "@type": "Person", "name": "Mr M Caddye" },
+        "reviewBody": "APH Parking was very efficient and the whole process of dropping off the car to the transfers and pick up on return was perfect. Great service by APH and I'll continue to use them."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "10", "bestRating": "10" },
+        "author": { "@type": "Person", "name": "Mrs C Muirden" },
+        "reviewBody": "Efficient, reliable, helpful staff and good timing of buses. Would use again without hesitation."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "9", "bestRating": "10" },
+        "author": { "@type": "Person", "name": "Mr C Stevens" },
+        "reviewBody": "Easy and good service. Would book again. The shuttle was prompt and the check-in process was quick and straightforward."
+      }
     ]
   }
   </script>
@@ -99,7 +166,14 @@
     .form-group input:focus, .form-group select:focus { border-color: var(--hx-blue); }
     .btn-search { width: 100%; background: var(--hx-yellow); color: var(--hx-blue-dark); border: none; border-radius: 8px; padding: 14px; font-family: inherit; font-size: 1rem; font-weight: 900; cursor: pointer; transition: background .2s, transform .1s; letter-spacing: 0.02em; }
     .btn-search:hover { background: #ffc800; transform: translateY(-1px); }
-    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .hero { padding: 36px 16px 32px; }
+      .hero h1 { font-size: 1.75rem; }
+      .hero-stats { gap: 16px; }
+      .hero-stat strong { font-size: 1.3rem; }
+      .search-box { padding: 16px; }
+    }
 
     /* ANCHOR LINKS */
     .anchor-links { background: var(--hx-light); border-bottom: 1px solid var(--hx-border); padding: 12px 24px; }
@@ -107,6 +181,7 @@
     .anchor-links strong { font-size: 0.8rem; color: var(--text-muted); margin-right: 4px; white-space: nowrap; }
     .anchor-links a { font-size: 0.8rem; color: var(--hx-blue); font-weight: 700; text-decoration: none; padding: 4px 10px; border: 1.5px solid var(--hx-border); border-radius: 20px; white-space: nowrap; transition: all .2s; }
     .anchor-links a:hover { background: var(--hx-blue); color: #fff; border-color: var(--hx-blue); }
+    @media (max-width: 600px) { .anchor-links { padding: 10px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; } .anchor-links-inner { flex-wrap: nowrap; } }
 
     /* BREADCRUMB */
     .breadcrumb { max-width: 1100px; margin: 16px auto 0; padding: 0 24px; }
@@ -129,11 +204,14 @@
     .content li { margin-bottom: 6px; color: #2a3848; }
 
     /* USP STRIP */
-    .usp-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 24px 0 32px; }
+    .usp-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0 32px; }
     .usp { background: var(--hx-light); border: 1.5px solid var(--hx-border); border-radius: var(--radius); padding: 16px; text-align: center; }
-    .usp-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .usp-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--hx-blue); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 900; margin: 0 auto 8px; }
+    .usp-icon svg { width: 18px; height: 18px; fill: #fff; }
     .usp strong { display: block; font-size: 0.85rem; font-weight: 800; color: var(--hx-blue); }
     .usp span { font-size: 0.75rem; color: var(--text-muted); }
+    @media (max-width: 768px) { .usp-strip { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 420px) { .usp-strip { grid-template-columns: 1fr; } }
 
     /* PRODUCT TABLE */
     .product-table-wrap { overflow-x: auto; margin: 16px 0 28px; border-radius: var(--radius); border: 1.5px solid var(--hx-border); box-shadow: var(--shadow); }
@@ -151,8 +229,9 @@
     .type-pr { background: #dcfce7; color: #166534; }
 
     /* COMPARISON TABLE */
-    .compare-table-wrap { overflow-x: auto; margin: 16px 0 28px; }
+    .compare-table-wrap { overflow-x: auto; margin: 16px 0 28px; -webkit-overflow-scrolling: touch; }
     .compare-table { width: 100%; border-collapse: collapse; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); min-width: 480px; }
+    @media (max-width: 600px) { .compare-table { font-size: 0.8rem; } .compare-table th, .compare-table td { padding: 8px 10px; } }
     .compare-table th { background: var(--hx-blue); color: #fff; padding: 14px; text-align: center; font-size: 0.875rem; font-weight: 800; }
     .compare-table th:first-child { text-align: left; background: var(--hx-blue-dark); }
     .compare-table td { padding: 11px 14px; border-bottom: 1px solid var(--hx-border); font-size: 0.875rem; }
@@ -162,14 +241,33 @@
     .tick { color: #16a34a; font-weight: 900; }
     .cross { color: #dc2626; font-weight: 900; }
 
+    /* REVIEW AGGREGATE */
+    .review-aggregate { background: var(--hx-blue); border-radius: var(--radius); padding: 24px 28px; margin: 16px 0 20px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .review-agg-score { text-align: center; min-width: 90px; }
+    .review-agg-number { font-size: 2.4rem; font-weight: 900; color: var(--hx-yellow); line-height: 1; }
+    .review-agg-outof { font-size: 0.85rem; color: rgba(255,255,255,0.7); font-weight: 700; }
+    .review-agg-stars { color: var(--hx-yellow); font-size: 1.1rem; letter-spacing: 2px; margin-top: 4px; }
+    .review-agg-detail { flex: 1; min-width: 200px; }
+    .review-agg-detail strong { color: #fff; font-size: 1rem; display: block; margin-bottom: 4px; }
+    .review-agg-detail span { color: rgba(255,255,255,0.8); font-size: 0.85rem; }
+    .review-agg-bars { margin-top: 10px; }
+    .review-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .review-bar-label { font-size: 0.7rem; color: rgba(255,255,255,0.7); font-weight: 700; width: 55px; text-align: right; }
+    .review-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
+    .review-bar-fill { height: 100%; background: var(--hx-yellow); border-radius: 3px; }
+    .review-bar-val { font-size: 0.7rem; color: rgba(255,255,255,0.7); font-weight: 700; width: 30px; }
+    @media (max-width: 600px) { .review-aggregate { flex-direction: column; text-align: center; } .review-bar-label { text-align: left; } }
+
     /* REVIEWS */
     .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 16px 0 28px; }
-    .review-card { background: var(--hx-light); border: 1.5px solid var(--hx-border); border-radius: var(--radius); padding: 18px; }
-    .review-stars { color: #f59e0b; font-size: 1rem; letter-spacing: 1px; margin-bottom: 4px; }
+    .review-card { background: #fff; border: 1.5px solid var(--hx-border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); transition: box-shadow .2s; }
+    .review-card:hover { box-shadow: 0 4px 20px rgba(0,63,125,0.15); }
+    .review-stars { color: var(--hx-yellow); font-size: 1rem; letter-spacing: 1px; margin-bottom: 4px; }
     .review-score { font-size: 0.75rem; font-weight: 700; color: #1a7a40; margin-bottom: 8px; }
     .review-text { font-size: 0.875rem; color: #2a3848; line-height: 1.55; margin-bottom: 10px; font-style: italic; }
     .review-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
     .review-site { font-size: 0.75rem; color: var(--hx-blue); font-weight: 700; }
+    @media (max-width: 600px) { .reviews-grid { grid-template-columns: 1fr; } }
 
     /* FAQs */
     .faq-list { margin: 16px 0 28px; }
@@ -181,23 +279,44 @@
     .faq-item.open .faq-a { display: block; }
 
     /* SIDEBAR */
-    .sidebar-card { background: var(--hx-light); border: 1.5px solid var(--hx-border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
-    .sidebar-card h3 { font-size: 0.95rem; font-weight: 800; color: var(--hx-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .sidebar-card { background: #fff; border: 1.5px solid var(--hx-border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+    .sidebar-card h3 { font-size: 0.95rem; font-weight: 800; color: var(--hx-blue); margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--hx-yellow); }
     .sidebar-card ul { list-style: none; padding: 0; }
-    .sidebar-card ul li { padding: 6px 0; border-bottom: 1px solid var(--hx-border); font-size: 0.85rem; }
+    .sidebar-card ul li { padding: 8px 0; border-bottom: 1px solid var(--hx-border); font-size: 0.85rem; }
     .sidebar-card ul li:last-child { border-bottom: none; }
     .sidebar-card a { color: var(--hx-blue); font-weight: 700; text-decoration: none; }
     .sidebar-card a:hover { text-decoration: underline; }
     .tip-list { list-style: none; padding: 0; }
     .tip-list li { padding: 6px 0 6px 20px; border-bottom: 1px solid var(--hx-border); font-size: 0.85rem; position: relative; }
-    .tip-list li::before { content: '✓'; color: #16a34a; position: absolute; left: 0; font-weight: 900; }
+    .tip-list li::before { content: ''; position: absolute; left: 0; top: 11px; width: 10px; height: 6px; border-left: 2px solid var(--hx-teal); border-bottom: 2px solid var(--hx-teal); transform: rotate(-45deg); }
     .tip-list li:last-child { border-bottom: none; }
+    .ratings-card { background: var(--hx-blue); border-color: var(--hx-blue); }
+    .ratings-card h3 { color: #fff; border-bottom-color: rgba(255,255,255,0.2); }
+    .ratings-card li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 0.85rem; color: rgba(255,255,255,0.9); display: flex; justify-content: space-between; }
+    .ratings-card li:last-child { border-bottom: none; }
+    .ratings-card .score-val { color: var(--hx-yellow); font-weight: 900; }
+    .ratings-card .ratings-footnote { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 10px; }
 
     /* TRUST BAR */
-    .trust-bar { background: var(--hx-blue); color: #fff; text-align: center; padding: 20px 24px; }
-    .trust-bar-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 700; }
-    .trust-icon { font-size: 1.2rem; }
+    .trust-bar { background: var(--hx-blue-dark); color: #fff; text-align: center; padding: 20px 24px; }
+    .trust-bar-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; }
+    .trust-icon { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.12); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .trust-icon svg { width: 14px; height: 14px; fill: var(--hx-yellow); }
+    @media (max-width: 768px) { .trust-bar-inner { gap: 16px; } .trust-item { font-size: 0.75rem; gap: 6px; } .trust-icon { width: 24px; height: 24px; } .trust-icon svg { width: 12px; height: 12px; } }
+
+    /* MOBILE TABLE CARDS */
+    @media (max-width: 600px) {
+      .product-table-wrap { border: none; box-shadow: none; }
+      .product-table { min-width: 0; }
+      .product-table thead { display: none; }
+      .product-table tr { display: block; background: #fff; border: 1.5px solid var(--hx-border); border-radius: var(--radius); margin-bottom: 12px; padding: 16px; box-shadow: var(--shadow); }
+      .product-table td { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--hx-border); font-size: 0.85rem; }
+      .product-table td:last-child { border-bottom: none; padding-top: 12px; }
+      .product-table td::before { content: attr(data-label); font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
+      .product-table tr:hover td { background: transparent; }
+      .product-table .book-btn { width: 100%; text-align: center; padding: 10px 16px; }
+    }
 
     /* DISCLAIMER */
     .disclaimer { background: var(--hx-light); border-top: 1px solid var(--hx-border); padding: 12px 24px; font-size: 0.75rem; color: var(--text-muted); text-align: center; }
@@ -222,7 +341,7 @@
 
 <!-- Hero with Search -->
 <section class="hero">
-  <div class="hero-badge">★ Over 5 Million Customers</div>
+  <div class="hero-badge">Over 5 Million Customers</div>
   <h1>Gatwick Parking</h1>
   <p class="hero-sub">Compare &amp; Save Up to 60% — From Just £3.49/Day*</p>
   <div class="hero-stats">
@@ -287,10 +406,10 @@
 
       <!-- USP Strip -->
       <div class="usp-strip">
-        <div class="usp"><div class="usp-icon">💰</div><strong>From £3.49/day*</strong><span>Best prices guaranteed</span></div>
-        <div class="usp"><div class="usp-icon">✅</div><strong>Free Cancellation</strong><span>Up to 24hrs before</span></div>
-        <div class="usp"><div class="usp-icon">🔒</div><strong>Secure &amp; Safe</strong><span>CCTV &amp; Park Mark</span></div>
-        <div class="usp"><div class="usp-icon">⭐</div><strong>9.3/10 Rated</strong><span>5,300+ Gatwick reviews</span></div>
+        <div class="usp"><div class="usp-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z" fill="none"/><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><strong>From £3.49/day*</strong><span>Best prices guaranteed</span></div>
+        <div class="usp"><div class="usp-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></div><strong>Free Cancellation</strong><span>Up to 24hrs before</span></div>
+        <div class="usp"><div class="usp-icon"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><strong>Secure &amp; Safe</strong><span>CCTV &amp; Park Mark</span></div>
+        <div class="usp"><div class="usp-icon"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div><strong>9.3/10 Rated</strong><span>5,300+ Gatwick reviews</span></div>
       </div>
 
       <p>Looking for <strong>Gatwick airport parking</strong>? You're in the right place. Holiday Extras has been helping UK travellers compare and book <a href="https://www.holidayextras.com/gatwick-airport-parking.html">Gatwick car parking</a> for over 40 years. Whether you need <a href="https://www.holidayextras.com/gatwick-airport-parking/gatwick-meet-and-greet-parking.html">meet and greet parking at Gatwick</a> or a cheap <a href="https://www.holidayextras.com/gatwick-airport-parking.html">Gatwick park and ride</a>, we compare 10+ car parks so you don't have to. Book in advance and save up to 60% on airport prices.</p>
@@ -352,46 +471,46 @@
           </thead>
           <tbody>
             <tr>
-              <td><strong>APH Gatwick</strong></td>
-              <td><span class="type-badge type-pr">Park &amp; Ride</span></td>
-              <td><span class="score">★ 9.6/10</span></td>
-              <td><span class="price">£4.50</span></td>
-              <td><a href="https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=WY992&depart=LGW&terminal=S&redirectReferal=carpark&from_categories=true" class="book-btn">Book Now</a></td>
+              <td data-label="Car Park"><strong>APH Gatwick</strong></td>
+              <td data-label="Type"><span class="type-badge type-pr">Park &amp; Ride</span></td>
+              <td data-label="Rating"><span class="score">9.6/10</span></td>
+              <td data-label="From*"><span class="price">£4.50</span></td>
+              <td><a href="javascript:void(0)" onclick="doSearch()" class="book-btn">Book Now</a></td>
             </tr>
             <tr>
-              <td><strong>I Love Meet &amp; Greet Gatwick</strong></td>
-              <td><span class="type-badge type-mg">Meet &amp; Greet</span></td>
-              <td><span class="score">★ 9.3/10</span></td>
-              <td><span class="price">£12.99</span></td>
-              <td><a href="https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=WY992&depart=LGW&terminal=S&redirectReferal=carpark&from_categories=true" class="book-btn">Book Now</a></td>
+              <td data-label="Car Park"><strong>I Love Meet &amp; Greet Gatwick</strong></td>
+              <td data-label="Type"><span class="type-badge type-mg">Meet &amp; Greet</span></td>
+              <td data-label="Rating"><span class="score">9.3/10</span></td>
+              <td data-label="From*"><span class="price">£12.99</span></td>
+              <td><a href="javascript:void(0)" onclick="doSearch()" class="book-btn">Book Now</a></td>
             </tr>
             <tr>
-              <td><strong>Purple Parking Gatwick</strong></td>
-              <td><span class="type-badge type-pr">Park &amp; Ride</span></td>
-              <td><span class="score">★ 9.3/10</span></td>
-              <td><span class="price">£5.00</span></td>
-              <td><a href="https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=WY992&depart=LGW&terminal=S&redirectReferal=carpark&from_categories=true" class="book-btn">Book Now</a></td>
+              <td data-label="Car Park"><strong>Purple Parking Gatwick</strong></td>
+              <td data-label="Type"><span class="type-badge type-pr">Park &amp; Ride</span></td>
+              <td data-label="Rating"><span class="score">9.3/10</span></td>
+              <td data-label="From*"><span class="price">£5.00</span></td>
+              <td><a href="javascript:void(0)" onclick="doSearch()" class="book-btn">Book Now</a></td>
             </tr>
             <tr>
-              <td><strong>Maple Manor Parking Gatwick</strong></td>
-              <td><span class="type-badge type-mg">Meet &amp; Greet</span></td>
-              <td><span class="score">★ 9.3/10</span></td>
-              <td><span class="price">£13.50</span></td>
-              <td><a href="https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=WY992&depart=LGW&terminal=S&redirectReferal=carpark&from_categories=true" class="book-btn">Book Now</a></td>
+              <td data-label="Car Park"><strong>Maple Manor Parking Gatwick</strong></td>
+              <td data-label="Type"><span class="type-badge type-mg">Meet &amp; Greet</span></td>
+              <td data-label="Rating"><span class="score">9.3/10</span></td>
+              <td data-label="From*"><span class="price">£13.50</span></td>
+              <td><a href="javascript:void(0)" onclick="doSearch()" class="book-btn">Book Now</a></td>
             </tr>
             <tr>
-              <td><strong>Cophall Parking Gatwick</strong></td>
-              <td><span class="type-badge type-pr">Park &amp; Ride</span></td>
-              <td><span class="score">★ 9.2/10</span></td>
-              <td><span class="price">£3.49</span></td>
-              <td><a href="https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=WY992&depart=LGW&terminal=S&redirectReferal=carpark&from_categories=true" class="book-btn">Book Now</a></td>
+              <td data-label="Car Park"><strong>Cophall Parking Gatwick</strong></td>
+              <td data-label="Type"><span class="type-badge type-pr">Park &amp; Ride</span></td>
+              <td data-label="Rating"><span class="score">9.2/10</span></td>
+              <td data-label="From*"><span class="price">£3.49</span></td>
+              <td><a href="javascript:void(0)" onclick="doSearch()" class="book-btn">Book Now</a></td>
             </tr>
             <tr>
-              <td><strong>Holiday Parking Gatwick</strong></td>
-              <td><span class="type-badge type-pr">Park &amp; Ride</span></td>
-              <td><span class="score">★ 9.0/10</span></td>
-              <td><span class="price">£4.00</span></td>
-              <td><a href="https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=WY992&depart=LGW&terminal=S&redirectReferal=carpark&from_categories=true" class="book-btn">Book Now</a></td>
+              <td data-label="Car Park"><strong>Holiday Parking Gatwick</strong></td>
+              <td data-label="Type"><span class="type-badge type-pr">Park &amp; Ride</span></td>
+              <td data-label="Rating"><span class="score">9.0/10</span></td>
+              <td data-label="From*"><span class="price">£4.00</span></td>
+              <td><a href="javascript:void(0)" onclick="doSearch()" class="book-btn">Book Now</a></td>
             </tr>
           </tbody>
         </table>
@@ -492,6 +611,26 @@
       <!-- Reviews -->
       <h2 id="reviews">Gatwick Parking Reviews</h2>
       <p>All reviews are from verified Holiday Extras customers who have actually used these car parks. Over 5,300 Gatwick parking reviews are collected every year.</p>
+
+      <div class="review-aggregate">
+        <div class="review-agg-score">
+          <div class="review-agg-number">9.3</div>
+          <div class="review-agg-outof">out of 10</div>
+          <div class="review-agg-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        </div>
+        <div class="review-agg-detail">
+          <strong>5,334 verified reviews</strong>
+          <span>Rated by real Holiday Extras customers across all Gatwick car parks</span>
+          <div class="review-agg-bars">
+            <div class="review-bar-row"><span class="review-bar-label">APH</span><div class="review-bar-track"><div class="review-bar-fill" style="width:96%"></div></div><span class="review-bar-val">9.6</span></div>
+            <div class="review-bar-row"><span class="review-bar-label">I Love M&amp;G</span><div class="review-bar-track"><div class="review-bar-fill" style="width:93%"></div></div><span class="review-bar-val">9.3</span></div>
+            <div class="review-bar-row"><span class="review-bar-label">Purple</span><div class="review-bar-track"><div class="review-bar-fill" style="width:93%"></div></div><span class="review-bar-val">9.3</span></div>
+            <div class="review-bar-row"><span class="review-bar-label">Maple Manor</span><div class="review-bar-track"><div class="review-bar-fill" style="width:93%"></div></div><span class="review-bar-val">9.3</span></div>
+            <div class="review-bar-row"><span class="review-bar-label">Cophall</span><div class="review-bar-track"><div class="review-bar-fill" style="width:92%"></div></div><span class="review-bar-val">9.2</span></div>
+            <div class="review-bar-row"><span class="review-bar-label">Holiday</span><div class="review-bar-track"><div class="review-bar-fill" style="width:90%"></div></div><span class="review-bar-val">9.0</span></div>
+          </div>
+        </div>
+      </div>
 
       <div class="reviews-grid">
         <div class="review-card">
@@ -634,7 +773,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-card">
-        <h3>✈️ Related Links</h3>
+        <h3>Related Links</h3>
         <ul>
           <li><a href="https://www.holidayextras.com/gatwick-airport-parking.html">All Gatwick Parking</a></li>
           <li><a href="https://www.holidayextras.com/gatwick-airport-parking/gatwick-meet-and-greet-parking.html">Gatwick Meet &amp; Greet</a></li>
@@ -648,7 +787,7 @@
       </div>
 
       <div class="sidebar-card">
-        <h3>💡 Quick Tips</h3>
+        <h3>Quick Tips</h3>
         <ul class="tip-list">
           <li>Book 3–4 weeks early for best prices</li>
           <li>Check your terminal before booking</li>
@@ -660,16 +799,17 @@
         </ul>
       </div>
 
-      <div class="sidebar-card" style="background: var(--hx-blue); border-color: var(--hx-blue);">
-        <h3 style="color: #fff;">⭐ Customer Ratings</h3>
-        <ul style="list-style: none; padding: 0;">
-          <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 0.85rem; color: rgba(255,255,255,0.9);">APH Gatwick <strong style="color: var(--hx-yellow);">9.6/10</strong></li>
-          <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 0.85rem; color: rgba(255,255,255,0.9);">I Love M&amp;G <strong style="color: var(--hx-yellow);">9.3/10</strong></li>
-          <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 0.85rem; color: rgba(255,255,255,0.9);">Purple Parking <strong style="color: var(--hx-yellow);">9.3/10</strong></li>
-          <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 0.85rem; color: rgba(255,255,255,0.9);">Maple Manor <strong style="color: var(--hx-yellow);">9.3/10</strong></li>
-          <li style="padding: 8px 0; font-size: 0.85rem; color: rgba(255,255,255,0.9);">Cophall Parking <strong style="color: var(--hx-yellow);">9.2/10</strong></li>
+      <div class="sidebar-card ratings-card">
+        <h3>Customer Ratings</h3>
+        <ul>
+          <li>APH Gatwick <span class="score-val">9.6/10</span></li>
+          <li>I Love M&amp;G <span class="score-val">9.3/10</span></li>
+          <li>Purple Parking <span class="score-val">9.3/10</span></li>
+          <li>Maple Manor <span class="score-val">9.3/10</span></li>
+          <li>Cophall Parking <span class="score-val">9.2/10</span></li>
+          <li>Holiday Parking <span class="score-val">9.0/10</span></li>
         </ul>
-        <p style="font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 10px;">Based on 5,334 verified reviews</p>
+        <p class="ratings-footnote">Based on 5,334 verified reviews</p>
       </div>
     </aside>
   </div>
@@ -678,11 +818,11 @@
 <!-- Trust Bar -->
 <div class="trust-bar">
   <div class="trust-bar-inner">
-    <div class="trust-item"><span class="trust-icon">🏆</span> 40+ Years Experience</div>
-    <div class="trust-item"><span class="trust-icon">👥</span> 5 Million+ Customers</div>
-    <div class="trust-item"><span class="trust-icon">⭐</span> 9.3/10 Average Rating</div>
-    <div class="trust-item"><span class="trust-icon">🔒</span> Secure CCTV Parking</div>
-    <div class="trust-item"><span class="trust-icon">✅</span> Free Cancellation</div>
+    <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg></span> 40+ Years Experience</div>
+    <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span> 5 Million+ Customers</div>
+    <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span> 9.3/10 Average Rating</div>
+    <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></span> Secure CCTV Parking</div>
+    <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></span> Free Cancellation</div>
   </div>
 </div>
 
