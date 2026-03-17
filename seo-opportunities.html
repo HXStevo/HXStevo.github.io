@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Opportunities — HX, Airparks, Purple Parking</title>
+<style>
+  :root {
+    --hx-blue: #003F7D;
+    --hx-yellow: #FFD100;
+    --green: #16a34a;
+    --red: #dc2626;
+    --orange: #ea580c;
+    --purple: #7c3aed;
+    --gray: #6b7280;
+    --light: #f0f4f8;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--light); color: #111; }
+
+  .topbar { background: var(--hx-blue); color: white; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar h1 { font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+  .topbar .meta { font-size: 0.8rem; opacity: 0.7; }
+  .badge { background: var(--hx-yellow); color: var(--hx-blue); padding: 2px 10px; border-radius: 10px; font-size: 0.72rem; font-weight: 800; }
+
+  .nav-tabs { background: white; border-bottom: 2px solid #e5e7eb; display: flex; padding: 0 28px; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .nav-tab { padding: 14px 20px; font-size: 0.88rem; font-weight: 700; cursor: pointer; color: var(--gray); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s; white-space: nowrap; }
+  .nav-tab.active { color: var(--hx-blue); border-bottom-color: var(--hx-blue); }
+  .nav-tab:hover:not(.active) { color: var(--hx-blue); }
+
+  .section { display: none; padding: 28px; max-width: 1200px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .intro { background: white; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 24px; border-left: 4px solid var(--hx-blue); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .intro h2 { font-size: 1rem; color: var(--hx-blue); margin-bottom: 6px; }
+  .intro p { font-size: 0.88rem; color: #374151; line-height: 1.6; }
+  .source-tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 8px; font-weight: 700; margin-left: 8px; }
+  .source-sc { background: #dbeafe; color: #1e40af; }
+  .source-sem { background: #f3e8ff; color: #6b21a8; }
+
+  .opp-card { background: white; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; display: grid; grid-template-columns: 36px 1fr auto; gap: 16px; align-items: start; transition: box-shadow 0.15s; }
+  .opp-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+  .opp-rank { font-size: 1.6rem; font-weight: 900; color: #d1d5db; line-height: 1; padding-top: 2px; }
+  .opp-rank.top3 { color: var(--hx-yellow); text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+  .opp-type { display: inline-block; font-size: 0.7rem; font-weight: 800; padding: 3px 9px; border-radius: 20px; margin-bottom: 8px; }
+  .type-near1 { background: #dcfce7; color: #166534; }
+  .type-push { background: #dbeafe; color: #1e40af; }
+  .type-ctr { background: #fef3c7; color: #92400e; }
+  .type-p2p1 { background: #f3e8ff; color: #6b21a8; }
+
+  .opp-kw { font-size: 1.05rem; font-weight: 800; color: #111; margin-bottom: 6px; }
+  .opp-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.8rem; color: var(--gray); margin-bottom: 10px; }
+  .opp-meta span { display: flex; align-items: center; gap: 4px; }
+  .opp-meta b { color: #374151; }
+  .opp-url { font-size: 0.75rem; color: var(--hx-blue); text-decoration: none; word-break: break-all; opacity: 0.8; }
+  .opp-url:hover { opacity: 1; text-decoration: underline; }
+  .opp-insight { font-size: 0.82rem; color: #374151; margin-top: 8px; background: var(--light); border-radius: 6px; padding: 8px 12px; line-height: 1.5; }
+
+  .opp-clicks { text-align: right; }
+  .opp-clicks .val { font-size: 1.5rem; font-weight: 900; color: var(--green); line-height: 1; }
+  .opp-clicks .lbl { font-size: 0.68rem; color: var(--gray); font-weight: 600; text-transform: uppercase; white-space: nowrap; }
+
+  .pos-badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; }
+  .pos-1 { background: #fef9c3; color: #854d0e; }
+  .pos-3 { background: #dcfce7; color: #166534; }
+  .pos-10 { background: #dbeafe; color: #1e40af; }
+  .pos-20 { background: #f3e8ff; color: #6b21a8; }
+
+  .summary-bar { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+  .summary-stat { background: white; border-radius: 10px; padding: 14px 20px; flex: 1; min-width: 140px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-top: 3px solid var(--hx-blue); }
+  .summary-stat.green { border-top-color: var(--green); }
+  .summary-stat.orange { border-top-color: var(--orange); }
+  .summary-stat.purple { border-top-color: var(--purple); }
+  .summary-stat .sv { font-size: 1.5rem; font-weight: 900; color: var(--hx-blue); }
+  .summary-stat.green .sv { color: var(--green); }
+  .summary-stat.orange .sv { color: var(--orange); }
+  .summary-stat.purple .sv { color: var(--purple); }
+  .summary-stat .sl { font-size: 0.7rem; color: var(--gray); font-weight: 700; text-transform: uppercase; }
+
+  .updated { text-align: center; font-size: 0.75rem; color: var(--gray); padding: 20px; }
+
+  @media(max-width:600px) {
+    .opp-card { grid-template-columns: 28px 1fr; }
+    .opp-clicks { grid-column: 2; display: flex; align-items: center; gap: 8px; }
+    .topbar { flex-direction: column; align-items: flex-start; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
+    SEO Growth Opportunities
+    <span class="badge">LIVE DATA</span>
+  </h1>
+  <div class="meta">holidayextras.com · airparks.co.uk · purpleparking.com · Mar 2026</div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showSection('hx',this)">🟣 Holiday Extras</div>
+  <div class="nav-tab" onclick="showSection('ap',this)">🅿️ Airparks</div>
+  <div class="nav-tab" onclick="showSection('pp',this)">🟣 Purple Parking</div>
+  <div class="nav-tab" onclick="showSection('cross',this)">⚡ Cross-Site Intel</div>
+</div>
+
+<!-- ══ HX ══ -->
+<div class="section active" id="hx">
+  <div class="intro">
+    <h2>holidayextras.com <span class="source-tag source-sc">Live Google Search Console · 28 days</span></h2>
+    <p>Real-time data from Search Console. Opportunities ranked by estimated additional clicks per month if positions improve to their realistic target.</p>
+  </div>
+
+  <div class="summary-bar">
+    <div class="summary-stat"><div class="sv">+139k</div><div class="sl">Total extra clicks/month potential</div></div>
+    <div class="summary-stat green"><div class="sv">2</div><div class="sl">Quick CTR wins (no ranking needed)</div></div>
+    <div class="summary-stat orange"><div class="sv">6</div><div class="sl">Pos 2–3 (one push to #1)</div></div>
+    <div class="summary-stat purple"><div class="sv">1,000</div><div class="sl">Keywords tracked in SC</div></div>
+  </div>
+
+  <!-- 1 -->
+  <div class="opp-card">
+    <div class="opp-rank top3">1</div>
+    <div>
+      <span class="opp-type type-ctr">CTR FIX — #1 POSITION</span>
+      <div class="opp-kw">petrol station near me</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-1">#1 (avg 1.4)</span></span>
+        <span>📊 Impressions: <b>130,198/mo</b></span>
+        <span>🖱 Clicks: <b>168</b></span>
+        <span>📈 CTR: <b style="color:var(--red)">0.13%</b></span>
+      </div>
+      <div class="opp-insight">⚡ <b>Already ranking #1</b> — but only getting 168 clicks from 130k impressions. At a normal #1 CTR of ~25%, this should be generating 32,000+ clicks. The title tag or meta description isn't compelling enough for this query. Quick fix: rewrite the title to clearly match search intent for "petrol station near me" and test SERP snippet improvements. Zero ranking effort required — this is pure copywriting.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+32k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="opp-card">
+    <div class="opp-rank top3">2</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">manchester airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 3.0</span></span>
+        <span>📊 Impressions: <b>135,876/mo</b></span>
+        <span>🖱 Clicks: <b>3,437</b></span>
+        <span>📈 CTR: <b>2.53%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/manchester-airport-parking.html" target="_blank">holidayextras.com/manchester-airport-parking.html</a>
+      <div class="opp-insight">🚀 Highest-value opportunity on the site. 136k impressions/month at position 3 — moving to #1 would unlock an estimated <b>+34,600 extra clicks/month</b>. This is a fiercely competitive keyword. Strengthen the page with more comprehensive content, improve E-E-A-T signals, add FAQ schema, build internal links from airport hub pages, and focus on improving engagement metrics.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+34k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="opp-card">
+    <div class="opp-rank top3">3</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">stansted airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 3.4</span></span>
+        <span>📊 Impressions: <b>88,906/mo</b></span>
+        <span>🖱 Clicks: <b>2,211</b></span>
+        <span>📈 CTR: <b>2.49%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/stansted-airport-parking.html" target="_blank">holidayextras.com/stansted-airport-parking.html</a>
+      <div class="opp-insight">Position 3.4 with 89k impressions — very close to top 3 lock-in. Estimated <b>+22,700 clicks/month</b> at #1. Strengthen page content, add FAQPage schema, and build more internal links from Stansted hub pages. Compare content depth against the two pages sitting above you.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+22k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="opp-card">
+    <div class="opp-rank">4</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">gatwick parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 2.6</span></span>
+        <span>📊 Impressions: <b>79,027/mo</b></span>
+        <span>🖱 Clicks: <b>2,016</b></span>
+        <span>📈 CTR: <b>2.55%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/gatwick-airport-parking.html" target="_blank">holidayextras.com/gatwick-airport-parking.html</a>
+      <div class="opp-insight">So close — position 2.6 with 79k impressions. Moving from pos 3 to pos 1 here is worth an estimated <b>+20,100 clicks/month</b>. This is a head term with extremely high commercial intent. Add FAQPage schema, deepen comparison content (Meet & Greet vs Park & Ride), improve AggregateRating markup.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+20k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="opp-card">
+    <div class="opp-rank">5</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">bristol airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 3.3</span></span>
+        <span>📊 Impressions: <b>71,884/mo</b></span>
+        <span>🖱 Clicks: <b>1,956</b></span>
+        <span>📈 CTR: <b>2.72%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/bristol-airport-parking.html" target="_blank">holidayextras.com/bristol-airport-parking.html</a>
+      <div class="opp-insight">Position 3.3 — just outside the top 3 sweet spot. <b>+18,200 clicks/month</b> potential at #1. Bristol is a growth airport — traffic increasing year on year. Invest in content depth and E-E-A-T signals now before competition increases further.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+18k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="opp-card">
+    <div class="opp-rank">6</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">edinburgh airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 2.5</span></span>
+        <span>📊 Impressions: <b>60,367/mo</b></span>
+        <span>🖱 Clicks: <b>1,506</b></span>
+        <span>📈 CTR: <b>2.49%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/edinburgh-airport-parking.html" target="_blank">holidayextras.com/edinburgh-airport-parking.html</a>
+      <div class="opp-insight">Position 2.5 — genuinely one push away from #1. <b>+15,400 clicks/month</b> potential. Update content with 2026 pricing, add local Edinburgh travel tips, strengthen internal linking from the Scotland hub, and ensure schema markup is complete.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+15k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="opp-card">
+    <div class="opp-rank">7</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">birmingham airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 2.7</span></span>
+        <span>📊 Impressions: <b>60,636/mo</b></span>
+        <span>🖱 Clicks: <b>2,593</b></span>
+        <span>📈 CTR: <b>4.28%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/birmingham-airport-parking.html" target="_blank">holidayextras.com/birmingham-airport-parking.html</a>
+      <div class="opp-insight">Best CTR of the near-#1 group at 4.28% — the title and meta are already working well. This page just needs the ranking push. <b>+14,400 clicks/month</b> at #1. Focus on content depth and authority signals rather than CTR improvements.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+14k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 8 -->
+  <div class="opp-card">
+    <div class="opp-rank">8</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">gatwick airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 2.9</span></span>
+        <span>📊 Impressions: <b>43,104/mo</b></span>
+        <span>🖱 Clicks: <b>929</b></span>
+        <span>📈 CTR: <b>2.16%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/gatwick-airport-parking.html" target="_blank">holidayextras.com/gatwick-airport-parking.html</a>
+      <div class="opp-insight">Same page as "gatwick parking" but different query — 43k impressions at pos 2.9. Note the lower CTR vs the shorter tail variant. <b>+11,100 clicks/month</b> potential. The title/meta may need tuning to match this longer-tail intent better.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+11k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 9 -->
+  <div class="opp-card">
+    <div class="opp-rank">9</div>
+    <div>
+      <span class="opp-type type-ctr">CTR FIX — WRONG PAGE RANKING</span>
+      <div class="opp-kw">harry potter studios</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 2.3</span></span>
+        <span>📊 Impressions: <b>36,019/mo</b></span>
+        <span>🖱 Clicks: <b>37</b></span>
+        <span>📈 CTR: <b style="color:var(--red)">0.10%</b></span>
+      </div>
+      <div class="opp-insight">🚨 A non-commercial page is ranking pos 2.3 for a query with 36k impressions and getting just 37 clicks. 0.10% CTR at position 2 is a red flag — almost certainly the wrong page is ranking, or a travel blog page is showing when a product/booking page should be. If HX sells Harry Potter Studios tickets or nearby hotels, redirect traffic to the right page. Potential: <b>+10,000 clicks/month</b> with zero new content.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+10k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+
+  <!-- 10 -->
+  <div class="opp-card">
+    <div class="opp-rank">10</div>
+    <div>
+      <span class="opp-type type-near1">NEAR #1 — PUSH NOW</span>
+      <div class="opp-kw">airport parking</div>
+      <div class="opp-meta">
+        <span><span class="pos-badge pos-3">Pos 3.0</span></span>
+        <span>📊 Impressions: <b>36,719/mo</b></span>
+        <span>🖱 Clicks: <b>1,366</b></span>
+        <span>📈 CTR: <b>3.72%</b></span>
+      </div>
+      <a class="opp-url" href="https://www.holidayextras.com/airport-parking.html" target="_blank">holidayextras.com/airport-parking.html</a>
+      <div class="opp-insight">The broadest head term in the category — HX is already #3. <b>+8,900 clicks/month</b> at #1. This is the hub page — strengthen it with updated content covering all airports, add schema markup, and use it as the primary internal linking destination from all airport parking subpages.</div>
+    </div>
+    <div class="opp-clicks"><div class="val">+8.9k</div><div class="lbl">extra clicks/mo</div></div>
+  </div>
+</div>
+
+<!-- ══ AIRPARKS ══ -->
+<div class="section" id="ap">
+  <div class="intro">
+    <h2>airparks.co.uk <span class="source-tag source-sem">SEMrush · UK Database · Mar 2026</span></h2>
+    <p>Keyword data from SEMrush. Opportunities ranked by estimated additional clicks per month based on search volume and realistic CTR improvements.</p>
+  </div>
+
+  <div class="summary-bar">
+    <div class="summary-stat"><div class="sv">+66k</div><div class="sl">Total extra clicks/month potential</div></div>
+    <div class="summary-stat green"><div class="sv">3</div><div class="sl">Near #1 opportunities</div></div>
+    <div class="summary-stat orange"><div class="sv">7</div><div class="sl">Page 1 push opportunities</div></div>
+    <div class="summary-stat purple"><div class="sv">75k</div><div class="sl">Total organic keywords</div></div>
+  </div>
+
+  <div class="opp-card"><div class="opp-rank top3">1</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">gatwick parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>110,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/gatwick-parking.html" target="_blank">airparks.co.uk/gatwick-parking.html</a><div class="opp-insight">Position 3 on a 110k/month keyword — the biggest single opportunity on the site. Moving to #1 is worth an estimated <b>+19,800 clicks/month</b>. Deepen content, add schema, and build internal links. All three brands (HX, AP, PP) are fighting for this — Airparks needs to out-content the competition.</div></div><div class="opp-clicks"><div class="val">+19.8k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank top3">2</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">bristol airport</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 7</span></span><span>📊 Volume: <b>165,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/bristol-airport/" target="_blank">airparks.co.uk/bristol-airport/</a><div class="opp-insight">Highest-volume keyword in Airparks' portfolio at 165k/month. Sitting at position 7 — pushing to top 3 is worth <b>+9,900 clicks/month</b>. This is an informational page competing against the airport's own site. Focus on making it the most useful Bristol Airport resource online: live departures, parking prices, transport, tips.</div></div><div class="opp-clicks"><div class="val">+9.9k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank top3">3</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">manchester airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 6</span></span><span>📊 Volume: <b>165,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/manchester-airport-parking.html" target="_blank">airparks.co.uk/manchester-airport-parking.html</a><div class="opp-insight">Position 6 on a massive 165k/month keyword. <b>+9,900 clicks/month</b> potential. Manchester is the most competitive airport parking keyword — winning here requires deep, comprehensive content, excellent technical SEO, and strong internal linking. Note HX is at pos 3 for the same keyword — study what they're doing right.</div></div><div class="opp-clicks"><div class="val">+9.9k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">4</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">glasgow airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>40,500/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/glasgow-airport-parking.html" target="_blank">airparks.co.uk/glasgow-airport-parking.html</a><div class="opp-insight">Position 3 at 40.5k volume. Glasgow is underserved by content compared to the English airports — relatively low competition. <b>+7,290 clicks/month</b> at #1. This could be flipped to #1 with a focused content push and schema improvements.</div></div><div class="opp-clicks"><div class="val">+7.3k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">5</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">leeds bradford airport</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 7</span></span><span>📊 Volume: <b>110,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/leeds-airport/" target="_blank">airparks.co.uk/leeds-airport/</a><div class="opp-insight">110k/month keyword at position 7. <b>+6,600 clicks/month</b> at top 3. Another high-volume informational airport keyword. Make it the definitive Leeds Bradford resource — departures, arrivals, parking, transport, hotels — and this can climb fast.</div></div><div class="opp-clicks"><div class="val">+6.6k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">6</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">stansted airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 8</span></span><span>📊 Volume: <b>110,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/stansted-parking.html" target="_blank">airparks.co.uk/stansted-parking.html</a><div class="opp-insight">Position 8 — just inside page 1. <b>+6,600 clicks/month</b> at top 3. Note Purple Parking is at pos 3 for this same keyword. Study their Stansted page structure and out-execute it.</div></div><div class="opp-clicks"><div class="val">+6.6k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">7</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">luton airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 6</span></span><span>📊 Volume: <b>74,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/luton-airport-parking/" target="_blank">airparks.co.uk/luton-airport-parking/</a><div class="opp-insight">74k/month at position 6. <b>+4,440 clicks/month</b> at top 3. Purple Parking is pos 3 here too — both AP and PP fighting for the same slots. Luton is a Ryanair hub with strong budget-conscious searchers — emphasise price in content.</div></div><div class="opp-clicks"><div class="val">+4.4k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">8</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">birmingham airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 7</span></span><span>📊 Volume: <b>74,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/birmingham-airport-parking/" target="_blank">airparks.co.uk/birmingham-airport-parking/</a><div class="opp-insight">74k/month at position 7. <b>+4,440 clicks/month</b> potential. HX is at pos 2.7 here. Compare content depth and internal linking structure.</div></div><div class="opp-clicks"><div class="val">+4.4k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">9</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">edinburgh airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 8</span></span><span>📊 Volume: <b>74,000/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/edinburgh-airport-parking.html" target="_blank">airparks.co.uk/edinburgh-airport-parking.html</a><div class="opp-insight">74k/month at position 8. <b>+4,440 clicks/month</b>. Edinburgh is a high-value market — international travellers, longer stays. Focus content on long-stay value and family travel.</div></div><div class="opp-clicks"><div class="val">+4.4k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">10</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">airlines parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 2</span></span><span>📊 Volume: <b>18,100/mo</b></span></div><a class="opp-url" href="https://www.airparks.co.uk/" target="_blank">airparks.co.uk/</a><div class="opp-insight">Position 2 on a branded-adjacent term. <b>+3,258 clicks/month</b> at #1. Worth strengthening the homepage for this term with clearer H1 and title tag alignment.</div></div><div class="opp-clicks"><div class="val">+3.3k</div><div class="lbl">extra clicks/mo</div></div></div>
+</div>
+
+<!-- ══ PURPLE PARKING ══ -->
+<div class="section" id="pp">
+  <div class="intro">
+    <h2>purpleparking.com <span class="source-tag source-sem">SEMrush · UK Database · Mar 2026</span></h2>
+    <p>Keyword data from SEMrush. Purple Parking is punching hard in the Stansted and Luton markets — these are the biggest opportunities to expand that dominance.</p>
+  </div>
+
+  <div class="summary-bar">
+    <div class="summary-stat"><div class="sv">+81k</div><div class="sl">Total extra clicks/month potential</div></div>
+    <div class="summary-stat green"><div class="sv">5</div><div class="sl">Near #1 opportunities</div></div>
+    <div class="summary-stat orange"><div class="sv">5</div><div class="sl">Page 1 push opportunities</div></div>
+    <div class="summary-stat purple"><div class="sv">79k</div><div class="sl">Total organic keywords</div></div>
+  </div>
+
+  <div class="opp-card"><div class="opp-rank top3">1</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">stansted airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>110,000/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/airport-parking/london-stansted" target="_blank">purpleparking.com/airport-parking/london-stansted</a><div class="opp-insight">Purple Parking's single biggest opportunity. Position 3 on 110k/month. <b>+19,800 clicks/month</b> at #1. PP already has a strong Stansted brand — this needs a full content and schema audit to take the top spot. Combined with "stansted parking" (pos 2) below, Stansted is clearly PP's strongest market to dominate.</div></div><div class="opp-clicks"><div class="val">+19.8k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank top3">2</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">luton airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>74,000/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/airport-parking/luton" target="_blank">purpleparking.com/airport-parking/luton</a><div class="opp-insight">Position 3 on 74k/month. <b>+13,320 clicks/month</b> at #1. Luton is a Ryanair hub — price-focused searchers. PP should be emphasising competitive pricing and free cancellation in title/meta and content. Budget travellers respond well to price signals in snippets.</div></div><div class="opp-clicks"><div class="val">+13.3k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank top3">3</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">manchester airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 7</span></span><span>📊 Volume: <b>165,000/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/manchester-airport-parking" target="_blank">purpleparking.com/manchester-airport-parking</a><div class="opp-insight">The biggest volume keyword in UK airport parking at 165k/month. PP is at position 7. <b>+9,900 clicks/month</b> potential. Manchester is where all three brands are competing — HX leads, AP is pos 6, PP is pos 7. A concerted content push here could be transformational.</div></div><div class="opp-clicks"><div class="val">+9.9k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">4</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">gatwick parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 9</span></span><span>📊 Volume: <b>110,000/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/gatwick-airport-parking" target="_blank">purpleparking.com/gatwick-airport-parking</a><div class="opp-insight">Position 9 — almost off page 1. <b>+6,600 clicks/month</b> at top 3. This is the weakest of PP's major airport pages. Needs investment to stay on page 1 and push toward the top. Gatwick is PP's biggest physical operation — the website performance should match.</div></div><div class="opp-clicks"><div class="val">+6.6k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">5</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">stansted parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 2</span></span><span>📊 Volume: <b>33,100/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/airport-parking/london-stansted" target="_blank">purpleparking.com/airport-parking/london-stansted</a><div class="opp-insight">Same page, shorter-tail keyword — position 2 at 33k/month. <b>+5,958 clicks/month</b>. Being pos 2 here while pos 3 for the longer-tail suggests the page is strong but losing out on one specific signal. Target featured snippets for this term.</div></div><div class="opp-clicks"><div class="val">+6k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">6</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">bristol airport parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 6</span></span><span>📊 Volume: <b>90,500/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/airport-parking/bristol-international" target="_blank">purpleparking.com/airport-parking/bristol</a><div class="opp-insight">90.5k/month at position 6. <b>+5,430 clicks/month</b>. Bristol is a growth market. PP has a presence but needs to deepen content to compete with HX (pos 3.3) and win the top spots.</div></div><div class="opp-clicks"><div class="val">+5.4k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">7</div><div><span class="opp-type type-push">PAGE 1 PUSH</span><div class="opp-kw">heathrow parking</div><div class="opp-meta"><span><span class="pos-badge pos-10">Pos 7</span></span><span>📊 Volume: <b>74,000/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/airport-parking/london-heathrow" target="_blank">purpleparking.com/airport-parking/london-heathrow</a><div class="opp-insight">74k/month at position 7. <b>+4,440 clicks/month</b>. Heathrow is the most competitive airport parking keyword cluster in the UK. Strong content investment required to push into top 3 here.</div></div><div class="opp-clicks"><div class="val">+4.4k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">8</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">airlines parking</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>18,100/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/" target="_blank">purpleparking.com/</a><div class="opp-insight">Position 3 on this branded-adjacent generic term. <b>+3,258 clicks/month</b>. Homepage optimisation — clearer H1 and title alignment could push this to #1.</div></div><div class="opp-clicks"><div class="val">+3.3k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">9</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">airport parking manchester</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>18,100/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/manchester-airport-parking" target="_blank">purpleparking.com/manchester-airport-parking</a><div class="opp-insight">Position 3 for the reverse keyword variant. <b>+3,258 clicks/month</b>. Same page as the main Manchester term — ensure the page targets both keyword variants in title/H1/content.</div></div><div class="opp-clicks"><div class="val">+3.3k</div><div class="lbl">extra clicks/mo</div></div></div>
+
+  <div class="opp-card"><div class="opp-rank">10</div><div><span class="opp-type type-near1">NEAR #1</span><div class="opp-kw">parking at stansted airport uk</div><div class="opp-meta"><span><span class="pos-badge pos-3">Pos 3</span></span><span>📊 Volume: <b>18,100/mo</b></span></div><a class="opp-url" href="https://www.purpleparking.com/airport-parking/london-stansted" target="_blank">purpleparking.com/airport-parking/london-stansted</a><div class="opp-insight">Third Stansted variant in PP's top 10. <b>+3,258 clicks/month</b>. The Stansted page is clearly strong — it's ranking for multiple variants. Consolidate all Stansted keyword signals on one page and push hard for #1 on the primary term.</div></div><div class="opp-clicks"><div class="val">+3.3k</div><div class="lbl">extra clicks/mo</div></div></div>
+</div>
+
+<!-- ══ CROSS-SITE ══ -->
+<div class="section" id="cross">
+  <div class="intro">
+    <h2>Cross-Site Intelligence <span class="source-tag source-sc">SC + SEMrush combined</span></h2>
+    <p>Where all three brands are competing for the same keywords — and who's winning.</p>
+  </div>
+
+  <div class="summary-bar">
+    <div class="summary-stat"><div class="sv">Manchester</div><div class="sl">Biggest battleground keyword</div></div>
+    <div class="summary-stat green"><div class="sv">HX leads</div><div class="sl">Most #1 positions across portfolio</div></div>
+    <div class="summary-stat orange"><div class="sv">PP</div><div class="sl">Stansted/Luton specialist</div></div>
+    <div class="summary-stat purple"><div class="sv">AP</div><div class="sl">Strongest info pages</div></div>
+  </div>
+
+  <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);border:1px solid #e5e7eb;margin-bottom:16px;">
+    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+      <thead><tr style="background:#003F7D;color:white;">
+        <th style="padding:12px 16px;text-align:left;font-weight:700;">Keyword</th>
+        <th style="padding:12px 16px;text-align:center;">Volume/mo</th>
+        <th style="padding:12px 16px;text-align:center;">🟣 HX</th>
+        <th style="padding:12px 16px;text-align:center;">🅿️ Airparks</th>
+        <th style="padding:12px 16px;text-align:center;">🟣 PP</th>
+        <th style="padding:12px 16px;text-align:left;">Winner</th>
+      </tr></thead>
+      <tbody>
+        ${[
+          ['manchester airport parking','165,000','3','6','7','HX 🟣'],
+          ['gatwick parking','110,000','2.6','3','9','HX 🟣'],
+          ['stansted airport parking','110,000','3.4','8','3','Tie PP/HX'],
+          ['bristol airport parking','90,500','3.3','7','6','HX 🟣'],
+          ['luton airport parking','74,000','3.7','6','3','PP 🟣'],
+          ['birmingham airport parking','74,000','2.7','7','—','HX 🟣'],
+          ['heathrow parking','74,000','4.3','—','7','HX 🟣'],
+          ['edinburgh airport parking','60,000','2.5','8','—','HX 🟣'],
+          ['glasgow airport parking','40,500','—','3','—','AP 🅿️'],
+          ['stansted parking','33,100','3.9','—','2','PP 🟣'],
+          ['airport parking','40,500','3.0','—','—','HX 🟣'],
+        ].map(([kw,vol,hx,ap,pp,winner],i) => `
+        <tr style="background:${i%2===0?'white':'#f9fafb'}">
+          <td style="padding:10px 16px;font-weight:600;">${kw}</td>
+          <td style="padding:10px 16px;text-align:center;color:#6b7280;">${vol}</td>
+          <td style="padding:10px 16px;text-align:center;font-weight:700;color:${hx<=2?'#166534':hx<=3?'#1e40af':hx<=10?'#374151':'#9ca3af'}">${hx}</td>
+          <td style="padding:10px 16px;text-align:center;font-weight:700;color:${ap<=2?'#166534':ap<=3?'#1e40af':ap<=10?'#374151':'#9ca3af'}">${ap}</td>
+          <td style="padding:10px 16px;text-align:center;font-weight:700;color:${pp<=2?'#166534':pp<=3?'#1e40af':pp<=10?'#374151':'#9ca3af'}">${pp}</td>
+          <td style="padding:10px 16px;">${winner}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+    <div style="background:white;border-radius:12px;padding:20px;border:1px solid #e5e7eb;">
+      <h3 style="font-size:0.9rem;font-weight:800;color:#003F7D;margin-bottom:12px;">🎯 Key Insights</h3>
+      <ul style="font-size:0.85rem;color:#374151;line-height:1.8;padding-left:16px;">
+        <li><b>Manchester is the grand prize</b> — 165k/month, all 3 brands fighting. HX leads at pos 3 but none have #1. Whoever invests most in content depth wins.</li>
+        <li><b>HX dominates most categories</b> but Stansted (pos 3.4) and Luton (pos 3.7) are vulnerable.</li>
+        <li><b>Purple Parking owns Stansted</b> — pos 2–3 across multiple variants. Clear market focus paying off.</li>
+        <li><b>Airparks is the info-page play</b> — strong on "bristol airport" and "leeds bradford airport" informational queries. Different strategy to HX/PP.</li>
+        <li><b>Glasgow is AP's only exclusive win</b> — no HX or PP presence at pos 3. Competitor blind spot.</li>
+        <li><b>Heathrow is HX-only</b> at pos 4.3 — PP and AP are absent from the top results.</li>
+      </ul>
+    </div>
+    <div style="background:white;border-radius:12px;padding:20px;border:1px solid #e5e7eb;">
+      <h3 style="font-size:0.9rem;font-weight:800;color:#003F7D;margin-bottom:12px;">⚡ Priority Actions</h3>
+      <ol style="font-size:0.85rem;color:#374151;line-height:1.8;padding-left:16px;">
+        <li><b>HX — Fix petrol station near me CTR</b> immediately. Already #1, costs nothing, +32k clicks.</li>
+        <li><b>HX — Manchester content push</b> to #1. Biggest traffic prize in the portfolio.</li>
+        <li><b>HX — Harry Potter Studios</b> — fix wrong page ranking. Easy +10k clicks.</li>
+        <li><b>PP — Stansted consolidation</b> — 3 variants, 3 near-#1 positions. One final push gets all three to #1.</li>
+        <li><b>PP — Gatwick rescue</b> — pos 9, risk of dropping to page 2. Needs urgent content investment.</li>
+        <li><b>AP — Bristol &amp; Manchester info pages</b> — 165k keywords at pos 6–7. Largest volume opportunity on the site.</li>
+        <li><b>All 3 — Add schema markup</b> across all airport pages (see schema audit report).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="updated">Generated by Andy 🤖 · Search Console live data · SEMrush UK · March 2026</div>
+
+<script>
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
