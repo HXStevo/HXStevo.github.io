@@ -95,8 +95,8 @@
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
     .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .form-group input { border: 1.5px solid var(--hx-border); border-radius: 8px; padding: 10px 12px; font-family: inherit; font-size: 0.9rem; color: var(--text); outline: none; transition: border .2s; }
-    .form-group input:focus { border-color: var(--hx-blue); }
+    .form-group input, .form-group select { border: 1.5px solid var(--hx-border); border-radius: 8px; padding: 10px 12px; font-family: inherit; font-size: 0.9rem; color: var(--text); outline: none; transition: border .2s; background: #fff; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--hx-blue); }
     .btn-search { width: 100%; background: var(--hx-yellow); color: var(--hx-blue-dark); border: none; border-radius: 8px; padding: 14px; font-family: inherit; font-size: 1rem; font-weight: 900; cursor: pointer; transition: background .2s, transform .1s; letter-spacing: 0.02em; }
     .btn-search:hover { background: #ffc800; transform: translateY(-1px); }
     @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
@@ -232,26 +232,28 @@
     <div class="hero-stat"><strong>Free</strong><span>Cancellation</span></div>
   </div>
   <div class="search-box">
-    <h2>🔍 Search Gatwick Parking</h2>
+    <h2>Search Gatwick Parking</h2>
     <div class="form-grid">
       <div class="form-group">
-        <label>Drop-off Date</label>
-        <input type="date" id="inDate" />
+        <label for="inDate">Drop-off Date</label>
+        <input type="date" id="inDate" required />
       </div>
       <div class="form-group">
-        <label>Pick-up Date</label>
-        <input type="date" id="outDate" />
-      </div>
-      <div class="form-group">
-        <label>Drop-off Time</label>
-        <input type="time" id="inTime" value="08:00" />
-      </div>
-      <div class="form-group">
-        <label>Pick-up Time</label>
-        <input type="time" id="outTime" value="08:00" />
+        <label for="outDate">Pick-up Date</label>
+        <input type="date" id="outDate" required />
       </div>
     </div>
-    <button class="btn-search" onclick="doSearch()">Compare Gatwick Parking Prices →</button>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="inTime">Drop-off Time</label>
+        <select id="inTime"></select>
+      </div>
+      <div class="form-group">
+        <label for="outTime">Pick-up Time</label>
+        <select id="outTime"></select>
+      </div>
+    </div>
+    <button class="btn-search" onclick="doSearch()">Compare Gatwick Parking Prices</button>
   </div>
 </section>
 
@@ -695,24 +697,91 @@
 </div>
 
 <script>
-  // Set default dates
-  const today = new Date();
-  const next = new Date(); next.setDate(today.getDate() + 7);
-  const fmt = d => d.toISOString().split('T')[0];
-  document.getElementById('inDate').value = fmt(next);
-  const ret = new Date(); ret.setDate(today.getDate() + 14);
-  document.getElementById('outDate').value = fmt(ret);
+  // --- Format helpers (from Holiday Extras search spec) ---
+  function toDDMMYY(d) {
+    var day = String(d.getDate()).padStart(2, '0');
+    var month = String(d.getMonth() + 1).padStart(2, '0');
+    var year = String(d.getFullYear()).slice(2);
+    return encodeURIComponent(day + '/' + month + '/' + year);
+  }
 
+  function toHumanDate(d) {
+    var DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var day = d.getDate();
+    var suffix = ['th','st','nd','rd'][day % 10 > 3 ? 0 : (day % 100 - day % 10 !== 10) * day % 10];
+    return DAY_NAMES[d.getDay()] + '+' + day + suffix + '+' + MONTH_NAMES[d.getMonth()] + '+' + String(d.getFullYear()).slice(2);
+  }
+
+  function toHHMM(h) {
+    return String(h).padStart(2, '0') + '00';
+  }
+
+  // --- Populate time dropdowns (whole hours) ---
+  function populateTimeSelect(id, defaultHour) {
+    var sel = document.getElementById(id);
+    for (var h = 0; h < 24; h++) {
+      var opt = document.createElement('option');
+      opt.value = h;
+      opt.textContent = String(h).padStart(2, '0') + ':00';
+      if (h === defaultHour) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  }
+  populateTimeSelect('inTime', 8);
+  populateTimeSelect('outTime', 16);
+
+  // --- Set default dates (drop-off +7 days, pick-up +14 days) ---
+  var today = new Date();
+  var dropoff = new Date(); dropoff.setDate(today.getDate() + 7);
+  var pickup = new Date(); pickup.setDate(today.getDate() + 14);
+  var fmtISO = function(d) { return d.toISOString().split('T')[0]; };
+  document.getElementById('inDate').value = fmtISO(dropoff);
+  document.getElementById('outDate').value = fmtISO(pickup);
+
+  // --- Search function ---
   function doSearch() {
-    const inD = document.getElementById('inDate').value.replace(/-/g,'');
-    const outD = document.getElementById('outDate').value.replace(/-/g,'');
-    const inT = document.getElementById('inTime').value.replace(':','');
-    const outT = document.getElementById('outTime').value.replace(':','');
-    // Agent code logic: default WY992
-    let agent = 'WY992';
-    const urlP = new URLSearchParams(window.location.search);
-    if (urlP.get('agent') && /^[a-zA-Z0-9]{4,5}$/.test(urlP.get('agent'))) agent = urlP.get('agent');
-    const url = `https://www.holidayextras.com/static/?selectProduct=cp&#/categories?agent=${agent}&depart=LGW&terminal=S&in=${inD}&out=${outD}&park_from=${inT}&park_to=${outT}&redirectReferal=carpark&from_categories=true`;
+    var inDateEl = document.getElementById('inDate');
+    var outDateEl = document.getElementById('outDate');
+    var inTimeEl = document.getElementById('inTime');
+    var outTimeEl = document.getElementById('outTime');
+
+    if (!inDateEl.value || !outDateEl.value) {
+      inDateEl.reportValidity();
+      outDateEl.reportValidity();
+      return;
+    }
+
+    var arrivalDate = new Date(inDateEl.value + 'T00:00:00');
+    var departDate = new Date(outDateEl.value + 'T00:00:00');
+    var arrivalHour = parseInt(inTimeEl.value, 10);
+    var departHour = parseInt(outTimeEl.value, 10);
+
+    var params = [
+      'Referer=' + encodeURIComponent('https://www.holidayextras.com/'),
+      'agent=WEB1',
+      'domain=www.holidayextras.com',
+      'lang=en',
+      'product=cp',
+      'request=1',
+      'rule_set=hx',
+      'selectProduct=cp',
+      'tc=1',
+      'search=',
+      'Location=LGW',
+      'Arrival=' + toHumanDate(arrivalDate),
+      'ArrivalDate=' + toDDMMYY(arrivalDate),
+      'ArrivalTime=' + toHHMM(arrivalHour),
+      'Depart=' + toHumanDate(departDate),
+      'DepartDate=' + toDDMMYY(departDate),
+      'DepartTime=' + toHHMM(departHour),
+      'flightTime=',
+      'flight_number=default',
+      'terminal=',
+      'CampaignID=65642'
+    ];
+
+    var url = 'https://www.holidayextras.com/static/?' + params.join('&');
     window.open(url, '_blank');
   }
 
