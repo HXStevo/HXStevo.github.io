@@ -395,7 +395,7 @@ body {
     box-shadow: var(--shadow-md);
 }
 .polaroid::before {
-    content: '📸';
+    content: '';
     position: absolute;
     top: -12px;
     left: 16px;

@@ -9,9 +9,9 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --purple: #7C3AED;
-      --purple-dark: #5B21B6;
-      --purple-light: #EDE9FE;
+      --purple: #542E91;
+      --purple-dark: #3d1f6d;
+      --purple-light: #F8F6FC;
       --yellow: #FBBF24;
       --yellow-dark: #D97706;
       --bg: #F8F7FF;
@@ -78,7 +78,7 @@
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(135deg, var(--purple) 0%, #4F46E5 60%, #7C3AED 100%);
+      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 60%, var(--purple) 100%);
       color: white;
       padding: 3rem 1.5rem 2.5rem;
       text-align: center;
@@ -387,7 +387,7 @@
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
-    <a href="/" class="brand">✈ Gatwick<span>Guide</span></a>
+    <a href="/" class="brand"><img src="https://d17s4kc6349e5h.cloudfront.net/holidayextras/assets/images/logos/HolidayExtras-logo-horizontal-transparent.svg" alt="Holiday Extras" style="height:28px;width:auto;" /></a>
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/gatwick-parking.html">Parking</a></li>
@@ -399,7 +399,7 @@
 <!-- ── HERO ── -->
 <div class="hero">
   <div class="hero-content">
-    <h1>Gatwick ✈️ <span class="accent">Live Flights</span></h1>
+    <h1>Gatwick <span class="accent">Live Flights</span></h1>
     <p>Real-time departures &amp; arrivals for London Gatwick Airport (LGW / EGKK)</p>
     <span class="live-badge">Live Data &mdash; Updated 16 Mar 2026, 14:26 UTC</span>
   </div>
@@ -433,7 +433,7 @@
   <!-- ── DEPARTURES TABLE ── -->
   <div class="table-card" id="panel-dep" role="tabpanel">
     <div class="table-header">
-      <div class="icon">🛫</div>
+      <div class="icon"><img src="https://dmy0b9oeprz0f.cloudfront.net/holidayextras.co.uk/brand-guidelines/product-icons/flextras.svg" alt="" style="width:32px;height:32px;" /></div>
       <h2>Departures from Gatwick</h2>
       <span class="source-tag">Live via OpenSky</span>
     </div>
@@ -634,7 +634,7 @@
         </tbody>
       </table>
       <div class="empty-state" id="depEmpty" style="display:none">
-        <span class="emoji">🔍</span>
+        <span class="emoji"></span>
         <p>No departures match your search.</p>
       </div>
     </div>
@@ -837,7 +837,7 @@
         </tbody>
       </table>
       <div class="empty-state" id="arrEmpty" style="display:none">
-        <span class="emoji">🔍</span>
+        <span class="emoji"></span>
         <p>No arrivals match your search.</p>
       </div>
     </div>
