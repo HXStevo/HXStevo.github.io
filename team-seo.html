@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HX SEO Team Dashboard</title>
+<style>
+:root{--blue:#003F7D;--yellow:#FFD100;--green:#16a34a;--red:#dc2626;--orange:#ea580c;--purple:#7c3aed;--gray:#6b7280;--light:#f0f4f8;--white:#ffffff;--radius:10px;--shadow:0 1px 4px rgba(0,0,0,.07);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--light);color:#111;min-height:100vh;}
+.topbar{background:var(--blue);color:#fff;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.topbar h1{font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:8px;}
+.badge{background:var(--yellow);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:800;}
+.live-dot{width:8px;height:8px;background:#4ade80;border-radius:50%;display:inline-block;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.topbar-right{display:flex;align-items:center;gap:10px;font-size:.78rem;opacity:.85;}
+.refresh-btn{background:var(--yellow);color:var(--blue);border:none;padding:5px 14px;border-radius:20px;cursor:pointer;font-weight:700;font-size:.78rem;}
+
+.sidenav{position:fixed;left:0;top:53px;bottom:0;width:190px;background:#fff;border-right:1px solid #e5e7eb;overflow-y:auto;z-index:100;padding:12px 0;}
+.sidenav a{display:block;padding:9px 18px;font-size:.82rem;font-weight:600;color:var(--gray);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
+.sidenav a:hover,.sidenav a.active{color:var(--blue);border-left-color:var(--blue);background:#f0f4f8;}
+.sidenav .nav-group{font-size:.65rem;font-weight:800;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;padding:12px 18px 4px;}
+
+.main{margin-left:190px;padding:24px;max-width:1300px;}
+
+.section{margin-bottom:40px;}
+.section-hdr{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gray);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-hdr::after{content:'';flex:1;height:1px;background:#e5e7eb;}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:6px;}
+.card{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border:1px solid #e5e7eb;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);}
+.card.g::before{background:var(--green);}
+.card.y::before{background:var(--yellow);}
+.card.p::before{background:var(--purple);}
+.card.o::before{background:var(--orange);}
+.card.r::before{background:var(--red);}
+.card-lbl{font-size:.68rem;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.card-val{font-size:1.8rem;font-weight:900;color:var(--blue);line-height:1;}
+.card.g .card-val{color:var(--green);}
+.card.r .card-val{color:var(--red);}
+.card.o .card-val{color:var(--orange);}
+.card-sub{font-size:.7rem;color:var(--gray);margin-top:5px;}
+.card-chg{font-size:.75rem;font-weight:600;margin-top:4px;}
+.up{color:var(--green);}
+.dn{color:var(--red);}
+.nu{color:var(--gray);}
+
+/* Panels */
+.panel{background:#fff;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);border:1px solid #e5e7eb;margin-bottom:14px;}
+.panel h3{font-size:.85rem;font-weight:800;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr;}.sidenav{display:none;}.main{margin-left:0;}}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:.8rem;}
+th{text-align:left;padding:7px 10px;background:var(--light);color:var(--gray);font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb;white-space:nowrap;}
+th:not(:first-child){text-align:right;}
+td{padding:7px 10px;border-bottom:1px solid #f3f4f6;vertical-align:middle;}
+td:not(:first-child){text-align:right;}
+tr:hover td{background:#f9fafb;}
+tr:last-child td{border-bottom:none;}
+.kw{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;}
+.pg{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--blue);font-size:.75rem;}
+
+/* CWV */
+.cwv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;}
+.cwv-card{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border:1px solid #e5e7eb;}
+.cwv-name{font-size:.82rem;font-weight:800;color:#374151;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.cwv-scores{display:flex;gap:8px;margin-bottom:10px;}
+.score-pill{flex:1;text-align:center;border-radius:8px;padding:6px 4px;}
+.score-pill .sv{font-size:1.1rem;font-weight:900;}
+.score-pill .sl{font-size:.6rem;font-weight:700;text-transform:uppercase;opacity:.8;}
+.s-red{background:#fee2e2;color:#991b1b;}
+.s-orange{background:#fed7aa;color:#9a3412;}
+.s-green{background:#dcfce7;color:#166534;}
+.cwv-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.cwv-m{background:var(--light);border-radius:6px;padding:6px 8px;text-align:center;}
+.cwv-m .mv{font-size:.85rem;font-weight:800;}
+.cwv-m .ml{font-size:.6rem;color:var(--gray);font-weight:700;text-transform:uppercase;}
+.cwv-m.good .mv{color:var(--green);}
+.cwv-m.warn .mv{color:var(--orange);}
+.cwv-m.bad .mv{color:var(--red);}
+.strategy-tabs{display:flex;gap:4px;margin-bottom:10px;}
+.st{padding:3px 10px;border-radius:12px;font-size:.7rem;font-weight:700;cursor:pointer;background:var(--light);color:var(--gray);border:none;}
+.st.active{background:var(--blue);color:#fff;}
+
+/* Badges */
+.pos-b{display:inline-block;padding:2px 7px;border-radius:8px;font-size:.72rem;font-weight:700;}
+.p1{background:#fef9c3;color:#854d0e;}
+.p3{background:#dcfce7;color:#166534;}
+.p10{background:#dbeafe;color:#1e40af;}
+.p20{background:#f3e8ff;color:#6b21a8;}
+.pout{background:#fee2e2;color:#991b1b;}
+
+.bar-w{background:#f3f4f6;border-radius:4px;height:5px;overflow:hidden;margin-top:3px;}
+.bar-f{height:100%;border-radius:4px;background:var(--blue);}
+.bar-f.g{background:var(--green);}
+.bar-f.o{background:var(--orange);}
+.bar-f.r{background:var(--red);}
+
+.ctr-g{color:var(--green);font-weight:700;}
+.ctr-m{color:var(--orange);font-weight:700;}
+.ctr-b{color:var(--red);font-weight:700;}
+
+.opp-tag{display:inline-block;font-size:.68rem;padding:2px 6px;border-radius:4px;font-weight:800;}
+.ot-ctr{background:#fef3c7;color:#92400e;}
+.ot-pos{background:#dbeafe;color:#1e40af;}
+.ot-p2{background:#f3e8ff;color:#6b21a8;}
+.ot-n1{background:#dcfce7;color:#166534;}
+
+.loading{text-align:center;padding:30px;color:var(--gray);font-size:.85rem;}
+.spin{display:inline-block;width:24px;height:24px;border:3px solid #e5e7eb;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.schema-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:.8rem;}
+.schema-row:last-child{border:none;}
+.schema-tag{display:inline-block;padding:2px 7px;border-radius:10px;font-size:.68rem;font-weight:700;margin:1px;}
+.has{background:#dcfce7;color:#166534;}
+.missing{background:#fee2e2;color:#991b1b;}
+
+.channel-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ch-name{width:130px;font-size:.78rem;font-weight:600;}
+.ch-bar{flex:1;}
+.ch-val{width:65px;text-align:right;font-size:.78rem;font-weight:800;color:var(--blue);}
+.ch-pct{width:40px;text-align:right;font-size:.72rem;color:var(--gray);}
+
+.alert{border-radius:8px;padding:10px 14px;font-size:.8rem;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
+.alert-red{background:#fee2e2;border-left:3px solid var(--red);color:#7f1d1d;}
+.alert-orange{background:#fed7aa;border-left:3px solid var(--orange);color:#7c2d12;}
+.alert-green{background:#dcfce7;border-left:3px solid var(--green);color:#14532d;}
+
+.updated{font-size:.7rem;color:var(--gray);text-align:center;padding:16px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 13h4v8H3v-8zm7-6h4v14h-4V7zm7-4h4v18h-4V3z" fill="currentColor"/></svg>
+    HX SEO Team Dashboard
+    <span class="badge">LIVE</span>
+  </h1>
+  <div class="topbar-right">
+    <span class="live-dot"></span>
+    <span id="statusTxt">Connecting...</span>
+    <span>|</span>
+    <span id="dateRange"></span>
+    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+  </div>
+</div>
+
+<nav class="sidenav">
+  <div class="nav-group">Overview</div>
+  <a href="#cwv" onclick="scrollTo('#cwv')">⚡ Core Web Vitals</a>
+  <a href="#sc" onclick="scrollTo('#sc')">📡 Search Console</a>
+  <a href="#ga" onclick="scrollTo('#ga')">📊 Analytics</a>
+  <div class="nav-group">Keywords</div>
+  <a href="#kw-top" onclick="scrollTo('#kw-top')">🔍 Top Keywords</a>
+  <a href="#kw-opp" onclick="scrollTo('#kw-opp')">🎯 Opportunities</a>
+  <a href="#kw-pos" onclick="scrollTo('#kw-pos')">📍 Positions</a>
+  <div class="nav-group">Pages</div>
+  <a href="#pages-sc" onclick="scrollTo('#pages-sc')">📄 SC Pages</a>
+  <a href="#pages-ga" onclick="scrollTo('#pages-ga')">📄 GA4 Pages</a>
+  <div class="nav-group">Technical</div>
+  <a href="#schema" onclick="scrollTo('#schema')">🏷️ Schema Audit</a>
+  <a href="#alerts" onclick="scrollTo('#alerts')">🚨 Alerts</a>
+</nav>
+
+<div class="main">
+
+<!-- ═══ CORE WEB VITALS ═══ -->
+<div class="section" id="cwv">
+  <div class="section-hdr">⚡ Core Web Vitals — holidayextras.com (PageSpeed Insights, fetched today)</div>
+
+  <div class="alert alert-red">
+    <span>🚨</span>
+    <div><b>Mobile performance is failing across all pages (scores 26–49).</b> Google uses mobile-first indexing — these scores are directly impacting rankings. Manchester and Stansted parking pages have 22s mobile LCP — nearly 10x over the 2.5s target. This needs urgent dev attention.</div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:12px;">
+    <button class="st active" id="mob-btn" onclick="showCWV('mobile',this)">📱 Mobile</button>
+    <button class="st" id="desk-btn" onclick="showCWV('desktop',this)">🖥️ Desktop</button>
+  </div>
+
+  <div class="cwv-grid" id="cwv-grid"></div>
+
+  <div class="panel" style="margin-top:14px;">
+    <h3>📊 CWV Score Summary Table</h3>
+    <table>
+      <thead><tr>
+        <th>Page</th>
+        <th>📱 Perf</th><th>🖥️ Perf</th>
+        <th>📱 LCP</th><th>🖥️ LCP</th>
+        <th>📱 CLS</th><th>📱 TBT</th>
+        <th>A11y</th><th>SEO Score</th>
+      </tr></thead>
+      <tbody id="cwv-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SEARCH CONSOLE OVERVIEW ═══ -->
+<div class="section" id="sc">
+  <div class="section-hdr">📡 Search Console — Organic Performance (live · 28 days vs prev 28)</div>
+  <div class="cards" id="sc-cards"><div class="loading"><div class="spin"></div><br>Loading Search Console...</div></div>
+</div>
+
+<!-- ═══ GA4 OVERVIEW ═══ -->
+<div class="section" id="ga">
+  <div class="section-hdr">📊 Google Analytics — Site Performance (live · 28 days)</div>
+  <div class="cards" id="ga-cards"><div class="loading"><div class="spin"></div><br>Loading Analytics...</div></div>
+  <div class="grid2" style="margin-top:14px;">
+    <div class="panel">
+      <h3>🚦 Traffic Channels</h3>
+      <div id="channels-panel"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+    <div class="panel">
+      <h3>📱 Device Breakdown</h3>
+      <div id="devices-panel"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOP KEYWORDS ═══ -->
+<div class="section" id="kw-top">
+  <div class="section-hdr">🔍 Top 25 Keywords by Clicks (Search Console · 28 days)</div>
+  <div class="panel">
+    <div id="kw-top-tbl"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+</div>
+
+<!-- ═══ OPPORTUNITIES ═══ -->
+<div class="section" id="kw-opp">
+  <div class="section-hdr">🎯 SEO Opportunities — Quick Wins (High Impressions / Low CTR)</div>
+  <div class="panel">
+    <div id="opp-tbl"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+</div>
+
+<!-- ═══ POSITION DISTRIBUTION ═══ -->
+<div class="section" id="kw-pos">
+  <div class="section-hdr">📍 Keyword Position Distribution (Search Console · 28 days)</div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>📊 Position Breakdown</h3>
+      <div id="pos-dist"></div>
+    </div>
+    <div class="panel">
+      <h3>🏆 #1 Rankings</h3>
+      <div id="pos-1-tbl"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SC PAGES ═══ -->
+<div class="section" id="pages-sc">
+  <div class="section-hdr">📄 Top 25 Pages — Search Console (Organic Clicks · 28 days)</div>
+  <div class="panel">
+    <div id="sc-pages-tbl"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+</div>
+
+<!-- ═══ GA4 PAGES ═══ -->
+<div class="section" id="pages-ga">
+  <div class="section-hdr">📄 Top 25 Pages — Google Analytics (Sessions · 28 days)</div>
+  <div class="panel">
+    <div id="ga-pages-tbl"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+</div>
+
+<!-- ═══ SCHEMA AUDIT ═══ -->
+<div class="section" id="schema">
+  <div class="section-hdr">🏷️ Schema Markup Audit — Top 10 Pages</div>
+  <div class="panel">
+    <h3>Current Schema Status</h3>
+    <table>
+      <thead><tr><th>Page</th><th>BreadcrumbList</th><th>FAQPage</th><th>AggregateRating</th><th>ItemList/Product</th><th>Organization</th><th>Priority</th></tr></thead>
+      <tbody>
+        ${[
+          ['Gatwick Parking','✅ Partial','❌ Missing','❌ Missing','❌ Missing','❌ Missing','HIGH'],
+          ['Manchester Parking','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','CRITICAL'],
+          ['Stansted Parking','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','CRITICAL'],
+          ['Heathrow Parking','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','CRITICAL'],
+          ['Luton Parking','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','HIGH'],
+          ['Gatwick Hotels','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','HIGH'],
+          ['Manchester Hotels','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','HIGH'],
+          ['Stansted Hotels','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','MEDIUM'],
+          ['Heathrow Hotels','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','MEDIUM'],
+          ['Luton Hotels','❌ Missing','❌ Missing','❌ Missing','❌ Missing','❌ Missing','MEDIUM'],
+        ].map(([page,...cols]) => `<tr>
+          <td style="font-weight:600">${page}</td>
+          ${cols.slice(0,-1).map(c => `<td><span class="${c.startsWith('✅')?'has':'missing'} schema-tag">${c}</span></td>`).join('')}
+          <td><span class="opp-tag ${cols[cols.length-1]==='CRITICAL'?'ot-ctr':cols[cols.length-1]==='HIGH'?'ot-pos':'ot-p2'}">${cols[cols.length-1]}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid #e5e7eb;">
+      <a href="https://hxstevo.github.io/hx-schema-reference.html" target="_blank" style="background:var(--blue);color:#fff;padding:8px 18px;border-radius:8px;text-decoration:none;font-size:.82rem;font-weight:700;">📋 View Ready-to-Paste Schema →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ALERTS ═══ -->
+<div class="section" id="alerts">
+  <div class="section-hdr">🚨 Priority Actions for the Team</div>
+  <div class="panel">
+    <h3>🔴 Critical — Fix This Week</h3>
+    <div class="alert alert-red"><span>1</span><div><b>Mobile LCP failing on Manchester & Stansted parking pages (22s).</b> This is 9x over the 2.5s target. Google's mobile-first indexing means this is actively hurting rankings on your highest-value keywords. Tag a dev immediately — likely a render-blocking image or lazy-loaded widget above the fold.</div></div>
+    <div class="alert alert-red"><span>2</span><div><b>9 out of 10 pages have zero schema markup.</b> FAQPage, AggregateRating, BreadcrumbList and ItemList are all missing. Competitors who add schema first will see rich snippets in SERPs before you. The code is ready at hxstevo.github.io/hx-schema-reference.html — just needs implementing.</div></div>
+    <div class="alert alert-red"><span>3</span><div><b>petrol station near me — #1 position, 0.13% CTR, 130k impressions.</b> Fix the title/meta to match the query intent and unlock an estimated +32,000 clicks/month with zero ranking effort.</div></div>
+
+    <h3 style="margin-top:16px;">🟠 High Priority — This Month</h3>
+    <div class="alert alert-orange"><span>4</span><div><b>Manchester airport parking (pos 3) — biggest traffic prize.</b> 136k impressions/month. One content push to #1 = +34,600 clicks. Deepen content, add internal links from hub, submit to GSC after every update.</div></div>
+    <div class="alert alert-orange"><span>5</span><div><b>Desktop TBT (Total Blocking Time) is 1,530ms on homepage.</b> Target is under 200ms. This is likely third-party scripts (chat widgets, analytics, ad scripts) blocking the main thread. Defer or async-load non-critical scripts.</div></div>
+    <div class="alert alert-orange"><span>6</span><div><b>Stansted & Gatwick parking both at pos 3 with 80k–90k monthly impressions.</b> Two near-#1 pages that need a final push. Content depth + schema + internal links.</div></div>
+    <div class="alert alert-orange"><span>7</span><div><b>Harry Potter Studios — pos 2.3, 36k impressions, 0.10% CTR.</b> Wrong page is ranking. Identify which page is showing and redirect traffic to a relevant product page.</div></div>
+
+    <h3 style="margin-top:16px;">✅ Quick Wins — Do Today</h3>
+    <div class="alert alert-green"><span>8</span><div><b>Submit all major pages to Google Search Console after any content update.</b> Don't wait for Google to crawl — go to GSC → URL Inspection → Request Indexing for each updated page.</div></div>
+    <div class="alert alert-green"><span>9</span><div><b>Add Airparks and Purple Parking to Search Console access.</b> Add andy-agent@flight-mission.iam.gserviceaccount.com as a full user on both SC properties to unlock live data for all 3 brands.</div></div>
+    <div class="alert alert-green"><span>10</span><div><b>CLS on Gatwick Parking mobile is 0.092 — just under the 0.1 fail threshold.</b> Monitor this closely. Any new content addition above the fold could push it into failing territory.</div></div>
+  </div>
+</div>
+
+<div class="updated" id="last-updated"></div>
+</div>
+
+<script>
+// ── CONFIG ──
+const SA_EMAIL='andy-agent@flight-mission.iam.gserviceaccount.com';
+const SA_KEY=`-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGPw2Xx2ipa7Af
+Cz+t5DR1W57KDSvsY8+IZLck/HCvUCxsuoMzbshAIyPCFZLxHm5ymeXMiwtSOzul
+/bCeDO03meyTxUCbGJtbanU5W9/6lVNYHuIV55npjXDMJ7EZC2lRtWkkTauu1r+Y
+HUKG1GZJhhDJFJaIyqSijbl0Vbc+K/kmcDNdJtbvZZMCBQ11mCfcONi1pKZBP4sj
+2uJu6t2xxxXjROHRFwXhErS8CsboThyT80Gv4xsvZ9zllUsme5NgyGeocEVtga6N
+dOgJ0fAM9YxtnqHtMDLNR79+Itcio15w4dVxl0zQ9S2GTH4itUNT+XMSFo/KbOrr
+m4qZ/ne1AgMBAAECggEAAvLv3x7jQURGS00aEKH133SSNi2yr76is2IOgfhmLeVv
+070MpNEK4Wu3OCl3wmaSQEN1rocv6YOHs1MuHP2lh5c1Gj1kZO3/TlRJ12keSPDa
+LnmR9LAqhALxQqoSXqJ5WdSwW8OYfJueAaVxEsh+anD76/7+72+DyTO16lkpexAi
+RfkRRwuQrzpg4nUVsHMgqbS1ywGxp3SXc2+2CBQ1UPyd3iLQsDmcsm9pQaa23K/f
+zfZtD3pXhWQ67h1di//3WOOR4BkSTWWZF9nbxT4ZxMvyOoEQsNVMq6t4s2cPGdSR
+bSH9cmNQOmrrKNtapigf3VnPppUZQ6T/Ds/XtTgnvQKBgQDqqHwyCWQ3iogvrDht
+0Yt9f9+rngXSvOKA/wEJowFXCEpda7JvF9Mnk9B/8Q/arIAnAzZGEy8Sqw+FbQXB
+vcxGcObF4hAqYZM4jZhxMDFLRUssxD971QrUPYB4VhxrXP9WVau/458MWfVtggOa
+DGlm2k+CXNnEZMtiNUGhWDobbwKBgQDYRsu3Rsem7LABsVB0W4dImGKDl3BAIXRr
+d4qi5V4Lr2PX08e1Ya4V7cTX+Nl0KxVFi6RaxjYYf0g1Pi/TEk98SeVyiHqB3HVu
+GKqAI1PDDUBDTnuU3+gdMuPtWcvGuJUavIlcN5ej37iDI1ZCNZrN5GjBGw0qek7B
+Z/gmnF4dGwKBgCuW7Ksmz3T5yN6CMWFFAZJohJYOnqpM6A5qUDkIDKGsKpQ8A0Nb
+u5+od5ysnPNUA+I7WIOf4KipGhMA84bPyPh01ImButsEkSJ6Ow0blKyUzKgeNGS+
+aGqQmiLAbDsNZWkWNPdKQys6MrsK4bxl/dZbS1W+Bb3Ts2wk1HIyP2kFAoGBANXu
+IXAnCTIqiWcDN6wBJW4/naLA1334Gap70pyS+VXhpYdFqxPVjVePm9huBNsOCrqC
+CI7p5XSR4qEX5EKKqCkvB1ElgtiVc2r15yFc0Gvt3ZU2OrPmTzkir6aF3jWxO3v4
+5n5bVxn4IBFHkPlpALmMp7nrwjg0R1a0OxgmMEnlAoGALp80Jqh4x8URsLN7sibP
+Gls+f3L7pj0lCX9NcjN0Ymg/KtpFR8VVtfQc48weuWjaYu3xosxxx9JjEg+cyhn8
+G2buON8Vq0FEjMNqoakvGEIMRp2BFU5pWuL3AX0AzRIC2U/bZzL5hMxVRgx/Sc0S
+6F4A1iQEGjxhjOHMivb6DWQ=
+-----END PRIVATE KEY-----`;
+const GA4='properties/404773537';
+const SC_SITE='sc-domain:holidayextras.com';
+
+// ── CWV DATA (pre-fetched) ──
+const CWV_DATA = [{"name":"Homepage","url":"https://www.holidayextras.com/","strategy":"mobile","perf":47,"a11y":85,"seo":100,"bp":96,"lcp":"9.6\u00a0s","fcp":"3.8\u00a0s","tbt":"730\u00a0ms","cls":"0.041","si":"4.3\u00a0s","lcp_ms":9573.53,"fcp_ms":3755.55,"tbt_ms":725,"cls_val":0.041},{"name":"Homepage","url":"https://www.holidayextras.com/","strategy":"desktop","perf":62,"a11y":91,"seo":100,"bp":96,"lcp":"1.3\u00a0s","fcp":"1.1\u00a0s","tbt":"1,530\u00a0ms","cls":"0.021","si":"1.8\u00a0s","lcp_ms":1282.02,"fcp_ms":1073.35,"tbt_ms":1528,"cls_val":0.021},{"name":"Gatwick Parking","url":"https://www.holidayextras.com/gatwick-airport-parking.html","strategy":"mobile","perf":44,"a11y":90,"seo":100,"bp":88,"lcp":"8.0\u00a0s","fcp":"2.4\u00a0s","tbt":"1,110\u00a0ms","cls":"0.092","si":"5.0\u00a0s","lcp_ms":8026.69,"fcp_ms":2402.0,"tbt_ms":1109.5,"cls_val":0.092},{"name":"Gatwick Parking","url":"https://www.holidayextras.com/gatwick-airport-parking.html","strategy":"desktop","perf":74,"a11y":90,"seo":100,"bp":88,"lcp":"1.7\u00a0s","fcp":"0.6\u00a0s","tbt":"450\u00a0ms","cls":"0.011","si":"1.1\u00a0s","lcp_ms":1681.76,"fcp_ms":562.01,"tbt_ms":450.5,"cls_val":0.011},{"name":"Manchester Parking","url":"https://www.holidayextras.com/manchester-airport-parking.html","strategy":"mobile","perf":49,"a11y":90,"seo":100,"bp":88,"lcp":"22.0\u00a0s","fcp":"2.9\u00a0s","tbt":"550\u00a0ms","cls":"0.105","si":"5.7\u00a0s","lcp_ms":21985.29,"fcp_ms":2852.04,"tbt_ms":550,"cls_val":0.105},{"name":"Manchester Parking","url":"https://www.holidayextras.com/manchester-airport-parking.html","strategy":"desktop","perf":49,"a11y":90,"seo":100,"bp":92,"lcp":"4.6\u00a0s","fcp":"0.7\u00a0s","tbt":"330\u00a0ms","cls":"0.018","si":"2.3\u00a0s","lcp_ms":4600,"fcp_ms":700,"tbt_ms":330,"cls_val":0.018},{"name":"Stansted Parking","url":"https://www.holidayextras.com/stansted-airport-parking.html","strategy":"mobile","perf":49,"a11y":92,"seo":100,"bp":88,"lcp":"22.3\u00a0s","fcp":"2.7\u00a0s","tbt":"560\u00a0ms","cls":"0.105","si":"5.5\u00a0s","lcp_ms":22300,"fcp_ms":2700,"tbt_ms":560,"cls_val":0.105},{"name":"Stansted Parking","url":"https://www.holidayextras.com/stansted-airport-parking.html","strategy":"desktop","perf":50,"a11y":92,"seo":100,"bp":88,"lcp":"4.5\u00a0s","fcp":"0.7\u00a0s","tbt":"310\u00a0ms","cls":"0.015","si":"2.2\u00a0s","lcp_ms":4500,"fcp_ms":700,"tbt_ms":310,"cls_val":0.015},{"name":"Heathrow Parking","url":"https://www.holidayextras.com/heathrow-airport-parking.html","strategy":"mobile","perf":45,"a11y":89,"seo":100,"bp":88,"lcp":"8.1\u00a0s","fcp":"2.5\u00a0s","tbt":"840\u00a0ms","cls":"0.089","si":"4.8\u00a0s","lcp_ms":8100,"fcp_ms":2500,"tbt_ms":840,"cls_val":0.089},{"name":"Heathrow Parking","url":"https://www.holidayextras.com/heathrow-airport-parking.html","strategy":"desktop","perf":59,"a11y":89,"seo":100,"bp":88,"lcp":"2.0\u00a0s","fcp":"0.6\u00a0s","tbt":"390\u00a0ms","cls":"0.012","si":"1.3\u00a0s","lcp_ms":2000,"fcp_ms":600,"tbt_ms":390,"cls_val":0.012},{"name":"Luton Parking","url":"https://www.holidayextras.com/luton-airport-parking.html","strategy":"mobile","perf":43,"a11y":92,"seo":100,"bp":88,"lcp":"4.5\u00a0s","fcp":"2.3\u00a0s","tbt":"740\u00a0ms","cls":"0.08","si":"4.0\u00a0s","lcp_ms":4500,"fcp_ms":2300,"tbt_ms":740,"cls_val":0.08},{"name":"Luton Parking","url":"https://www.holidayextras.com/luton-airport-parking.html","strategy":"desktop","perf":62,"a11y":92,"seo":100,"bp":88,"lcp":"1.6\u00a0s","fcp":"0.5\u00a0s","tbt":"340\u00a0ms","cls":"0.01","si":"1.1\u00a0s","lcp_ms":1600,"fcp_ms":500,"tbt_ms":340,"cls_val":0.01},{"name":"Airport Parking Hub","url":"https://www.holidayextras.com/airport-parking.html","strategy":"mobile","perf":44,"a11y":84,"seo":92,"bp":88,"lcp":"10.6\u00a0s","fcp":"3.2\u00a0s","tbt":"820\u00a0ms","cls":"0.07","si":"5.1\u00a0s","lcp_ms":10600,"fcp_ms":3200,"tbt_ms":820,"cls_val":0.07},{"name":"Airport Parking Hub","url":"https://www.holidayextras.com/airport-parking.html","strategy":"desktop","perf":68,"a11y":84,"seo":92,"bp":88,"lcp":"1.6\u00a0s","fcp":"0.6\u00a0s","tbt":"450\u00a0ms","cls":"0.008","si":"1.3\u00a0s","lcp_ms":1600,"fcp_ms":600,"tbt_ms":450,"cls_val":0.008},{"name":"Gatwick Hotels","url":"https://www.holidayextras.com/gatwick-airport-hotels.html","strategy":"mobile","perf":26,"a11y":85,"seo":92,"bp":88,"lcp":"7.5\u00a0s","fcp":"3.5\u00a0s","tbt":"1,200\u00a0ms","cls":"0.12","si":"6.2\u00a0s","lcp_ms":7500,"fcp_ms":3500,"tbt_ms":1200,"cls_val":0.12},{"name":"Gatwick Hotels","url":"https://www.holidayextras.com/gatwick-airport-hotels.html","strategy":"desktop","perf":62,"a11y":85,"seo":92,"bp":88,"lcp":"2.1\u00a0s","fcp":"0.8\u00a0s","tbt":"530\u00a0ms","cls":"0.015","si":"1.5\u00a0s","lcp_ms":2100,"fcp_ms":800,"tbt_ms":530,"cls_val":0.015}];
+
+let TOKEN_C={};
+function b64u(s){return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
+function b64uB(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
+
+async function getToken(scopes){
+  const k=scopes.join(','),now=Math.floor(Date.now()/1000);
+  if(TOKEN_C[k]&&TOKEN_C[k].exp>now+60)return TOKEN_C[k].t;
+  const hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
+  const pay=b64u(JSON.stringify({iss:SA_EMAIL,scope:scopes.join(' '),aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
+  const msg=`${hdr}.${pay}`;
+  const pem=SA_KEY.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  const bin=Uint8Array.from(atob(pem),c=>c.charCodeAt(0));
+  const ck=await crypto.subtle.importKey('pkcs8',bin,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
+  const sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',ck,new TextEncoder().encode(msg));
+  const jwt=`${msg}.${b64uB(sig)}`;
+  const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`});
+  const d=await r.json();
+  if(!d.access_token)throw new Error('Auth failed: '+JSON.stringify(d));
+  TOKEN_C[k]={t:d.access_token,exp:now+3600};
+  return d.access_token;
+}
+
+function ds(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().split('T')[0];}
+function fmt(n){return Number(n).toLocaleString('en-GB');}
+function fmtP(p){return Number(p).toFixed(1);}
+function fmtC(c){return(Number(c)*100).toFixed(2)+'%';}
+function fmtD(s){s=Math.round(s);return`${Math.floor(s/60)}m ${s%60}s`;}
+
+function sC(s){return s>=90?'s-green':s>=50?'s-orange':'s-red';}
+function lcpC(ms){return ms<=2500?'good':ms<=4000?'warn':'bad';}
+function clsC(v){return v<=0.1?'good':v<=0.25?'warn':'bad';}
+function tbtC(ms){return ms<=200?'good':ms<=600?'warn':'bad';}
+function ctrCls(c,p){const e=p<=1.5?25:p<=3?12:p<=5?6:p<=10?3:1,pct=c*100;return pct>=e*.8?'ctr-g':pct>=e*.4?'ctr-m':'ctr-b';}
+function posBadge(p){if(p<=1.5)return'<span class="pos-b p1">🥇 #1</span>';if(p<=3.5)return'<span class="pos-b p3">Top 3</span>';if(p<=10.5)return'<span class="pos-b p10">Pg 1</span>';if(p<=20.5)return'<span class="pos-b p20">Pg 2</span>';return'<span class="pos-b pout">Pg '+(Math.ceil(p/10))+'</span>';}
+function bar(v,mx,cls=''){return`<div class="bar-w"><div class="bar-f ${cls}" style="width:${Math.min(100,(v/mx)*100).toFixed(0)}%"></div></div>`;}
+
+// ── CWV RENDER ──
+let cwvMode='mobile';
+function showCWV(mode,btn){
+  cwvMode=mode;
+  document.querySelectorAll('.st').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCWVCards();
+}
+
+function renderCWVCards(){
+  const data=CWV_DATA.filter(d=>d.strategy===cwvMode);
+  document.getElementById('cwv-grid').innerHTML=data.map(d=>`
+    <div class="cwv-card">
+      <div class="cwv-name">
+        <span>${d.name}</span>
+        <span style="font-size:.7rem;color:var(--gray)">${cwvMode==='mobile'?'📱':'🖥️'}</span>
+      </div>
+      <div class="cwv-scores">
+        <div class="score-pill ${sC(d.perf)}"><div class="sv">${d.perf}</div><div class="sl">Perf</div></div>
+        <div class="score-pill ${sC(d.a11y)}"><div class="sv">${d.a11y}</div><div class="sl">A11y</div></div>
+        <div class="score-pill ${sC(d.seo)}"><div class="sv">${d.seo}</div><div class="sl">SEO</div></div>
+        <div class="score-pill ${sC(d.bp)}"><div class="sv">${d.bp}</div><div class="sl">B.P.</div></div>
+      </div>
+      <div class="cwv-metrics">
+        <div class="cwv-m ${lcpC(d.lcp_ms)}"><div class="mv">${d.lcp}</div><div class="ml">LCP</div></div>
+        <div class="cwv-m ${clsC(d.cls_val)}"><div class="mv">${d.cls}</div><div class="ml">CLS</div></div>
+        <div class="cwv-m ${tbtC(d.tbt_ms)}"><div class="mv">${d.tbt}</div><div class="ml">TBT</div></div>
+        <div class="cwv-m"><div class="mv">${d.fcp}</div><div class="ml">FCP</div></div>
+        <div class="cwv-m"><div class="mv">${d.si}</div><div class="ml">Speed Idx</div></div>
+        <div class="cwv-m"><div class="mv"><a href="${d.url}" target="_blank" style="color:var(--blue);text-decoration:none;font-size:.65rem">View →</a></div><div class="ml">PSI</div></div>
+      </div>
+    </div>`).join('');
+
+  // Summary table
+  const pages=[...new Set(CWV_DATA.map(d=>d.name))];
+  document.getElementById('cwv-table').innerHTML=pages.map(name=>{
+    const mob=CWV_DATA.find(d=>d.name===name&&d.strategy==='mobile')||{};
+    const desk=CWV_DATA.find(d=>d.name===name&&d.strategy==='desktop')||{};
+    return`<tr>
+      <td style="font-weight:600">${name}</td>
+      <td><span class="${sC(mob.perf||0)} score-pill" style="padding:2px 8px;display:inline-block"><b>${mob.perf||'—'}</b></span></td>
+      <td><span class="${sC(desk.perf||0)} score-pill" style="padding:2px 8px;display:inline-block"><b>${desk.perf||'—'}</b></span></td>
+      <td class="${lcpC(mob.lcp_ms||9999)}" style="font-weight:700">${mob.lcp||'—'}</td>
+      <td class="${lcpC(desk.lcp_ms||9999)}" style="font-weight:700">${desk.lcp||'—'}</td>
+      <td class="${clsC(mob.cls_val||1)}" style="font-weight:700">${mob.cls||'—'}</td>
+      <td class="${tbtC(mob.tbt_ms||9999)}" style="font-weight:700">${mob.tbt||'—'}</td>
+      <td>${mob.a11y||'—'}</td>
+      <td>${mob.seo||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function scQ(body){
+  const t=await getToken(['https://www.googleapis.com/auth/webmasters.readonly']);
+  const r=await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SC_SITE)}/searchAnalytics/query`,{method:'POST',headers:{Authorization:`Bearer ${t}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  return(await r.json()).rows||[];
+}
+async function gaQ(body){
+  const t=await getToken(['https://www.googleapis.com/auth/analytics.readonly']);
+  const r=await fetch(`https://analyticsdata.googleapis.com/v1beta/${GA4}:runReport`,{method:'POST',headers:{Authorization:`Bearer ${t}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  return r.json();
+}
+
+function renderSC(curr,prev){
+  const dC=curr.clicks-prev.clicks,dI=curr.impressions-prev.impressions;
+  const dCtr=((curr.ctr-prev.ctr)*100).toFixed(2),dP=(curr.position-prev.position).toFixed(1);
+  document.getElementById('sc-cards').innerHTML=`
+    <div class="card"><div class="card-lbl">Total Clicks</div><div class="card-val">${fmt(curr.clicks)}</div><div class="card-chg ${dC>=0?'up':'dn'}">${dC>=0?'▲':'▼'} ${fmt(Math.abs(dC))} vs prev</div><div class="card-sub">organic search</div></div>
+    <div class="card g"><div class="card-lbl">Impressions</div><div class="card-val">${curr.impressions>999999?(curr.impressions/1e6).toFixed(1)+'M':fmt(curr.impressions)}</div><div class="card-chg ${dI>=0?'up':'dn'}">${dI>=0?'▲':'▼'} ${fmt(Math.abs(dI))} vs prev</div><div class="card-sub">times shown in Google</div></div>
+    <div class="card y"><div class="card-lbl">Click-Through Rate</div><div class="card-val">${(curr.ctr*100).toFixed(2)}%</div><div class="card-chg ${dCtr>=0?'up':'dn'}">${dCtr>=0?'▲':'▼'} ${Math.abs(dCtr)}% vs prev</div><div class="card-sub">clicks ÷ impressions</div></div>
+    <div class="card p"><div class="card-lbl">Avg Position</div><div class="card-val">${fmtP(curr.position)}</div><div class="card-chg ${dP<=0?'up':'dn'}">${dP<=0?'▲ improved':'▼ dropped'} ${Math.abs(dP)}</div><div class="card-sub">avg rank across all queries</div></div>`;
+}
+
+function renderGA(d){
+  const r=d.rows?.[0]?.metricValues||[];
+  const g=(i)=>Number(r[i]?.value||0);
+  const [sess,users,bounce,dur,eng,nu]=[ g(0),g(1),g(2),g(3),g(4),g(5)];
+  document.getElementById('ga-cards').innerHTML=`
+    <div class="card"><div class="card-lbl">Sessions</div><div class="card-val">${fmt(sess)}</div><div class="card-sub">all channels</div></div>
+    <div class="card g"><div class="card-lbl">Active Users</div><div class="card-val">${fmt(users)}</div><div class="card-sub">${fmt(nu)} new users</div></div>
+    <div class="card ${bounce>0.6?'r':bounce>0.4?'o':'g'}"><div class="card-lbl">Bounce Rate</div><div class="card-val">${(bounce*100).toFixed(1)}%</div><div class="card-sub">${bounce<0.4?'✅ Good':bounce<0.6?'⚠️ Watch':'🔴 High'}</div></div>
+    <div class="card y"><div class="card-lbl">Avg Session</div><div class="card-val">${Math.floor(dur/60)}m${Math.round(dur%60)}s</div><div class="card-sub">engagement time</div></div>
+    <div class="card p"><div class="card-lbl">Engagement Rate</div><div class="card-val">${(eng*100).toFixed(1)}%</div><div class="card-sub">${eng>0.6?'✅ Strong':'⚠️ Monitor'}</div></div>`;
+}
+
+function renderChannels(rows){
+  if(!rows?.length)return;
+  const total=rows.reduce((s,r)=>s+Number(r.metricValues[0].value),0);
+  const cols={'Organic Search':'#003F7D','Direct':'#ca8a04','Referral':'#16a34a','Paid Search':'#ea580c','Organic Social':'#7c3aed','Email':'#0891b2'};
+  const mx=Math.max(...rows.map(r=>Number(r.metricValues[0].value)));
+  document.getElementById('channels-panel').innerHTML=rows.slice(0,8).map(r=>{
+    const ch=r.dimensionValues[0].value,v=Number(r.metricValues[0].value),col=cols[ch]||'#9ca3af';
+    return`<div class="channel-row"><div class="ch-name" style="color:${col}">● ${ch}</div><div class="ch-bar"><div class="bar-w"><div class="bar-f" style="width:${(v/mx*100).toFixed(0)}%;background:${col}"></div></div></div><div class="ch-val">${fmt(v)}</div><div class="ch-pct">${(v/total*100).toFixed(1)}%</div></div>`;
+  }).join('');
+}
+
+function renderDevices(rows){
+  if(!rows?.length)return;
+  const total=rows.reduce((s,r)=>s+Number(r.metricValues[0].value),0);
+  const icons={'mobile':'📱','desktop':'🖥️','tablet':'📟'};
+  document.getElementById('devices-panel').innerHTML=rows.map(r=>{
+    const d=r.dimensionValues[0].value,v=Number(r.metricValues[0].value),b=Number(r.metricValues[1].value);
+    return`<div class="channel-row"><div class="ch-name">${icons[d]||'📱'} ${d}</div><div class="ch-bar"><div class="bar-w"><div class="bar-f" style="width:${(v/total*100).toFixed(0)}%"></div></div></div><div class="ch-val">${fmt(v)}</div><div style="width:80px;text-align:right;font-size:.72rem;color:var(--gray)">Bounce: ${(b*100).toFixed(0)}%</div></div>`;
+  }).join('');
+}
+
+function renderKwTop(rows){
+  if(!rows?.length)return;
+  const mx=Math.max(...rows.map(r=>r.clicks));
+  document.getElementById('kw-top-tbl').innerHTML=`<table><thead><tr><th>#</th><th>Keyword</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr></thead><tbody>`+
+  rows.slice(0,25).map((r,i)=>`<tr>
+    <td style="color:#9ca3af;font-size:.75rem">${i+1}</td>
+    <td><div class="kw" title="${r.keys[0]}">${r.keys[0]}</div>${bar(r.clicks,mx)}</td>
+    <td><b>${fmt(r.clicks)}</b></td>
+    <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
+    <td class="${ctrCls(r.ctr,r.position)}">${fmtC(r.ctr)}</td>
+    <td>${posBadge(r.position)} <span style="color:#9ca3af;font-size:.72rem">${fmtP(r.position)}</span></td>
+  </tr>`).join('')+'</tbody></table>';
+}
+
+function renderOpps(rows){
+  const opps=rows.filter(r=>r.impressions>=1000&&r.position>=4&&r.position<=30&&r.ctr<0.05)
+    .sort((a,b)=>b.impressions-a.impressions).slice(0,20);
+  if(!opps.length)return;
+  const mx=Math.max(...opps.map(r=>r.impressions));
+  document.getElementById('opp-tbl').innerHTML=`
+  <p style="font-size:.78rem;color:var(--gray);margin-bottom:12px;">Keywords with 1,000+ impressions, under 5% CTR, and positions 4–30. Sorted by impression volume. Improving these generates the most additional clicks.</p>
+  <table><thead><tr><th>#</th><th>Keyword</th><th>Impressions</th><th>Current CTR</th><th>Avg Position</th><th>Est. Extra Clicks</th></tr></thead><tbody>`+
+  opps.map((r,i)=>{
+    const pot=Math.max(0,Math.round(r.impressions*(r.position<=5?0.08:0.025)-r.clicks));
+    return`<tr>
+      <td style="color:#9ca3af;font-size:.75rem">${i+1}</td>
+      <td><div class="kw" title="${r.keys[0]}" style="max-width:280px"><b>${r.keys[0]}</b></div>${bar(r.impressions,mx,'o')}</td>
+      <td><b>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</b></td>
+      <td class="ctr-b"><b>${fmtC(r.ctr)}</b></td>
+      <td>${posBadge(r.position)} <span style="color:#9ca3af;font-size:.72rem">${fmtP(r.position)}</span></td>
+      <td><span class="opp-tag ot-ctr">+${fmt(pot)} clicks/mo</span></td>
+    </tr>`;
+  }).join('')+'</tbody></table>';
+}
+
+function renderPosDist(rows){
+  const p1=rows.filter(r=>r.position<=1.5).length;
+  const p3=rows.filter(r=>r.position>1.5&&r.position<=3.5).length;
+  const p10=rows.filter(r=>r.position>3.5&&r.position<=10.5).length;
+  const p20=rows.filter(r=>r.position>10.5&&r.position<=20.5).length;
+  const pout=rows.filter(r=>r.position>20.5).length;
+  const total=rows.length;
+  document.getElementById('pos-dist').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+      ${[['🥇 #1',p1,'#854d0e'],['Top 3',p1+p3,'#166534'],['Page 1',p1+p3+p10,'#1e40af'],['Page 2',p20,'#6b21a8'],['Page 3+',pout,'#9ca3af'],['Total',total,'#003F7D']].map(([l,v,c])=>`
+      <div style="background:var(--light);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:1.2rem;font-weight:900;color:${c}">${fmt(v)}</div>
+        <div style="font-size:.65rem;color:var(--gray);font-weight:700;text-transform:uppercase">${l}</div>
+      </div>`).join('')}
+    </div>
+    ${[['#1 only',p1,'#854d0e'],['Pos 2–3',p3,'#166534'],['Pos 4–10',p10,'#1e40af'],['Pos 11–20',p20,'#6b21a8'],['Pos 21+',pout,'#9ca3af']].map(([l,v,c])=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:.8rem;">
+      <div style="width:7px;height:7px;background:${c};border-radius:50%;flex-shrink:0"></div>
+      <div style="flex:1;color:#374151;font-weight:600">${l}</div>
+      <div style="font-weight:800;color:${c}">${v}</div>
+      <div style="color:#9ca3af;width:38px;text-align:right">${(v/total*100).toFixed(0)}%</div>
+    </div>`).join('')}`;
+
+  const pos1kws=rows.filter(r=>r.position<=1.5).sort((a,b)=>b.clicks-a.clicks).slice(0,15);
+  const mx=Math.max(...pos1kws.map(r=>r.clicks));
+  document.getElementById('pos-1-tbl').innerHTML=`<table><thead><tr><th>Keyword</th><th>Clicks</th><th>CTR</th></tr></thead><tbody>`+
+  pos1kws.map(r=>`<tr><td><div class="kw" title="${r.keys[0]}">${r.keys[0]}</div>${bar(r.clicks,mx,'g')}</td><td><b>${fmt(r.clicks)}</b></td><td class="ctr-g">${fmtC(r.ctr)}</td></tr>`).join('')+'</tbody></table>';
+}
+
+function renderSCPages(rows){
+  if(!rows?.length)return;
+  const mx=Math.max(...rows.map(r=>r.clicks));
+  document.getElementById('sc-pages-tbl').innerHTML=`<table><thead><tr><th>#</th><th>Page</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Avg Position</th></tr></thead><tbody>`+
+  rows.slice(0,25).map((r,i)=>{
+    const pg=r.keys[0].replace('https://www.holidayextras.com','').replace('https://holidayextras.com','')||'/';
+    return`<tr>
+      <td style="color:#9ca3af;font-size:.75rem">${i+1}</td>
+      <td><div class="pg" title="${r.keys[0]}">${pg}</div>${bar(r.clicks,mx)}</td>
+      <td><b>${fmt(r.clicks)}</b></td>
+      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
+      <td class="${ctrCls(r.ctr,r.position)}">${fmtC(r.ctr)}</td>
+      <td>${posBadge(r.position)} ${fmtP(r.position)}</td>
+    </tr>`;
+  }).join('')+'</tbody></table>';
+}
+
+function renderGAPages(rows){
+  if(!rows?.length)return;
+  const mx=Math.max(...rows.slice(0,25).map(r=>Number(r.metricValues[0].value)));
+  document.getElementById('ga-pages-tbl').innerHTML=`<table><thead><tr><th>#</th><th>Page</th><th>Sessions</th><th>Bounce Rate</th><th>Avg Session</th></tr></thead><tbody>`+
+  rows.slice(0,25).map((r,i)=>{
+    const pg=(r.dimensionValues[0].value||'/').replace('https://www.holidayextras.com','').replace('https://holidayextras.com','')||'/';
+    const sess=Number(r.metricValues[0].value),bounce=Number(r.metricValues[1].value),dur=Number(r.metricValues[2].value);
+    return`<tr>
+      <td style="color:#9ca3af;font-size:.75rem">${i+1}</td>
+      <td><div class="pg" title="${pg}">${pg}</div>${bar(sess,mx)}</td>
+      <td><b>${fmt(sess)}</b></td>
+      <td class="${bounce<0.4?'ctr-g':bounce<0.6?'ctr-m':'ctr-b'}">${(bounce*100).toFixed(0)}%</td>
+      <td>${fmtD(dur)}</td>
+    </tr>`;
+  }).join('')+'</tbody></table>';
+}
+
+async function loadAll(){
+  document.getElementById('statusTxt').textContent='Loading...';
+  const end=ds(1),start=ds(28),pEnd=ds(29),pStart=ds(56);
+  document.getElementById('dateRange').textContent=`${start} → ${end}`;
+  try{
+    const[scC,scP,scKw,scPg,gaO,gaCh,gaDev,gaPg]=await Promise.all([
+      scQ({startDate:start,endDate:end,metrics:['clicks','impressions','ctr','position'],rowLimit:1}),
+      scQ({startDate:pStart,endDate:pEnd,metrics:['clicks','impressions','ctr','position'],rowLimit:1}),
+      scQ({startDate:start,endDate:end,dimensions:['query'],metrics:['clicks','impressions','ctr','position'],rowLimit:500,orderBy:[{fieldName:'clicks',sortOrder:'descending'}]}),
+      scQ({startDate:start,endDate:end,dimensions:['page'],metrics:['clicks','impressions','ctr','position'],rowLimit:25,orderBy:[{fieldName:'clicks',sortOrder:'descending'}]}),
+      gaQ({dateRanges:[{startDate:start,endDate:end}],metrics:[{name:'sessions'},{name:'activeUsers'},{name:'bounceRate'},{name:'averageSessionDuration'},{name:'engagementRate'},{name:'newUsers'}]}),
+      gaQ({dateRanges:[{startDate:start,endDate:end}],dimensions:[{name:'sessionDefaultChannelGroup'}],metrics:[{name:'sessions'},{name:'activeUsers'}],orderBys:[{metric:{metricName:'sessions'},desc:true}]}),
+      gaQ({dateRanges:[{startDate:start,endDate:end}],dimensions:[{name:'deviceCategory'}],metrics:[{name:'sessions'},{name:'bounceRate'}],orderBys:[{metric:{metricName:'sessions'},desc:true}]}),
+      gaQ({dateRanges:[{startDate:start,endDate:end}],dimensions:[{name:'pagePath'}],metrics:[{name:'sessions'},{name:'bounceRate'},{name:'averageSessionDuration'}],orderBys:[{metric:{metricName:'sessions'},desc:true}],limit:25}),
+    ]);
+    renderSC(scC[0]||{clicks:0,impressions:0,ctr:0,position:0},scP[0]||{clicks:0,impressions:0,ctr:0,position:0});
+    renderGA(gaO);
+    renderChannels(gaCh.rows||[]);
+    renderDevices(gaDev.rows||[]);
+    renderKwTop(scKw);
+    renderOpps(scKw);
+    renderPosDist(scKw);
+    renderSCPages(scPg);
+    renderGAPages(gaPg.rows||[]);
+    document.getElementById('statusTxt').textContent='● Live';
+    document.getElementById('last-updated').textContent='Last updated: '+new Date().toLocaleString('en-GB');
+  }catch(e){
+    document.getElementById('statusTxt').textContent='⚠ Error';
+    console.error(e);
+  }
+}
+
+function scrollTo(id){document.querySelector(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+
+renderCWVCards();
+loadAll();
+</script>
+</body>
+</html>
