@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HX SEO Dashboard</title>
+<style>
+  :root {
+    --hx-blue: #003F7D;
+    --hx-yellow: #FFD100;
+    --hx-light: #f0f4f8;
+    --green: #16a34a;
+    --red: #dc2626;
+    --orange: #ea580c;
+    --purple: #7c3aed;
+    --gray: #6b7280;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--hx-light); color: #111; min-height: 100vh; }
+
+  .topbar { background: var(--hx-blue); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .topbar h1 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .topbar .badge { background: var(--hx-yellow); color: var(--hx-blue); font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
+  .topbar .status { font-size: 0.8rem; opacity: 0.8; }
+  .topbar .status.live { color: #86efac; }
+
+  .range-bar { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 24px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .range-btn { padding: 5px 14px; border-radius: 20px; border: 1.5px solid #d1d5db; background: white; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #374151; transition: all 0.15s; }
+  .range-btn.active { background: var(--hx-blue); color: white; border-color: var(--hx-blue); }
+  .range-btn:hover:not(.active) { border-color: var(--hx-blue); color: var(--hx-blue); }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 20px 20px 60px; }
+
+  .section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin: 28px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 8px; }
+  .card { background: white; border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; position: relative; overflow: hidden; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--hx-blue); }
+  .card.green::before { background: var(--green); }
+  .card.yellow::before { background: var(--hx-yellow); }
+  .card.purple::before { background: var(--purple); }
+  .card.orange::before { background: var(--orange); }
+  .card-label { font-size: 0.72rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .card-value { font-size: 1.9rem; font-weight: 800; color: var(--hx-blue); line-height: 1; }
+  .card-change { font-size: 0.78rem; margin-top: 6px; font-weight: 600; }
+  .card-change.up { color: var(--green); }
+  .card-change.down { color: var(--red); }
+  .card-change.neutral { color: var(--gray); }
+  .card-sub { font-size: 0.72rem; color: var(--gray); margin-top: 4px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media(max-width: 900px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  .panel { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+  .panel h3 { font-size: 0.85rem; font-weight: 700; color: var(--hx-blue); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .panel.full { grid-column: 1 / -1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  th { text-align: left; padding: 7px 10px; background: var(--hx-light); color: var(--gray); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e5e7eb; }
+  th:not(:first-child) { text-align: right; }
+  td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+  td:not(:first-child) { text-align: right; }
+  tr:hover td { background: #f9fafb; }
+  tr:last-child td { border-bottom: none; }
+  .kw { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+  .pg { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--hx-blue); font-size: 0.78rem; }
+
+  .pos-badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+  .pos-1 { background: #fef9c3; color: #854d0e; }
+  .pos-3 { background: #dcfce7; color: #166534; }
+  .pos-10 { background: #dbeafe; color: #1e40af; }
+  .pos-20 { background: #f3e8ff; color: #6b21a8; }
+  .pos-out { background: #fee2e2; color: #991b1b; }
+
+  .bar-wrap { background: #f3f4f6; border-radius: 4px; height: 6px; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 4px; background: var(--hx-blue); }
+  .bar-fill.green { background: var(--green); }
+  .bar-fill.orange { background: var(--orange); }
+  .bar-fill.red { background: var(--red); }
+
+  .ctr-good { color: var(--green); font-weight: 600; }
+  .ctr-mid { color: var(--orange); font-weight: 600; }
+  .ctr-low { color: var(--red); font-weight: 600; }
+
+  .loading { text-align: center; padding: 40px; color: var(--gray); }
+  .loading .spin { display: inline-block; width: 32px; height: 32px; border: 3px solid #e5e7eb; border-top-color: var(--hx-blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .err { background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: var(--red); font-size: 0.85rem; margin: 8px 0; }
+  .refresh-btn { background: var(--hx-yellow); color: var(--hx-blue); border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 0.8rem; }
+  .refresh-btn:hover { opacity: 0.9; }
+
+  .opp-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+  .opp-ctr { background: #fef3c7; color: #92400e; }
+  .opp-pos { background: #dbeafe; color: #1e40af; }
+
+  .channel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .channel-name { width: 120px; font-size: 0.82rem; font-weight: 600; }
+  .channel-val { width: 70px; text-align: right; font-size: 0.82rem; font-weight: 700; color: var(--hx-blue); }
+  .channel-pct { width: 40px; text-align: right; font-size: 0.75rem; color: var(--gray); }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 2px solid #e5e7eb; }
+  .tab { padding: 7px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .tab.active { color: var(--hx-blue); border-bottom-color: var(--hx-blue); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .sparkline { display: flex; align-items: flex-end; gap: 2px; height: 40px; }
+  .sparkline-bar { flex: 1; background: var(--hx-blue); border-radius: 2px 2px 0 0; opacity: 0.7; min-width: 4px; }
+
+  .updated { font-size: 0.72rem; color: var(--gray); text-align: right; margin-top: 16px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .summary-item { text-align: center; padding: 10px; background: var(--hx-light); border-radius: 8px; }
+  .summary-item .val { font-size: 1.2rem; font-weight: 800; color: var(--hx-blue); }
+  .summary-item .lbl { font-size: 0.68rem; color: var(--gray); font-weight: 600; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 13h4v8H3v-8zm7-6h4v14h-4V7zm7-4h4v18h-4V3z" fill="currentColor"/></svg>
+    HX SEO Dashboard
+    <span class="badge">LIVE</span>
+  </h1>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="status live" id="statusText">● Connecting...</span>
+    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+  </div>
+</div>
+
+<div class="range-bar">
+  <span style="font-size:0.8rem;font-weight:600;color:#374151;">Date range:</span>
+  <button class="range-btn" onclick="setRange(7,this)">7 days</button>
+  <button class="range-btn active" onclick="setRange(28,this)">28 days</button>
+  <button class="range-btn" onclick="setRange(90,this)">90 days</button>
+  <button class="range-btn" onclick="setRange(180,this)">6 months</button>
+  <span style="margin-left:auto;font-size:0.78rem;color:var(--gray);" id="dateRangeLabel"></span>
+</div>
+
+<div class="container">
+
+  <!-- Overview Cards -->
+  <div class="section-title">📡 Search Console — Organic Performance</div>
+  <div class="cards" id="scCards">
+    <div class="loading"><div class="spin"></div><br>Loading Search Console...</div>
+  </div>
+
+  <div class="section-title">📊 Google Analytics — Site Metrics</div>
+  <div class="cards" id="gaCards">
+    <div class="loading"><div class="spin"></div><br>Loading Analytics...</div>
+  </div>
+
+  <!-- Main panels -->
+  <div class="section-title">🔍 Keyword Intelligence</div>
+  <div class="grid2">
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('kw','top',this)">Top Keywords</div>
+        <div class="tab" onclick="switchTab('kw','opp',this)">Opportunities</div>
+        <div class="tab" onclick="switchTab('kw','pos',this)">By Position</div>
+      </div>
+      <div class="tab-content active" id="kw-top">
+        <div class="loading"><div class="spin"></div></div>
+      </div>
+      <div class="tab-content" id="kw-opp">
+        <div class="loading"><div class="spin"></div></div>
+      </div>
+      <div class="tab-content" id="kw-pos">
+        <div class="loading"><div class="spin"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('pg','top',this)">Top Pages</div>
+        <div class="tab" onclick="switchTab('pg','ga',this)">GA4 Traffic</div>
+      </div>
+      <div class="tab-content active" id="pg-top">
+        <div class="loading"><div class="spin"></div></div>
+      </div>
+      <div class="tab-content" id="pg-ga">
+        <div class="loading"><div class="spin"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">📈 Traffic Channels & Engagement</div>
+  <div class="grid3">
+    <div class="panel">
+      <h3>🚦 Traffic by Channel</h3>
+      <div id="channelPanel"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+    <div class="panel">
+      <h3>⏱ Engagement Metrics</h3>
+      <div id="engagePanel"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+    <div class="panel">
+      <h3>📍 Position Distribution</h3>
+      <div id="posDistPanel"><div class="loading"><div class="spin"></div></div></div>
+    </div>
+  </div>
+
+  <div class="section-title">🔥 SEO Opportunities</div>
+  <div class="panel full" style="grid-column:1/-1">
+    <h3>🎯 Quick Wins — High Impressions, Low CTR (push these up)</h3>
+    <div id="oppPanel"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+
+  <p class="updated" id="lastUpdated"></p>
+</div>
+
+<script>
+// ── CONFIG ──
+const SA_EMAIL = 'andy-agent@flight-mission.iam.gserviceaccount.com';
+const SA_KEY_PEM = `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGPw2Xx2ipa7Af
+Cz+t5DR1W57KDSvsY8+IZLck/HCvUCxsuoMzbshAIyPCFZLxHm5ymeXMiwtSOzul
+/bCeDO03meyTxUCbGJtbanU5W9/6lVNYHuIV55npjXDMJ7EZC2lRtWkkTauu1r+Y
+HUKG1GZJhhDJFJaIyqSijbl0Vbc+K/kmcDNdJtbvZZMCBQ11mCfcONi1pKZBP4sj
+2uJu6t2xxxXjROHRFwXhErS8CsboThyT80Gv4xsvZ9zllUsme5NgyGeocEVtga6N
+dOgJ0fAM9YxtnqHtMDLNR79+Itcio15w4dVxl0zQ9S2GTH4itUNT+XMSFo/KbOrr
+m4qZ/ne1AgMBAAECggEAAvLv3x7jQURGS00aEKH133SSNi2yr76is2IOgfhmLeVv
+070MpNEK4Wu3OCl3wmaSQEN1rocv6YOHs1MuHP2lh5c1Gj1kZO3/TlRJ12keSPDa
+LnmR9LAqhALxQqoSXqJ5WdSwW8OYfJueAaVxEsh+anD76/7+72+DyTO16lkpexAi
+RfkRRwuQrzpg4nUVsHMgqbS1ywGxp3SXc2+2CBQ1UPyd3iLQsDmcsm9pQaa23K/f
+zfZtD3pXhWQ67h1di//3WOOR4BkSTWWZF9nbxT4ZxMvyOoEQsNVMq6t4s2cPGdSR
+bSH9cmNQOmrrKNtapigf3VnPppUZQ6T/Ds/XtTgnvQKBgQDqqHwyCWQ3iogvrDht
+0Yt9f9+rngXSvOKA/wEJowFXCEpda7JvF9Mnk9B/8Q/arIAnAzZGEy8Sqw+FbQXB
+vcxGcObF4hAqYZM4jZhxMDFLRUssxD971QrUPYB4VhxrXP9WVau/458MWfVtggOa
+DGlm2k+CXNnEZMtiNUGhWDobbwKBgQDYRsu3Rsem7LABsVB0W4dImGKDl3BAIXRr
+d4qi5V4Lr2PX08e1Ya4V7cTX+Nl0KxVFi6RaxjYYf0g1Pi/TEk98SeVyiHqB3HVu
+GKqAI1PDDUBDTnuU3+gdMuPtWcvGuJUavIlcN5ej37iDI1ZCNZrN5GjBGw0qek7B
+Z/gmnF4dGwKBgCuW7Ksmz3T5yN6CMWFFAZJohJYOnqpM6A5qUDkIDKGsKpQ8A0Nb
+u5+od5ysnPNUA+I7WIOf4KipGhMA84bPyPh01ImButsEkSJ6Ow0blKyUzKgeNGS+
+aGqQmiLAbDsNZWkWNPdKQys6MrsK4bxl/dZbS1W+Bb3Ts2wk1HIyP2kFAoGBANXu
+IXAnCTIqiWcDN6wBJW4/naLA1334Gap70pyS+VXhpYdFqxPVjVePm9huBNsOCrqC
+CI7p5XSR4qEX5EKKqCkvB1ElgtiVc2r15yFc0Gvt3ZU2OrPmTzkir6aF3jWxO3v4
+5n5bVxn4IBFHkPlpALmMp7nrwjg0R1a0OxgmMEnlAoGALp80Jqh4x8URsLN7sibP
+Gls+f3L7pj0lCX9NcjN0Ymg/KtpFR8VVtfQc48weuWjaYu3xosxxx9JjEg+cyhn8
+G2buON8Vq0FEjMNqoakvGEIMRp2BFU5pWuL3AX0AzRIC2U/bZzL5hMxVRgx/Sc0S
+6F4A1iQEGjxhjOHMivb6DWQ=
+-----END PRIVATE KEY-----`;
+const GA4_PROPERTY = 'properties/404773537';
+const SC_SITE = 'sc-domain:holidayextras.com';
+
+let DAYS = 28;
+let TOKEN_CACHE = { sc: null, ga: null, exp: 0 };
+
+// ── JWT / AUTH ──
+function b64url(str) {
+  return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+function b64urlBuf(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+
+async function getToken(scopes) {
+  const now = Math.floor(Date.now()/1000);
+  const cacheKey = scopes.join(',');
+  if (TOKEN_CACHE[cacheKey] && TOKEN_CACHE.exp > now + 60) return TOKEN_CACHE[cacheKey];
+
+  const header = b64url(JSON.stringify({alg:'RS256',typ:'JWT'}));
+  const payload = b64url(JSON.stringify({
+    iss: SA_EMAIL,
+    scope: scopes.join(' '),
+    aud: 'https://oauth2.googleapis.com/token',
+    exp: now + 3600,
+    iat: now
+  }));
+  const toSign = `${header}.${payload}`;
+
+  const pemBody = SA_KEY_PEM.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  const binaryKey = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+  const cryptoKey = await crypto.subtle.importKey('pkcs8', binaryKey, {name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'}, false, ['sign']);
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, new TextEncoder().encode(toSign));
+  const jwt = `${toSign}.${b64urlBuf(sig)}`;
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`
+  });
+  const data = await res.json();
+  if (!data.access_token) throw new Error('Token error: ' + JSON.stringify(data));
+  TOKEN_CACHE[cacheKey] = data.access_token;
+  TOKEN_CACHE.exp = now + 3600;
+  return data.access_token;
+}
+
+// ── DATE HELPERS ──
+function dateStr(daysAgo) {
+  const d = new Date(); d.setDate(d.getDate() - daysAgo);
+  return d.toISOString().split('T')[0];
+}
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+}
+
+function setRange(days, btn) {
+  DAYS = days;
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const start = fmtDate(dateStr(days));
+  const end = fmtDate(dateStr(1));
+  document.getElementById('dateRangeLabel').textContent = `${start} → ${end}`;
+  loadAll();
+}
+
+// ── API CALLS ──
+async function scQuery(body) {
+  const token = await getToken(['https://www.googleapis.com/auth/webmasters.readonly']);
+  const r = await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SC_SITE)}/searchAnalytics/query`, {
+    method:'POST', headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
+async function gaQuery(body) {
+  const token = await getToken(['https://www.googleapis.com/auth/analytics.readonly']);
+  const r = await fetch(`https://analyticsdata.googleapis.com/v1beta/${GA4_PROPERTY}:runReport`, {
+    method:'POST', headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
+// ── FORMATTERS ──
+function fmt(n) { return Number(n).toLocaleString('en-GB'); }
+function fmtPos(p) { return Number(p).toFixed(1); }
+function fmtCtr(c) { return (Number(c)*100).toFixed(1)+'%'; }
+function fmtDur(s) { s=Math.round(s); return `${Math.floor(s/60)}m ${s%60}s`; }
+function fmtPct(n) { return (Number(n)*100).toFixed(1)+'%'; }
+
+function posBadge(p) {
+  p = Number(p);
+  if (p <= 1.5) return `<span class="pos-badge pos-1">🥇 #1</span>`;
+  if (p <= 3.5) return `<span class="pos-badge pos-3">Top 3</span>`;
+  if (p <= 10.5) return `<span class="pos-badge pos-10">Pg 1</span>`;
+  if (p <= 20.5) return `<span class="pos-badge pos-20">Pg 2</span>`;
+  return `<span class="pos-badge pos-out">Pg ${Math.ceil(p/10)}</span>`;
+}
+
+function ctrClass(ctr, pos) {
+  const c = Number(ctr)*100;
+  // Expected CTR by position
+  const expected = pos <= 1.5 ? 25 : pos <= 3 ? 12 : pos <= 5 ? 6 : pos <= 10 ? 3 : 1;
+  if (c >= expected * 0.8) return 'ctr-good';
+  if (c >= expected * 0.4) return 'ctr-mid';
+  return 'ctr-low';
+}
+
+function bar(val, max, cls='') {
+  const pct = Math.min(100, (val/max)*100);
+  return `<div class="bar-wrap"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>`;
+}
+
+function changeArrow(val, suffix='') {
+  if (val > 0) return `<span class="card-change up">▲ ${fmt(val)}${suffix} vs prev period</span>`;
+  if (val < 0) return `<span class="card-change down">▼ ${fmt(Math.abs(val))}${suffix} vs prev period</span>`;
+  return `<span class="card-change neutral">— no change</span>`;
+}
+
+// ── RENDER FUNCTIONS ──
+function renderSCCards(curr, prev) {
+  const dClick = curr.clicks - prev.clicks;
+  const dImpr = curr.impressions - prev.impressions;
+  const dCtr = ((curr.ctr - prev.ctr)*100).toFixed(2);
+  const dPos = (curr.position - prev.position).toFixed(1);
+  document.getElementById('scCards').innerHTML = `
+    <div class="card">
+      <div class="card-label">Total Clicks</div>
+      <div class="card-value">${fmt(curr.clicks)}</div>
+      ${changeArrow(dClick)}
+      <div class="card-sub">organic search traffic</div>
+    </div>
+    <div class="card green">
+      <div class="card-label">Impressions</div>
+      <div class="card-value">${curr.impressions>999999?(curr.impressions/1000000).toFixed(1)+'M':fmt(curr.impressions)}</div>
+      ${changeArrow(dImpr)}
+      <div class="card-sub">times shown in Google</div>
+    </div>
+    <div class="card yellow">
+      <div class="card-label">Click-Through Rate</div>
+      <div class="card-value">${(curr.ctr*100).toFixed(2)}%</div>
+      <span class="card-change ${dCtr>0?'up':dCtr<0?'down':'neutral'}">${dCtr>0?'▲':'▼'} ${Math.abs(dCtr)}% vs prev</span>
+      <div class="card-sub">clicks ÷ impressions</div>
+    </div>
+    <div class="card purple">
+      <div class="card-label">Avg Position</div>
+      <div class="card-value">${fmtPos(curr.position)}</div>
+      <span class="card-change ${dPos<0?'up':dPos>0?'down':'neutral'}">${dPos<0?'▲ improved':'▼ dropped'} ${Math.abs(dPos)} vs prev</span>
+      <div class="card-sub">average rank in Google</div>
+    </div>`;
+}
+
+function renderGACards(data) {
+  const rows = data.rows || [];
+  const get = name => {
+    const hdr = data.metricHeaders || [];
+    const idx = hdr.findIndex(h => h.name === name);
+    return idx >= 0 && rows[0] ? Number(rows[0].metricValues[idx].value) : 0;
+  };
+  const sessions = get('sessions');
+  const users = get('activeUsers');
+  const bounce = get('bounceRate');
+  const duration = get('averageSessionDuration');
+  const engage = get('engagementRate');
+  const newUsers = get('newUsers');
+
+  document.getElementById('gaCards').innerHTML = `
+    <div class="card">
+      <div class="card-label">Sessions</div>
+      <div class="card-value">${fmt(sessions)}</div>
+      <div class="card-sub">all channels</div>
+    </div>
+    <div class="card green">
+      <div class="card-label">Active Users</div>
+      <div class="card-value">${fmt(users)}</div>
+      <div class="card-sub">${fmt(newUsers)} new users</div>
+    </div>
+    <div class="card orange">
+      <div class="card-label">Bounce Rate</div>
+      <div class="card-value">${(bounce*100).toFixed(1)}%</div>
+      <div class="card-sub">${bounce < 0.4 ? '✅ Good' : bounce < 0.6 ? '⚠️ Average' : '🔴 High'}</div>
+    </div>
+    <div class="card yellow">
+      <div class="card-label">Avg Session</div>
+      <div class="card-value">${Math.floor(duration/60)}m</div>
+      <div class="card-sub">${fmtDur(duration)} total</div>
+    </div>
+    <div class="card purple">
+      <div class="card-label">Engagement Rate</div>
+      <div class="card-value">${(engage*100).toFixed(1)}%</div>
+      <div class="card-sub">${engage > 0.6 ? '✅ Strong' : '⚠️ Monitor'}</div>
+    </div>`;
+}
+
+function renderKeywords(rows) {
+  if (!rows || !rows.length) { document.getElementById('kw-top').innerHTML='<p class="loading">No data</p>'; return; }
+  const maxClicks = Math.max(...rows.map(r=>r.clicks));
+
+  // Top keywords table
+  let topHtml = `<table><thead><tr><th>Keyword</th><th>Clicks</th><th>Impr</th><th>CTR</th><th>Pos</th></tr></thead><tbody>`;
+  rows.slice(0,20).forEach(r => {
+    topHtml += `<tr>
+      <td><div class="kw" title="${r.keys[0]}">${r.keys[0]}</div>${bar(r.clicks,maxClicks)}</td>
+      <td><b>${fmt(r.clicks)}</b></td>
+      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
+      <td class="${ctrClass(r.ctr,r.position)}">${fmtCtr(r.ctr)}</td>
+      <td>${posBadge(r.position)}</td>
+    </tr>`;
+  });
+  topHtml += '</tbody></table>';
+  document.getElementById('kw-top').innerHTML = topHtml;
+
+  // Opportunities: high impressions, low CTR (position 4-20)
+  const opps = rows
+    .filter(r => r.position >= 4 && r.position <= 20 && r.impressions > 1000)
+    .sort((a,b) => b.impressions - a.impressions)
+    .slice(0,20);
+  const maxI = Math.max(...opps.map(r=>r.impressions));
+  let oppHtml = `<table><thead><tr><th>Keyword</th><th>Impr</th><th>CTR</th><th>Pos</th><th>Opportunity</th></tr></thead><tbody>`;
+  opps.forEach(r => {
+    const expectedCtr = r.position <= 5 ? 0.06 : 0.03;
+    const potentialClicks = Math.round(r.impressions * expectedCtr) - r.clicks;
+    oppHtml += `<tr>
+      <td><div class="kw" title="${r.keys[0]}">${r.keys[0]}</div>${bar(r.impressions,maxI,'orange')}</td>
+      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
+      <td class="ctr-low">${fmtCtr(r.ctr)}</td>
+      <td>${posBadge(r.position)}</td>
+      <td><span class="opp-tag opp-ctr">+${fmt(potentialClicks)} clicks potential</span></td>
+    </tr>`;
+  });
+  oppHtml += '</tbody></table>';
+  document.getElementById('kw-opp').innerHTML = oppHtml;
+
+  // By position distribution
+  const p1 = rows.filter(r=>r.position<=1.5).length;
+  const p13 = rows.filter(r=>r.position>1.5&&r.position<=3.5).length;
+  const p110 = rows.filter(r=>r.position>3.5&&r.position<=10.5).length;
+  const p210 = rows.filter(r=>r.position>10.5&&r.position<=20.5).length;
+  const p3 = rows.filter(r=>r.position>20.5).length;
+  const total = rows.length;
+  document.getElementById('kw-pos').innerHTML = `
+    <div style="margin-bottom:16px;">
+      <div class="summary-grid">
+        <div class="summary-item"><div class="val">${p1}</div><div class="lbl">#1 Position</div></div>
+        <div class="summary-item"><div class="val">${p1+p13}</div><div class="lbl">Top 3</div></div>
+        <div class="summary-item"><div class="val">${p1+p13+p110}</div><div class="lbl">Page 1 (Top 10)</div></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      ${[['#1',p1,'#854d0e'],['2–3',p13,'#166534'],['4–10',p110,'#1e40af'],['11–20',p210,'#6b21a8'],['21+',p3,'#991b1b']].map(([label,count,color])=>`
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:40px;font-size:0.78rem;font-weight:700;color:${color}">Pos ${label}</div>
+          <div style="flex:1;background:#f3f4f6;border-radius:4px;height:18px;overflow:hidden;">
+            <div style="width:${(count/total*100).toFixed(1)}%;height:100%;background:${color};border-radius:4px;"></div>
+          </div>
+          <div style="width:60px;text-align:right;font-size:0.78rem;font-weight:600;">${count} <span style="color:#9ca3af">(${(count/total*100).toFixed(0)}%)</span></div>
+        </div>`).join('')}
+    </div>`;
+
+  // Position dist for right panel
+  document.getElementById('posDistPanel').innerHTML = `
+    <div class="summary-grid" style="margin-bottom:12px;">
+      <div class="summary-item"><div class="val">${p1}</div><div class="lbl">#1 Ranks</div></div>
+      <div class="summary-item"><div class="val">${p1+p13}</div><div class="lbl">Top 3</div></div>
+      <div class="summary-item"><div class="val">${p1+p13+p110}</div><div class="lbl">Page 1</div></div>
+    </div>
+    <div style="margin-top:8px">
+      ${[['#1 only',p1,'#854d0e'],['Pos 2–3',p13,'#166534'],['Pos 4–10',p110,'#1e40af'],['Pos 11–20',p210,'#6b21a8'],['Pos 21+',p3,'#9ca3af']].map(([l,c,col])=>`
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:0.8rem;">
+          <div style="width:6px;height:6px;background:${col};border-radius:50%;flex-shrink:0;"></div>
+          <div style="flex:1;color:#374151;">${l}</div>
+          <div style="font-weight:700;color:${col};">${c}</div>
+          <div style="color:#9ca3af;width:35px;text-align:right">${(c/total*100).toFixed(0)}%</div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;font-size:0.78rem;color:#6b7280;">
+      Total keywords tracked: <b style="color:#003F7D">${fmt(total)}</b>
+    </div>`;
+}
+
+function renderPages(scRows, gaRows) {
+  if (!scRows || !scRows.length) { document.getElementById('pg-top').innerHTML='<p>No data</p>'; return; }
+  const maxC = Math.max(...scRows.map(r=>r.clicks));
+  let html = `<table><thead><tr><th>Page</th><th>Clicks</th><th>Impr</th><th>CTR</th><th>Pos</th></tr></thead><tbody>`;
+  scRows.slice(0,20).forEach(r => {
+    const pg = r.keys[0].replace('https://www.holidayextras.com','') || '/';
+    html += `<tr>
+      <td><div class="pg" title="${r.keys[0]}">${pg || '/'}</div>${bar(r.clicks,maxC)}</td>
+      <td><b>${fmt(r.clicks)}</b></td>
+      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
+      <td class="${ctrClass(r.ctr,r.position)}">${fmtCtr(r.ctr)}</td>
+      <td>${posBadge(r.position)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('pg-top').innerHTML = html;
+
+  // GA4 pages
+  if (gaRows && gaRows.length) {
+    const maxS = Math.max(...gaRows.slice(0,20).map(r=>Number(r.metricValues[0].value)));
+    let gaHtml = `<table><thead><tr><th>Page</th><th>Sessions</th><th>Bounce</th><th>Avg Time</th></tr></thead><tbody>`;
+    gaRows.slice(0,20).forEach(r => {
+      const pg = (r.dimensionValues[0].value || '/').replace('https://www.holidayextras.com','') || '/';
+      const sess = Number(r.metricValues[0].value);
+      const bounce = Number(r.metricValues[1].value);
+      const dur = Number(r.metricValues[2].value);
+      gaHtml += `<tr>
+        <td><div class="pg" title="${pg}">${pg}</div>${bar(sess,maxS)}</td>
+        <td><b>${fmt(sess)}</b></td>
+        <td class="${bounce<0.4?'ctr-good':bounce<0.6?'ctr-mid':'ctr-low'}">${(bounce*100).toFixed(0)}%</td>
+        <td>${fmtDur(dur)}</td>
+      </tr>`;
+    });
+    gaHtml += '</tbody></table>';
+    document.getElementById('pg-ga').innerHTML = gaHtml;
+  }
+}
+
+function renderChannels(rows, headers) {
+  if (!rows) { document.getElementById('channelPanel').innerHTML='<p>No data</p>'; return; }
+  const total = rows.reduce((s,r) => s + Number(r.metricValues[0].value), 0);
+  const colours = {'Organic Search':'#003F7D','Direct':'#FFD100','Referral':'#16a34a','Paid Search':'#ea580c','Organic Social':'#7c3aed','Email':'#0891b2','(Other)':'#9ca3af'};
+  const maxV = Math.max(...rows.map(r=>Number(r.metricValues[0].value)));
+  let html = '';
+  rows.slice(0,8).forEach(r => {
+    const ch = r.dimensionValues[0].value;
+    const val = Number(r.metricValues[0].value);
+    const pct = (val/total*100).toFixed(1);
+    const col = colours[ch] || '#9ca3af';
+    html += `<div class="channel-row">
+      <div class="channel-name" style="color:${col}">● ${ch}</div>
+      <div style="flex:1"><div class="bar-wrap"><div class="bar-fill" style="width:${(val/maxV*100).toFixed(0)}%;background:${col}"></div></div></div>
+      <div class="channel-val">${fmt(val)}</div>
+      <div class="channel-pct">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('channelPanel').innerHTML = html;
+}
+
+function renderEngagement(rows, headers) {
+  if (!rows || !rows[0]) return;
+  const vals = rows[0].metricValues;
+  const get = idx => Number(vals[idx]?.value || 0);
+  const sessions = get(0), users = get(1), bounce = get(2), dur = get(3), engage = get(4), pagesPerSess = get(5);
+  document.getElementById('engagePanel').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      ${[
+        ['Sessions', fmt(sessions), ''],
+        ['Active Users', fmt(users), ''],
+        ['Bounce Rate', (bounce*100).toFixed(1)+'%', bounce<0.4?'✅':bounce<0.6?'⚠️':'🔴'],
+        ['Engagement Rate', (engage*100).toFixed(1)+'%', engage>0.6?'✅':'⚠️'],
+        ['Avg Session', fmtDur(dur), dur>90?'✅':'⚠️'],
+        ['Pages/Session', pagesPerSess.toFixed(2), ''],
+      ].map(([l,v,icon])=>`
+        <div style="background:var(--hx-light);border-radius:8px;padding:10px;">
+          <div style="font-size:0.68rem;color:var(--gray);font-weight:700;text-transform:uppercase;">${l}</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--hx-blue);">${v} ${icon}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderOpportunities(rows) {
+  const opps = (rows || [])
+    .filter(r => r.position >= 4 && r.position <= 30 && r.impressions > 2000 && r.ctr < 0.04)
+    .sort((a,b) => b.impressions - a.impressions)
+    .slice(0, 25);
+
+  if (!opps.length) { document.getElementById('oppPanel').innerHTML='<p>No major opportunities found</p>'; return; }
+  const maxI = Math.max(...opps.map(r=>r.impressions));
+  let html = `<table><thead><tr><th>#</th><th>Keyword</th><th>Impressions</th><th>Current CTR</th><th>Avg Pos</th><th>Est. Extra Clicks (if CTR doubles)</th></tr></thead><tbody>`;
+  opps.forEach((r,i) => {
+    const potential = Math.round(r.impressions * Math.min(r.ctr*3, 0.15)) - r.clicks;
+    html += `<tr>
+      <td style="color:#9ca3af;font-size:0.78rem">${i+1}</td>
+      <td>
+        <div class="kw" title="${r.keys[0]}" style="max-width:300px"><b>${r.keys[0]}</b></div>
+        ${bar(r.impressions,maxI,'orange')}
+      </td>
+      <td><b>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</b></td>
+      <td class="ctr-low"><b>${fmtCtr(r.ctr)}</b></td>
+      <td>${posBadge(r.position)} <span style="color:#9ca3af;font-size:0.75rem">${fmtPos(r.position)}</span></td>
+      <td><span class="opp-tag opp-ctr" style="font-size:0.8rem">+${fmt(Math.max(0,potential))} clicks/month</span></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('oppPanel').innerHTML = html;
+}
+
+// ── TABS ──
+function switchTab(group, id, el) {
+  document.querySelectorAll(`#${group}-top,#${group}-opp,#${group}-pos,#${group}-ga`).forEach(t => { if(t) t.classList.remove('active'); });
+  const target = document.getElementById(`${group}-${id}`);
+  if (target) target.classList.add('active');
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── MAIN LOAD ──
+async function loadAll() {
+  document.getElementById('statusText').textContent = '● Loading...';
+  document.getElementById('statusText').className = 'status';
+
+  const end = dateStr(1);
+  const start = dateStr(DAYS);
+  const prevEnd = dateStr(DAYS + 1);
+  const prevStart = dateStr(DAYS * 2);
+
+  const d = new Date(); d.setDate(d.getDate() - DAYS);
+  document.getElementById('dateRangeLabel').textContent = `${fmtDate(start)} → ${fmtDate(end)}`;
+
+  try {
+    // Parallel requests
+    const [scCurr, scPrev, scKw, scPg, gaOverview, gaChannels, gaPages] = await Promise.all([
+
+      // SC: overall metrics current period
+      scQuery({ startDate: start, endDate: end, metrics: ['clicks','impressions','ctr','position'], rowLimit: 1 }),
+
+      // SC: overall metrics prev period
+      scQuery({ startDate: prevStart, endDate: prevEnd, metrics: ['clicks','impressions','ctr','position'], rowLimit: 1 }),
+
+      // SC: top keywords
+      scQuery({ startDate: start, endDate: end, dimensions: ['query'], metrics: ['clicks','impressions','ctr','position'], rowLimit: 500, orderBy: [{fieldName:'clicks',sortOrder:'descending'}] }),
+
+      // SC: top pages
+      scQuery({ startDate: start, endDate: end, dimensions: ['page'], metrics: ['clicks','impressions','ctr','position'], rowLimit: 25, orderBy: [{fieldName:'clicks',sortOrder:'descending'}] }),
+
+      // GA4: overview
+      gaQuery({ dateRanges:[{startDate:start,endDate:end}], metrics:[{name:'sessions'},{name:'activeUsers'},{name:'bounceRate'},{name:'averageSessionDuration'},{name:'engagementRate'},{name:'newUsers'}] }),
+
+      // GA4: channels
+      gaQuery({ dateRanges:[{startDate:start,endDate:end}], dimensions:[{name:'sessionDefaultChannelGroup'}], metrics:[{name:'sessions'},{name:'activeUsers'}], orderBys:[{metric:{metricName:'sessions'},desc:true}] }),
+
+      // GA4: top pages
+      gaQuery({ dateRanges:[{startDate:start,endDate:end}], dimensions:[{name:'pagePath'}], metrics:[{name:'sessions'},{name:'bounceRate'},{name:'averageSessionDuration'}], orderBys:[{metric:{metricName:'sessions'},desc:true}], limit:25 }),
+    ]);
+
+    // Extract summary row from SC
+    const curr = scCurr.rows?.[0] || {clicks:0,impressions:0,ctr:0,position:0};
+    const prev = scPrev.rows?.[0] || {clicks:0,impressions:0,ctr:0,position:0};
+
+    renderSCCards(curr, prev);
+    renderGACards(gaOverview);
+    renderKeywords(scKw.rows || []);
+    renderPages(scPg.rows || [], gaPages.rows || []);
+    renderChannels(gaChannels.rows || [], gaChannels.metricHeaders || []);
+    renderEngagement(gaOverview.rows || [], gaOverview.metricHeaders || []);
+    renderOpportunities(scKw.rows || []);
+
+    document.getElementById('statusText').textContent = '● Live';
+    document.getElementById('statusText').className = 'status live';
+    document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleString('en-GB')}`;
+
+  } catch(e) {
+    document.getElementById('statusText').textContent = '● Error';
+    document.getElementById('statusText').className = 'status';
+    console.error(e);
+    ['scCards','gaCards'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `<div class="err">Error loading data: ${e.message}</div>`;
+    });
+  }
+}
+
+// Init
+loadAll();
+</script>
+</body>
+</html>
