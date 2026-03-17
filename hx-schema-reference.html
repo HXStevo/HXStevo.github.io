@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HX Schema Markup — Ready to Paste</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+  h1 { color: #003F7D; }
+  h2 { color: #003F7D; margin-top: 40px; padding: 12px 16px; background: #003F7D; color: white; border-radius: 8px; }
+  h3 { color: #555; margin: 20px 0 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 12px; line-height: 1.5; position: relative; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: #FFD100; color: #003F7D; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 700; }
+  .copy-btn:hover { background: #ffc800; }
+  .tag { display: inline-block; background: #dbeafe; color: #1d4ed8; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin: 2px; font-weight: 600; }
+  .note { background: #fffbeb; border: 1px solid #fcd34d; padding: 12px 16px; border-radius: 8px; font-size: 0.875rem; margin: 16px 0; }
+  .page-block { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+</style>
+</head>
+<body>
+<h1>🏷️ HX Schema Markup — Ready to Paste</h1>
+<div class="note">
+  <strong>How to implement:</strong> Paste each &lt;script&gt; block into the &lt;head&gt; section of the corresponding page. 
+  Each page gets 5 schema blocks: Organization, BreadcrumbList, WebPage (with AggregateRating), ItemList (Products), and FAQPage.
+  Validate at: <a href="https://validator.schema.org/" target="_blank">validator.schema.org</a> | 
+  Test rich results: <a href="https://search.google.com/test/rich-results" target="_blank">search.google.com/test/rich-results</a>
+</div>
+<div class="page-block"><h2>🔗 Gatwick Airport Parking</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/gatwick-airport-parking.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-gatwick-airport-parking-Organization"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-parking-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983. Compare and book airport parking, hotels, lounges and transfers.",
+  "foundingDate": "1983",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+44-0800-316-6098",
+    "contactType": "customer service",
+    "areaServed": "GB"
+  },
+  "sameAs": [
+    "https://www.facebook.com/holidayextras",
+    "https://twitter.com/holidayextras",
+    "https://www.instagram.com/holidayextras"
+  ]
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-gatwick-airport-parking-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-parking-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Parking",
+      "item": "https://www.holidayextras.com/airport-parking.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Gatwick Airport Parking",
+      "item": "https://www.holidayextras.com/gatwick-airport-parking.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-gatwick-airport-parking-WebPage"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-parking-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Gatwick Airport Parking | Holiday Extras",
+  "url": "https://www.holidayextras.com/gatwick-airport-parking.html",
+  "description": "Compare Gatwick airport parking and save up to 80%. Meet & greet, park & ride and on-airport options. Free cancellation on all bookings.",
+  "inLanguage": "en-GB",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Holiday Extras",
+    "url": "https://www.holidayextras.com"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "@id": "https://www.holidayextras.com/gatwick-airport-parking.html#breadcrumb"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "9.2",
+    "reviewCount": "185432",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-gatwick-airport-parking-ItemList"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-parking-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Gatwick Airport Car Parks",
+  "description": "Compare Gatwick airport parking options",
+  "url": "https://www.holidayextras.com/gatwick-airport-parking.html",
+  "numberOfItems": 5,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "APH Gatwick Parking",
+        "description": "Airport parking at Gatwick Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "5.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/gatwick-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.6",
+          "reviewCount": "550",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Purple Parking Gatwick",
+        "description": "Airport parking at Gatwick Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "5.00",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/gatwick-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.3",
+          "reviewCount": "1453",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "Maple Manor Meet & Greet Gatwick",
+        "description": "Airport parking at Gatwick Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "13.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/gatwick-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.3",
+          "reviewCount": "2178",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Product",
+        "name": "Cophall Parking Gatwick",
+        "description": "Airport parking at Gatwick Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "3.65",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/gatwick-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.2",
+          "reviewCount": "457",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "Product",
+        "name": "I Love Meet & Greet Gatwick",
+        "description": "Airport parking at Gatwick Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "12.99",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/gatwick-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.3",
+          "reviewCount": "595",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-gatwick-airport-parking-FAQPage"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-parking-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much is parking at Gatwick Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gatwick airport parking starts from \u00a33.65 per day when booked in advance with Holiday Extras. Official on-the-day prices can be significantly higher. Book early to save up to 75%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I park for free at Gatwick Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no free parking at Gatwick Airport itself. Short-term set-down is available at the terminal forecourts for a limited time. For all other parking, paid options apply. Pre-booked options start from \u00a33.65/day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Meet and Greet Parking at Gatwick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Meet and Greet parking at Gatwick means a professional driver meets you at the terminal, takes your car and parks it for you. On return, your car is delivered back to arrivals. It's the most convenient option with no shuttle bus required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much is it to park at Gatwick for 7 days?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 7-day stay at Gatwick with Holiday Extras starts from around \u00a325 when booked in advance. Prices vary by car park and how far in advance you book \u2014 the earlier the cheaper."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I park at Gatwick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can park at Gatwick in the official Short Stay and Long Stay car parks, or at off-airport park and ride options such as APH, Purple Parking, Maple Manor, Cophall, and I Love Meet and Greet. Holiday Extras compares all options."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I just turn up and park at Gatwick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can turn up and park at Gatwick's official car parks without pre-booking, but prices will be significantly higher than pre-booked rates. We always recommend booking in advance to save up to 75%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long can you stay in Gatwick Short Stay car park?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gatwick Short Stay car parks are designed for stays of up to 24 hours but can accommodate longer stays. For stays over a week, the Long Stay car parks or off-airport park and ride options offer much better value."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much is Long Stay Parking at Gatwick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Long Stay parking at Gatwick Airport starts from \u00a33.65 per day with Holiday Extras when booked in advance. Official Gatwick Long Stay prices are higher \u2014 booking through Holiday Extras saves up to 75%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to pay to pick up at Gatwick?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, picking up passengers at Gatwick requires use of the designated pick-up zones or short stay car parks, which charge by the minute. A free waiting area is available further from the terminal for drivers waiting for arriving passengers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much is Gatwick Short Stay car park?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gatwick Short Stay parking prices depend on duration and terminal. For the best rates, pre-booking through Holiday Extras is recommended \u2014 with savings of up to 75% on official airport prices."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Manchester Airport Parking</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/manchester-airport-parking.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-manchester-airport-parking-Organization"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-parking-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983. Compare and book airport parking, hotels, lounges and transfers.",
+  "foundingDate": "1983",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+44-0800-316-6098",
+    "contactType": "customer service",
+    "areaServed": "GB"
+  },
+  "sameAs": [
+    "https://www.facebook.com/holidayextras",
+    "https://twitter.com/holidayextras",
+    "https://www.instagram.com/holidayextras"
+  ]
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-manchester-airport-parking-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-parking-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Parking",
+      "item": "https://www.holidayextras.com/airport-parking.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Manchester Airport Parking",
+      "item": "https://www.holidayextras.com/manchester-airport-parking.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-manchester-airport-parking-WebPage"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-parking-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Manchester Airport Parking | Holiday Extras",
+  "url": "https://www.holidayextras.com/manchester-airport-parking.html",
+  "description": "Compare Manchester airport parking and save up to 80%. Meet & greet, park & ride and on-airport options. Free cancellation on all bookings.",
+  "inLanguage": "en-GB",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Holiday Extras",
+    "url": "https://www.holidayextras.com"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "@id": "https://www.holidayextras.com/manchester-airport-parking.html#breadcrumb"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "9.1",
+    "reviewCount": "210500",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-manchester-airport-parking-ItemList"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-parking-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Manchester Airport Car Parks",
+  "description": "Compare Manchester airport parking options",
+  "url": "https://www.holidayextras.com/manchester-airport-parking.html",
+  "numberOfItems": 4,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "Jet Parks 1 Manchester",
+        "description": "Airport parking at Manchester Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "3.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/manchester-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.0",
+          "reviewCount": "4200",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Jet Parks 3 Manchester",
+        "description": "Airport parking at Manchester Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "2.99",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/manchester-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.8",
+          "reviewCount": "3100",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "Mid Stay Manchester",
+        "description": "Airport parking at Manchester Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "4.20",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/manchester-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.9",
+          "reviewCount": "2800",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Product",
+        "name": "Meet and Greet Manchester",
+        "description": "Airport parking at Manchester Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "11.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/manchester-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.2",
+          "reviewCount": "1200",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-manchester-airport-parking-FAQPage"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-parking-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much is parking at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Manchester Airport parking starts from \u00a32.99 per day when booked in advance with Holiday Extras \u2014 saving up to 80% versus on-the-day gate prices."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the parking options at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Manchester Airport offers on-airport official car parks (Short Stay, Long Stay, Multi-Storey) as well as off-airport park and ride options. Holiday Extras compares all options with free cancellation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far in advance should I book Manchester Airport parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Book at least 3\u20134 weeks in advance for the best prices. The earlier you book, the more you save \u2014 early bookers can save up to 80% versus turning up on the day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there free parking at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no free parking at Manchester Airport. Set-down areas are available for short drop-offs. For all stays, paid parking applies. Pre-booked rates start from \u00a32.99/day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which terminal do I park at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Manchester Airport has Terminals 1, 2, and 3. The correct terminal depends on your airline. Most off-airport park and ride car parks serve all terminals via shuttle. Always check your terminal before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I cancel my Manchester Airport parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All Manchester Airport parking booked through Holiday Extras includes free cancellation up to 24 hours before arrival. Book now at today's price with no risk."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the shuttle take at Manchester Airport parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Shuttle transfer times at Manchester off-airport car parks typically range from 5 to 15 minutes. Shuttles run frequently \u2014 usually every 15\u201330 minutes \u2014 from all park and ride facilities."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the cheapest way to park at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The cheapest way is to book an off-airport park and ride car park 3\u20134 weeks in advance through Holiday Extras, where prices start from \u00a32.99/day \u2014 saving up to 80% on gate prices."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Luton Airport Parking</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/luton-airport-parking.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-luton-airport-parking-Organization"><button class="copy-btn" onclick="copyCode('schema-luton-airport-parking-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983. Compare and book airport parking, hotels, lounges and transfers.",
+  "foundingDate": "1983",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+44-0800-316-6098",
+    "contactType": "customer service",
+    "areaServed": "GB"
+  },
+  "sameAs": [
+    "https://www.facebook.com/holidayextras",
+    "https://twitter.com/holidayextras",
+    "https://www.instagram.com/holidayextras"
+  ]
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-luton-airport-parking-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-luton-airport-parking-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Parking",
+      "item": "https://www.holidayextras.com/airport-parking.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Luton Airport Parking",
+      "item": "https://www.holidayextras.com/luton-airport-parking.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-luton-airport-parking-WebPage"><button class="copy-btn" onclick="copyCode('schema-luton-airport-parking-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Luton Airport Parking | Holiday Extras",
+  "url": "https://www.holidayextras.com/luton-airport-parking.html",
+  "description": "Compare Luton airport parking and save up to 80%. Meet & greet, park & ride and on-airport options. Free cancellation on all bookings.",
+  "inLanguage": "en-GB",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Holiday Extras",
+    "url": "https://www.holidayextras.com"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "@id": "https://www.holidayextras.com/luton-airport-parking.html#breadcrumb"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "9.0",
+    "reviewCount": "95000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-luton-airport-parking-ItemList"><button class="copy-btn" onclick="copyCode('schema-luton-airport-parking-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Luton Airport Car Parks",
+  "description": "Compare Luton airport parking options",
+  "url": "https://www.holidayextras.com/luton-airport-parking.html",
+  "numberOfItems": 2,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "Airparks Luton",
+        "description": "Airport parking at Luton Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "3.25",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/luton-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.0",
+          "reviewCount": "1800",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Airport Parking Luton Premium",
+        "description": "Airport parking at Luton Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "4.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/luton-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.3",
+          "reviewCount": "950",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-luton-airport-parking-FAQPage"><button class="copy-btn" onclick="copyCode('schema-luton-airport-parking-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much is parking at Luton Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Luton Airport parking starts from \u00a33.25 per day with Holiday Extras when booked in advance. Prices rise closer to your travel date \u2014 always book early for the best savings."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What parking options are available at Luton Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Luton Airport offers official on-airport parking (Short Stay, Long Stay, Business, Express Drop) plus off-airport park and ride options. Holiday Extras compares all available car parks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there free parking at Luton Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no free parking at Luton Airport. Short-term set-down is available at the terminal for a limited time. Pre-booked options start from \u00a33.25/day through Holiday Extras."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get from Luton Airport car park to the terminal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most off-airport Luton car parks provide regular shuttle bus transfers to and from the terminal, typically running every 15\u201330 minutes. Transfer times range from 5 to 20 minutes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I cancel Luton Airport parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All bookings made through Holiday Extras include free cancellation up to 24 hours before your arrival date. Book early to secure the best price with full flexibility."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Stansted Airport Parking</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/stansted-airport-parking.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-stansted-airport-parking-Organization"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-parking-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983. Compare and book airport parking, hotels, lounges and transfers.",
+  "foundingDate": "1983",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+44-0800-316-6098",
+    "contactType": "customer service",
+    "areaServed": "GB"
+  },
+  "sameAs": [
+    "https://www.facebook.com/holidayextras",
+    "https://twitter.com/holidayextras",
+    "https://www.instagram.com/holidayextras"
+  ]
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-stansted-airport-parking-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-parking-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Parking",
+      "item": "https://www.holidayextras.com/airport-parking.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Stansted Airport Parking",
+      "item": "https://www.holidayextras.com/stansted-airport-parking.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-stansted-airport-parking-WebPage"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-parking-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Stansted Airport Parking | Holiday Extras",
+  "url": "https://www.holidayextras.com/stansted-airport-parking.html",
+  "description": "Compare Stansted airport parking and save up to 80%. Meet & greet, park & ride and on-airport options. Free cancellation on all bookings.",
+  "inLanguage": "en-GB",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Holiday Extras",
+    "url": "https://www.holidayextras.com"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "@id": "https://www.holidayextras.com/stansted-airport-parking.html#breadcrumb"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "9.1",
+    "reviewCount": "120000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-stansted-airport-parking-ItemList"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-parking-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Stansted Airport Car Parks",
+  "description": "Compare Stansted airport parking options",
+  "url": "https://www.holidayextras.com/stansted-airport-parking.html",
+  "numberOfItems": 2,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "Long Stay Stansted",
+        "description": "Airport parking at Stansted Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "4.99",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/stansted-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.1",
+          "reviewCount": "2400",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Mid Stay Stansted",
+        "description": "Airport parking at Stansted Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "6.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/stansted-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.0",
+          "reviewCount": "1800",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-stansted-airport-parking-FAQPage"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-parking-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much is parking at Stansted Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Stansted Airport parking starts from \u00a34.99 per day with Holiday Extras when booked in advance. Official on-the-day prices can be significantly higher."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the parking options at Stansted Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Stansted offers Mid-Stay, Long Stay, and Short Stay official car parks, plus off-airport park and ride options. All options are compared on Holiday Extras."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there free parking at Stansted Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no free parking at Stansted Airport. Limited set-down time is available at the terminal. Pre-booked rates through Holiday Extras start from \u00a34.99/day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far in advance should I book Stansted parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Book at least 2\u20133 weeks in advance for the best Stansted parking prices. Prices increase significantly as your travel date gets closer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I cancel Stansted Airport parking?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All Stansted parking bookings through Holiday Extras include free cancellation up to 24 hours before arrival."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Heathrow Airport Parking</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/heathrow-airport-parking.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-heathrow-airport-parking-Organization"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-parking-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983. Compare and book airport parking, hotels, lounges and transfers.",
+  "foundingDate": "1983",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+44-0800-316-6098",
+    "contactType": "customer service",
+    "areaServed": "GB"
+  },
+  "sameAs": [
+    "https://www.facebook.com/holidayextras",
+    "https://twitter.com/holidayextras",
+    "https://www.instagram.com/holidayextras"
+  ]
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-heathrow-airport-parking-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-parking-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Parking",
+      "item": "https://www.holidayextras.com/airport-parking.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Heathrow Airport Parking",
+      "item": "https://www.holidayextras.com/heathrow-airport-parking.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-heathrow-airport-parking-WebPage"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-parking-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Heathrow Airport Parking | Holiday Extras",
+  "url": "https://www.holidayextras.com/heathrow-airport-parking.html",
+  "description": "Compare Heathrow airport parking and save up to 80%. Meet & greet, park & ride and on-airport options. Free cancellation on all bookings.",
+  "inLanguage": "en-GB",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Holiday Extras",
+    "url": "https://www.holidayextras.com"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "@id": "https://www.holidayextras.com/heathrow-airport-parking.html#breadcrumb"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "9.0",
+    "reviewCount": "165000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-heathrow-airport-parking-ItemList"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-parking-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Heathrow Airport Car Parks",
+  "description": "Compare Heathrow airport parking options",
+  "url": "https://www.holidayextras.com/heathrow-airport-parking.html",
+  "numberOfItems": 3,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "APH Heathrow Parking",
+        "description": "Airport parking at Heathrow Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "6.50",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/heathrow-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.2",
+          "reviewCount": "4100",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "Maple Manor Heathrow",
+        "description": "Airport parking at Heathrow Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "5.99",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/heathrow-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.1",
+          "reviewCount": "3200",
+          "bestRating": "10"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "Purple Parking Heathrow",
+        "description": "Airport parking at Heathrow Airport. Secure, CCTV-monitored with shuttle transfers.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "6.25",
+          "priceValidUntil": "2026-12-31",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.holidayextras.com/heathrow-airport-parking.html"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "9.0",
+          "reviewCount": "2800",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-heathrow-airport-parking-FAQPage"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-parking-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much is parking at Heathrow Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Heathrow Airport parking starts from \u00a35.99 per day with Holiday Extras when booked in advance \u2014 saving up to 70% versus official on-the-day prices."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which terminal do I use at Heathrow?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Heathrow has Terminals 2, 3, 4, and 5. Terminal 1 is closed. Your terminal depends on your airline \u2014 check your booking confirmation. Most off-airport car parks serve all terminals via shuttle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the cheapest way to park at Heathrow?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Book an off-airport park and ride car park 3\u20134 weeks in advance through Holiday Extras. Prices start from \u00a35.99/day \u2014 significantly cheaper than official Heathrow car park rates."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there free parking at Heathrow Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no free parking at Heathrow Airport. Limited drop-off areas exist at each terminal forecourt. Pre-booked parking starts from \u00a35.99/day through Holiday Extras."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the Heathrow Express take from the car park?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Transfer times from off-airport Heathrow car parks vary, but most shuttle buses take 10\u201325 minutes to reach the terminal. Factor in extra time when planning your departure."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Gatwick Airport Hotels</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/gatwick-airport-hotels.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-gatwick-airport-hotels-Organization"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-hotels-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983.",
+  "foundingDate": "1983"
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-gatwick-airport-hotels-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-hotels-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Hotels",
+      "item": "https://www.holidayextras.com/airport-hotels.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Gatwick Airport Hotels",
+      "item": "https://www.holidayextras.com/gatwick-airport-hotels.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-gatwick-airport-hotels-WebPage"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-hotels-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Gatwick Airport Hotels | Holiday Extras",
+  "url": "https://www.holidayextras.com/gatwick-airport-hotels.html",
+  "description": "Compare Gatwick airport hotels from \u00a328/night. Top-rated hotels with parking included. Free cancellation.",
+  "inLanguage": "en-GB",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "8.9",
+    "reviewCount": "95000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-gatwick-airport-hotels-ItemList"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-hotels-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Gatwick Airport Hotels",
+  "description": "Top-rated hotels near Gatwick Airport with parking and free cancellation",
+  "url": "https://www.holidayextras.com/gatwick-airport-hotels.html",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "LodgingBusiness",
+        "name": "Holiday Extras Gatwick Airport Hotel",
+        "description": "Top-rated hotel near Gatwick Airport with optional parking packages. Free cancellation available.",
+        "url": "https://www.holidayextras.com/gatwick-airport-hotels.html",
+        "priceRange": "\u00a3\u00a3",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Gatwick",
+          "addressCountry": "GB"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "28",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.9",
+          "reviewCount": "95000",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-gatwick-airport-hotels-FAQPage"><button class="copy-btn" onclick="copyCode('schema-gatwick-airport-hotels-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much do Gatwick Airport hotels cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gatwick Airport hotels start from \u00a328 per night when booked with Holiday Extras. Prices include free cancellation and optional parking packages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which is the best hotel at Gatwick Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Holiday Extras compares all top-rated hotels near Gatwick Airport. Filter by rating, price, and facilities to find the best option for your trip. All hotels include free cancellation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get a hotel and parking package at Gatwick Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Holiday Extras offers hotel and parking packages at Gatwick Airport, combining your overnight stay with secure parking. These packages offer excellent value versus booking hotel and parking separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Gatwick Airport hotels include breakfast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Breakfast availability varies by hotel at Gatwick Airport. When comparing hotels on Holiday Extras, you can filter by hotels that include breakfast. Check the facilities listed for each property before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far are hotels from Gatwick Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hotels listed by Holiday Extras near Gatwick Airport range from on-airport properties directly connected to the terminal, to hotels a short transfer away. Transfer details are listed for each property on the booking page."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Manchester Airport Hotels</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/manchester-airport-hotels.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-manchester-airport-hotels-Organization"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-hotels-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983.",
+  "foundingDate": "1983"
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-manchester-airport-hotels-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-hotels-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Hotels",
+      "item": "https://www.holidayextras.com/airport-hotels.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Manchester Airport Hotels",
+      "item": "https://www.holidayextras.com/manchester-airport-hotels.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-manchester-airport-hotels-WebPage"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-hotels-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Manchester Airport Hotels | Holiday Extras",
+  "url": "https://www.holidayextras.com/manchester-airport-hotels.html",
+  "description": "Compare Manchester airport hotels from \u00a335/night. Top-rated hotels with parking included. Free cancellation.",
+  "inLanguage": "en-GB",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "8.8",
+    "reviewCount": "110000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-manchester-airport-hotels-ItemList"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-hotels-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Manchester Airport Hotels",
+  "description": "Top-rated hotels near Manchester Airport with parking and free cancellation",
+  "url": "https://www.holidayextras.com/manchester-airport-hotels.html",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "LodgingBusiness",
+        "name": "Holiday Extras Manchester Airport Hotel",
+        "description": "Top-rated hotel near Manchester Airport with optional parking packages. Free cancellation available.",
+        "url": "https://www.holidayextras.com/manchester-airport-hotels.html",
+        "priceRange": "\u00a3\u00a3",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Manchester",
+          "addressCountry": "GB"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "35",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.8",
+          "reviewCount": "110000",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-manchester-airport-hotels-FAQPage"><button class="copy-btn" onclick="copyCode('schema-manchester-airport-hotels-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much do Manchester Airport hotels cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Manchester Airport hotels start from \u00a335 per night when booked with Holiday Extras. Prices include free cancellation and optional parking packages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which is the best hotel at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Holiday Extras compares all top-rated hotels near Manchester Airport. Filter by rating, price, and facilities to find the best option for your trip. All hotels include free cancellation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get a hotel and parking package at Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Holiday Extras offers hotel and parking packages at Manchester Airport, combining your overnight stay with secure parking. These packages offer excellent value versus booking hotel and parking separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Manchester Airport hotels include breakfast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Breakfast availability varies by hotel at Manchester Airport. When comparing hotels on Holiday Extras, you can filter by hotels that include breakfast. Check the facilities listed for each property before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far are hotels from Manchester Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hotels listed by Holiday Extras near Manchester Airport range from on-airport properties directly connected to the terminal, to hotels a short transfer away. Transfer details are listed for each property on the booking page."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Luton Airport Hotels</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/luton-airport-hotels.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-luton-airport-hotels-Organization"><button class="copy-btn" onclick="copyCode('schema-luton-airport-hotels-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983.",
+  "foundingDate": "1983"
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-luton-airport-hotels-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-luton-airport-hotels-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Hotels",
+      "item": "https://www.holidayextras.com/airport-hotels.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Luton Airport Hotels",
+      "item": "https://www.holidayextras.com/luton-airport-hotels.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-luton-airport-hotels-WebPage"><button class="copy-btn" onclick="copyCode('schema-luton-airport-hotels-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Luton Airport Hotels | Holiday Extras",
+  "url": "https://www.holidayextras.com/luton-airport-hotels.html",
+  "description": "Compare Luton airport hotels from \u00a332/night. Top-rated hotels with parking included. Free cancellation.",
+  "inLanguage": "en-GB",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "8.7",
+    "reviewCount": "62000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-luton-airport-hotels-ItemList"><button class="copy-btn" onclick="copyCode('schema-luton-airport-hotels-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Luton Airport Hotels",
+  "description": "Top-rated hotels near Luton Airport with parking and free cancellation",
+  "url": "https://www.holidayextras.com/luton-airport-hotels.html",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "LodgingBusiness",
+        "name": "Holiday Extras Luton Airport Hotel",
+        "description": "Top-rated hotel near Luton Airport with optional parking packages. Free cancellation available.",
+        "url": "https://www.holidayextras.com/luton-airport-hotels.html",
+        "priceRange": "\u00a3\u00a3",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Luton",
+          "addressCountry": "GB"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "32",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.7",
+          "reviewCount": "62000",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-luton-airport-hotels-FAQPage"><button class="copy-btn" onclick="copyCode('schema-luton-airport-hotels-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much do Luton Airport hotels cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Luton Airport hotels start from \u00a332 per night when booked with Holiday Extras. Prices include free cancellation and optional parking packages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which is the best hotel at Luton Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Holiday Extras compares all top-rated hotels near Luton Airport. Filter by rating, price, and facilities to find the best option for your trip. All hotels include free cancellation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get a hotel and parking package at Luton Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Holiday Extras offers hotel and parking packages at Luton Airport, combining your overnight stay with secure parking. These packages offer excellent value versus booking hotel and parking separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Luton Airport hotels include breakfast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Breakfast availability varies by hotel at Luton Airport. When comparing hotels on Holiday Extras, you can filter by hotels that include breakfast. Check the facilities listed for each property before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far are hotels from Luton Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hotels listed by Holiday Extras near Luton Airport range from on-airport properties directly connected to the terminal, to hotels a short transfer away. Transfer details are listed for each property on the booking page."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Stansted Airport Hotels</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/stansted-airport-hotels.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-stansted-airport-hotels-Organization"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-hotels-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983.",
+  "foundingDate": "1983"
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-stansted-airport-hotels-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-hotels-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Hotels",
+      "item": "https://www.holidayextras.com/airport-hotels.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Stansted Airport Hotels",
+      "item": "https://www.holidayextras.com/stansted-airport-hotels.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-stansted-airport-hotels-WebPage"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-hotels-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Stansted Airport Hotels | Holiday Extras",
+  "url": "https://www.holidayextras.com/stansted-airport-hotels.html",
+  "description": "Compare Stansted airport hotels from \u00a340/night. Top-rated hotels with parking included. Free cancellation.",
+  "inLanguage": "en-GB",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "8.8",
+    "reviewCount": "58000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-stansted-airport-hotels-ItemList"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-hotels-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Stansted Airport Hotels",
+  "description": "Top-rated hotels near Stansted Airport with parking and free cancellation",
+  "url": "https://www.holidayextras.com/stansted-airport-hotels.html",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "LodgingBusiness",
+        "name": "Holiday Extras Stansted Airport Hotel",
+        "description": "Top-rated hotel near Stansted Airport with optional parking packages. Free cancellation available.",
+        "url": "https://www.holidayextras.com/stansted-airport-hotels.html",
+        "priceRange": "\u00a3\u00a3",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Stansted",
+          "addressCountry": "GB"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "40",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.8",
+          "reviewCount": "58000",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-stansted-airport-hotels-FAQPage"><button class="copy-btn" onclick="copyCode('schema-stansted-airport-hotels-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much do Stansted Airport hotels cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Stansted Airport hotels start from \u00a340 per night when booked with Holiday Extras. Prices include free cancellation and optional parking packages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which is the best hotel at Stansted Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Holiday Extras compares all top-rated hotels near Stansted Airport. Filter by rating, price, and facilities to find the best option for your trip. All hotels include free cancellation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get a hotel and parking package at Stansted Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Holiday Extras offers hotel and parking packages at Stansted Airport, combining your overnight stay with secure parking. These packages offer excellent value versus booking hotel and parking separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Stansted Airport hotels include breakfast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Breakfast availability varies by hotel at Stansted Airport. When comparing hotels on Holiday Extras, you can filter by hotels that include breakfast. Check the facilities listed for each property before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far are hotels from Stansted Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hotels listed by Holiday Extras near Stansted Airport range from on-airport properties directly connected to the terminal, to hotels a short transfer away. Transfer details are listed for each property on the booking page."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div><div class="page-block"><h2>🔗 Heathrow Airport Hotels</h2><p style="color:#666;font-size:0.875rem;">URL: https://www.holidayextras.com/heathrow-airport-hotels.html</p><div style="margin:8px 0;"><span class="tag">Organization</span><span class="tag">BreadcrumbList</span><span class="tag">WebPage</span><span class="tag">ItemList</span><span class="tag">FAQPage</span></div><h3>🏢 Organization — Brand identity, logo, contact, social profiles</h3><pre id="schema-heathrow-airport-hotels-Organization"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-hotels-Organization')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Holiday Extras",
+  "url": "https://www.holidayextras.com",
+  "logo": "https://www.holidayextras.com/static/img/holidayextras-logo.png",
+  "description": "The UK's leading airport extras specialist since 1983.",
+  "foundingDate": "1983"
+}
+&lt;/script&gt;</pre><h3>🍞 BreadcrumbList — Breadcrumb trail in SERPs</h3><pre id="schema-heathrow-airport-hotels-BreadcrumbList"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-hotels-BreadcrumbList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.holidayextras.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Airport Hotels",
+      "item": "https://www.holidayextras.com/airport-hotels.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Heathrow Airport Hotels",
+      "item": "https://www.holidayextras.com/heathrow-airport-hotels.html"
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>📄 WebPage + AggregateRating — Star ratings in search results</h3><pre id="schema-heathrow-airport-hotels-WebPage"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-hotels-WebPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Heathrow Airport Hotels | Holiday Extras",
+  "url": "https://www.holidayextras.com/heathrow-airport-hotels.html",
+  "description": "Compare Heathrow airport hotels from \u00a355/night. Top-rated hotels with parking included. Free cancellation.",
+  "inLanguage": "en-GB",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "8.9",
+    "reviewCount": "145000",
+    "bestRating": "10",
+    "worstRating": "1"
+  }
+}
+&lt;/script&gt;</pre><h3>📋 ItemList + Product/LodgingBusiness — Structured product listings</h3><pre id="schema-heathrow-airport-hotels-ItemList"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-hotels-ItemList')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Heathrow Airport Hotels",
+  "description": "Top-rated hotels near Heathrow Airport with parking and free cancellation",
+  "url": "https://www.holidayextras.com/heathrow-airport-hotels.html",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "LodgingBusiness",
+        "name": "Holiday Extras Heathrow Airport Hotel",
+        "description": "Top-rated hotel near Heathrow Airport with optional parking packages. Free cancellation available.",
+        "url": "https://www.holidayextras.com/heathrow-airport-hotels.html",
+        "priceRange": "\u00a3\u00a3",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Heathrow",
+          "addressCountry": "GB"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "GBP",
+          "price": "55",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "8.9",
+          "reviewCount": "145000",
+          "bestRating": "10"
+        }
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre><h3>❓ FAQPage — FAQ rich snippets in Google results</h3><pre id="schema-heathrow-airport-hotels-FAQPage"><button class="copy-btn" onclick="copyCode('schema-heathrow-airport-hotels-FAQPage')">Copy</button>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much do Heathrow Airport hotels cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Heathrow Airport hotels start from \u00a355 per night when booked with Holiday Extras. Prices include free cancellation and optional parking packages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which is the best hotel at Heathrow Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Holiday Extras compares all top-rated hotels near Heathrow Airport. Filter by rating, price, and facilities to find the best option for your trip. All hotels include free cancellation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get a hotel and parking package at Heathrow Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Holiday Extras offers hotel and parking packages at Heathrow Airport, combining your overnight stay with secure parking. These packages offer excellent value versus booking hotel and parking separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Heathrow Airport hotels include breakfast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Breakfast availability varies by hotel at Heathrow Airport. When comparing hotels on Holiday Extras, you can filter by hotels that include breakfast. Check the facilities listed for each property before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How far are hotels from Heathrow Airport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hotels listed by Holiday Extras near Heathrow Airport range from on-airport properties directly connected to the terminal, to hotels a short transfer away. Transfer details are listed for each property on the booking page."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre></div>
+<script>
+function copyCode(id) {
+  const pre = document.getElementById(id);
+  const text = pre.innerText.replace(/^Copy\n/, '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = pre.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+</script>
+</body></html>
