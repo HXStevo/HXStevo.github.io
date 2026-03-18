@@ -3,1341 +3,1061 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HX SEO Performance Report</title>
+<title>SEO Performance Report &#8212; Search Console &amp; Rankings</title>
 <style>
-  :root {
-    --bg: #0f1117;
-    --card: #1e293b;
-    --border: #334155;
-    --blue: #3b82f6;
-    --green: #22c55e;
-    --red: #ef4444;
-    --yellow: #f59e0b;
-    --orange: #f97316;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --sidebar-w: 240px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
-
-  /* Sidebar */
-  #sidebar {
-    position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
-    background: #0a0d14; border-right: 1px solid var(--border);
-    overflow-y: auto; z-index: 100; display: flex; flex-direction: column;
-  }
-  #sidebar .logo {
-    padding: 20px 16px 16px; border-bottom: 1px solid var(--border);
-  }
-  #sidebar .logo h1 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
-  #sidebar .logo p { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  #sidebar nav { padding: 12px 8px; flex: 1; }
-  #sidebar nav a {
-    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-    color: var(--muted); text-decoration: none; border-radius: 6px;
-    font-size: 12px; font-weight: 500; margin-bottom: 2px; transition: all 0.15s;
-  }
-  #sidebar nav a:hover, #sidebar nav a.active { background: var(--card); color: var(--text); }
-  #sidebar nav a .icon { font-size: 14px; width: 20px; text-align: center; }
-  #sidebar .generated { padding: 12px 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); }
-
-  /* Main content */
-  #main { margin-left: var(--sidebar-w); padding: 0; }
-
-  /* Header */
-  #header {
-    background: linear-gradient(135deg, #0f1117 0%, #1e2d4a 100%);
-    border-bottom: 1px solid var(--border); padding: 32px 32px 24px;
-  }
-  #header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-  #header h1 span { color: var(--blue); }
-  #header .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
-  .kpi-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 20px; position: relative; overflow: hidden;
-  }
-  .kpi-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: var(--blue);
-  }
-  .kpi-card.green::before { background: var(--green); }
-  .kpi-card.yellow::before { background: var(--yellow); }
-  .kpi-card.red::before { background: var(--red); }
-  .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .kpi-value { font-size: 32px; font-weight: 800; margin: 8px 0 4px; letter-spacing: -1px; }
-  .kpi-change { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-  .kpi-change.up { color: var(--green); }
-  .kpi-change.down { color: var(--red); }
-  .kpi-change.good-down { color: var(--green); }
-
-  /* Section */
-  section { padding: 32px; border-bottom: 1px solid var(--border); scroll-margin-top: 0; }
-  section h2 {
-    font-size: 20px; font-weight: 700; margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  section h2 .icon { font-size: 22px; }
-  h3 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
-
-  /* Cards grid */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-  .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-
-  /* Tables */
-  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: #152035; }
-  th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-  td { padding: 9px 14px; border-top: 1px solid var(--border); font-size: 13px; }
-  tbody tr:hover { background: rgba(59,130,246,0.05); }
-  .num { text-align: right; font-variant-numeric: tabular-nums; }
-
-  /* Position badges */
-  .pos { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-  .pos-green { background: rgba(34,197,94,0.15); color: var(--green); }
-  .pos-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
-  .pos-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
-  .pos-red { background: rgba(239,68,68,0.15); color: var(--red); }
-
-  /* Score badges */
-  .score-green { color: var(--green); font-weight: 700; }
-  .score-yellow { color: var(--yellow); font-weight: 700; }
-  .score-red { color: var(--red); font-weight: 700; }
-
-  /* LCP */
-  .lcp-green { color: var(--green); }
-  .lcp-yellow { color: var(--yellow); }
-  .lcp-red { color: var(--red); }
-
-  /* Bar chart */
-  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .bar-label { width: 130px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
-  .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 20px; position: relative; }
-  .bar-fill { height: 100%; border-radius: 4px; background: var(--blue); transition: width 0.3s; display: flex; align-items: center; }
-  .bar-val { font-size: 12px; font-weight: 600; padding: 0 6px; white-space: nowrap; }
-
-  /* Sparkline */
-  .sparkline-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-  .sparkline-wrap svg { width: 100%; height: 80px; display: block; }
-
-  /* Opportunity cards */
-  .opp-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 16px; display: flex; flex-direction: column; gap: 6px;
-  }
-  .opp-card .kw { font-weight: 600; font-size: 13px; }
-  .opp-card .metrics { display: flex; gap: 12px; flex-wrap: wrap; }
-  .opp-card .metric { font-size: 11px; color: var(--muted); }
-  .opp-card .metric span { color: var(--text); font-weight: 600; }
-  .opp-card .uplift { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--green); font-weight: 600; margin-top: 4px; }
-  .opps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
-
-  /* Review cards */
-  .review-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 16px; display: flex; flex-direction: column; gap: 8px;
-  }
-  .review-header { display: flex; justify-content: space-between; align-items: flex-start; }
-  .review-name { font-weight: 600; font-size: 13px; }
-  .review-site { font-size: 11px; color: var(--muted); }
-  .review-score { font-size: 18px; font-weight: 800; }
-  .review-score.s10 { color: var(--green); }
-  .review-score.s9 { color: #86efac; }
-  .review-score.s7-8 { color: var(--yellow); }
-  .review-score.s5-6 { color: var(--orange); }
-  .review-score.slow { color: var(--red); }
-  .review-comment { font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.4; }
-  .review-airport { font-size: 11px; color: var(--blue); font-weight: 600; }
-  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
-
-  /* Action plan */
-  .action-group { margin-bottom: 24px; }
-  .action-group h3 { margin-bottom: 12px; }
-  .action-item {
-    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
-    padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 12px;
-  }
-  .action-item .bullet { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-  .action-item .content { flex: 1; }
-  .action-item .title { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
-  .action-item .desc { font-size: 12px; color: var(--muted); }
-  .action-item.critical { border-left: 3px solid var(--red); }
-  .action-item.high { border-left: 3px solid var(--yellow); }
-  .action-item.quick { border-left: 3px solid var(--green); }
-
-  /* Metric row */
-  .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .metric-row:last-child { border-bottom: none; }
-  .metric-name { font-size: 13px; color: var(--muted); }
-  .metric-val { font-size: 15px; font-weight: 700; }
-  .metric-change { font-size: 12px; font-weight: 600; }
-  .metric-change.up { color: var(--green); }
-  .metric-change.down { color: var(--red); }
-  .metric-change.good-down { color: var(--green); }
-
-  /* Stars */
-  .stars { color: var(--yellow); font-size: 18px; letter-spacing: 2px; }
-
-  /* CWV summary */
-  .cwv-summary { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .cwv-stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px 28px; text-align: center; }
-  .cwv-stat .val { font-size: 36px; font-weight: 800; }
-  .cwv-stat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-  /* Score dist */
-  .score-dist { margin: 16px 0; }
-  .score-dist .row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .score-dist .row .lbl { width: 20px; font-size: 13px; font-weight: 700; text-align: right; }
-  .score-dist .row .bar-track { flex: 1; }
-  .score-dist .row .cnt { width: 60px; font-size: 12px; text-align: right; color: var(--muted); }
-
-  /* Country flag */
-  .flag { font-size: 18px; margin-right: 6px; }
-
-  /* Competitor */
-  .comp-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .comp-row:last-child { border-bottom: none; }
-  .comp-rank { width: 28px; height: 28px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-  .comp-domain { flex: 1; font-weight: 600; font-size: 13px; }
-  .comp-bar { flex: 2; }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    #sidebar { display: none; }
-    #main { margin-left: 0; }
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .cards-4 { grid-template-columns: repeat(2, 1fr); }
-    .cards-3 { grid-template-columns: 1fr; }
-    .cards-2 { grid-template-columns: 1fr; }
-    section { padding: 20px; }
-    #header { padding: 20px; }
-    #header h1 { font-size: 22px; }
-    .kpi-value { font-size: 24px; }
-  }
-  @media (max-width: 480px) {
-    .kpi-grid { grid-template-columns: 1fr; }
-  }
-
-  /* URL truncate */
-  .url-cell { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .url-cell a { color: var(--blue); text-decoration: none; }
-  .url-cell a:hover { text-decoration: underline; }
-
-  /* Period table */
-  .period-table th, .period-table td { padding: 12px 16px; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-  /* Divider */
-  .section-divider { height: 1px; background: var(--border); margin: 24px 0; }
-
-  /* Tag */
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
-  .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f1117;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;--hx:#3b82f6;--pp:#8b5cf6;--ap:#f59e0b;--green:#22c55e;--yellow:#eab308;--orange:#f97316;--red:#ef4444;--sidebar-w:250px}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;display:flex;min-height:100vh}
+#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:#0a0e1a;border-right:1px solid var(--border);overflow-y:auto;z-index:100;transition:transform 0.3s;display:flex;flex-direction:column}
+#sidebar-logo{padding:20px 16px 12px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;color:var(--hx);letter-spacing:.05em;text-transform:uppercase}
+#sidebar-logo span{color:var(--muted);font-weight:400;display:block;font-size:11px;margin-top:2px;text-transform:none;letter-spacing:0}
+#sidebar nav{padding:12px 0;flex:1}
+#sidebar nav a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:var(--muted);text-decoration:none;font-size:12.5px;border-left:3px solid transparent;transition:all .15s}
+#sidebar nav a:hover,#sidebar nav a.active{color:var(--text);background:rgba(59,130,246,.08);border-left-color:var(--hx)}
+#sidebar nav .nav-section{padding:16px 16px 4px;font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.1em}
+#sidebar nav .pp-nav:hover,#sidebar nav .pp-nav.active{border-left-color:var(--pp)}
+#sidebar nav .ap-nav:hover,#sidebar nav .ap-nav.active{border-left-color:var(--ap)}
+#sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);font-size:11px;color:#475569}
+#main{margin-left:var(--sidebar-w);flex:1;padding:24px 28px;max-width:1400px}
+.section{margin-bottom:40px}
+.section-title{font-size:16px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em}
+.badge-hx{background:rgba(59,130,246,.15);color:var(--hx)}
+.badge-pp{background:rgba(139,92,246,.15);color:var(--pp)}
+.badge-ap{background:rgba(245,158,11,.15);color:var(--ap)}
+.badge-all{background:rgba(100,116,139,.15);color:var(--muted)}
+.brand-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.brand-tab{padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;border:2px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s}
+.brand-tab.active-hx{border-color:var(--hx);color:var(--hx);background:rgba(59,130,246,.1)}
+.brand-tab.active-pp{border-color:var(--pp);color:var(--pp);background:rgba(139,92,246,.1)}
+.brand-tab.active-ap{border-color:var(--ap);color:var(--ap);background:rgba(245,158,11,.1)}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-hx::before{background:var(--hx)}.kpi-pp::before{background:var(--pp)}.kpi-ap::before{background:var(--ap)}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
+.kpi-sub{font-size:11px;color:var(--muted)}
+.up{color:var(--green)}.dn{color:var(--red)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+th{background:#161d2e;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;user-select:none;white-space:nowrap;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--border)}
+th:hover{color:var(--text)}
+th::after{content:' &#x21D5;';opacity:.3;font-size:10px}
+th.sort-asc::after{content:' &#x2191;';opacity:1;color:var(--hx)}
+th.sort-desc::after{content:' &#x2193;';opacity:1;color:var(--hx)}
+td{padding:9px 12px;border-bottom:1px solid rgba(51,65,85,.5);font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover{background:rgba(255,255,255,.02)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.url-link{color:var(--hx);text-decoration:none;font-size:12px}
+.url-link:hover{text-decoration:underline}
+.top-page{border-left:3px solid var(--hx)}
+.pos-green{color:var(--green);font-weight:600}
+.pos-yellow{color:var(--yellow);font-weight:600}
+.pos-orange{color:var(--orange);font-weight:600}
+.pos-red{color:var(--red);font-weight:600}
+.ctr-green{color:var(--green)}.ctr-yellow{color:var(--yellow)}.ctr-red{color:var(--red)}
+.opp-extra{color:#34d399;font-weight:700}
+.donut-wrap{display:flex;align-items:center;gap:28px}
+.donut-svg{width:130px;height:130px;flex-shrink:0}
+.donut-legend{flex:1}
+.legend-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.mini-bar{display:flex;align-items:center;gap:8px;min-width:120px}
+.mini-fill{height:6px;background:var(--hx);border-radius:3px;min-width:2px}
+.mini-bar span{font-size:11px;color:var(--muted);white-space:nowrap}
+.sparkline-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.sparkline-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sparkline-dates{font-size:11px;color:var(--muted)}
+.device-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.device-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
+.device-icon{font-size:20px;margin-bottom:8px}
+.device-name{font-size:14px;font-weight:700;margin-bottom:12px}
+.device-metric{display:flex;justify-content:space-between;margin-bottom:6px}
+.device-key{font-size:11px;color:var(--muted)}.device-val{font-size:13px;font-weight:600}
+.actions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.action-col-title{font-size:13px;font-weight:700;margin-bottom:12px;padding:8px 12px;border-radius:6px}
+.action-critical{background:rgba(239,68,68,.15);color:var(--red)}
+.action-high{background:rgba(234,179,8,.15);color:var(--yellow)}
+.action-quick{background:rgba(34,197,94,.15);color:var(--green)}
+.action-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.action-item .action-kw{font-weight:600;font-size:13px;margin-bottom:6px}
+.action-item .action-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.action-item .action-metric{font-size:11px;margin-top:6px;color:#34d399;font-weight:600}
+.action-critical-border{border-left:3px solid var(--red)}
+.action-high-border{border-left:3px solid var(--yellow)}
+.action-quick-border{border-left:3px solid var(--green)}
+.pos-dist{margin-top:8px}
+.pos-dist-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pos-dist-label{width:70px;font-size:12px;color:var(--muted);flex-shrink:0}
+.pos-dist-bar{flex:1;height:20px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.pos-dist-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden}
+.pos-dist-count{width:60px;font-size:12px;text-align:right;color:var(--muted);flex-shrink:0}
+.note-box{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted);margin-bottom:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.comp-table .hx-col{color:var(--hx);font-weight:700}
+.comp-table .pp-col{color:var(--pp);font-weight:700}
+.comp-table .ap-col{color:var(--ap);font-weight:700}
+#menu-toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 12px;cursor:pointer;font-size:16px}
+@media(max-width:900px){
+  #menu-toggle{display:block}
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:translateX(0)}
+  #main{margin-left:0;padding:60px 16px 16px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .device-grid{grid-template-columns:1fr}
+  .actions-grid{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr}
+}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 </style>
 </head>
 <body>
+<button id="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
 
-<!-- SIDEBAR -->
-<nav id="sidebar">
-  <div class="logo">
-    <h1>HX SEO Report</h1>
-    <p>holidayextras.com</p>
-  </div>
+<aside id="sidebar">
+  <div id="sidebar-logo">SEO Report<span>18 Mar 2026 &#183; 3 Brands</span></div>
   <nav>
-    <a href="#header" class="active"><span class="icon">🏠</span> Overview</a>
-    <a href="#sc-overview"><span class="icon">📊</span> Search Console</a>
-    <a href="#keywords"><span class="icon">🔑</span> Top Keywords</a>
-    <a href="#opportunities"><span class="icon">💡</span> Opportunities</a>
-    <a href="#pages"><span class="icon">📄</span> Top Pages</a>
-    <a href="#ga4"><span class="icon">📈</span> Google Analytics 4</a>
-    <a href="#cwv"><span class="icon">⚡</span> Core Web Vitals</a>
-    <a href="#geo"><span class="icon">🌍</span> Geographic</a>
-    <a href="#competitors"><span class="icon">🏆</span> Competitors</a>
-    <a href="#reviews"><span class="icon">⭐</span> Reviews</a>
-    <a href="#actions"><span class="icon">🎯</span> Action Plan</a>
+    <div class="nav-section">Overview</div>
+    <a href="#header-section">&#x1F4CA; Header &amp; KPIs</a>
+    <a href="#s1">&#x1F3C6; Brand Comparison</a>
+    <div class="nav-section">Holiday Extras</div>
+    <a href="#s2">&#x1F50E; SC Deep Dive</a>
+    <a href="#s3">&#x1F511; Top 50 Keywords</a>
+    <a href="#s4">&#x26A1; Opportunities</a>
+    <a href="#s5">&#x1F516; Brand vs Non-Brand</a>
+    <a href="#s6">&#x1F4C4; Top 50 Pages</a>
+    <a href="#s7">&#x1F30D; Geographic</a>
+    <a href="#s8">&#x1F4F1; Devices</a>
+    <div class="nav-section">Other Brands</div>
+    <a href="#s9" class="pp-nav">&#x1F7E3; Purple Parking</a>
+    <a href="#s10" class="ap-nav">&#x1F7E1; Airparks</a>
+    <div class="nav-section">Insights</div>
+    <a href="#s11">&#x1F50D; Competitive Overlap</a>
+    <a href="#s12">&#x1F3AF; Priority Actions</a>
   </nav>
-  <div class="generated">Generated 18 Mar 2026</div>
-</nav>
+  <div id="sidebar-footer">Generated 18 Mar 2026</div>
+</aside>
 
-<!-- MAIN -->
-<div id="main">
+<main id="main">
 
-<!-- HEADER -->
-<div id="header">
-  <h1>HX SEO <span>Performance Report</span></h1>
-  <p class="subtitle">holidayextras.com &nbsp;·&nbsp; 28-day report &nbsp;·&nbsp; Generated 18 Mar 2026</p>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-label">Total Clicks (28d)</div>
-      <div class="kpi-value">450,607</div>
-      <div class="kpi-change down">▼ 2.0% vs prev 28d <span style="color:var(--muted);font-weight:400">(was 459,593)</span></div>
+<div id="header-section" class="section">
+  <h1 style="font-size:22px;font-weight:700;margin-bottom:4px">SEO Performance Report &#8212; Search Console &amp; Rankings</h1>
+  <div style="color:var(--muted);font-size:13px;margin-bottom:20px">holidayextras.com &#183; purpleparking.com &#183; airparks.co.uk &#183; 18 Mar 2026</div>
+
+  <div class="brand-tabs">
+    <div class="brand-tab active-hx" onclick="switchBrand('hx',this)">&#x1F535; HX</div>
+    <div class="brand-tab" onclick="switchBrand('pp',this)">&#x1F7E3; Purple Parking</div>
+    <div class="brand-tab" onclick="switchBrand('ap',this)">&#x1F7E1; Airparks</div>
+  </div>
+
+  <div class="kpi-grid" id="kpi-hx">
+    <div class="kpi-card kpi-hx">
+      <div class="kpi-label">Clicks (28d)</div>
+      <div class="kpi-value" style="color:var(--hx)">450.6K</div>
+      <div class="kpi-sub"><span class="dn">&#9660; -2.0%</span> vs prev 28d &#183; 7d: 107.8K</div>
     </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">Total Impressions (28d)</div>
-      <div class="kpi-value">41.4M</div>
-      <div class="kpi-change up">▲ 2.5% vs prev 28d <span style="color:var(--muted);font-weight:400">(was 40.4M)</span></div>
+    <div class="kpi-card kpi-hx">
+      <div class="kpi-label">Impressions (28d)</div>
+      <div class="kpi-value" style="color:var(--hx)">41.4M</div>
+      <div class="kpi-sub"><span class="up">&#9650; +2.5%</span> vs prev 28d &#183; 90d: 129.6M</div>
     </div>
-    <div class="kpi-card yellow">
-      <div class="kpi-label">Avg. Position (28d)</div>
-      <div class="kpi-value">8.80</div>
-      <div class="kpi-change up">▲ Improved from 10.25 <span style="color:var(--muted);font-weight:400">(↑ 1.44 pts)</span></div>
+    <div class="kpi-card kpi-hx">
+      <div class="kpi-label">Avg Position (28d)</div>
+      <div class="kpi-value" style="color:var(--hx)">8.8</div>
+      <div class="kpi-sub">CTR: 1.09% &#183; 90d pos: 9.7</div>
     </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">Organic Sessions (GA4)</div>
-      <div class="kpi-value">25,651</div>
-      <div class="kpi-change up">▲ 6.3% vs prev period <span style="color:var(--muted);font-weight:400">(was 24,137)</span></div>
+    <div class="kpi-card kpi-hx">
+      <div class="kpi-label">Keywords Tracked (AWR)</div>
+      <div class="kpi-value" style="color:var(--hx)">2.8K</div>
+      <div class="kpi-sub">#1: 221 &#183; Top 10: 1158 &#183; Avg: 18.3</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid" id="kpi-pp" style="display:none">
+    <div class="kpi-card kpi-pp">
+      <div class="kpi-label">Organic Keywords (SEMrush)</div>
+      <div class="kpi-value" style="color:var(--pp)">79.6K</div>
+      <div class="kpi-sub">SEMrush Rank: #3144</div>
+    </div>
+    <div class="kpi-card kpi-pp">
+      <div class="kpi-label">Organic Traffic Est.</div>
+      <div class="kpi-value" style="color:var(--pp)">219.1K</div>
+      <div class="kpi-sub">Organic Cost: &#163;246.2K</div>
+    </div>
+    <div class="kpi-card kpi-pp">
+      <div class="kpi-label">Keywords Tracked (AWR)</div>
+      <div class="kpi-value" style="color:var(--pp)">1.9K</div>
+      <div class="kpi-sub">#1: 27 &#183; Top 10: 707 &#183; Avg: 19.7</div>
+    </div>
+    <div class="kpi-card kpi-pp">
+      <div class="kpi-label">Top 3 Positions (AWR)</div>
+      <div class="kpi-value" style="color:var(--pp)">225</div>
+      <div class="kpi-sub">Page 1: 707 &#183; Page 2: 1091</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid" id="kpi-ap" style="display:none">
+    <div class="kpi-card kpi-ap">
+      <div class="kpi-label">Organic Keywords (SEMrush)</div>
+      <div class="kpi-value" style="color:var(--ap)">75.4K</div>
+      <div class="kpi-sub">SEMrush Rank: #3770</div>
+    </div>
+    <div class="kpi-card kpi-ap">
+      <div class="kpi-label">Organic Traffic Est.</div>
+      <div class="kpi-value" style="color:var(--ap)">179.1K</div>
+      <div class="kpi-sub">Organic Cost: &#163;176.5K</div>
+    </div>
+    <div class="kpi-card kpi-ap">
+      <div class="kpi-label">Keywords Tracked (AWR)</div>
+      <div class="kpi-value" style="color:var(--ap)">2.0K</div>
+      <div class="kpi-sub">#1: 26 &#183; Top 10: 789 &#183; Avg: 19.5</div>
+    </div>
+    <div class="kpi-card kpi-ap">
+      <div class="kpi-label">Top 3 Positions (AWR)</div>
+      <div class="kpi-value" style="color:var(--ap)">202</div>
+      <div class="kpi-sub">Page 1: 789 &#183; Page 2: 1126</div>
     </div>
   </div>
 </div>
 
-<!-- SEARCH CONSOLE OVERVIEW -->
-<section id="sc-overview">
-  <h2><span class="icon">📊</span> Search Console Overview</h2>
+<!-- S1: Brand Comparison -->
+<div id="s1" class="section">
+  <div class="section-title">1. Head-to-Head Brand Comparison <span class="badge badge-all">AWR + SEMrush</span></div>
 
-  <div class="cards-2" style="margin-bottom:20px;">
-    <!-- Period table -->
+  <div class="card">
+    <div class="card-title">AWR Position Tracking &#8212; All 3 Brands</div>
+    <div class="table-wrap">
+      <table class="comp-table" id="comp-table">
+        <thead><tr><th>Metric</th><th class="num hx-col">&#x1F535; Holiday Extras</th><th class="num pp-col">&#x1F7E3; Purple Parking</th><th class="num ap-col">&#x1F7E1; Airparks</th></tr></thead>
+        <tbody>
+          <tr><td>Keywords Tracked</td><td class="num hx-col">2.8K</td><td class="num pp-col">1.9K</td><td class="num ap-col">2.0K</td></tr>
+          <tr><td>#1 Positions</td><td class="num hx-col">221</td><td class="num pp-col">27</td><td class="num ap-col">26</td></tr>
+          <tr><td>Top 3</td><td class="num hx-col">694</td><td class="num pp-col">225</td><td class="num ap-col">202</td></tr>
+          <tr><td>Page 1 (Top 10)</td><td class="num hx-col">1158</td><td class="num pp-col">707</td><td class="num ap-col">789</td></tr>
+          <tr><td>Page 2 (Top 20)</td><td class="num hx-col">1622</td><td class="num pp-col">1091</td><td class="num ap-col">1126</td></tr>
+          <tr><td>Avg Position</td><td class="num hx-col">18.3</td><td class="num pp-col">19.7</td><td class="num ap-col">19.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
     <div class="card">
-      <h3>Period Comparison</h3>
-      <div class="table-wrap">
-        <table class="period-table">
-          <thead><tr><th>Period</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr></thead>
-          <tbody>
-            <tr><td><span class="tag tag-blue">7d</span></td><td class="num">107,823</td><td class="num">10,202,531</td><td class="num">1.06%</td><td class="num">8.46</td></tr>
-            <tr><td><span class="tag tag-blue">28d</span></td><td class="num">450,607</td><td class="num">41,408,512</td><td class="num">1.09%</td><td class="num">8.80</td></tr>
-            <tr><td><span class="tag tag-green">90d</span></td><td class="num">1,373,288</td><td class="num">129,632,153</td><td class="num">1.06%</td><td class="num">9.71</td></tr>
-            <tr><td style="color:var(--muted);">Prev 28d</td><td class="num" style="color:var(--muted);">459,593</td><td class="num" style="color:var(--muted);">40,395,574</td><td class="num" style="color:var(--muted);">1.14%</td><td class="num" style="color:var(--muted);">10.25</td></tr>
-          </tbody>
-        </table>
+      <div class="card-title">#1 Position Rankings Comparison</div>
+      <div style="display:flex;gap:20px;align-items:flex-end;height:130px;padding:10px 10px 0">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--hx)">221</div>
+          <div style="width:100%;background:var(--hx);border-radius:4px 4px 0 0;height:100px"></div>
+          <div style="font-size:11px;color:var(--muted)">HX</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--pp)">27</div>
+          <div style="width:100%;background:var(--pp);border-radius:4px 4px 0 0;height:12px"></div>
+          <div style="font-size:11px;color:var(--muted)">PP</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--ap)">26</div>
+          <div style="width:100%;background:var(--ap);border-radius:4px 4px 0 0;height:12px"></div>
+          <div style="font-size:11px;color:var(--muted)">AP</div>
+        </div>
       </div>
     </div>
-    <!-- CTR / Position metrics -->
     <div class="card">
-      <h3>Key Metrics</h3>
-      <div class="metric-row">
-        <span class="metric-name">Click-Through Rate (28d)</span>
-        <div style="text-align:right">
-          <div class="metric-val">1.09%</div>
-          <div class="metric-change down">▼ from 1.14%</div>
+      <div class="card-title">Page 1 (Top 10) Rankings Comparison</div>
+      <div style="display:flex;gap:20px;align-items:flex-end;height:130px;padding:10px 10px 0">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--hx)">1158</div>
+          <div style="width:100%;background:var(--hx);border-radius:4px 4px 0 0;height:100px"></div>
+          <div style="font-size:11px;color:var(--muted)">HX</div>
         </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Average Position (28d)</span>
-        <div style="text-align:right">
-          <div class="metric-val">8.80</div>
-          <div class="metric-change up">▲ improved from 10.25</div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--pp)">707</div>
+          <div style="width:100%;background:var(--pp);border-radius:4px 4px 0 0;height:61px"></div>
+          <div style="font-size:11px;color:var(--muted)">PP</div>
         </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Total Organic Keywords</span>
-        <div style="text-align:right">
-          <div class="metric-val">251,394</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">SEMrush Organic Traffic Est.</span>
-        <div style="text-align:right">
-          <div class="metric-val">1,091,590</div>
-          <div style="font-size:11px;color:var(--muted);">monthly est.</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Organic Traffic Value</span>
-        <div style="text-align:right">
-          <div class="metric-val">£983,919</div>
-          <div style="font-size:11px;color:var(--muted);">monthly est.</div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--ap)">789</div>
+          <div style="width:100%;background:var(--ap);border-radius:4px 4px 0 0;height:68px"></div>
+          <div style="font-size:11px;color:var(--muted)">AP</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Sparkline chart -->
-  <div class="sparkline-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-      <h3 style="margin:0">Daily Clicks (28 Days)</h3>
-      <div style="display:flex;gap:16px;font-size:12px;">
-        <span style="color:var(--blue);">⬤ Clicks</span>
-        <span style="color:var(--muted);">Peak: 19,949 (1 Mar)</span>
-        <span style="color:var(--muted);">Low: 13,828 (14 Mar)</span>
+  <div class="card">
+    <div class="card-title">SEMrush Organic Intelligence</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Brand</th><th class="num">Organic Keywords</th><th class="num">Traffic Est.</th><th class="num">Traffic Value (&#163;)</th><th class="num">SEMrush Rank</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--hx);font-weight:700">&#x1F535; Holiday Extras</td><td class="num">251.4K</td><td class="num">1.1M</td><td class="num">&#163;983.9K</td><td class="num">#680</td></tr>
+          <tr><td style="color:var(--pp);font-weight:700">&#x1F7E3; Purple Parking</td><td class="num">79.6K</td><td class="num">219.1K</td><td class="num">&#163;246.2K</td><td class="num">#3144</td></tr>
+          <tr><td style="color:var(--ap);font-weight:700">&#x1F7E1; Airparks</td><td class="num">75.4K</td><td class="num">179.1K</td><td class="num">&#163;176.5K</td><td class="num">#3770</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- S2: HX SC Deep Dive -->
+<div id="s2" class="section">
+  <div class="section-title">2. Holiday Extras &#8212; Search Console Deep Dive <span class="badge badge-hx">SC Data</span></div>
+
+  <div class="card">
+    <div class="card-title">2a. Performance Overview</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Period</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Position</th></tr></thead>
+        <tbody>
+          <tr><td>Last 7 Days</td><td class="num">107.8K</td><td class="num">10.2M</td><td class="num">1.06%</td><td class="num pos-yellow">8.5</td></tr>
+          <tr><td>Last 28 Days</td><td class="num">450.6K</td><td class="num">41.4M</td><td class="num">1.09%</td><td class="num pos-yellow">8.8</td></tr>
+          <tr><td>Last 90 Days</td><td class="num">1.4M</td><td class="num">129.6M</td><td class="num">1.06%</td><td class="num pos-yellow">9.7</td></tr>
+          <tr style="background:rgba(255,255,255,.02)"><td style="color:var(--muted);font-size:12px">vs prev 7d</td><td class="num"><span class="dn">&#9660; -4.3%</span></td><td class="num"><span class="dn">&#9660; -7.1%</span></td><td class="num"><span class="up">&#9650; +3.0%</span></td><td class="num"><span class="dn">&#9660; -5.9%</span></td></tr>
+          <tr style="background:rgba(255,255,255,.02)"><td style="color:var(--muted);font-size:12px">vs prev 28d</td><td class="num"><span class="dn">&#9660; -2.0%</span></td><td class="num"><span class="up">&#9650; +2.5%</span></td><td class="num"><span class="dn">&#9660; -4.4%</span></td><td class="num"><span class="dn">&#9660; -14.1%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sparkline-card">
+    <div class="sparkline-header">
+      <div class="card-title" style="margin-bottom:0">2b. Daily Clicks &#8212; Last 28 Days</div>
+      <div class="sparkline-dates">15 Feb &#8211; 14 Mar 2026</div>
+    </div>
+    <div style="margin-top:8px"><svg viewBox="0 0 600 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:80px;">
+  <defs>
+    <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 10.0,20.7 L 31.5,31.4 L 53.0,49.2 L 74.4,50.8 L 95.9,54.7 L 117.4,57.0 L 138.9,58.2 L 160.4,26.1 L 181.9,27.2 L 203.3,42.1 L 224.8,50.6 L 246.3,53.2 L 267.8,53.9 L 289.3,47.0 L 310.7,10.0 L 332.2,24.7 L 353.7,46.7 L 375.2,55.7 L 396.7,64.4 L 418.1,66.7 L 439.6,66.1 L 461.1,43.4 L 482.6,36.3 L 504.1,54.9 L 525.6,57.4 L 547.0,56.2 L 568.5,63.7 L 590.0,70.0 L 590.0,70 L 10.0,70 Z" fill="url(#sparkGrad)"/>
+  <path d="M 10.0,20.7 L 31.5,31.4 L 53.0,49.2 L 74.4,50.8 L 95.9,54.7 L 117.4,57.0 L 138.9,58.2 L 160.4,26.1 L 181.9,27.2 L 203.3,42.1 L 224.8,50.6 L 246.3,53.2 L 267.8,53.9 L 289.3,47.0 L 310.7,10.0 L 332.2,24.7 L 353.7,46.7 L 375.2,55.7 L 396.7,64.4 L 418.1,66.7 L 439.6,66.1 L 461.1,43.4 L 482.6,36.3 L 504.1,54.9 L 525.6,57.4 L 547.0,56.2 L 568.5,63.7 L 590.0,70.0" fill="none" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="10.0" cy="20.7" r="2" fill="#3b82f6"/> <circle cx="31.5" cy="31.4" r="2" fill="#3b82f6"/> <circle cx="53.0" cy="49.2" r="2" fill="#3b82f6"/> <circle cx="74.4" cy="50.8" r="2" fill="#3b82f6"/> <circle cx="95.9" cy="54.7" r="2" fill="#3b82f6"/> <circle cx="117.4" cy="57.0" r="2" fill="#3b82f6"/> <circle cx="138.9" cy="58.2" r="2" fill="#3b82f6"/> <circle cx="160.4" cy="26.1" r="2" fill="#3b82f6"/> <circle cx="181.9" cy="27.2" r="2" fill="#3b82f6"/> <circle cx="203.3" cy="42.1" r="2" fill="#3b82f6"/> <circle cx="224.8" cy="50.6" r="2" fill="#3b82f6"/> <circle cx="246.3" cy="53.2" r="2" fill="#3b82f6"/> <circle cx="267.8" cy="53.9" r="2" fill="#3b82f6"/> <circle cx="289.3" cy="47.0" r="2" fill="#3b82f6"/> <circle cx="310.7" cy="10.0" r="2" fill="#3b82f6"/> <circle cx="332.2" cy="24.7" r="2" fill="#3b82f6"/> <circle cx="353.7" cy="46.7" r="2" fill="#3b82f6"/> <circle cx="375.2" cy="55.7" r="2" fill="#3b82f6"/> <circle cx="396.7" cy="64.4" r="2" fill="#3b82f6"/> <circle cx="418.1" cy="66.7" r="2" fill="#3b82f6"/> <circle cx="439.6" cy="66.1" r="2" fill="#3b82f6"/> <circle cx="461.1" cy="43.4" r="2" fill="#3b82f6"/> <circle cx="482.6" cy="36.3" r="2" fill="#3b82f6"/> <circle cx="504.1" cy="54.9" r="2" fill="#3b82f6"/> <circle cx="525.6" cy="57.4" r="2" fill="#3b82f6"/> <circle cx="547.0" cy="56.2" r="2" fill="#3b82f6"/> <circle cx="568.5" cy="63.7" r="2" fill="#3b82f6"/> <circle cx="590.0" cy="70.0" r="2" fill="#3b82f6"/>
+</svg></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--muted)">
+      <span>15 Feb</span>
+      <span>Peak: 19.9K clicks (2026-03-01)</span>
+      <span>14 Mar</span>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">2c. Brand vs Non-Brand Clicks (28d)</div>
+      <div class="donut-wrap">
+        <svg class="donut-svg" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#1e3a5f" stroke-width="18"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="var(--hx)" stroke-width="18"
+            stroke-dasharray="69 238.9"
+            stroke-dashoffset="59.75" transform="rotate(-90 50 50)"/>
+          <text x="50" y="46" text-anchor="middle" fill="white" font-size="12" font-weight="bold">28.9%</text>
+          <text x="50" y="58" text-anchor="middle" fill="#94a3b8" font-size="7.5">brand</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--hx)"></div>
+            <div>
+              <div style="font-size:12px;color:var(--muted)">Brand Queries</div>
+              <div style="font-size:14px;font-weight:700;color:var(--hx)">49.3K clicks</div>
+              <div style="font-size:11px;color:var(--muted)">198.6K impressions</div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#475569"></div>
+            <div>
+              <div style="font-size:12px;color:var(--muted)">Non-Brand Queries</div>
+              <div style="font-size:14px;font-weight:700">121.0K clicks</div>
+              <div style="font-size:11px;color:var(--muted)">6.2M impressions</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <svg viewBox="0 0 800 80" preserveAspectRatio="none" style="height:90px">
-      <defs>
-        <linearGradient id="clickGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
-          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/>
-        </linearGradient>
-      </defs>
-      <!-- Grid lines -->
-      <line x1="0" y1="20" x2="800" y2="20" stroke="#334155" stroke-width="0.5"/>
-      <line x1="0" y1="40" x2="800" y2="40" stroke="#334155" stroke-width="0.5"/>
-      <line x1="0" y1="60" x2="800" y2="60" stroke="#334155" stroke-width="0.5"/>
-      <!-- Labels -->
-      <text x="2" y="18" fill="#64748b" font-size="8">20k</text>
-      <text x="2" y="58" fill="#64748b" font-size="8">15k</text>
-      <!-- Area fill -->
-      <path d="M0,22 L28.6,30 L57.1,42 L85.7,43 L114.3,45 L142.9,47 L171.4,47 L200,31 L228.6,32 L257.1,39 L285.7,44 L314.3,45 L342.9,45 L371.4,40 L400,21 L428.6,29 L457.1,38 L485.7,44 L514.3,47 L542.9,48 L571.4,47 L600,39 L628.6,37 L657.1,44 L685.7,44 L714.3,44 L742.9,47 L771.4,53 L800,57 L800,80 L0,80 Z" fill="url(#clickGrad)"/>
-      <!-- Line -->
-      <polyline fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"
-        points="0,22 28.6,30 57.1,42 85.7,43 114.3,45 142.9,47 171.4,47 200,31 228.6,32 257.1,39 285.7,44 314.3,45 342.9,45 371.4,40 400,21 428.6,29 457.1,38 485.7,44 514.3,47 542.9,48 571.4,47 600,39 628.6,37 657.1,44 685.7,44 714.3,44 742.9,47 771.4,53 800,57"/>
-      <!-- Dots for peaks -->
-      <circle cx="400" cy="21" r="4" fill="#3b82f6" stroke="#0f1117" stroke-width="2"/>
-      <circle cx="800" cy="57" r="4" fill="#ef4444" stroke="#0f1117" stroke-width="2"/>
-      <!-- Date labels -->
-      <text x="0" y="78" fill="#64748b" font-size="7.5">15 Feb</text>
-      <text x="185" y="78" fill="#64748b" font-size="7.5">22 Feb</text>
-      <text x="385" y="78" fill="#64748b" font-size="7.5">1 Mar</text>
-      <text x="585" y="78" fill="#64748b" font-size="7.5">9 Mar</text>
-      <text x="762" y="78" fill="#64748b" font-size="7.5">14 Mar</text>
-    </svg>
+    <div class="card">
+      <div class="card-title">2d. SC Position Distribution (top 2,000 queries)</div>
+      <div class="pos-dist">
+        <div class="pos-dist-row"><div class="pos-dist-label" style="color:var(--green)">#1 Positions</div><div class="pos-dist-bar"><div class="pos-dist-fill" style="width:5.5%;background:var(--green);color:#fff">5.5%</div></div><div class="pos-dist-count" style="color:var(--green)">110</div></div>
+        <div class="pos-dist-row"><div class="pos-dist-label" style="color:#86efac">Top 3</div><div class="pos-dist-bar"><div class="pos-dist-fill" style="width:28.3%;background:#4ade80;color:#0f1117">28.3%</div></div><div class="pos-dist-count" style="color:#86efac">566</div></div>
+        <div class="pos-dist-row"><div class="pos-dist-label" style="color:var(--yellow)">Page 1</div><div class="pos-dist-bar"><div class="pos-dist-fill" style="width:91.0%;background:var(--yellow);color:#0f1117">91.0%</div></div><div class="pos-dist-count" style="color:var(--yellow)">1821</div></div>
+        <div class="pos-dist-row"><div class="pos-dist-label" style="color:var(--orange)">Page 2</div><div class="pos-dist-bar"><div class="pos-dist-fill" style="width:99.1%;background:var(--orange);color:#fff">99.1%</div></div><div class="pos-dist-count" style="color:var(--orange)">1982</div></div>
+        <div class="pos-dist-row"><div class="pos-dist-label" style="color:var(--muted)">Total tracked</div><div class="pos-dist-bar"><div class="pos-dist-fill" style="width:100%;background:var(--border);color:var(--muted)">100%</div></div><div class="pos-dist-count">2000</div></div>
+      </div>
+    </div>
   </div>
-</section>
+</div>
 
-<!-- TOP 25 KEYWORDS -->
-<section id="keywords">
-  <h2><span class="icon">🔑</span> Top 25 Keywords</h2>
+<!-- S3: Top 50 Keywords -->
+<div id="s3" class="section">
+  <div class="section-title">3. Top 50 Keywords &#8212; Holiday Extras (28d) <span class="badge badge-hx">Search Console</span></div>
   <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>#</th><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Position</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>holiday extras</td><td class="num">19,157</td><td class="num">112,584</td><td class="num">17.02%</td><td class="num"><span class="pos pos-green">1.1</span></td></tr>
-        <tr><td>2</td><td>holiday extras discount code</td><td class="num">5,126</td><td class="num">15,861</td><td class="num">32.32%</td><td class="num"><span class="pos pos-green">3.1</span></td></tr>
-        <tr><td>3</td><td>holiday extras agent login</td><td class="num">4,673</td><td class="num">5,733</td><td class="num">81.51%</td><td class="num"><span class="pos pos-green">1.6</span></td></tr>
-        <tr><td>4</td><td>manchester airport parking</td><td class="num">3,657</td><td class="num">142,432</td><td class="num">2.57%</td><td class="num"><span class="pos pos-green">3.0</span></td></tr>
-        <tr><td>5</td><td>birmingham airport parking</td><td class="num">2,710</td><td class="num">63,493</td><td class="num">4.27%</td><td class="num"><span class="pos pos-green">2.7</span></td></tr>
-        <tr><td>6</td><td>stansted airport parking</td><td class="num">2,383</td><td class="num">92,845</td><td class="num">2.57%</td><td class="num"><span class="pos pos-green">3.4</span></td></tr>
-        <tr><td>7</td><td>gatwick parking</td><td class="num">2,108</td><td class="num">82,749</td><td class="num">2.55%</td><td class="num"><span class="pos pos-green">2.6</span></td></tr>
-        <tr><td>8</td><td>bristol airport parking</td><td class="num">2,025</td><td class="num">75,038</td><td class="num">2.70%</td><td class="num"><span class="pos pos-green">3.4</span></td></tr>
-        <tr><td>9</td><td>edinburgh airport parking</td><td class="num">1,571</td><td class="num">62,595</td><td class="num">2.51%</td><td class="num"><span class="pos pos-green">2.5</span></td></tr>
-        <tr><td>10</td><td>airport parking</td><td class="num">1,414</td><td class="num">38,410</td><td class="num">3.68%</td><td class="num"><span class="pos pos-green">3.0</span></td></tr>
-        <tr><td>11</td><td>holidayextras</td><td class="num">1,395</td><td class="num">6,976</td><td class="num">20.00%</td><td class="num"><span class="pos pos-green">1.1</span></td></tr>
-        <tr><td>12</td><td>manchester airport arrivals</td><td class="num">1,359</td><td class="num">62,289</td><td class="num">2.18%</td><td class="num"><span class="pos pos-yellow">6.3</span></td></tr>
-        <tr><td>13</td><td>heathrow parking</td><td class="num">1,328</td><td class="num">71,372</td><td class="num">1.86%</td><td class="num"><span class="pos pos-green">3.5</span></td></tr>
-        <tr><td>14</td><td>stansted parking</td><td class="num">1,325</td><td class="num">34,788</td><td class="num">3.81%</td><td class="num"><span class="pos pos-green">3.5</span></td></tr>
-        <tr><td>15</td><td>holiday extras login</td><td class="num">1,267</td><td class="num">1,632</td><td class="num">77.63%</td><td class="num"><span class="pos pos-green">2.0</span></td></tr>
-        <tr><td>16</td><td>gatwick departures</td><td class="num">1,148</td><td class="num">81,487</td><td class="num">1.41%</td><td class="num"><span class="pos pos-yellow">6.2</span></td></tr>
-        <tr><td>17</td><td>holiday extras contact number</td><td class="num">1,114</td><td class="num">2,277</td><td class="num">48.92%</td><td class="num"><span class="pos pos-green">2.3</span></td></tr>
-        <tr><td>18</td><td>airport parking manchester</td><td class="num">1,016</td><td class="num">16,098</td><td class="num">6.31%</td><td class="num"><span class="pos pos-green">2.7</span></td></tr>
-        <tr><td>19</td><td>newcastle airport parking</td><td class="num">1,016</td><td class="num">25,368</td><td class="num">4.01%</td><td class="num"><span class="pos pos-green">3.0</span></td></tr>
-        <tr><td>20</td><td>holiday extra</td><td class="num">1,014</td><td class="num">5,125</td><td class="num">19.79%</td><td class="num"><span class="pos pos-green">1.2</span></td></tr>
-        <tr><td>21</td><td>glasgow airport parking</td><td class="num">984</td><td class="num">33,504</td><td class="num">2.94%</td><td class="num"><span class="pos pos-green">2.9</span></td></tr>
-        <tr><td>22</td><td>heathrow departures</td><td class="num">965</td><td class="num">135,586</td><td class="num">0.71%</td><td class="num"><span class="pos pos-yellow">5.8</span></td></tr>
-        <tr><td>23</td><td>gatwick airport parking</td><td class="num">960</td><td class="num">45,102</td><td class="num">2.13%</td><td class="num"><span class="pos pos-green">2.9</span></td></tr>
-        <tr><td>24</td><td>heathrow arrivals</td><td class="num">960</td><td class="num">104,343</td><td class="num">0.92%</td><td class="num"><span class="pos pos-yellow">5.7</span></td></tr>
-        <tr><td>25</td><td>holiday extras reisebüro login</td><td class="num">922</td><td class="num">993</td><td class="num">92.85%</td><td class="num"><span class="pos pos-green">1.5</span></td></tr>
-      </tbody>
+    <table id="kw-table">
+      <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr></thead>
+      <tbody><tr><td class="num">1</td><td>holiday extras</td><td class="num">19.2K</td><td class="num">112.6K</td><td class="num ctr-green">17.02%</td><td class="num pos-green">1.1</td></tr>
+<tr><td class="num">2</td><td>holiday extras discount code</td><td class="num">5.1K</td><td class="num">15.9K</td><td class="num ctr-green">32.32%</td><td class="num pos-yellow">3.1</td></tr>
+<tr><td class="num">3</td><td>holiday extras agent login</td><td class="num">4.7K</td><td class="num">5.7K</td><td class="num ctr-green">81.51%</td><td class="num pos-green">1.6</td></tr>
+<tr><td class="num">4</td><td>manchester airport parking</td><td class="num">3.7K</td><td class="num">142.4K</td><td class="num ctr-red">2.57%</td><td class="num pos-yellow">3.0</td></tr>
+<tr><td class="num">5</td><td>birmingham airport parking</td><td class="num">2.7K</td><td class="num">63.5K</td><td class="num ctr-red">4.27%</td><td class="num pos-green">2.7</td></tr>
+<tr><td class="num">6</td><td>stansted airport parking</td><td class="num">2.4K</td><td class="num">92.8K</td><td class="num ctr-red">2.57%</td><td class="num pos-yellow">3.4</td></tr>
+<tr><td class="num">7</td><td>gatwick parking</td><td class="num">2.1K</td><td class="num">82.7K</td><td class="num ctr-red">2.55%</td><td class="num pos-green">2.6</td></tr>
+<tr><td class="num">8</td><td>bristol airport parking</td><td class="num">2.0K</td><td class="num">75.0K</td><td class="num ctr-red">2.70%</td><td class="num pos-yellow">3.4</td></tr>
+<tr><td class="num">9</td><td>edinburgh airport parking</td><td class="num">1.6K</td><td class="num">62.6K</td><td class="num ctr-red">2.51%</td><td class="num pos-green">2.5</td></tr>
+<tr><td class="num">10</td><td>airport parking</td><td class="num">1.4K</td><td class="num">38.4K</td><td class="num ctr-red">3.68%</td><td class="num pos-yellow">3.0</td></tr>
+<tr><td class="num">11</td><td>holidayextras</td><td class="num">1.4K</td><td class="num">7.0K</td><td class="num ctr-green">20.00%</td><td class="num pos-green">1.1</td></tr>
+<tr><td class="num">12</td><td>manchester airport arrivals</td><td class="num">1.4K</td><td class="num">62.3K</td><td class="num ctr-red">2.18%</td><td class="num pos-yellow">6.3</td></tr>
+<tr><td class="num">13</td><td>heathrow parking</td><td class="num">1.3K</td><td class="num">71.4K</td><td class="num ctr-red">1.86%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">14</td><td>stansted parking</td><td class="num">1.3K</td><td class="num">34.8K</td><td class="num ctr-red">3.81%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">15</td><td>holiday extras login</td><td class="num">1.3K</td><td class="num">1.6K</td><td class="num ctr-green">77.63%</td><td class="num pos-green">2.0</td></tr>
+<tr><td class="num">16</td><td>gatwick departures</td><td class="num">1.1K</td><td class="num">81.5K</td><td class="num ctr-red">1.41%</td><td class="num pos-yellow">6.2</td></tr>
+<tr><td class="num">17</td><td>holiday extras contact number</td><td class="num">1.1K</td><td class="num">2.3K</td><td class="num ctr-green">48.92%</td><td class="num pos-green">2.3</td></tr>
+<tr><td class="num">18</td><td>airport parking manchester</td><td class="num">1.0K</td><td class="num">16.1K</td><td class="num ctr-yellow">6.31%</td><td class="num pos-green">2.7</td></tr>
+<tr><td class="num">19</td><td>newcastle airport parking</td><td class="num">1.0K</td><td class="num">25.4K</td><td class="num ctr-red">4.01%</td><td class="num pos-yellow">3.0</td></tr>
+<tr><td class="num">20</td><td>holiday extra</td><td class="num">1.0K</td><td class="num">5.1K</td><td class="num ctr-green">19.79%</td><td class="num pos-green">1.2</td></tr>
+<tr><td class="num">21</td><td>glasgow airport parking</td><td class="num">984</td><td class="num">33.5K</td><td class="num ctr-red">2.94%</td><td class="num pos-green">2.9</td></tr>
+<tr><td class="num">22</td><td>heathrow departures</td><td class="num">965</td><td class="num">135.6K</td><td class="num ctr-red">0.71%</td><td class="num pos-yellow">5.8</td></tr>
+<tr><td class="num">23</td><td>gatwick airport parking</td><td class="num">960</td><td class="num">45.1K</td><td class="num ctr-red">2.13%</td><td class="num pos-green">2.9</td></tr>
+<tr><td class="num">24</td><td>heathrow arrivals</td><td class="num">960</td><td class="num">104.3K</td><td class="num ctr-red">0.92%</td><td class="num pos-yellow">5.7</td></tr>
+<tr><td class="num">25</td><td>holiday extras reisebüro login</td><td class="num">922</td><td class="num">993</td><td class="num ctr-green">92.85%</td><td class="num pos-green">1.5</td></tr>
+<tr><td class="num">26</td><td>luton airport parking</td><td class="num">907</td><td class="num">72.6K</td><td class="num ctr-red">1.25%</td><td class="num pos-yellow">3.8</td></tr>
+<tr><td class="num">27</td><td>airport transfers</td><td class="num">822</td><td class="num">23.7K</td><td class="num ctr-red">3.47%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">28</td><td>east midlands airport parking</td><td class="num">772</td><td class="num">18.9K</td><td class="num ctr-red">4.08%</td><td class="num pos-yellow">3.4</td></tr>
+<tr><td class="num">29</td><td>holiday extras parking</td><td class="num">744</td><td class="num">7.2K</td><td class="num ctr-green">10.32%</td><td class="num pos-green">1.3</td></tr>
+<tr><td class="num">30</td><td>holiday extras gmbh</td><td class="num">716</td><td class="num">1.2K</td><td class="num ctr-green">59.87%</td><td class="num pos-green">1.7</td></tr>
+<tr><td class="num">31</td><td>heathrow airport parking</td><td class="num">711</td><td class="num">28.0K</td><td class="num ctr-red">2.54%</td><td class="num pos-yellow">3.2</td></tr>
+<tr><td class="num">32</td><td>holidayextras reisebüro login</td><td class="num">697</td><td class="num">744</td><td class="num ctr-green">93.68%</td><td class="num pos-green">1.5</td></tr>
+<tr><td class="num">33</td><td>bournemouth airport parking</td><td class="num">612</td><td class="num">10.7K</td><td class="num ctr-yellow">5.74%</td><td class="num pos-yellow">3.6</td></tr>
+<tr><td class="num">34</td><td>liverpool airport parking</td><td class="num">579</td><td class="num">26.7K</td><td class="num ctr-red">2.17%</td><td class="num pos-green">2.9</td></tr>
+<tr><td class="num">35</td><td>flughafen stuttgart abflug</td><td class="num">577</td><td class="num">13.3K</td><td class="num ctr-red">4.33%</td><td class="num pos-yellow">4.2</td></tr>
+<tr><td class="num">36</td><td>airport parking birmingham</td><td class="num">571</td><td class="num">7.5K</td><td class="num ctr-yellow">7.62%</td><td class="num pos-green">2.3</td></tr>
+<tr><td class="num">37</td><td>flughafen bremen abflug</td><td class="num">553</td><td class="num">3.0K</td><td class="num ctr-green">18.31%</td><td class="num pos-green">2.5</td></tr>
+<tr><td class="num">38</td><td>parking manchester airport</td><td class="num">552</td><td class="num">12.1K</td><td class="num ctr-red">4.58%</td><td class="num pos-yellow">3.8</td></tr>
+<tr><td class="num">39</td><td>abflug stuttgart</td><td class="num">512</td><td class="num">10.8K</td><td class="num ctr-red">4.73%</td><td class="num pos-yellow">3.1</td></tr>
+<tr><td class="num">40</td><td>parking stansted airport</td><td class="num">511</td><td class="num">10.7K</td><td class="num ctr-red">4.78%</td><td class="num pos-yellow">3.4</td></tr>
+<tr><td class="num">41</td><td>liverpool airport arrivals</td><td class="num">505</td><td class="num">13.0K</td><td class="num ctr-red">3.88%</td><td class="num pos-yellow">3.3</td></tr>
+<tr><td class="num">42</td><td>flughafen bremen abflug wochenplan</td><td class="num">495</td><td class="num">3.0K</td><td class="num ctr-green">16.23%</td><td class="num pos-green">2.0</td></tr>
+<tr><td class="num">43</td><td>holiday extras travel insurance</td><td class="num">495</td><td class="num">5.3K</td><td class="num ctr-yellow">9.39%</td><td class="num pos-yellow">6.3</td></tr>
+<tr><td class="num">44</td><td>leeds bradford airport parking</td><td class="num">489</td><td class="num">16.3K</td><td class="num ctr-red">2.99%</td><td class="num pos-green">2.2</td></tr>
+<tr><td class="num">45</td><td>airport lounge</td><td class="num">444</td><td class="num">9.5K</td><td class="num ctr-red">4.68%</td><td class="num pos-yellow">5.4</td></tr>
+<tr><td class="num">46</td><td>airport parking stansted</td><td class="num">442</td><td class="num">7.0K</td><td class="num ctr-yellow">6.32%</td><td class="num pos-yellow">7.2</td></tr>
+<tr><td class="num">47</td><td>gatwick parking promo code</td><td class="num">435</td><td class="num">6.3K</td><td class="num ctr-yellow">6.93%</td><td class="num pos-yellow">3.2</td></tr>
+<tr><td class="num">48</td><td>manchester airport departures</td><td class="num">424</td><td class="num">107.7K</td><td class="num ctr-red">0.39%</td><td class="num pos-yellow">7.2</td></tr>
+<tr><td class="num">49</td><td>holiday extras phone number</td><td class="num">402</td><td class="num">816</td><td class="num ctr-green">49.26%</td><td class="num pos-green">1.8</td></tr>
+<tr><td class="num">50</td><td>gatwick airport departures</td><td class="num">398</td><td class="num">15.2K</td><td class="num ctr-red">2.62%</td><td class="num pos-yellow">5.9</td></tr></tbody>
     </table>
   </div>
-  <p style="font-size:11px;color:var(--muted);margin-top:10px;">Position colour coding: <span class="pos pos-green">≤3</span> <span class="pos pos-yellow">4–10</span> <span class="pos pos-orange">11–20</span> <span class="pos pos-red">&gt;20</span></p>
-</section>
+</div>
 
-<!-- OPPORTUNITIES -->
-<section id="opportunities">
-  <h2><span class="icon">💡</span> SEO Opportunities</h2>
+<!-- S4: SEO Opportunities -->
+<div id="s4" class="section">
+  <div class="section-title">4. SEO Opportunities &#8212; Holiday Extras <span class="badge badge-hx">SC Analysis</span></div>
 
-  <h3 style="margin-bottom:6px;">A) Low CTR / High Impression Keywords</h3>
-  <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Keywords with &gt;500 impressions, CTR &lt;5%, position 5–20. Estimated uplift if CTR improves to 10%.</p>
-  <div class="opps-grid">
-    <div class="opp-card">
-      <div class="kw">travel insurance</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>151,846</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.02%</span></div>
-        <div class="metric">Pos: <span>13.1</span></div>
-      </div>
-      <div class="uplift">Est. +15,150 clicks/28d at 10% CTR (+15,116 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">fcdo travel advice</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>145,414</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.20%</span></div>
-        <div class="metric">Pos: <span>5.5</span></div>
-      </div>
-      <div class="uplift">Est. +14,541 clicks/28d at 10% CTR (+14,245 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">heathrow departures</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>135,586</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.71%</span></div>
-        <div class="metric">Pos: <span>5.8</span></div>
-      </div>
-      <div class="uplift">Est. +13,559 clicks/28d at 10% CTR (+12,594 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">benidorm weather</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>115,734</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.23%</span></div>
-        <div class="metric">Pos: <span>10.5</span></div>
-      </div>
-      <div class="uplift">Est. +11,573 clicks/28d at 10% CTR (+11,309 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">manchester airport departures</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>107,675</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.39%</span></div>
-        <div class="metric">Pos: <span>7.2</span></div>
-      </div>
-      <div class="uplift">Est. +10,768 clicks/28d at 10% CTR (+10,344 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">heathrow arrivals</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>104,343</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.92%</span></div>
-        <div class="metric">Pos: <span>5.7</span></div>
-      </div>
-      <div class="uplift">Est. +10,434 clicks/28d at 10% CTR (+9,474 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">gatwick departures</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>81,487</span></div>
-        <div class="metric">CTR: <span style="color:var(--yellow)">1.41%</span></div>
-        <div class="metric">Pos: <span>6.2</span></div>
-      </div>
-      <div class="uplift">Est. +8,149 clicks/28d at 10% CTR (+7,001 net)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">tenerife weather</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>82,823</span></div>
-        <div class="metric">CTR: <span style="color:var(--red)">0.29%</span></div>
-        <div class="metric">Pos: <span>10.1</span></div>
-      </div>
-      <div class="uplift">Est. +8,282 clicks/28d at 10% CTR (+8,041 net)</div>
+  <div class="card">
+    <div class="card-title">4a. Low CTR / High Impressions (pos 5-20, &gt;300 impressions, CTR &lt;5%)</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Extra clicks estimated if CTR reaches 5% &#183; Formula: impressions &#215; (0.05 &#8722; current CTR)</div>
+    <div class="table-wrap">
+      <table id="opp-a">
+        <thead><tr><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th><th class="num">Est. Extra Clicks</th></tr></thead>
+        <tbody><tr><td>travel insurance</td><td class="num">34</td><td class="num">151.8K</td><td class="num ctr-red">0.02%</td><td class="num pos-orange">13.1</td><td class="num opp-extra">+7.6K</td></tr>
+<tr><td>fcdo travel advice</td><td class="num">296</td><td class="num">145.4K</td><td class="num ctr-red">0.20%</td><td class="num pos-yellow">5.5</td><td class="num opp-extra">+7.0K</td></tr>
+<tr><td>heathrow departures</td><td class="num">965</td><td class="num">135.6K</td><td class="num ctr-red">0.71%</td><td class="num pos-yellow">5.8</td><td class="num opp-extra">+5.8K</td></tr>
+<tr><td>benidorm weather</td><td class="num">264</td><td class="num">115.7K</td><td class="num ctr-red">0.23%</td><td class="num pos-orange">10.5</td><td class="num opp-extra">+5.5K</td></tr>
+<tr><td>manchester airport departures</td><td class="num">424</td><td class="num">107.7K</td><td class="num ctr-red">0.39%</td><td class="num pos-yellow">7.2</td><td class="num opp-extra">+5.0K</td></tr>
+<tr><td>heathrow arrivals</td><td class="num">960</td><td class="num">104.3K</td><td class="num ctr-red">0.92%</td><td class="num pos-yellow">5.7</td><td class="num opp-extra">+4.3K</td></tr>
+<tr><td>tenerife weather</td><td class="num">241</td><td class="num">82.8K</td><td class="num ctr-red">0.29%</td><td class="num pos-orange">10.1</td><td class="num opp-extra">+3.9K</td></tr>
+<tr><td>waze app</td><td class="num">99</td><td class="num">65.4K</td><td class="num ctr-red">0.15%</td><td class="num pos-yellow">8.8</td><td class="num opp-extra">+3.2K</td></tr>
+<tr><td>gatwick departures</td><td class="num">1.1K</td><td class="num">81.5K</td><td class="num ctr-red">1.41%</td><td class="num pos-yellow">6.2</td><td class="num opp-extra">+2.9K</td></tr>
+<tr><td>weather benidorm</td><td class="num">143</td><td class="num">46.3K</td><td class="num ctr-red">0.31%</td><td class="num pos-orange">10.5</td><td class="num opp-extra">+2.2K</td></tr>
+<tr><td>harry potter world</td><td class="num">78</td><td class="num">41.5K</td><td class="num ctr-red">0.19%</td><td class="num pos-yellow">5.2</td><td class="num opp-extra">+2.0K</td></tr>
+<tr><td>manchester airport arrivals</td><td class="num">1.4K</td><td class="num">62.3K</td><td class="num ctr-red">2.18%</td><td class="num pos-yellow">6.3</td><td class="num opp-extra">+1.8K</td></tr>
+<tr><td>gatwick arrivals</td><td class="num">75</td><td class="num">32.5K</td><td class="num ctr-red">0.23%</td><td class="num pos-yellow">8.3</td><td class="num opp-extra">+1.5K</td></tr>
+<tr><td>dublin airport departures</td><td class="num">232</td><td class="num">35.0K</td><td class="num ctr-red">0.66%</td><td class="num pos-yellow">7.0</td><td class="num opp-extra">+1.5K</td></tr>
+<tr><td>dublin airport arrivals</td><td class="num">271</td><td class="num">32.9K</td><td class="num ctr-red">0.82%</td><td class="num pos-yellow">6.6</td><td class="num opp-extra">+1.4K</td></tr></tbody>
+      </table>
     </div>
   </div>
 
-  <div class="section-divider"></div>
-
-  <h3 style="margin-bottom:6px;">B) Near #1 Opportunities (Position 4–10, &gt;200 impressions)</h3>
-  <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Small ranking improvements could significantly increase clicks for these high-volume terms.</p>
-  <div class="opps-grid">
-    <div class="opp-card">
-      <div class="kw">manchester airport parking</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>142,432</span></div>
-        <div class="metric">CTR: <span>2.57%</span></div>
-        <div class="metric">Pos: <span style="color:var(--green)">3.0</span></div>
-      </div>
-      <div class="uplift">Move to #1: est. +~7k clicks/28d (25% CTR)</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">fcdo travel advice</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>145,414</span></div>
-        <div class="metric">CTR: <span>0.20%</span></div>
-        <div class="metric">Pos: <span style="color:var(--yellow)">5.5</span></div>
-      </div>
-      <div class="uplift">Move to top 3: est. +14,000 clicks/28d</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">heathrow departures</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>135,586</span></div>
-        <div class="metric">CTR: <span>0.71%</span></div>
-        <div class="metric">Pos: <span style="color:var(--yellow)">5.8</span></div>
-      </div>
-      <div class="uplift">Move to top 3: est. +12,000 clicks/28d</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">heathrow arrivals</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>104,343</span></div>
-        <div class="metric">CTR: <span>0.92%</span></div>
-        <div class="metric">Pos: <span style="color:var(--yellow)">5.7</span></div>
-      </div>
-      <div class="uplift">Move to top 3: est. +10,000 clicks/28d</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">stansted airport parking</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>92,845</span></div>
-        <div class="metric">CTR: <span>2.57%</span></div>
-        <div class="metric">Pos: <span style="color:var(--green)">3.4</span></div>
-      </div>
-      <div class="uplift">Move to #1: est. +5,000 clicks/28d</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">gatwick departures</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>81,487</span></div>
-        <div class="metric">CTR: <span>1.41%</span></div>
-        <div class="metric">Pos: <span style="color:var(--yellow)">6.2</span></div>
-      </div>
-      <div class="uplift">Move to top 3: est. +6,500 clicks/28d</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">luton airport parking</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>72,564</span></div>
-        <div class="metric">CTR: <span>1.25%</span></div>
-        <div class="metric">Pos: <span style="color:var(--green)">3.8</span></div>
-      </div>
-      <div class="uplift">Move to #1: est. +5,000 clicks/28d</div>
-    </div>
-    <div class="opp-card">
-      <div class="kw">heathrow parking</div>
-      <div class="metrics">
-        <div class="metric">Impressions: <span>71,372</span></div>
-        <div class="metric">CTR: <span>1.86%</span></div>
-        <div class="metric">Pos: <span style="color:var(--green)">3.5</span></div>
-      </div>
-      <div class="uplift">Move to #1: est. +4,000 clicks/28d</div>
-    </div>
-  </div>
-</section>
-
-<!-- TOP 25 PAGES -->
-<section id="pages">
-  <h2><span class="icon">📄</span> Top 25 Pages (Search Console)</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>#</th><th>Page URL</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr>
-      </thead>
-      <tbody id="pages-tbody">
-        <tr><td>1</td><td class="url-cell"><a href="https://www.holidayextras.com/" target="_blank">holidayextras.com/</a></td><td class="num">15,313</td><td class="num">363,786</td><td class="num">4.21%</td><td class="num"><span class="pos pos-red">22.9</span></td></tr>
-        <tr><td>2</td><td class="url-cell"><a href="https://www.holidayextras.com/discount-codes.html" target="_blank">/discount-codes.html</a></td><td class="num">9,232</td><td class="num">196,940</td><td class="num">4.69%</td><td class="num"><span class="pos pos-yellow">7.7</span></td></tr>
-        <tr><td>3</td><td class="url-cell"><a href="https://www.holidayextras.com/stansted-airport-parking.html" target="_blank">/stansted-airport-parking.html</a></td><td class="num">8,952</td><td class="num">368,159</td><td class="num">2.43%</td><td class="num"><span class="pos pos-yellow">6.5</span></td></tr>
-        <tr><td>4</td><td class="url-cell"><a href="https://www.holidayextras.com/manchester-airport-parking.html" target="_blank">/manchester-airport-parking.html</a></td><td class="num">8,002</td><td class="num">344,318</td><td class="num">2.32%</td><td class="num"><span class="pos pos-yellow">4.8</span></td></tr>
-        <tr><td>5</td><td class="url-cell"><a href="https://www.holidayextras.com/de/" target="_blank">holidayextras.com/de/</a></td><td class="num">7,790</td><td class="num">60,135</td><td class="num">12.95%</td><td class="num"><span class="pos pos-red">35.9</span></td></tr>
-        <tr><td>6</td><td class="url-cell"><a href="https://www.holidayextras.com/login.php" target="_blank">/login.php</a></td><td class="num">7,432</td><td class="num">20,799</td><td class="num">35.73%</td><td class="num"><span class="pos pos-yellow">5.1</span></td></tr>
-        <tr><td>7</td><td class="url-cell"><a href="https://www.holidayextras.com/birmingham-airport-parking.html" target="_blank">/birmingham-airport-parking.html</a></td><td class="num">6,133</td><td class="num">198,990</td><td class="num">3.08%</td><td class="num"><span class="pos pos-green">3.9</span></td></tr>
-        <tr><td>8</td><td class="url-cell"><a href="https://www.holidayextras.com/gatwick-airport-parking.html" target="_blank">/gatwick-airport-parking.html</a></td><td class="num">5,677</td><td class="num">354,601</td><td class="num">1.60%</td><td class="num"><span class="pos pos-yellow">4.7</span></td></tr>
-        <tr><td>9</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-parking.html" target="_blank">/airport-parking.html</a></td><td class="num">5,085</td><td class="num">349,895</td><td class="num">1.45%</td><td class="num"><span class="pos pos-yellow">10.0</span></td></tr>
-        <tr><td>10</td><td class="url-cell"><a href="https://www.holidayextras.com/heathrow-airport-parking.html" target="_blank">/heathrow-airport-parking.html</a></td><td class="num">4,964</td><td class="num">422,272</td><td class="num">1.18%</td><td class="num"><span class="pos pos-yellow">7.0</span></td></tr>
-        <tr><td>11</td><td class="url-cell"><a href="https://www.holidayextras.com/de/login.html" target="_blank">/de/login.html</a></td><td class="num">4,433</td><td class="num">18,833</td><td class="num">23.54%</td><td class="num"><span class="pos pos-green">2.0</span></td></tr>
-        <tr><td>12</td><td class="url-cell"><a href="https://www.holidayextras.com/de/flughafen-stuttgart-abflug.html" target="_blank">/de/flughafen-stuttgart-abflug.html</a></td><td class="num">4,366</td><td class="num">129,384</td><td class="num">3.37%</td><td class="num"><span class="pos pos-yellow">6.4</span></td></tr>
-        <tr><td>13</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-parking-discount-code.html" target="_blank">/airport-parking-discount-code.html</a></td><td class="num">4,329</td><td class="num">159,598</td><td class="num">2.71%</td><td class="num"><span class="pos pos-yellow">6.5</span></td></tr>
-        <tr><td>14</td><td class="url-cell"><a href="https://www.holidayextras.com/flights/gatwick-departures.html" target="_blank">/flights/gatwick-departures.html</a></td><td class="num">4,144</td><td class="num">287,225</td><td class="num">1.44%</td><td class="num"><span class="pos pos-yellow">6.7</span></td></tr>
-        <tr><td>15</td><td class="url-cell"><a href="https://www.holidayextras.com/bristol-airport-parking.html" target="_blank">/bristol-airport-parking.html</a></td><td class="num">3,995</td><td class="num">174,723</td><td class="num">2.29%</td><td class="num"><span class="pos pos-green">3.6</span></td></tr>
-        <tr><td>16</td><td class="url-cell"><a href="https://www.holidayextras.com/de/flughafen-bremen-abflug.html" target="_blank">/de/flughafen-bremen-abflug.html</a></td><td class="num">3,771</td><td class="num">55,913</td><td class="num">6.74%</td><td class="num"><span class="pos pos-yellow">5.8</span></td></tr>
-        <tr><td>17</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-lounges.html" target="_blank">/airport-lounges.html</a></td><td class="num">3,757</td><td class="num">318,383</td><td class="num">1.18%</td><td class="num"><span class="pos pos-yellow">6.2</span></td></tr>
-        <tr><td>18</td><td class="url-cell"><a href="https://www.holidayextras.com/about-us/can-i-contact-holiday-extras-by-phone.html" target="_blank">/about-us/can-i-contact...</a></td><td class="num">3,578</td><td class="num">17,096</td><td class="num">20.93%</td><td class="num"><span class="pos pos-green">3.6</span></td></tr>
-        <tr><td>19</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-transfers.html" target="_blank">/airport-transfers.html</a></td><td class="num">3,531</td><td class="num">325,953</td><td class="num">1.08%</td><td class="num"><span class="pos pos-yellow">6.2</span></td></tr>
-        <tr><td>20</td><td class="url-cell"><a href="https://www.holidayextras.com/edinburgh-airport-parking.html" target="_blank">/edinburgh-airport-parking.html</a></td><td class="num">3,106</td><td class="num">147,253</td><td class="num">2.11%</td><td class="num"><span class="pos pos-green">3.6</span></td></tr>
-        <tr><td>21</td><td class="url-cell"><a href="https://www.holidayextras.com/luton-airport-parking.html" target="_blank">/luton-airport-parking.html</a></td><td class="num">2,608</td><td class="num">211,211</td><td class="num">1.23%</td><td class="num"><span class="pos pos-yellow">4.9</span></td></tr>
-        <tr><td>22</td><td class="url-cell"><a href="https://www.holidayextras.com/about-us/can-i-speak-to-someone-at-holiday-extras.html" target="_blank">/about-us/can-i-speak-to...</a></td><td class="num">2,224</td><td class="num">16,687</td><td class="num">13.33%</td><td class="num"><span class="pos pos-green">4.0</span></td></tr>
-        <tr><td>23</td><td class="url-cell"><a href="https://www.holidayextras.com/flights/manchester-airport-arrivals.html" target="_blank">/flights/manchester-airport-arrivals.html</a></td><td class="num">2,223</td><td class="num">151,618</td><td class="num">1.47%</td><td class="num"><span class="pos pos-yellow">7.2</span></td></tr>
-        <tr><td>24</td><td class="url-cell"><a href="https://www.holidayextras.com/manchester-airport-lounges-terminal-2.html" target="_blank">/manchester-airport-lounges-t2.html</a></td><td class="num">2,203</td><td class="num">92,539</td><td class="num">2.38%</td><td class="num"><span class="pos pos-yellow">7.8</span></td></tr>
-        <tr><td>25</td><td class="url-cell"><a href="https://www.holidayextras.com/gatwick-parking-promo-code.html" target="_blank">/gatwick-parking-promo-code.html</a></td><td class="num">2,181</td><td class="num">46,467</td><td class="num">4.69%</td><td class="num"><span class="pos pos-yellow">4.9</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- GOOGLE ANALYTICS 4 -->
-<section id="ga4">
-  <h2><span class="icon">📈</span> Google Analytics 4</h2>
-
-  <div class="cards-3" style="margin-bottom:20px;">
-    <div class="card">
-      <h3>Core Metrics (28d)</h3>
-      <div class="metric-row">
-        <span class="metric-name">Sessions</span>
-        <div style="text-align:right">
-          <div class="metric-val">25,651</div>
-          <div class="metric-change up">▲ +6.3%</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Active Users</span>
-        <div style="text-align:right">
-          <div class="metric-val">22,343</div>
-          <div class="metric-change up">▲ +4.7%</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">New Users</span>
-        <div style="text-align:right">
-          <div class="metric-val">19,749</div>
-          <div class="metric-change up">▲ +6.6%</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Bounce Rate</span>
-        <div style="text-align:right">
-          <div class="metric-val">48.5%</div>
-          <div class="metric-change good-down">▼ improved from 50.1%</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Avg Session Duration</span>
-        <div style="text-align:right">
-          <div class="metric-val">1m 54s</div>
-          <div class="metric-change up">▲ +2.9%</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Engagement Rate</span>
-        <div style="text-align:right">
-          <div class="metric-val">51.5%</div>
-          <div class="metric-change up">▲ from 49.9%</div>
-        </div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Page Views</span>
-        <div style="text-align:right">
-          <div class="metric-val">87,820</div>
-          <div class="metric-change up">▲ +11.7%</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Traffic Channels</h3>
-      <div class="bar-row">
-        <div class="bar-label">Direct</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:67%;background:var(--blue)">
-            <span class="bar-val" style="color:#fff">16,355</span>
-          </div>
-        </div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">Referral</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:24%;background:#6366f1">
-            <span class="bar-val" style="color:#fff">5,991</span>
-          </div>
-        </div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">Organic Search</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:5.6%;background:var(--green)">
-            <span class="bar-val" style="color:#fff;font-size:11px">1,351</span>
-          </div>
-        </div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">Unassigned</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:2.4%;background:var(--muted)">
-            <span class="bar-val" style="color:#fff;font-size:11px">571</span>
-          </div>
-        </div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">Email</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:1.0%;background:var(--yellow);min-width:50px">
-            <span class="bar-val" style="color:#1e293b;font-size:11px">251</span>
-          </div>
-        </div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">Organic Social</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:0.2%;background:var(--orange);min-width:40px">
-            <span class="bar-val" style="color:#1e293b;font-size:11px">12</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Device Split (GA4 Sessions)</h3>
-      <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
-        <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:13px;">📱 Mobile</span>
-            <span style="font-weight:700">16,257 <span style="color:var(--muted);font-weight:400;font-size:12px">(63.4%)</span></span>
-          </div>
-          <div class="bar-track"><div class="bar-fill" style="width:63.4%;background:var(--blue)"></div></div>
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:13px;">🖥️ Desktop</span>
-            <span style="font-weight:700">7,689 <span style="color:var(--muted);font-weight:400;font-size:12px">(30.0%)</span></span>
-          </div>
-          <div class="bar-track"><div class="bar-fill" style="width:30%;background:#6366f1"></div></div>
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:13px;">📟 Tablet</span>
-            <span style="font-weight:700">433 <span style="color:var(--muted);font-weight:400;font-size:12px">(1.7%)</span></span>
-          </div>
-          <div class="bar-track"><div class="bar-fill" style="width:1.7%;background:var(--yellow);min-width:30px"></div></div>
-        </div>
-        <div class="section-divider"></div>
-        <div style="font-size:12px;color:var(--muted)">
-          <strong style="color:var(--text)">SC Device Split:</strong><br>
-          Mobile: 306k clicks (67.9%) · Desktop: 129k (28.5%) · Tablet: 16k (3.5%)
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-title">4b. Near Page 1 Opportunities (pos 10-20, &gt;100 impressions)</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Estimated clicks at position 5 (CTR &#8776; 6.3%) &#183; Extra = impressions &#215; (0.063 &#8722; current CTR)</div>
+    <div class="table-wrap">
+      <table id="opp-b">
+        <thead><tr><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th><th class="num">Est. Extra Clicks</th></tr></thead>
+        <tbody><tr><td>travel insurance</td><td class="num">34</td><td class="num">151.8K</td><td class="num ctr-red">0.02%</td><td class="num pos-orange">13.1</td><td class="num opp-extra">+9.5K</td></tr>
+<tr><td>benidorm weather</td><td class="num">264</td><td class="num">115.7K</td><td class="num ctr-red">0.23%</td><td class="num pos-orange">10.5</td><td class="num opp-extra">+7.0K</td></tr>
+<tr><td>tenerife weather</td><td class="num">241</td><td class="num">82.8K</td><td class="num ctr-red">0.29%</td><td class="num pos-orange">10.1</td><td class="num opp-extra">+5.0K</td></tr>
+<tr><td>weather benidorm</td><td class="num">143</td><td class="num">46.3K</td><td class="num ctr-red">0.31%</td><td class="num pos-orange">10.5</td><td class="num opp-extra">+2.8K</td></tr>
+<tr><td>weather tenerife</td><td class="num">60</td><td class="num">21.5K</td><td class="num ctr-red">0.28%</td><td class="num pos-orange">10.4</td><td class="num opp-extra">+1.3K</td></tr></tbody>
+      </table>
     </div>
   </div>
 
-  <h3 style="margin-bottom:12px;">Top 20 Landing Pages (GA4)</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>#</th><th>Page Path</th><th class="num">Sessions</th><th class="num">Users</th><th class="num">Avg Duration</th><th class="num">Engagement</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>/static//carpark</td><td class="num">20,776</td><td class="num">5,311</td><td class="num">1m 05s</td><td class="num">19.4%</td></tr>
-        <tr><td>2</td><td>/static//categories</td><td class="num">7,085</td><td class="num">4,407</td><td class="num">0m 21s</td><td class="num">3.3%</td></tr>
-        <tr><td>3</td><td>/static//hotel_with_parking</td><td class="num">2,066</td><td class="num">1,214</td><td class="num">0m 41s</td><td class="num">41.1%</td></tr>
-        <tr><td>4</td><td>/booking/parking.html</td><td class="num">1,630</td><td class="num">996</td><td class="num">0m 60s</td><td class="num">70.2%</td></tr>
-        <tr><td>5</td><td>/static//feedback/amend</td><td class="num">1,113</td><td class="num">951</td><td class="num">0m 39s</td><td class="num">3.2%</td></tr>
-        <tr><td>6</td><td>/static//users/new_sign_in</td><td class="num">935</td><td class="num">653</td><td class="num">0m 41s</td><td class="num">5.6%</td></tr>
-        <tr><td>7</td><td>/de/booking/parking.html</td><td class="num">786</td><td class="num">512</td><td class="num">1m 13s</td><td class="num">68.2%</td></tr>
-        <tr><td>8</td><td>/it/booking/parking.html</td><td class="num">559</td><td class="num">348</td><td class="num">1m 02s</td><td class="num">71.8%</td></tr>
-        <tr><td>9</td><td>/fr/booking/parking.html</td><td class="num">545</td><td class="num">397</td><td class="num">0m 55s</td><td class="num">76.5%</td></tr>
-        <tr><td>10</td><td>/static//users/otpLogin</td><td class="num">519</td><td class="num">418</td><td class="num">0m 20s</td><td class="num">5.0%</td></tr>
-        <tr><td>11</td><td>/en/documents/terms</td><td class="num">518</td><td class="num">464</td><td class="num">0m 25s</td><td class="num">94.5%</td></tr>
-        <tr><td>12</td><td>/static//users/password/edit</td><td class="num">514</td><td class="num">210</td><td class="num">1m 07s</td><td class="num">12.7%</td></tr>
-        <tr><td>13</td><td>/static//mytrips</td><td class="num">478</td><td class="num">274</td><td class="num">12m 03s</td><td class="num">6.0%</td></tr>
-        <tr><td>14</td><td>/static//users/sign_in</td><td class="num">436</td><td class="num">224</td><td class="num">0m 26s</td><td class="num">4.5%</td></tr>
-        <tr><td>15</td><td>/es/</td><td class="num">342</td><td class="num">182</td><td class="num">1m 49s</td><td class="num">54.9%</td></tr>
-        <tr><td>16</td><td>/static//users/password/new</td><td class="num">307</td><td class="num">234</td><td class="num">0m 22s</td><td class="num">56.6%</td></tr>
-        <tr><td>17</td><td>/es/booking/parking.html</td><td class="num">243</td><td class="num">147</td><td class="num">1m 36s</td><td class="num">69.2%</td></tr>
-        <tr><td>18</td><td>/static/carpark/carpark</td><td class="num">210</td><td class="num">83</td><td class="num">1m 32s</td><td class="num">27.3%</td></tr>
-        <tr><td>19</td><td>/static//users/passwordLogin</td><td class="num">203</td><td class="num">158</td><td class="num">0m 31s</td><td class="num">5.7%</td></tr>
-        <tr><td>20</td><td>/da/hittegods-koebenhavns-lufthavn.html</td><td class="num">200</td><td class="num">145</td><td class="num">0m 13s</td><td class="num">92.8%</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- CORE WEB VITALS -->
-<section id="cwv">
-  <h2><span class="icon">⚡</span> Core Web Vitals</h2>
-
-  <div class="cwv-summary">
-    <div class="cwv-stat">
-      <div class="val" style="color:var(--red)">40</div>
-      <div class="lbl">Avg Performance Score</div>
-    </div>
-    <div class="cwv-stat">
-      <div class="val" style="color:var(--green)">0</div>
-      <div class="lbl">Good Pages (≥90)</div>
-    </div>
-    <div class="cwv-stat">
-      <div class="val" style="color:var(--yellow)">3</div>
-      <div class="lbl">Needs Improvement (50-89)</div>
-    </div>
-    <div class="cwv-stat">
-      <div class="val" style="color:var(--red)">16</div>
-      <div class="lbl">Poor Pages (&lt;50)</div>
-    </div>
-    <div class="cwv-stat">
-      <div class="val" style="color:var(--muted)">1</div>
-      <div class="lbl">Error / No Data</div>
+  <div class="card">
+    <div class="card-title">4c. #1 Ranking Opportunities (pos 2-5, &gt;200 impressions)</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Estimated additional clicks at #1 (CTR &#8776; 28%) &#183; Extra = impressions &#215; (0.28 &#8722; current CTR)</div>
+    <div class="table-wrap">
+      <table id="opp-c">
+        <thead><tr><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th><th class="num">Est. Extra @ #1</th></tr></thead>
+        <tbody><tr><td>manchester airport parking</td><td class="num">3.7K</td><td class="num">142.4K</td><td class="num ctr-red">2.57%</td><td class="num pos-yellow">3.0</td><td class="num opp-extra">+36.2K</td></tr>
+<tr><td>stansted airport parking</td><td class="num">2.4K</td><td class="num">92.8K</td><td class="num ctr-red">2.57%</td><td class="num pos-yellow">3.4</td><td class="num opp-extra">+23.6K</td></tr>
+<tr><td>gatwick parking</td><td class="num">2.1K</td><td class="num">82.7K</td><td class="num ctr-red">2.55%</td><td class="num pos-green">2.6</td><td class="num opp-extra">+21.1K</td></tr>
+<tr><td>bristol airport parking</td><td class="num">2.0K</td><td class="num">75.0K</td><td class="num ctr-red">2.70%</td><td class="num pos-yellow">3.4</td><td class="num opp-extra">+19.0K</td></tr>
+<tr><td>luton airport parking</td><td class="num">907</td><td class="num">72.6K</td><td class="num ctr-red">1.25%</td><td class="num pos-yellow">3.8</td><td class="num opp-extra">+19.4K</td></tr>
+<tr><td>dublin airport parking</td><td class="num">122</td><td class="num">72.3K</td><td class="num ctr-red">0.17%</td><td class="num pos-yellow">3.6</td><td class="num opp-extra">+20.1K</td></tr>
+<tr><td>heathrow parking</td><td class="num">1.3K</td><td class="num">71.4K</td><td class="num ctr-red">1.86%</td><td class="num pos-yellow">3.5</td><td class="num opp-extra">+18.7K</td></tr>
+<tr><td>birmingham airport parking</td><td class="num">2.7K</td><td class="num">63.5K</td><td class="num ctr-red">4.27%</td><td class="num pos-green">2.7</td><td class="num opp-extra">+15.1K</td></tr>
+<tr><td>edinburgh airport parking</td><td class="num">1.6K</td><td class="num">62.6K</td><td class="num ctr-red">2.51%</td><td class="num pos-green">2.5</td><td class="num opp-extra">+16.0K</td></tr>
+<tr><td>gatwick airport parking</td><td class="num">960</td><td class="num">45.1K</td><td class="num ctr-red">2.13%</td><td class="num pos-green">2.9</td><td class="num opp-extra">+11.7K</td></tr>
+<tr><td>airport parking</td><td class="num">1.4K</td><td class="num">38.4K</td><td class="num ctr-red">3.68%</td><td class="num pos-yellow">3.0</td><td class="num opp-extra">+9.3K</td></tr>
+<tr><td>stansted parking</td><td class="num">1.3K</td><td class="num">34.8K</td><td class="num ctr-red">3.81%</td><td class="num pos-yellow">3.5</td><td class="num opp-extra">+8.4K</td></tr>
+<tr><td>glasgow airport parking</td><td class="num">984</td><td class="num">33.5K</td><td class="num ctr-red">2.94%</td><td class="num pos-green">2.9</td><td class="num opp-extra">+8.4K</td></tr>
+<tr><td>heathrow airport parking</td><td class="num">711</td><td class="num">28.0K</td><td class="num ctr-red">2.54%</td><td class="num pos-yellow">3.2</td><td class="num opp-extra">+7.1K</td></tr>
+<tr><td>doha airport</td><td class="num">28</td><td class="num">27.7K</td><td class="num ctr-red">0.10%</td><td class="num pos-yellow">3.8</td><td class="num opp-extra">+7.7K</td></tr></tbody>
+      </table>
     </div>
   </div>
+</div>
 
-  <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px 16px;margin-bottom:20px;">
-    <strong style="color:var(--red);">Critical CWV Issue:</strong> <span style="color:var(--muted)">0 out of 19 tested pages achieve a Good performance score. The average score of 40 is well below Google's recommended threshold of 90. This is directly impacting rankings and user experience.</span>
-  </div>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>#</th><th>Page</th><th class="num">Perf Score</th><th class="num">LCP</th><th class="num">CLS</th><th class="num">TBT</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td class="url-cell"><span style="color:var(--red)">⚠</span> /stansted-airport-parking.html</td><td class="num"><span style="color:var(--muted)">Error</span></td><td class="num">–</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>2</td><td class="url-cell">/login.php</td><td class="num"><span class="score-yellow">54</span></td><td class="num"><span class="lcp-red">14.7s</span></td><td class="num">0</td><td class="num">740ms</td></tr>
-        <tr><td>3</td><td class="url-cell">/ (homepage)</td><td class="num"><span class="score-yellow">59</span></td><td class="num"><span class="lcp-red">4.6s</span></td><td class="num">0.041</td><td class="num">610ms</td></tr>
-        <tr><td>4</td><td class="url-cell">/de/login.html</td><td class="num"><span class="score-red">45</span></td><td class="num"><span class="lcp-red">20.6s</span></td><td class="num">0</td><td class="num">610ms</td></tr>
-        <tr><td>5</td><td class="url-cell">/airport-parking.html</td><td class="num"><span class="score-red">41</span></td><td class="num"><span class="lcp-red">12.9s</span></td><td class="num">0</td><td class="num">690ms</td></tr>
-        <tr><td>6</td><td class="url-cell">/birmingham-airport-parking.html</td><td class="num"><span class="score-red">34</span></td><td class="num"><span class="lcp-red">15.2s</span></td><td class="num">0.004</td><td class="num">1,100ms</td></tr>
-        <tr><td>7</td><td class="url-cell">/discount-codes.html</td><td class="num"><span class="score-red">36</span></td><td class="num"><span class="lcp-red">10.1s</span></td><td class="num">0.042</td><td class="num">1,460ms</td></tr>
-        <tr><td>8</td><td class="url-cell">/gatwick-airport-parking.html</td><td class="num"><span class="score-red">44</span></td><td class="num"><span class="lcp-red">8.2s</span></td><td class="num">0.004</td><td class="num">1,370ms</td></tr>
-        <tr><td>9</td><td class="url-cell">/de/ (German homepage)</td><td class="num"><span class="score-red">29</span></td><td class="num"><span class="lcp-red">10.6s</span></td><td class="num">0</td><td class="num">2,170ms</td></tr>
-        <tr><td>10</td><td class="url-cell">/manchester-airport-parking.html</td><td class="num"><span class="score-red">29</span></td><td class="num"><span class="lcp-red">22.0s</span></td><td class="num" style="color:var(--red)">0.104</td><td class="num">1,430ms</td></tr>
-        <tr><td>11</td><td class="url-cell">/heathrow-airport-parking.html</td><td class="num"><span class="score-red">45</span></td><td class="num"><span class="lcp-red">4.8s</span></td><td class="num" style="color:var(--red)">0.095</td><td class="num">1,520ms</td></tr>
-        <tr><td>12</td><td class="url-cell">/airport-parking-discount-code.html</td><td class="num"><span class="score-yellow">50</span></td><td class="num"><span class="lcp-red">7.0s</span></td><td class="num" style="color:var(--yellow)">0.068</td><td class="num">650ms</td></tr>
-        <tr><td>13</td><td class="url-cell">/de/flughafen-stuttgart-abflug.html</td><td class="num"><span class="score-red">41</span></td><td class="num"><span class="lcp-green">4.0s</span></td><td class="num" style="color:var(--red)">0.353</td><td class="num">1,240ms</td></tr>
-        <tr><td>14</td><td class="url-cell">/flights/gatwick-departures.html</td><td class="num"><span class="score-red">37</span></td><td class="num"><span class="lcp-yellow">5.3s</span></td><td class="num" style="color:var(--red)">0.188</td><td class="num">1,180ms</td></tr>
-        <tr><td>15</td><td class="url-cell">/de/flughafen-bremen-abflug.html</td><td class="num"><span class="score-red">38</span></td><td class="num"><span class="lcp-yellow">6.0s</span></td><td class="num" style="color:var(--red)">0.376</td><td class="num">660ms</td></tr>
-        <tr><td>16</td><td class="url-cell">/airport-lounges.html</td><td class="num"><span class="score-red">22</span></td><td class="num"><span class="lcp-red">11.1s</span></td><td class="num" style="color:var(--red)">0.403</td><td class="num">740ms</td></tr>
-        <tr><td>17</td><td class="url-cell">/about-us/can-i-contact...by-phone.html</td><td class="num"><span class="score-red">43</span></td><td class="num"><span class="lcp-red">9.4s</span></td><td class="num">0</td><td class="num">960ms</td></tr>
-        <tr><td>18</td><td class="url-cell">/bristol-airport-parking.html</td><td class="num"><span class="score-red">29</span></td><td class="num"><span class="lcp-red">22.6s</span></td><td class="num" style="color:var(--red)">0.105</td><td class="num">1,360ms</td></tr>
-        <tr><td>19</td><td class="url-cell">/airport-transfers.html</td><td class="num"><span class="score-red">39</span></td><td class="num"><span class="lcp-red">20.0s</span></td><td class="num">0.024</td><td class="num">690ms</td></tr>
-        <tr><td>20</td><td class="url-cell">/edinburgh-airport-parking.html</td><td class="num"><span class="score-red">39</span></td><td class="num"><span class="lcp-red">7.4s</span></td><td class="num">0.004</td><td class="num">1,320ms</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size:11px;color:var(--muted);margin-top:10px;">Score: <span class="score-green">≥90 Good</span> · <span class="score-yellow">50–89 Needs Improvement</span> · <span class="score-red">&lt;50 Poor</span> &nbsp;|&nbsp; LCP: <span class="lcp-green">≤2.5s</span> · <span class="lcp-yellow">≤4s</span> · <span class="lcp-red">&gt;4s</span></p>
-</section>
-
-<!-- GEOGRAPHIC PERFORMANCE -->
-<section id="geo">
-  <h2><span class="icon">🌍</span> Geographic Performance</h2>
-  <div class="cards-2">
+<!-- S5: Brand vs Non-Brand Tables -->
+<div id="s5" class="section">
+  <div class="section-title">5. Brand vs Non-Brand Keyword Tables <span class="badge badge-hx">Search Console</span></div>
+  <div class="two-col">
     <div>
+      <div style="font-size:12px;font-weight:700;color:var(--hx);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Top 10 Brand Queries</div>
       <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Country</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><span class="flag">🇬🇧</span>United Kingdom</td><td class="num">307,561</td><td class="num">24,092,138</td><td class="num">1.28%</td><td class="num">8.87</td></tr>
-            <tr><td><span class="flag">🇩🇪</span>Germany</td><td class="num">80,232</td><td class="num">6,793,555</td><td class="num">1.18%</td><td class="num">7.32</td></tr>
-            <tr><td><span class="flag">🇪🇸</span>Spain</td><td class="num">7,803</td><td class="num">799,939</td><td class="num">0.98%</td><td class="num">7.97</td></tr>
-            <tr><td><span class="flag">🇫🇷</span>France</td><td class="num">5,830</td><td class="num">821,840</td><td class="num">0.71%</td><td class="num">11.05</td></tr>
-            <tr><td><span class="flag">🇮🇪</span>Ireland</td><td class="num">5,094</td><td class="num">839,681</td><td class="num">0.61%</td><td class="num">7.56</td></tr>
-            <tr><td><span class="flag">🇳🇱</span>Netherlands</td><td class="num">4,756</td><td class="num">596,403</td><td class="num">0.80%</td><td class="num">7.73</td></tr>
-            <tr><td><span class="flag">🇺🇸</span>United States</td><td class="num">3,965</td><td class="num">1,836,898</td><td class="num">0.22%</td><td class="num">13.76</td></tr>
-            <tr><td><span class="flag">🇦🇹</span>Austria</td><td class="num">2,808</td><td class="num">318,260</td><td class="num">0.88%</td><td class="num">7.43</td></tr>
-            <tr><td><span class="flag">🇧🇪</span>Belgium</td><td class="num">2,643</td><td class="num">255,942</td><td class="num">1.03%</td><td class="num">6.65</td></tr>
-            <tr><td><span class="flag">🇮🇹</span>Italy</td><td class="num">2,248</td><td class="num">469,225</td><td class="num">0.48%</td><td class="num">9.44</td></tr>
-            <tr><td><span class="flag">🇨🇭</span>Switzerland</td><td class="num">2,208</td><td class="num">374,780</td><td class="num">0.59%</td><td class="num">9.62</td></tr>
-            <tr><td><span class="flag">🇮🇳</span>India</td><td class="num">1,343</td><td class="num">286,567</td><td class="num">0.47%</td><td class="num">9.54</td></tr>
-            <tr><td><span class="flag">🇨🇦</span>Canada</td><td class="num">1,286</td><td class="num">253,226</td><td class="num">0.51%</td><td class="num">10.42</td></tr>
-            <tr><td><span class="flag">🇦🇺</span>Australia</td><td class="num">1,275</td><td class="num">191,074</td><td class="num">0.67%</td><td class="num">14.79</td></tr>
-            <tr><td><span class="flag">🇩🇰</span>Denmark</td><td class="num">1,221</td><td class="num">176,448</td><td class="num">0.69%</td><td class="num">7.08</td></tr>
-          </tbody>
+        <table id="brand-table">
+          <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Position</th></tr></thead>
+          <tbody><tr><td class="num">1</td><td>holiday extras</td><td class="num">19.2K</td><td class="num">112.6K</td><td class="num ctr-green">17.02%</td><td class="num pos-green">1.1</td></tr>
+<tr><td class="num">2</td><td>holiday extras discount code</td><td class="num">5.1K</td><td class="num">15.9K</td><td class="num ctr-green">32.32%</td><td class="num pos-yellow">3.1</td></tr>
+<tr><td class="num">3</td><td>holiday extras agent login</td><td class="num">4.7K</td><td class="num">5.7K</td><td class="num ctr-green">81.51%</td><td class="num pos-green">1.6</td></tr>
+<tr><td class="num">4</td><td>holiday extras login</td><td class="num">1.3K</td><td class="num">1.6K</td><td class="num ctr-green">77.63%</td><td class="num pos-green">2.0</td></tr>
+<tr><td class="num">5</td><td>holiday extras contact number</td><td class="num">1.1K</td><td class="num">2.3K</td><td class="num ctr-green">48.92%</td><td class="num pos-green">2.3</td></tr>
+<tr><td class="num">6</td><td>holiday extra</td><td class="num">1.0K</td><td class="num">5.1K</td><td class="num ctr-green">19.79%</td><td class="num pos-green">1.2</td></tr>
+<tr><td class="num">7</td><td>holiday extras reisebüro login</td><td class="num">922</td><td class="num">993</td><td class="num ctr-green">92.85%</td><td class="num pos-green">1.5</td></tr>
+<tr><td class="num">8</td><td>holiday extras parking</td><td class="num">744</td><td class="num">7.2K</td><td class="num ctr-green">10.32%</td><td class="num pos-green">1.3</td></tr>
+<tr><td class="num">9</td><td>holiday extras gmbh</td><td class="num">716</td><td class="num">1.2K</td><td class="num ctr-green">59.87%</td><td class="num pos-green">1.7</td></tr>
+<tr><td class="num">10</td><td>holiday extras travel insurance</td><td class="num">495</td><td class="num">5.3K</td><td class="num ctr-yellow">9.39%</td><td class="num pos-yellow">6.3</td></tr></tbody>
         </table>
       </div>
     </div>
-    <div class="card">
-      <h3>Traffic Share by Country</h3>
-      <div class="bar-row">
-        <div class="bar-label">🇬🇧 United Kingdom</div>
-        <div class="bar-track"><div class="bar-fill" style="width:68.3%;background:var(--blue)"><span class="bar-val" style="color:#fff">68.3%</span></div></div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">🇩🇪 Germany</div>
-        <div class="bar-track"><div class="bar-fill" style="width:17.8%;background:#6366f1"><span class="bar-val" style="color:#fff">17.8%</span></div></div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">🇪🇸 Spain</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.7%;background:var(--green);min-width:40px"><span class="bar-val" style="color:#fff;font-size:11px">1.7%</span></div></div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">🇫🇷 France</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.3%;background:var(--yellow);min-width:35px"><span class="bar-val" style="color:#1e293b;font-size:11px">1.3%</span></div></div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">🇮🇪 Ireland</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.1%;background:var(--orange);min-width:30px"><span class="bar-val" style="color:#fff;font-size:11px">1.1%</span></div></div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">🇳🇱 Netherlands</div>
-        <div class="bar-track"><div class="bar-fill" style="width:1.1%;background:#ec4899;min-width:30px"><span class="bar-val" style="color:#fff;font-size:11px">1.1%</span></div></div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">Other</div>
-        <div class="bar-track"><div class="bar-fill" style="width:8.7%;background:var(--muted)"><span class="bar-val" style="color:#fff">8.7%</span></div></div>
-      </div>
-      <div class="section-divider"></div>
-      <div style="font-size:12px;color:var(--muted)">
-        <strong style="color:var(--text);">Key insight:</strong> UK + Germany account for 86% of all clicks. Strong German-language presence via /de/ subdirectory performing well (avg pos 7.3). Low CTR in USA (0.22%) and France (0.71%) suggest ranking/intent mismatch.
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COMPETITORS -->
-<section id="competitors">
-  <h2><span class="icon">🏆</span> Competitor Intelligence (SEMrush)</h2>
-
-  <div class="cards-2">
-    <div class="card">
-      <h3>Holiday Extras vs Competitors</h3>
-      <div style="margin-bottom:16px;padding:12px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">holidayextras.com (SEMrush Rank #680)</div>
-        <div style="display:flex;gap:20px;flex-wrap:wrap;">
-          <div><div style="font-size:11px;color:var(--muted)">Organic KWs</div><div style="font-weight:700;font-size:16px">251,394</div></div>
-          <div><div style="font-size:11px;color:var(--muted)">Est. Traffic</div><div style="font-weight:700;font-size:16px">1,091,590</div></div>
-          <div><div style="font-size:11px;color:var(--muted)">Traffic Value</div><div style="font-weight:700;font-size:16px">£983,919</div></div>
-        </div>
-      </div>
-
-      <div class="comp-row">
-        <div class="comp-rank" style="background:var(--yellow);color:#1e293b">1</div>
-        <div class="comp-domain">airparks.co.uk</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"><span class="bar-val" style="color:#fff;font-size:11px">18,818 common KWs</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">2</div>
-        <div class="comp-domain">purpleparking.com</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:97.8%;background:var(--orange)"><span class="bar-val" style="color:#fff;font-size:11px">18,402</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">3</div>
-        <div class="comp-domain">aph.com</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:67.1%;background:var(--yellow)"><span class="bar-val" style="color:#1e293b;font-size:11px">12,621</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">4</div>
-        <div class="comp-domain">heathrow.com</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:48.9%;background:var(--blue)"><span class="bar-val" style="color:#fff;font-size:11px">9,205</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">5</div>
-        <div class="comp-domain">travelsupermarket.com</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:59.0%;background:#6366f1"><span class="bar-val" style="color:#fff;font-size:11px">11,109</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">6</div>
-        <div class="comp-domain">skyparksecure.com</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:47.7%;background:var(--muted)"><span class="bar-val" style="color:#fff;font-size:11px">8,970</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">7</div>
-        <div class="comp-domain">manchesterairport.co.uk</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:43.8%;background:#14b8a6"><span class="bar-val" style="color:#fff;font-size:11px">8,241</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">8</div>
-        <div class="comp-domain">ncp.co.uk</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:41.7%;background:#8b5cf6"><span class="bar-val" style="color:#fff;font-size:11px">7,848</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">9</div>
-        <div class="comp-domain">gatwickairport.com</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:36.1%;background:#ec4899"><span class="bar-val" style="color:#fff;font-size:11px">6,786</span></div></div>
-        </div>
-      </div>
-      <div class="comp-row">
-        <div class="comp-rank">10</div>
-        <div class="comp-domain">airport-parking-shop.co.uk</div>
-        <div class="comp-bar">
-          <div class="bar-track"><div class="bar-fill" style="width:31.0%;background:#64748b"><span class="bar-val" style="color:#fff;font-size:11px">5,832</span></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Competitive Analysis</h3>
-      <div class="table-wrap" style="border:none;border-radius:0;margin-bottom:16px;">
-        <table>
-          <thead><tr><th>Domain</th><th class="num">Relevance</th><th class="num">Org KWs</th><th class="num">Est. Traffic</th></tr></thead>
-          <tbody>
-            <tr><td>airparks.co.uk</td><td class="num"><span style="color:var(--red)">0.51</span></td><td class="num">75,382</td><td class="num">179,131</td></tr>
-            <tr><td>purpleparking.com</td><td class="num"><span style="color:var(--red)">0.48</span></td><td class="num">79,555</td><td class="num">219,086</td></tr>
-            <tr><td>aph.com</td><td class="num"><span style="color:var(--orange)">0.38</span></td><td class="num">68,674</td><td class="num">152,482</td></tr>
-            <tr><td>travelsupermarket.com</td><td class="num"><span style="color:var(--yellow)">0.30</span></td><td class="num">165,274</td><td class="num">406,494</td></tr>
-            <tr><td>heathrow.com</td><td class="num"><span style="color:var(--yellow)">0.21</span></td><td class="num">322,189</td><td class="num">3,649,837</td></tr>
-            <tr><td>manchesterairport.co.uk</td><td class="num"><span style="color:var(--yellow)">0.21</span></td><td class="num">229,396</td><td class="num">1,597,643</td></tr>
-          </tbody>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Top 20 Non-Brand Queries</div>
+      <div class="table-wrap">
+        <table id="nonbrand-table">
+          <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Position</th></tr></thead>
+          <tbody><tr><td class="num">1</td><td>manchester airport parking</td><td class="num">3.7K</td><td class="num">142.4K</td><td class="num ctr-red">2.57%</td><td class="num pos-yellow">3.0</td></tr>
+<tr><td class="num">2</td><td>birmingham airport parking</td><td class="num">2.7K</td><td class="num">63.5K</td><td class="num ctr-red">4.27%</td><td class="num pos-green">2.7</td></tr>
+<tr><td class="num">3</td><td>stansted airport parking</td><td class="num">2.4K</td><td class="num">92.8K</td><td class="num ctr-red">2.57%</td><td class="num pos-yellow">3.4</td></tr>
+<tr><td class="num">4</td><td>gatwick parking</td><td class="num">2.1K</td><td class="num">82.7K</td><td class="num ctr-red">2.55%</td><td class="num pos-green">2.6</td></tr>
+<tr><td class="num">5</td><td>bristol airport parking</td><td class="num">2.0K</td><td class="num">75.0K</td><td class="num ctr-red">2.70%</td><td class="num pos-yellow">3.4</td></tr>
+<tr><td class="num">6</td><td>edinburgh airport parking</td><td class="num">1.6K</td><td class="num">62.6K</td><td class="num ctr-red">2.51%</td><td class="num pos-green">2.5</td></tr>
+<tr><td class="num">7</td><td>airport parking</td><td class="num">1.4K</td><td class="num">38.4K</td><td class="num ctr-red">3.68%</td><td class="num pos-yellow">3.0</td></tr>
+<tr><td class="num">8</td><td>holidayextras</td><td class="num">1.4K</td><td class="num">7.0K</td><td class="num ctr-green">20.00%</td><td class="num pos-green">1.1</td></tr>
+<tr><td class="num">9</td><td>manchester airport arrivals</td><td class="num">1.4K</td><td class="num">62.3K</td><td class="num ctr-red">2.18%</td><td class="num pos-yellow">6.3</td></tr>
+<tr><td class="num">10</td><td>heathrow parking</td><td class="num">1.3K</td><td class="num">71.4K</td><td class="num ctr-red">1.86%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">11</td><td>stansted parking</td><td class="num">1.3K</td><td class="num">34.8K</td><td class="num ctr-red">3.81%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">12</td><td>gatwick departures</td><td class="num">1.1K</td><td class="num">81.5K</td><td class="num ctr-red">1.41%</td><td class="num pos-yellow">6.2</td></tr>
+<tr><td class="num">13</td><td>airport parking manchester</td><td class="num">1.0K</td><td class="num">16.1K</td><td class="num ctr-yellow">6.31%</td><td class="num pos-green">2.7</td></tr>
+<tr><td class="num">14</td><td>newcastle airport parking</td><td class="num">1.0K</td><td class="num">25.4K</td><td class="num ctr-red">4.01%</td><td class="num pos-yellow">3.0</td></tr>
+<tr><td class="num">15</td><td>glasgow airport parking</td><td class="num">984</td><td class="num">33.5K</td><td class="num ctr-red">2.94%</td><td class="num pos-green">2.9</td></tr>
+<tr><td class="num">16</td><td>heathrow departures</td><td class="num">965</td><td class="num">135.6K</td><td class="num ctr-red">0.71%</td><td class="num pos-yellow">5.8</td></tr>
+<tr><td class="num">17</td><td>gatwick airport parking</td><td class="num">960</td><td class="num">45.1K</td><td class="num ctr-red">2.13%</td><td class="num pos-green">2.9</td></tr>
+<tr><td class="num">18</td><td>heathrow arrivals</td><td class="num">960</td><td class="num">104.3K</td><td class="num ctr-red">0.92%</td><td class="num pos-yellow">5.7</td></tr>
+<tr><td class="num">19</td><td>luton airport parking</td><td class="num">907</td><td class="num">72.6K</td><td class="num ctr-red">1.25%</td><td class="num pos-yellow">3.8</td></tr>
+<tr><td class="num">20</td><td>airport transfers</td><td class="num">822</td><td class="num">23.7K</td><td class="num ctr-red">3.47%</td><td class="num pos-yellow">3.5</td></tr></tbody>
         </table>
       </div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.7">
-        <strong style="color:var(--text);">Key Insights:</strong><br>
-        • HX has 3.3x more organic keywords than closest competitor (airparks.co.uk 75k vs HX 251k)<br>
-        • Airport official sites (heathrow.com 3.6M, manchesterairport.co.uk 1.6M) drive far more traffic — opportunity to target their branded/info terms<br>
-        • airparks &amp; purpleparking are highest relevance competitors — monitor keyword overlaps<br>
-        • HX organic traffic value (£984k/mo) exceeds airparks (£176k) and purpleparking (£246k) combined
+    </div>
+  </div>
+</div>
+
+<!-- S6: Top 50 Pages -->
+<div id="s6" class="section">
+  <div class="section-title">6. Top 50 Pages &#8212; Holiday Extras (28d) <span class="badge badge-hx">Search Console</span></div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Blue left border = Top 10 pages by clicks. Click URL to open.</div>
+  <div class="table-wrap">
+    <table id="pages-table">
+      <thead><tr><th class="num">#</th><th>Page URL</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr></thead>
+      <tbody><tr class="top-page"><td class="num">1</td><td><a href="https://www.holidayextras.com/" target="_blank" class="url-link">/</a></td><td class="num">15.3K</td><td class="num">363.8K</td><td class="num ctr-red">4.21%</td><td class="num pos-red">22.9</td></tr>
+<tr class="top-page"><td class="num">2</td><td><a href="https://www.holidayextras.com/discount-codes.html" target="_blank" class="url-link">/discount-codes.html</a></td><td class="num">9.2K</td><td class="num">196.9K</td><td class="num ctr-red">4.69%</td><td class="num pos-yellow">7.7</td></tr>
+<tr class="top-page"><td class="num">3</td><td><a href="https://www.holidayextras.com/stansted-airport-parking.html" target="_blank" class="url-link">/stansted-airport-parking.html</a></td><td class="num">9.0K</td><td class="num">368.2K</td><td class="num ctr-red">2.43%</td><td class="num pos-yellow">6.5</td></tr>
+<tr class="top-page"><td class="num">4</td><td><a href="https://www.holidayextras.com/manchester-airport-parking.html" target="_blank" class="url-link">/manchester-airport-parking.html</a></td><td class="num">8.0K</td><td class="num">344.3K</td><td class="num ctr-red">2.32%</td><td class="num pos-yellow">4.8</td></tr>
+<tr class="top-page"><td class="num">5</td><td><a href="https://www.holidayextras.com/de/" target="_blank" class="url-link">/de/</a></td><td class="num">7.8K</td><td class="num">60.1K</td><td class="num ctr-green">12.95%</td><td class="num pos-red">35.9</td></tr>
+<tr class="top-page"><td class="num">6</td><td><a href="https://www.holidayextras.com/login.php" target="_blank" class="url-link">/login.php</a></td><td class="num">7.4K</td><td class="num">20.8K</td><td class="num ctr-green">35.73%</td><td class="num pos-yellow">5.1</td></tr>
+<tr class="top-page"><td class="num">7</td><td><a href="https://www.holidayextras.com/birmingham-airport-parking.html" target="_blank" class="url-link">/birmingham-airport-parking.html</a></td><td class="num">6.1K</td><td class="num">199.0K</td><td class="num ctr-red">3.08%</td><td class="num pos-yellow">3.9</td></tr>
+<tr class="top-page"><td class="num">8</td><td><a href="https://www.holidayextras.com/gatwick-airport-parking.html" target="_blank" class="url-link">/gatwick-airport-parking.html</a></td><td class="num">5.7K</td><td class="num">354.6K</td><td class="num ctr-red">1.60%</td><td class="num pos-yellow">4.7</td></tr>
+<tr class="top-page"><td class="num">9</td><td><a href="https://www.holidayextras.com/airport-parking.html" target="_blank" class="url-link">/airport-parking.html</a></td><td class="num">5.1K</td><td class="num">349.9K</td><td class="num ctr-red">1.45%</td><td class="num pos-orange">10.0</td></tr>
+<tr class="top-page"><td class="num">10</td><td><a href="https://www.holidayextras.com/heathrow-airport-parking.html" target="_blank" class="url-link">/heathrow-airport-parking.html</a></td><td class="num">5.0K</td><td class="num">422.3K</td><td class="num ctr-red">1.18%</td><td class="num pos-yellow">7.0</td></tr>
+<tr><td class="num">11</td><td><a href="https://www.holidayextras.com/de/login.html" target="_blank" class="url-link">/de/login.html</a></td><td class="num">4.4K</td><td class="num">18.8K</td><td class="num ctr-green">23.54%</td><td class="num pos-green">2.0</td></tr>
+<tr><td class="num">12</td><td><a href="https://www.holidayextras.com/de/flughafen-stuttgart-abflug.html" target="_blank" class="url-link">/de/flughafen-stuttgart-abflug.html</a></td><td class="num">4.4K</td><td class="num">129.4K</td><td class="num ctr-red">3.37%</td><td class="num pos-yellow">6.4</td></tr>
+<tr><td class="num">13</td><td><a href="https://www.holidayextras.com/airport-parking-discount-code.html" target="_blank" class="url-link">/airport-parking-discount-code.html</a></td><td class="num">4.3K</td><td class="num">159.6K</td><td class="num ctr-red">2.71%</td><td class="num pos-yellow">6.5</td></tr>
+<tr><td class="num">14</td><td><a href="https://www.holidayextras.com/flights/gatwick-departures.html" target="_blank" class="url-link">/flights/gatwick-departures.html</a></td><td class="num">4.1K</td><td class="num">287.2K</td><td class="num ctr-red">1.44%</td><td class="num pos-yellow">6.7</td></tr>
+<tr><td class="num">15</td><td><a href="https://www.holidayextras.com/bristol-airport-parking.html" target="_blank" class="url-link">/bristol-airport-parking.html</a></td><td class="num">4.0K</td><td class="num">174.7K</td><td class="num ctr-red">2.29%</td><td class="num pos-yellow">3.6</td></tr>
+<tr><td class="num">16</td><td><a href="https://www.holidayextras.com/de/flughafen-bremen-abflug.html" target="_blank" class="url-link">/de/flughafen-bremen-abflug.html</a></td><td class="num">3.8K</td><td class="num">55.9K</td><td class="num ctr-yellow">6.74%</td><td class="num pos-yellow">5.8</td></tr>
+<tr><td class="num">17</td><td><a href="https://www.holidayextras.com/airport-lounges.html" target="_blank" class="url-link">/airport-lounges.html</a></td><td class="num">3.8K</td><td class="num">318.4K</td><td class="num ctr-red">1.18%</td><td class="num pos-yellow">6.2</td></tr>
+<tr><td class="num">18</td><td><a href="https://www.holidayextras.com/about-us/can-i-contact-holiday-extras-by-phone.html" target="_blank" class="url-link">/about-us/can-i-contact-holiday-extras-by-phone.html</a></td><td class="num">3.6K</td><td class="num">17.1K</td><td class="num ctr-green">20.93%</td><td class="num pos-yellow">3.6</td></tr>
+<tr><td class="num">19</td><td><a href="https://www.holidayextras.com/airport-transfers.html" target="_blank" class="url-link">/airport-transfers.html</a></td><td class="num">3.5K</td><td class="num">326.0K</td><td class="num ctr-red">1.08%</td><td class="num pos-yellow">6.2</td></tr>
+<tr><td class="num">20</td><td><a href="https://www.holidayextras.com/edinburgh-airport-parking.html" target="_blank" class="url-link">/edinburgh-airport-parking.html</a></td><td class="num">3.1K</td><td class="num">147.3K</td><td class="num ctr-red">2.11%</td><td class="num pos-yellow">3.6</td></tr>
+<tr><td class="num">21</td><td><a href="https://www.holidayextras.com/luton-airport-parking.html" target="_blank" class="url-link">/luton-airport-parking.html</a></td><td class="num">2.6K</td><td class="num">211.2K</td><td class="num ctr-red">1.23%</td><td class="num pos-yellow">4.9</td></tr>
+<tr><td class="num">22</td><td><a href="https://www.holidayextras.com/about-us/can-i-speak-to-someone-at-holiday-extras.html" target="_blank" class="url-link">/about-us/can-i-speak-to-someone-at-holiday-extras.html</a></td><td class="num">2.2K</td><td class="num">16.7K</td><td class="num ctr-green">13.33%</td><td class="num pos-yellow">4.0</td></tr>
+<tr><td class="num">23</td><td><a href="https://www.holidayextras.com/flights/manchester-airport-arrivals.html" target="_blank" class="url-link">/flights/manchester-airport-arrivals.html</a></td><td class="num">2.2K</td><td class="num">151.6K</td><td class="num ctr-red">1.47%</td><td class="num pos-yellow">7.2</td></tr>
+<tr><td class="num">24</td><td><a href="https://www.holidayextras.com/manchester-airport-lounges-terminal-2.html" target="_blank" class="url-link">/manchester-airport-lounges-terminal-2.html</a></td><td class="num">2.2K</td><td class="num">92.5K</td><td class="num ctr-red">2.38%</td><td class="num pos-yellow">7.8</td></tr>
+<tr><td class="num">25</td><td><a href="https://www.holidayextras.com/gatwick-parking-promo-code.html" target="_blank" class="url-link">/gatwick-parking-promo-code.html</a></td><td class="num">2.2K</td><td class="num">46.5K</td><td class="num ctr-red">4.69%</td><td class="num pos-yellow">4.9</td></tr>
+<tr><td class="num">26</td><td><a href="https://www.holidayextras.com/eastmidlands-airport-parking.html" target="_blank" class="url-link">/eastmidlands-airport-parking.html</a></td><td class="num">2.2K</td><td class="num">83.0K</td><td class="num ctr-red">2.62%</td><td class="num pos-yellow">7.7</td></tr>
+<tr><td class="num">27</td><td><a href="https://www.holidayextras.com/newcastle-airport-parking.html" target="_blank" class="url-link">/newcastle-airport-parking.html</a></td><td class="num">2.1K</td><td class="num">70.3K</td><td class="num ctr-red">2.94%</td><td class="num pos-yellow">3.9</td></tr>
+<tr><td class="num">28</td><td><a href="https://www.holidayextras.com/glasgow-airport-parking.html" target="_blank" class="url-link">/glasgow-airport-parking.html</a></td><td class="num">2.0K</td><td class="num">81.8K</td><td class="num ctr-red">2.45%</td><td class="num pos-yellow">3.6</td></tr>
+<tr><td class="num">29</td><td><a href="https://www.holidayextras.com/leeds-bradford-airport-parking.html" target="_blank" class="url-link">/leeds-bradford-airport-parking.html</a></td><td class="num">1.8K</td><td class="num">66.2K</td><td class="num ctr-red">2.76%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">30</td><td><a href="https://www.holidayextras.com/blue-light-card-airport-parking-promo-code.html" target="_blank" class="url-link">/blue-light-card-airport-parking-promo-code.html</a></td><td class="num">1.8K</td><td class="num">113.3K</td><td class="num ctr-red">1.57%</td><td class="num pos-yellow">6.7</td></tr>
+<tr><td class="num">31</td><td><a href="https://www.holidayextras.com/flights/heathrow-departures.html" target="_blank" class="url-link">/flights/heathrow-departures.html</a></td><td class="num">1.8K</td><td class="num">325.8K</td><td class="num ctr-red">0.55%</td><td class="num pos-yellow">7.2</td></tr>
+<tr><td class="num">32</td><td><a href="https://www.holidayextras.com/flights/heathrow-arrivals.html" target="_blank" class="url-link">/flights/heathrow-arrivals.html</a></td><td class="num">1.7K</td><td class="num">203.9K</td><td class="num ctr-red">0.84%</td><td class="num pos-yellow">6.6</td></tr>
+<tr><td class="num">33</td><td><a href="https://www.holidayextras.com/help-and-support.html" target="_blank" class="url-link">/help-and-support.html</a></td><td class="num">1.7K</td><td class="num">133.6K</td><td class="num ctr-red">1.26%</td><td class="num pos-yellow">5.6</td></tr>
+<tr><td class="num">34</td><td><a href="https://www.holidayextras.com/manchester-airport-parking-promo-code.html" target="_blank" class="url-link">/manchester-airport-parking-promo-code.html</a></td><td class="num">1.6K</td><td class="num">37.7K</td><td class="num ctr-red">4.12%</td><td class="num pos-yellow">8.7</td></tr>
+<tr><td class="num">35</td><td><a href="https://www.holidayextras.com/southampton-port-parking.html" target="_blank" class="url-link">/southampton-port-parking.html</a></td><td class="num">1.5K</td><td class="num">50.1K</td><td class="num ctr-red">3.07%</td><td class="num pos-yellow">4.3</td></tr>
+<tr><td class="num">36</td><td><a href="https://www.holidayextras.com/de/memmingen-flughafen-parken.html" target="_blank" class="url-link">/de/memmingen-flughafen-parken.html</a></td><td class="num">1.5K</td><td class="num">59.6K</td><td class="num ctr-red">2.56%</td><td class="num pos-yellow">3.5</td></tr>
+<tr><td class="num">37</td><td><a href="https://www.holidayextras.com/de/karlsruhe-baden-baden-flughafen-parken.html" target="_blank" class="url-link">/de/karlsruhe-baden-baden-flughafen-parken.html</a></td><td class="num">1.5K</td><td class="num">40.7K</td><td class="num ctr-red">3.71%</td><td class="num pos-yellow">5.0</td></tr>
+<tr><td class="num">38</td><td><a href="https://www.holidayextras.com/nhs-discount-airport-parking.html" target="_blank" class="url-link">/nhs-discount-airport-parking.html</a></td><td class="num">1.5K</td><td class="num">92.7K</td><td class="num ctr-red">1.62%</td><td class="num pos-yellow">4.8</td></tr>
+<tr><td class="num">39</td><td><a href="https://www.holidayextras.com/de/frankfurt-flughafen-abflug.html" target="_blank" class="url-link">/de/frankfurt-flughafen-abflug.html</a></td><td class="num">1.5K</td><td class="num">174.2K</td><td class="num ctr-red">0.85%</td><td class="num pos-yellow">7.2</td></tr>
+<tr><td class="num">40</td><td><a href="https://www.holidayextras.com/destinations/gran-canaria/things-to-avoid.html" target="_blank" class="url-link">/destinations/gran-canaria/things-to-avoid.html</a></td><td class="num">1.5K</td><td class="num">69.0K</td><td class="num ctr-red">2.12%</td><td class="num pos-yellow">3.2</td></tr>
+<tr><td class="num">41</td><td><a href="https://www.holidayextras.com/gatwick-airport/north-terminal.html" target="_blank" class="url-link">/gatwick-airport/north-terminal.html</a></td><td class="num">1.5K</td><td class="num">82.2K</td><td class="num ctr-red">1.77%</td><td class="num pos-yellow">5.3</td></tr>
+<tr><td class="num">42</td><td><a href="https://www.holidayextras.com/travel-blog/navigating-the-middle-eastern-conflict.html" target="_blank" class="url-link">/travel-blog/navigating-the-middle-eastern-conflict.html</a></td><td class="num">1.4K</td><td class="num">41.4K</td><td class="num ctr-red">3.44%</td><td class="num pos-yellow">7.6</td></tr>
+<tr><td class="num">43</td><td><a href="https://www.holidayextras.com/destinations/tenerife/things-to-avoid.html" target="_blank" class="url-link">/destinations/tenerife/things-to-avoid.html</a></td><td class="num">1.4K</td><td class="num">80.0K</td><td class="num ctr-red">1.75%</td><td class="num pos-yellow">3.1</td></tr>
+<tr><td class="num">44</td><td><a href="https://www.holidayextras.com/dublin-airport-parking-promo-code.html" target="_blank" class="url-link">/dublin-airport-parking-promo-code.html</a></td><td class="num">1.4K</td><td class="num">30.0K</td><td class="num ctr-red">4.54%</td><td class="num pos-yellow">8.2</td></tr>
+<tr><td class="num">45</td><td><a href="https://www.holidayextras.com/manchester-airport-hotels-with-parking.html" target="_blank" class="url-link">/manchester-airport-hotels-with-parking.html</a></td><td class="num">1.3K</td><td class="num">40.3K</td><td class="num ctr-red">3.34%</td><td class="num pos-yellow">6.2</td></tr>
+<tr><td class="num">46</td><td><a href="https://www.holidayextras.com/travel-insurance.html" target="_blank" class="url-link">/travel-insurance.html</a></td><td class="num">1.3K</td><td class="num">424.4K</td><td class="num ctr-red">0.31%</td><td class="num pos-orange">13.9</td></tr>
+<tr><td class="num">47</td><td><a href="https://www.holidayextras.com/de/erfurt-flughafen-parken.html" target="_blank" class="url-link">/de/erfurt-flughafen-parken.html</a></td><td class="num">1.3K</td><td class="num">14.1K</td><td class="num ctr-yellow">9.25%</td><td class="num pos-yellow">7.8</td></tr>
+<tr><td class="num">48</td><td><a href="https://www.holidayextras.com/de/urlaubsmagazin/tips-and-advice/welche-stutzstrumpfe-fur-flugreisen.html" target="_blank" class="url-link">/de/urlaubsmagazin/tips-and-advice/welche-stutzstrumpfe-fur-</a></td><td class="num">1.3K</td><td class="num">52.2K</td><td class="num ctr-red">2.49%</td><td class="num pos-yellow">4.3</td></tr>
+<tr><td class="num">49</td><td><a href="https://www.holidayextras.com/liverpool-airport-parking.html" target="_blank" class="url-link">/liverpool-airport-parking.html</a></td><td class="num">1.3K</td><td class="num">75.2K</td><td class="num ctr-red">1.73%</td><td class="num pos-yellow">3.6</td></tr>
+<tr><td class="num">50</td><td><a href="https://www.holidayextras.com/flight.html" target="_blank" class="url-link">/flight.html</a></td><td class="num">1.2K</td><td class="num">142.7K</td><td class="num ctr-red">0.86%</td><td class="num pos-yellow">4.8</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S7: Geographic -->
+<div id="s7" class="section">
+  <div class="section-title">7. Geographic Performance &#8212; Holiday Extras (28d) <span class="badge badge-hx">Search Console</span></div>
+  <div class="table-wrap">
+    <table id="geo-table">
+      <thead><tr><th>Country</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th><th>% of Clicks</th></tr></thead>
+      <tbody><tr><td>&#x1F1EC;&#x1F1E7; United Kingdom</td><td class="num">307.6K</td><td class="num">24.1M</td><td class="num ctr-red">1.28%</td><td class="num pos-yellow">8.9</td><td><div class="mini-bar"><div class="mini-fill" style="width:100%"></div><span>70.7%</span></div></td></tr>
+<tr><td>&#x1F1E9;&#x1F1EA; Germany</td><td class="num">80.2K</td><td class="num">6.8M</td><td class="num ctr-red">1.18%</td><td class="num pos-yellow">7.3</td><td><div class="mini-bar"><div class="mini-fill" style="width:26%"></div><span>18.4%</span></div></td></tr>
+<tr><td>&#x1F1EA;&#x1F1F8; Spain</td><td class="num">7.8K</td><td class="num">799.9K</td><td class="num ctr-red">0.98%</td><td class="num pos-yellow">8.0</td><td><div class="mini-bar"><div class="mini-fill" style="width:3%"></div><span>1.8%</span></div></td></tr>
+<tr><td>&#x1F1EB;&#x1F1F7; France</td><td class="num">5.8K</td><td class="num">821.8K</td><td class="num ctr-red">0.71%</td><td class="num pos-orange">11.1</td><td><div class="mini-bar"><div class="mini-fill" style="width:2%"></div><span>1.3%</span></div></td></tr>
+<tr><td>&#x1F1EE;&#x1F1EA; Ireland</td><td class="num">5.1K</td><td class="num">839.7K</td><td class="num ctr-red">0.61%</td><td class="num pos-yellow">7.6</td><td><div class="mini-bar"><div class="mini-fill" style="width:2%"></div><span>1.2%</span></div></td></tr>
+<tr><td>&#x1F1F3;&#x1F1F1; Netherlands</td><td class="num">4.8K</td><td class="num">596.4K</td><td class="num ctr-red">0.80%</td><td class="num pos-yellow">7.7</td><td><div class="mini-bar"><div class="mini-fill" style="width:2%"></div><span>1.1%</span></div></td></tr>
+<tr><td>&#x1F1FA;&#x1F1F8; United States</td><td class="num">4.0K</td><td class="num">1.8M</td><td class="num ctr-red">0.22%</td><td class="num pos-orange">13.8</td><td><div class="mini-bar"><div class="mini-fill" style="width:1%"></div><span>0.9%</span></div></td></tr>
+<tr><td>&#x1F1E6;&#x1F1F9; Austria</td><td class="num">2.8K</td><td class="num">318.3K</td><td class="num ctr-red">0.88%</td><td class="num pos-yellow">7.4</td><td><div class="mini-bar"><div class="mini-fill" style="width:1%"></div><span>0.6%</span></div></td></tr>
+<tr><td>&#x1F1E7;&#x1F1EA; Belgium</td><td class="num">2.6K</td><td class="num">255.9K</td><td class="num ctr-red">1.03%</td><td class="num pos-yellow">6.7</td><td><div class="mini-bar"><div class="mini-fill" style="width:1%"></div><span>0.6%</span></div></td></tr>
+<tr><td>&#x1F1EE;&#x1F1F9; Italy</td><td class="num">2.2K</td><td class="num">469.2K</td><td class="num ctr-red">0.48%</td><td class="num pos-yellow">9.4</td><td><div class="mini-bar"><div class="mini-fill" style="width:1%"></div><span>0.5%</span></div></td></tr>
+<tr><td>&#x1F1E8;&#x1F1ED; Switzerland</td><td class="num">2.2K</td><td class="num">374.8K</td><td class="num ctr-red">0.59%</td><td class="num pos-yellow">9.6</td><td><div class="mini-bar"><div class="mini-fill" style="width:1%"></div><span>0.5%</span></div></td></tr>
+<tr><td> IND</td><td class="num">1.3K</td><td class="num">286.6K</td><td class="num ctr-red">0.47%</td><td class="num pos-yellow">9.5</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.3%</span></div></td></tr>
+<tr><td>&#x1F1E8;&#x1F1E6; Canada</td><td class="num">1.3K</td><td class="num">253.2K</td><td class="num ctr-red">0.51%</td><td class="num pos-orange">10.4</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.3%</span></div></td></tr>
+<tr><td>&#x1F1E6;&#x1F1FA; Australia</td><td class="num">1.3K</td><td class="num">191.1K</td><td class="num ctr-red">0.67%</td><td class="num pos-orange">14.8</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.3%</span></div></td></tr>
+<tr><td>&#x1F1E9;&#x1F1F0; Denmark</td><td class="num">1.2K</td><td class="num">176.4K</td><td class="num ctr-red">0.69%</td><td class="num pos-yellow">7.1</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.3%</span></div></td></tr>
+<tr><td>&#x1F1F5;&#x1F1F1; Poland</td><td class="num">1.2K</td><td class="num">173.1K</td><td class="num ctr-red">0.69%</td><td class="num pos-yellow">7.7</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.3%</span></div></td></tr>
+<tr><td> ARE</td><td class="num">988</td><td class="num">159.2K</td><td class="num ctr-red">0.62%</td><td class="num pos-yellow">9.6</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.2%</span></div></td></tr>
+<tr><td>&#x1F1F5;&#x1F1F9; Portugal</td><td class="num">937</td><td class="num">152.2K</td><td class="num ctr-red">0.62%</td><td class="num pos-yellow">8.6</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.2%</span></div></td></tr>
+<tr><td> TUR</td><td class="num">871</td><td class="num">130.1K</td><td class="num ctr-red">0.67%</td><td class="num pos-yellow">8.1</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.2%</span></div></td></tr>
+<tr><td>&#x1F1F8;&#x1F1EA; Sweden</td><td class="num">839</td><td class="num">97.8K</td><td class="num ctr-red">0.86%</td><td class="num pos-yellow">8.3</td><td><div class="mini-bar"><div class="mini-fill" style="width:0%"></div><span>0.2%</span></div></td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- S8: Devices -->
+<div id="s8" class="section">
+  <div class="section-title">8. Device Breakdown &#8212; Holiday Extras (28d) <span class="badge badge-hx">Search Console</span></div>
+  <div class="device-grid">
+    <div class="device-card">
+      <div class="device-icon">&#x1F4F1;</div>
+      <div class="device-name">Mobile</div>
+      <div class="device-metric"><span class="device-key">Clicks</span><span class="device-val" style="color:var(--hx)">306.2K</span></div>
+      <div class="device-metric"><span class="device-key">Impressions</span><span class="device-val">27.0M</span></div>
+      <div class="device-metric"><span class="device-key">CTR</span><span class="device-val ctr-red">1.13%</span></div>
+      <div class="device-metric"><span class="device-key">Avg Position</span><span class="device-val pos-yellow">7.3</span></div>
+    </div>
+    <div class="device-card">
+      <div class="device-icon">&#x1F5A5;&#xFE0F;</div>
+      <div class="device-name">Desktop</div>
+      <div class="device-metric"><span class="device-key">Clicks</span><span class="device-val" style="color:var(--hx)">128.7K</span></div>
+      <div class="device-metric"><span class="device-key">Impressions</span><span class="device-val">13.6M</span></div>
+      <div class="device-metric"><span class="device-key">CTR</span><span class="device-val ctr-red">0.95%</span></div>
+      <div class="device-metric"><span class="device-key">Avg Position</span><span class="device-val pos-orange">12.0</span></div>
+    </div>
+    <div class="device-card">
+      <div class="device-icon">&#x1F4BB;</div>
+      <div class="device-name">Tablet</div>
+      <div class="device-metric"><span class="device-key">Clicks</span><span class="device-val" style="color:var(--hx)">15.7K</span></div>
+      <div class="device-metric"><span class="device-key">Impressions</span><span class="device-val">801.9K</span></div>
+      <div class="device-metric"><span class="device-key">CTR</span><span class="device-val ctr-red">1.96%</span></div>
+      <div class="device-metric"><span class="device-key">Avg Position</span><span class="device-val pos-yellow">5.3</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- S9: Purple Parking -->
+<div id="s9" class="section">
+  <div class="section-title">9. Purple Parking &#8212; Rankings &amp; Keywords <span class="badge badge-pp">AWR + SEMrush</span></div>
+  <div class="note-box">&#x2139;&#xFE0F; SC data not available for Purple Parking &#8212; using AWR position tracking &amp; SEMrush organic data</div>
+  <div class="three-col" style="margin-bottom:16px">
+    <div class="kpi-card kpi-pp"><div class="kpi-label">Keywords Tracked</div><div class="kpi-value" style="color:var(--pp)">1.9K</div><div class="kpi-sub">AWR position tracking</div></div>
+    <div class="kpi-card kpi-pp"><div class="kpi-label">#1 Positions</div><div class="kpi-value" style="color:var(--pp)">27</div><div class="kpi-sub">Top 3: 225 &#183; Page 1: 707</div></div>
+    <div class="kpi-card kpi-pp"><div class="kpi-label">Avg Position</div><div class="kpi-value" style="color:var(--pp)">19.7</div><div class="kpi-sub">Page 2: 1091</div></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--pp);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">AWR &#8212; Top Keywords at Pos 1-5</div>
+      <div class="table-wrap">
+        <table id="pp-awr-table">
+          <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Position</th><th class="num">Searches/mo</th></tr></thead>
+          <tbody><tr><td class="num">1</td><td>transfer dubrovnik airport to montenegro</td><td class="num pos-green">1</td><td class="num">10</td></tr>
+<tr><td class="num">2</td><td>hotel and parking birmingham airport</td><td class="num pos-green">1</td><td class="num">4.4K</td></tr>
+<tr><td class="num">3</td><td>airport hotel and parking birmingham</td><td class="num pos-green">1</td><td class="num">1.0K</td></tr>
+<tr><td class="num">4</td><td>hotel and airport parking manchester</td><td class="num pos-green">1</td><td class="num">2.4K</td></tr>
+<tr><td class="num">5</td><td>birmingham airport hotels and parking</td><td class="num pos-green">1</td><td class="num">2.4K</td></tr>
+<tr><td class="num">6</td><td>exeter airport parking promo code</td><td class="num pos-green">1</td><td class="num">720</td></tr>
+<tr><td class="num">7</td><td>discount codes for airport parking</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr>
+<tr><td class="num">8</td><td>heathrow parking discount</td><td class="num pos-green">1</td><td class="num">590</td></tr>
+<tr><td class="num">9</td><td>cheap car parking manchester airport 2</td><td class="num pos-green">1</td><td class="num">10</td></tr>
+<tr><td class="num">10</td><td>airport parking discount code</td><td class="num pos-green">1</td><td class="num">1.9K</td></tr>
+<tr><td class="num">11</td><td>bristol airport parking deals</td><td class="num pos-green">1</td><td class="num">170</td></tr>
+<tr><td class="num">12</td><td>transfer dubrovnik airport to lapad</td><td class="num pos-green">1</td><td class="num">30</td></tr>
+<tr><td class="num">13</td><td>birmingham airport parking meet and greet</td><td class="num pos-green">1</td><td class="num">260</td></tr>
+<tr><td class="num">14</td><td>birmingham airport hotel with parking</td><td class="num pos-green">1</td><td class="num">4.4K</td></tr>
+<tr><td class="num">15</td><td>cheap stansted parking</td><td class="num pos-green">1</td><td class="num">9.9K</td></tr>
+<tr><td class="num">16</td><td>airport parking and hotel birmingham</td><td class="num pos-green">1</td><td class="num">1.0K</td></tr>
+<tr><td class="num">17</td><td>airport hotel with parking manchester</td><td class="num pos-green">1</td><td class="num">2.4K</td></tr>
+<tr><td class="num">18</td><td>birmingham airport hotels with parking</td><td class="num pos-green">1</td><td class="num">4.4K</td></tr>
+<tr><td class="num">19</td><td>airport parking discount codes</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr>
+<tr><td class="num">20</td><td>hotel and parking gatwick north</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--pp);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">SEMrush &#8212; Top 30 Keywords</div>
+      <div class="table-wrap">
+        <table id="pp-sem-table">
+          <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Pos</th><th class="num">Search Vol</th><th class="num">Traffic %</th><th class="num">CPC</th></tr></thead>
+          <tbody><tr><td class="num">1</td><td>purple parking</td><td class="num pos-green">1</td><td class="num">27.1K</td><td class="num">9.89%</td><td class="num">1.00</td></tr>
+<tr><td class="num">2</td><td>purple parking gatwick</td><td class="num pos-green">1</td><td class="num">12.1K</td><td class="num">4.41%</td><td class="num">1.14</td></tr>
+<tr><td class="num">3</td><td>purple parking heathrow</td><td class="num pos-green">1</td><td class="num">8.1K</td><td class="num">2.95%</td><td class="num">0.98</td></tr>
+<tr><td class="num">4</td><td>purple parking discount vouchers</td><td class="num pos-green">1</td><td class="num">6.6K</td><td class="num">2.41%</td><td class="num">0.87</td></tr>
+<tr><td class="num">5</td><td>purple parking promo code</td><td class="num pos-green">1</td><td class="num">5.4K</td><td class="num">1.97%</td><td class="num">0.87</td></tr>
+<tr><td class="num">6</td><td>purple parking stansted</td><td class="num pos-green">1</td><td class="num">1.9K</td><td class="num">0.69%</td><td class="num">1.23</td></tr>
+<tr><td class="num">7</td><td>purpleparking</td><td class="num pos-green">1</td><td class="num">1.9K</td><td class="num">0.69%</td><td class="num">0.96</td></tr>
+<tr><td class="num">8</td><td>heathrow parking</td><td class="num pos-green">3</td><td class="num">74.0K</td><td class="num">0.60%</td><td class="num">1.51</td></tr>
+<tr><td class="num">9</td><td>purple parking luton</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.47%</td><td class="num">1.41</td></tr>
+<tr><td class="num">10</td><td>purple parking stansted airport</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.47%</td><td class="num">1.23</td></tr>
+<tr><td class="num">11</td><td>gatwick purple parking</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.47%</td><td class="num">1.12</td></tr>
+<tr><td class="num">12</td><td>stansted parking</td><td class="num pos-green">2</td><td class="num">33.1K</td><td class="num">0.39%</td><td class="num">1.53</td></tr>
+<tr><td class="num">13</td><td>purple car park</td><td class="num pos-green">1</td><td class="num">1.0K</td><td class="num">0.36%</td><td class="num">1.27</td></tr>
+<tr><td class="num">14</td><td>lhr purple parking</td><td class="num pos-green">1</td><td class="num">1.0K</td><td class="num">0.36%</td><td class="num">1.01</td></tr>
+<tr><td class="num">15</td><td>purple parking gatwick airport</td><td class="num pos-green">1</td><td class="num">1.0K</td><td class="num">0.36%</td><td class="num">1.12</td></tr>
+<tr><td class="num">16</td><td>heathrow purple parking</td><td class="num pos-green">1</td><td class="num">1.0K</td><td class="num">0.36%</td><td class="num">1.01</td></tr>
+<tr><td class="num">17</td><td>bristol airport parking</td><td class="num pos-yellow">6</td><td class="num">90.5K</td><td class="num">0.33%</td><td class="num">1.50</td></tr>
+<tr><td class="num">18</td><td>stansted meet and greet</td><td class="num pos-green">1</td><td class="num">2.9K</td><td class="num">0.32%</td><td class="num">1.72</td></tr>
+<tr><td class="num">19</td><td>stansted airport parking</td><td class="num pos-green">3</td><td class="num">110.0K</td><td class="num">0.30%</td><td class="num">1.61</td></tr>
+<tr><td class="num">20</td><td>purple parking gatwick charlwood road horley crawley</td><td class="num pos-green">1</td><td class="num">720</td><td class="num">0.26%</td><td class="num">1.01</td></tr>
+<tr><td class="num">21</td><td>purple parking lhr t3</td><td class="num pos-green">1</td><td class="num">590</td><td class="num">0.21%</td><td class="num">1.25</td></tr>
+<tr><td class="num">22</td><td>purple parking discount</td><td class="num pos-green">1</td><td class="num">590</td><td class="num">0.21%</td><td class="num">0.99</td></tr>
+<tr><td class="num">23</td><td>luton airport parking</td><td class="num pos-green">3</td><td class="num">74.0K</td><td class="num">0.20%</td><td class="num">2.12</td></tr>
+<tr><td class="num">24</td><td>compare airport parking</td><td class="num pos-green">3</td><td class="num">5.4K</td><td class="num">0.20%</td><td class="num">1.91</td></tr>
+<tr><td class="num">25</td><td>gatwick parking promo code</td><td class="num pos-yellow">4</td><td class="num">9.9K</td><td class="num">0.19%</td><td class="num">0.95</td></tr>
+<tr><td class="num">26</td><td>airport parking manchester</td><td class="num pos-green">3</td><td class="num">18.1K</td><td class="num">0.19%</td><td class="num">1.91</td></tr>
+<tr><td class="num">27</td><td>airlines parking</td><td class="num pos-green">3</td><td class="num">18.1K</td><td class="num">0.19%</td><td class="num">1.61</td></tr>
+<tr><td class="num">28</td><td>cheap parking stansted</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.18%</td><td class="num">1.64</td></tr>
+<tr><td class="num">29</td><td>gatwick meet and greet</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.18%</td><td class="num">2.36</td></tr>
+<tr><td class="num">30</td><td>promo code purple parking</td><td class="num pos-green">1</td><td class="num">480</td><td class="num">0.17%</td><td class="num">0.79</td></tr></tbody>
+        </table>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- CUSTOMER REVIEWS -->
-<section id="reviews">
-  <h2><span class="icon">⭐</span> Customer Reviews</h2>
-
-  <div class="cards-3" style="margin-bottom:24px;">
-    <div class="card" style="text-align:center;">
-      <div style="font-size:48px;font-weight:800;color:var(--yellow)">9.29</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">Average Score / 10</div>
-      <div class="stars">★★★★★</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:8px;">Based on 64,227 reviews</div>
-    </div>
-    <div class="card">
-      <h3>Score Distribution</h3>
-      <div class="score-dist">
-        <div class="row">
-          <div class="lbl" style="color:var(--green)">10</div>
-          <div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--green)"></div></div>
-          <div class="cnt">~50,100</div>
-        </div>
-        <div class="row">
-          <div class="lbl" style="color:#86efac">9</div>
-          <div class="bar-track"><div class="bar-fill" style="width:12%;background:#86efac"></div></div>
-          <div class="cnt">~7,707</div>
-        </div>
-        <div class="row">
-          <div class="lbl" style="color:var(--yellow)">8</div>
-          <div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--yellow)"></div></div>
-          <div class="cnt">~3,211</div>
-        </div>
-        <div class="row">
-          <div class="lbl" style="color:var(--orange)">7</div>
-          <div class="bar-track"><div class="bar-fill" style="width:2.5%;background:var(--orange)"></div></div>
-          <div class="cnt">~1,607</div>
-        </div>
-        <div class="row">
-          <div class="lbl" style="color:var(--orange)">6</div>
-          <div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--orange);min-width:6px"></div></div>
-          <div class="cnt">~643</div>
-        </div>
-        <div class="row">
-          <div class="lbl" style="color:var(--red)">5</div>
-          <div class="bar-track"><div class="bar-fill" style="width:2.84%;background:var(--red)"></div></div>
-          <div class="cnt">1,823</div>
-        </div>
-        <div class="row">
-          <div class="lbl" style="color:var(--muted)">1-4</div>
-          <div class="bar-track"><div class="bar-fill" style="width:0.1%;background:var(--muted);min-width:4px"></div></div>
-          <div class="cnt">~136</div>
-        </div>
+<!-- S10: Airparks -->
+<div id="s10" class="section">
+  <div class="section-title">10. Airparks &#8212; Rankings &amp; Keywords <span class="badge badge-ap">AWR + SEMrush</span></div>
+  <div class="note-box" style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.25)">&#x2139;&#xFE0F; SC data not available for Airparks &#8212; using AWR position tracking &amp; SEMrush organic data</div>
+  <div class="three-col" style="margin-bottom:16px">
+    <div class="kpi-card kpi-ap"><div class="kpi-label">Keywords Tracked</div><div class="kpi-value" style="color:var(--ap)">2.0K</div><div class="kpi-sub">AWR position tracking</div></div>
+    <div class="kpi-card kpi-ap"><div class="kpi-label">#1 Positions</div><div class="kpi-value" style="color:var(--ap)">26</div><div class="kpi-sub">Top 3: 202 &#183; Page 1: 789</div></div>
+    <div class="kpi-card kpi-ap"><div class="kpi-label">Avg Position</div><div class="kpi-value" style="color:var(--ap)">19.5</div><div class="kpi-sub">Page 2: 1126</div></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--ap);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">AWR &#8212; Top Keywords at Pos 1-5</div>
+      <div class="table-wrap">
+        <table id="ap-awr-table">
+          <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Position</th><th class="num">Searches/mo</th></tr></thead>
+          <tbody><tr><td class="num">1</td><td>transfers from jfk to manhattan</td><td class="num pos-green">1</td><td class="num">480</td></tr>
+<tr><td class="num">2</td><td>park and fly stansted</td><td class="num pos-green">1</td><td class="num">320</td></tr>
+<tr><td class="num">3</td><td>gatwick park and ride</td><td class="num pos-green">1</td><td class="num">1.9K</td></tr>
+<tr><td class="num">4</td><td>airport parking aberdeen</td><td class="num pos-green">1</td><td class="num">880</td></tr>
+<tr><td class="num">5</td><td>jfk airport transfers</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr>
+<tr><td class="num">6</td><td>newcastle airport parking and hotel</td><td class="num pos-green">1</td><td class="num">1.9K</td></tr>
+<tr><td class="num">7</td><td>airport transfers jfk</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr>
+<tr><td class="num">8</td><td>cheapest gatwick parking</td><td class="num pos-green">1</td><td class="num">4.4K</td></tr>
+<tr><td class="num">9</td><td>alicante to benidorm transfers</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr>
+<tr><td class="num">10</td><td>hotels with parking near gatwick</td><td class="num pos-green">1</td><td class="num">1.0K</td></tr>
+<tr><td class="num">11</td><td>jfk transfers</td><td class="num pos-green">1</td><td class="num">1.3K</td></tr>
+<tr><td class="num">12</td><td>what is the difference between long stay and mid stay car park at stansted</td><td class="num pos-green">1</td><td class="num">0</td></tr>
+<tr><td class="num">13</td><td>transfers from palma airport to alcudia</td><td class="num pos-green">1</td><td class="num">320</td></tr>
+<tr><td class="num">14</td><td>park and ride glasgow airport</td><td class="num pos-green">1</td><td class="num">390</td></tr>
+<tr><td class="num">15</td><td>transfer from jfk to manhattan</td><td class="num pos-green">1</td><td class="num">480</td></tr>
+<tr><td class="num">16</td><td>park and ride luton airport</td><td class="num pos-green">1</td><td class="num">880</td></tr>
+<tr><td class="num">17</td><td>transfer from corfu airport to sidari</td><td class="num pos-green">1</td><td class="num">110</td></tr>
+<tr><td class="num">18</td><td>cheap gatwick parking</td><td class="num pos-green">1</td><td class="num">4.4K</td></tr>
+<tr><td class="num">19</td><td>transfers alicante to benidorm</td><td class="num pos-green">1</td><td class="num">4.4K</td></tr>
+<tr><td class="num">20</td><td>cheap car parking gatwick</td><td class="num pos-green">1</td><td class="num">590</td></tr></tbody>
+        </table>
       </div>
     </div>
-    <div class="card">
-      <h3>Review Summary</h3>
-      <div class="metric-row">
-        <span class="metric-name">Total Reviews</span>
-        <div class="metric-val">64,227</div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Average Score</span>
-        <div class="metric-val" style="color:var(--yellow)">9.29 / 10</div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Score ≥ 9 (Excellent)</span>
-        <div class="metric-val" style="color:var(--green)">~90%</div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Score ≤ 5 (Poor)</span>
-        <div class="metric-val" style="color:var(--red)">~3%</div>
-      </div>
-      <div class="metric-row">
-        <span class="metric-name">Most Recent Review</span>
-        <div style="font-size:12px;text-align:right;color:var(--muted)">17 Mar 2026</div>
-      </div>
-      <div style="margin-top:12px;padding:10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:6px;font-size:12px;color:var(--green)">
-        Excellent review profile — leverage in meta descriptions and structured data to improve organic CTR
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--ap);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">SEMrush &#8212; Top 30 Keywords</div>
+      <div class="table-wrap">
+        <table id="ap-sem-table">
+          <thead><tr><th class="num">#</th><th>Keyword</th><th class="num">Pos</th><th class="num">Search Vol</th><th class="num">Traffic %</th><th class="num">CPC</th></tr></thead>
+          <tbody><tr><td class="num">1</td><td>airparks</td><td class="num pos-green">1</td><td class="num">4.4K</td><td class="num">1.96%</td><td class="num">1.11</td></tr>
+<tr><td class="num">2</td><td>airparks express birmingham</td><td class="num pos-green">1</td><td class="num">3.6K</td><td class="num">1.60%</td><td class="num">0.64</td></tr>
+<tr><td class="num">3</td><td>london airports airspace closed</td><td class="num pos-green">2</td><td class="num">12.1K</td><td class="num">0.89%</td><td class="num">0.00</td></tr>
+<tr><td class="num">4</td><td>airparks drop and go</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.71%</td><td class="num">0.70</td></tr>
+<tr><td class="num">5</td><td>airparks birmingham</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.71%</td><td class="num">0.67</td></tr>
+<tr><td class="num">6</td><td>airparks birmingham birmingham</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.58%</td><td class="num">0.69</td></tr>
+<tr><td class="num">7</td><td>airparks discount code</td><td class="num pos-green">1</td><td class="num">1.0K</td><td class="num">0.44%</td><td class="num">0.87</td></tr>
+<tr><td class="num">8</td><td>gatwick parking</td><td class="num pos-green">3</td><td class="num">110.0K</td><td class="num">0.36%</td><td class="num">1.75</td></tr>
+<tr><td class="num">9</td><td>east midlands parking</td><td class="num pos-green">2</td><td class="num">4.4K</td><td class="num">0.32%</td><td class="num">1.03</td></tr>
+<tr><td class="num">10</td><td>airparks short run</td><td class="num pos-green">1</td><td class="num">720</td><td class="num">0.32%</td><td class="num">0.68</td></tr>
+<tr><td class="num">11</td><td>leeds bradford airport</td><td class="num pos-yellow">7</td><td class="num">110.0K</td><td class="num">0.30%</td><td class="num">0.39</td></tr>
+<tr><td class="num">12</td><td>cheap airport parking</td><td class="num pos-green">3</td><td class="num">6.6K</td><td class="num">0.30%</td><td class="num">1.43</td></tr>
+<tr><td class="num">13</td><td>airparks drop and go luton</td><td class="num pos-green">1</td><td class="num">590</td><td class="num">0.26%</td><td class="num">0.65</td></tr>
+<tr><td class="num">14</td><td>airparks self park luton</td><td class="num pos-green">1</td><td class="num">590</td><td class="num">0.26%</td><td class="num">0.71</td></tr>
+<tr><td class="num">15</td><td>edinburgh airport parking</td><td class="num pos-yellow">4</td><td class="num">74.0K</td><td class="num">0.24%</td><td class="num">1.50</td></tr>
+<tr><td class="num">16</td><td>heathrow parking</td><td class="num pos-yellow">7</td><td class="num">74.0K</td><td class="num">0.24%</td><td class="num">1.51</td></tr>
+<tr><td class="num">17</td><td>airlines parking</td><td class="num pos-green">2</td><td class="num">18.1K</td><td class="num">0.24%</td><td class="num">1.61</td></tr>
+<tr><td class="num">18</td><td>manchester airport parking</td><td class="num pos-yellow">6</td><td class="num">165.0K</td><td class="num">0.23%</td><td class="num">1.45</td></tr>
+<tr><td class="num">19</td><td>skyport glasgow</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.22%</td><td class="num">1.06</td></tr>
+<tr><td class="num">20</td><td>direct parking</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.22%</td><td class="num">1.15</td></tr>
+<tr><td class="num">21</td><td>direct parking glasgow</td><td class="num pos-green">1</td><td class="num">1.6K</td><td class="num">0.22%</td><td class="num">0.93</td></tr>
+<tr><td class="num">22</td><td>airparks birmingham mackadown lane</td><td class="num pos-green">1</td><td class="num">480</td><td class="num">0.21%</td><td class="num">0.64</td></tr>
+<tr><td class="num">23</td><td>hotel and parking gatwick</td><td class="num pos-green">1</td><td class="num">2.9K</td><td class="num">0.21%</td><td class="num">1.25</td></tr>
+<tr><td class="num">24</td><td>thistle hotel heathrow</td><td class="num pos-yellow">5</td><td class="num">8.1K</td><td class="num">0.19%</td><td class="num">0.58</td></tr>
+<tr><td class="num">25</td><td>ibis hotel spittlesea road luton</td><td class="num pos-yellow">6</td><td class="num">9.9K</td><td class="num">0.19%</td><td class="num">0.32</td></tr>
+<tr><td class="num">26</td><td>uk airports disruption</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.17%</td><td class="num">0.00</td></tr>
+<tr><td class="num">27</td><td>skyport parking glasgow</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.17%</td><td class="num">1.06</td></tr>
+<tr><td class="num">28</td><td>manchester airport contact number</td><td class="num pos-green">1</td><td class="num">1.3K</td><td class="num">0.17%</td><td class="num">2.60</td></tr>
+<tr><td class="num">29</td><td>gatwick parking and hotel</td><td class="num pos-green">1</td><td class="num">2.4K</td><td class="num">0.17%</td><td class="num">1.25</td></tr>
+<tr><td class="num">30</td><td>cheap gatwick parking</td><td class="num pos-green">1</td><td class="num">2.4K</td><td class="num">0.17%</td><td class="num">1.74</td></tr></tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
 
-  <h3 style="margin-bottom:12px;">Recent Reviews</h3>
-  <div class="reviews-grid">
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MR I SQUIRES</div><div class="review-site">Airport Meet &amp; Greet East Midlands</div></div>
-        <div><div class="review-score s7-8">7/10</div></div>
-      </div>
-      <div class="review-comment">"Used to be better when coloured parking areas at collection were numbered, otherwise great"</div>
-      <div class="review-airport">✈ East Midlands · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MR P GRIFFITHS</div><div class="review-site">Silver Zone Bristol</div></div>
-        <div><div class="review-score s10">10/10</div></div>
-      </div>
-      <div class="review-comment">"Smooth booking and parking"</div>
-      <div class="review-airport">✈ Bristol · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MISS H SEEKINGS</div><div class="review-site">Manchester Multi Storey T2 West</div></div>
-        <div><div class="review-score s10">10/10</div></div>
-      </div>
-      <div class="review-comment">"All went smoothly no problems at all very happy"</div>
-      <div class="review-airport">✈ Manchester · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MRS H GRIFFITHS</div><div class="review-site">Long Stay Newcastle</div></div>
-        <div><div class="review-score s9">9/10</div></div>
-      </div>
-      <div class="review-comment">"Easy booking system, and hassle free entry and exit system."</div>
-      <div class="review-airport">✈ Newcastle · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MRS D DAVIS</div><div class="review-site">Maple Manor P&amp;R Heathrow</div></div>
-        <div><div class="review-score s10">10/10</div></div>
-      </div>
-      <div class="review-comment">"The carpark was much nearer to the airport than expected. Well organised, buses ran regularly. Good value for money."</div>
-      <div class="review-airport">✈ Heathrow · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MRS D SHORE</div><div class="review-site">Silver Zone Bristol</div></div>
-        <div><div class="review-score s10">10/10</div></div>
-      </div>
-      <div class="review-comment">"Just so easy and hassle free - especially needed on a late flight!!"</div>
-      <div class="review-airport">✈ Bristol · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MISS A BUCHOLC</div><div class="review-site">Maple Manor P&amp;R Heathrow</div></div>
-        <div><div class="review-score s10">10/10</div></div>
-      </div>
-      <div class="review-comment">"Great prices and great service"</div>
-      <div class="review-airport">✈ Heathrow · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MR D RICHARDSON</div><div class="review-site">Short Stay Newcastle</div></div>
-        <div><div class="review-score s9">9/10</div></div>
-      </div>
-      <div class="review-comment">"Nothing you can do, but unfortunately we couldn't get back into the car as car next to us too close!"</div>
-      <div class="review-airport">✈ Newcastle · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MR D EDWARDS</div><div class="review-site">Silver Zone Bristol</div></div>
-        <div><div class="review-score s10">10/10</div></div>
-      </div>
-      <div class="review-comment">"Mostly all good with holiday except we were not booked onto shuttle bus and they charged us £30 to get to the hotel."</div>
-      <div class="review-airport">✈ Bristol · 17 Mar 2026</div>
-    </div>
-    <div class="review-card">
-      <div class="review-header">
-        <div><div class="review-name">MR M INMAN</div><div class="review-site">Maple Manor Parking Gatwick</div></div>
-        <div><div class="review-score s5-6">5/10</div></div>
-      </div>
-      <div class="review-comment">"Trip out was normal great service. Back was a 15/20 mins wait — not really meet and greet."</div>
-      <div class="review-airport">✈ Gatwick · 17 Mar 2026</div>
-    </div>
-  </div>
-</section>
-
-<!-- PRIORITY ACTION PLAN -->
-<section id="actions">
-  <h2><span class="icon">🎯</span> Priority Action Plan</h2>
-  <p style="color:var(--muted);font-size:13px;margin-bottom:24px;">10 concrete SEO actions based on data analysis — ordered by impact and urgency.</p>
-
-  <div class="action-group">
-    <h3 style="color:var(--red);">🔴 Critical (Immediate Action Required)</h3>
-    <div class="action-item critical">
-      <div class="bullet">🔴</div>
-      <div class="content">
-        <div class="title">Fix catastrophic LCP on manchester-airport-parking.html (22.0s) and bristol-airport-parking.html (22.6s)</div>
-        <div class="desc">These are top-5 pages by clicks (8k and 4k respectively) with LCP 8x above the 2.5s threshold. CLS is also failing (0.104 and 0.105). Fix image loading, reduce render-blocking resources, implement lazy loading. Expected ranking uplift: significant — Google uses CWV as ranking signal. <strong>Combined monthly traffic at stake: ~14k clicks.</strong></div>
+<!-- S11: Competitive Overlap -->
+<div id="s11" class="section">
+  <div class="section-title">11. Competitive Overlap <span class="badge badge-all">SEMrush</span></div>
+  <div class="three-col">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--hx);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">HX Top Competitors</div>
+      <div class="table-wrap">
+        <table id="hx-comp-table">
+          <thead><tr><th>Domain</th><th class="num">Relevance</th><th class="num">Common KWs</th><th class="num">Org KWs</th><th class="num">Traffic</th></tr></thead>
+          <tbody><tr><td>airparks.co.uk</td><td class="num">0.51</td><td class="num">18.8K</td><td class="num">75.4K</td><td class="num">179.1K</td></tr>
+<tr><td>purpleparking.com</td><td class="num">0.48</td><td class="num">18.4K</td><td class="num">79.6K</td><td class="num">219.1K</td></tr>
+<tr><td>aph.com</td><td class="num">0.38</td><td class="num">12.6K</td><td class="num">68.7K</td><td class="num">152.5K</td></tr>
+<tr><td>travelsupermarket.com</td><td class="num">0.30</td><td class="num">11.1K</td><td class="num">165.3K</td><td class="num">406.5K</td></tr>
+<tr><td>skyparksecure.com</td><td class="num">0.25</td><td class="num">9.0K</td><td class="num">38.4K</td><td class="num">63.7K</td></tr>
+<tr><td>heathrow.com</td><td class="num">0.21</td><td class="num">9.2K</td><td class="num">322.2K</td><td class="num">3.6M</td></tr>
+<tr><td>ncp.co.uk</td><td class="num">0.21</td><td class="num">7.8K</td><td class="num">176.5K</td><td class="num">981.3K</td></tr>
+<tr><td>manchesterairport.co.uk</td><td class="num">0.21</td><td class="num">8.2K</td><td class="num">229.4K</td><td class="num">1.6M</td></tr></tbody>
+        </table>
       </div>
     </div>
-    <div class="action-item critical">
-      <div class="bullet">🔴</div>
-      <div class="content">
-        <div class="title">Fix CWV sitewide — 0/19 pages pass. Average score 40/100</div>
-        <div class="desc">Every single tested page has Poor performance. airport-lounges.html scores 22/100 with LCP 11.1s and CLS 0.403. de/flughafen-bremen-abflug.html has CLS 0.376. Conduct a comprehensive performance audit: eliminate render-blocking JS, implement proper image sizing, reduce TBT (avg 1,000ms+ on most pages). This is a sitewide infrastructure issue.</div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--pp);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">PP Top Competitors</div>
+      <div class="table-wrap">
+        <table id="pp-comp-table">
+          <thead><tr><th>Domain</th><th class="num">Relevance</th><th class="num">Common KWs</th><th class="num">Org KWs</th><th class="num">Traffic</th></tr></thead>
+          <tbody><tr><td>airparks.co.uk</td><td class="num">0.75</td><td class="num">14.4K</td><td class="num">75.4K</td><td class="num">179.1K</td></tr>
+<tr><td>skyparksecure.com</td><td class="num">0.58</td><td class="num">7.8K</td><td class="num">38.4K</td><td class="num">63.7K</td></tr>
+<tr><td>aph.com</td><td class="num">0.54</td><td class="num">9.9K</td><td class="num">68.7K</td><td class="num">152.5K</td></tr>
+<tr><td>holidayextras.com</td><td class="num">0.48</td><td class="num">18.4K</td><td class="num">251.4K</td><td class="num">1.1M</td></tr>
+<tr><td>parkbcp.co.uk</td><td class="num">0.46</td><td class="num">6.1K</td><td class="num">33.3K</td><td class="num">12.3K</td></tr>
+<tr><td>airport-parking-shop.co.uk</td><td class="num">0.42</td><td class="num">5.4K</td><td class="num">22.1K</td><td class="num">14.7K</td></tr>
+<tr><td>parking4less.com</td><td class="num">0.38</td><td class="num">5.7K</td><td class="num">20.7K</td><td class="num">16.2K</td></tr>
+<tr><td>looking4.com</td><td class="num">0.33</td><td class="num">4.7K</td><td class="num">19.2K</td><td class="num">18.8K</td></tr></tbody>
+        </table>
       </div>
     </div>
-    <div class="action-item critical">
-      <div class="bullet">🔴</div>
-      <div class="content">
-        <div class="title">Fix 500 error on stansted-airport-parking.html — a top-3 page by clicks (8,952/28d)</div>
-        <div class="desc">PageSpeed Insights returns HTTP 500 error for stansted-airport-parking.html — the site's 3rd highest traffic page with 368k impressions. This suggests intermittent server errors that could be causing ranking drops. Investigate server logs, caching configuration, and CDN setup immediately. <strong>368,159 impressions at risk.</strong></div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--ap);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">AP Top Competitors</div>
+      <div class="table-wrap">
+        <table id="ap-comp-table">
+          <thead><tr><th>Domain</th><th class="num">Relevance</th><th class="num">Common KWs</th><th class="num">Org KWs</th><th class="num">Traffic</th></tr></thead>
+          <tbody><tr><td>purpleparking.com</td><td class="num">0.75</td><td class="num">14.4K</td><td class="num">79.6K</td><td class="num">219.1K</td></tr>
+<tr><td>holidayextras.com</td><td class="num">0.51</td><td class="num">18.8K</td><td class="num">251.4K</td><td class="num">1.1M</td></tr>
+<tr><td>aph.com</td><td class="num">0.49</td><td class="num">9.5K</td><td class="num">68.7K</td><td class="num">152.5K</td></tr>
+<tr><td>skyparksecure.com</td><td class="num">0.48</td><td class="num">7.6K</td><td class="num">38.4K</td><td class="num">63.7K</td></tr>
+<tr><td>parkbcp.co.uk</td><td class="num">0.39</td><td class="num">6.2K</td><td class="num">33.3K</td><td class="num">12.3K</td></tr>
+<tr><td>parking4less.com</td><td class="num">0.33</td><td class="num">5.7K</td><td class="num">20.7K</td><td class="num">16.2K</td></tr>
+<tr><td>airport-parking-shop.co.uk</td><td class="num">0.32</td><td class="num">5.3K</td><td class="num">22.1K</td><td class="num">14.7K</td></tr>
+<tr><td>travelsupermarket.com</td><td class="num">0.29</td><td class="num">8.4K</td><td class="num">165.3K</td><td class="num">406.5K</td></tr></tbody>
+        </table>
       </div>
     </div>
   </div>
-
-  <div class="action-group">
-    <h3 style="color:var(--yellow);">🟡 High Priority</h3>
-    <div class="action-item high">
-      <div class="bullet">🟡</div>
-      <div class="content">
-        <div class="title">Optimise CTR for "heathrow departures" — 135,586 impressions, only 0.71% CTR, position 5.8</div>
-        <div class="desc">This term has massive search volume but terrible CTR. Improve title tag and meta description with compelling copy, add structured data (flight departure table), include year in title for freshness signals. Moving from 0.71% to 5% CTR = +5,800 clicks/28d. Review /flights/gatwick-departures.html as a template for improvement.</div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">HX vs PP &amp; Airparks &#8212; Keyword Overlap Summary</div>
+    <div class="two-col" style="margin-top:8px">
+      <div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px">HX vs Purple Parking</div>
+        <div style="font-size:26px;font-weight:800;color:var(--hx)">18,402 <span style="font-size:14px;color:var(--muted);font-weight:400">common keywords</span></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Competitor Relevance: 0.48</div>
       </div>
-    </div>
-    <div class="action-item high">
-      <div class="bullet">🟡</div>
-      <div class="content">
-        <div class="title">Target "travel insurance" — 151,846 impressions, 0.02% CTR, position 13</div>
-        <div class="desc">Travel insurance is a massive commercial intent keyword with 151k impressions where HX barely registers (34 clicks). Either optimise existing content or create a dedicated travel insurance landing page/comparison tool. Moving to position 3-5 could yield 10,000+ clicks/28d and high-value conversions.</div>
-      </div>
-    </div>
-    <div class="action-item high">
-      <div class="bullet">🟡</div>
-      <div class="content">
-        <div class="title">Improve Gatwick Airport Parking page CTR — 354k impressions but only 1.6% CTR at position 4.7</div>
-        <div class="desc">gatwick-airport-parking.html has the highest impression count of any page (354,601) but very low CTR. At position 4.7 this should be getting 5%+ CTR. A/B test new title tags: add price points, star ratings, or "Best Price Guarantee" messaging. Add Review schema to show 9.29/10 in SERPs. Potential uplift: +11,900 clicks/28d.</div>
-      </div>
-    </div>
-    <div class="action-item high">
-      <div class="bullet">🟡</div>
-      <div class="content">
-        <div class="title">Add Review schema markup across all parking pages — leverage 9.29/10 from 64,227 reviews</div>
-        <div class="desc">HX has an exceptional review score (9.29/10 from 64k reviews) but this isn't visible in SERPs. Implementing AggregateRating schema on all parking pages will display star ratings in search results, typically improving CTR by 10–30%. Priority pages: all airport parking pages (collectively 2M+ impressions/28d).</div>
+      <div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px">HX vs Airparks</div>
+        <div style="font-size:26px;font-weight:800;color:var(--hx)">18,818 <span style="font-size:14px;color:var(--muted);font-weight:400">common keywords</span></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Competitor Relevance: 0.51</div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="action-group">
-    <h3 style="color:var(--green);">🟢 Quick Wins</h3>
-    <div class="action-item quick">
-      <div class="bullet">🟢</div>
-      <div class="content">
-        <div class="title">Optimise "airport-transfers.html" — 325k impressions, only 1.08% CTR at position 6.2</div>
-        <div class="desc">airport-transfers.html has 325,953 impressions with a very low 1.08% CTR. Rewrite title tag to be more specific and compelling (e.g. "Airport Transfers UK — Book &amp; Save | Holiday Extras"). Add FAQ schema for common transfer questions. Potential: +3,000 clicks/28d just from CTR improvement.</div>
+<!-- S12: Priority Actions -->
+<div id="s12" class="section">
+  <div class="section-title">12. Priority Actions <span class="badge badge-all">Data-Driven</span></div>
+  <div class="actions-grid">
+    <div class="action-col">
+      <div class="action-col-title action-critical">&#x1F534; Critical &#8212; Fix Now</div>
+      <div class="action-item action-critical-border">
+        <div class="action-kw">"travel insurance" &#8212; 151,846 impressions, 0.02% CTR</div>
+        <div class="action-desc">HX ranks at avg pos 13.1 for "travel insurance" (151.8K impressions) but captures only 34 clicks (0.02% CTR). This is a catastrophic content-intent mismatch. A properly optimised page at 5% CTR would deliver 7,500+ additional monthly clicks from a single keyword.</div>
+        <div class="action-metric">Potential: +7,500 clicks/month if CTR reaches 5%</div>
+      </div>
+      <div class="action-item action-critical-border">
+        <div class="action-kw">7-day click decline of -4.3% &#8212; investigate immediately</div>
+        <div class="action-desc">Last 7 days: 107,823 clicks vs 112,686 prior week (-4,863 clicks, -4.3%). The 28-day period is also down 2.0%. Cross-reference with ranking changes on top airport parking keywords (Manchester 142K imp, Stansted 93K, Gatwick 83K) to identify specific losses.</div>
+        <div class="action-metric">Impact: ~5K clicks lost this week vs prior week</div>
+      </div>
+      <div class="action-item action-critical-border">
+        <div class="action-kw">"fcdo travel advice" &#8212; 145K impressions, 0.20% CTR at pos 5.5</div>
+        <div class="action-desc">145,414 impressions with 296 clicks (0.20% CTR) at position 5.5. Expected CTR at pos 5 is ~6%+. The SERP snippet is not compelling searchers to click. Rewrite title/meta to clearly signal travel advice content and add FAQ structured data to generate rich results.</div>
+        <div class="action-metric">Potential: +7,000 clicks/month at 5% CTR</div>
+      </div>
+      <div class="action-item action-critical-border">
+        <div class="action-kw">Non-brand CTR gap: 6.18M impressions at 1.08% CTR</div>
+        <div class="action-desc">HX has 6.18M non-brand impressions in 28 days achieving only 1.08% CTR vs 24.8% for brand queries. Systematic implementation of Review, FAQ, Breadcrumb, and Price schema across parking and hotel pages could lift CTR by 1-2 percentage points unlocking 60-120K extra clicks per month.</div>
+        <div class="action-metric">Potential: +60K-120K clicks/month at 2% CTR improvement</div>
       </div>
     </div>
-    <div class="action-item quick">
-      <div class="bullet">🟢</div>
-      <div class="content">
-        <div class="title">Optimise US/France/Australia rankings — low CTR markets with high impression volume</div>
-        <div class="desc">USA has 1.8M impressions but only 0.22% CTR (avg pos 13.8). France has 821k impressions at 0.71% CTR. These markets are clearly discovering HX but not clicking. Review localised content, hreflang tags, and whether pages are truly relevant to US/FR searcher intent. Quick fix: ensure correct hreflang implementation across all international pages.</div>
+    <div class="action-col">
+      <div class="action-col-title action-high">&#x1F7E1; High Priority</div>
+      <div class="action-item action-high-border">
+        <div class="action-kw">Manchester Airport Parking &#8212; pos 3.0, 142K impressions</div>
+        <div class="action-desc">Ranking at 3.0 average position with 2.57% CTR for 142K monthly impressions. Moving to #1 (CTR &#8776;28%) represents +34K additional clicks/month. Focus on E-E-A-T signals, fresh user reviews, internal link consolidation, and content depth vs competitors.</div>
+        <div class="action-metric">Potential: +34K clicks/month at #1 position</div>
+      </div>
+      <div class="action-item action-high-border">
+        <div class="action-kw">Stansted (92.8K) + Gatwick (82.7K) &#8212; both pos 2.6-3.4</div>
+        <div class="action-desc">Two of HX&#8217;s highest-impression non-brand keywords are tantalizingly close to #1. At current position 3, CTR is &#8776;2.6% vs &#8776;28% at #1. Combined uplift potential of 43K+ clicks/month. Audit competitor schema markup and content structure for gaps to exploit.</div>
+        <div class="action-metric">Potential: +43K combined clicks/month at #1</div>
+      </div>
+      <div class="action-item action-high-border">
+        <div class="action-kw">HX vs PP: 18,402 keyword overlap &#8212; run gap analysis</div>
+        <div class="action-desc">HX and Purple Parking share 18,402 keywords (relevance 0.51 with AP, 0.48 with PP). HX has 251K organic keywords vs PP&#8217;s 79.5K, but where PP ranks #1 and HX doesn&#8217;t represents direct revenue leakage. PP has 27 #1 rankings &#8212; identify these and build targeted content to reclaim them.</div>
+        <div class="action-metric">Action: Export overlap keywords, filter PP #1 where HX is pos 3+</div>
+      </div>
+      <div class="action-item action-high-border">
+        <div class="action-kw">Dublin Airport Parking &#8212; 72.3K impressions at 0.17% CTR</div>
+        <div class="action-desc">"dublin airport parking" generates 72,315 impressions at position 3.6 with only 122 clicks (0.17% CTR). Irish users may not trust a UK brand for Irish airport parking. Create a dedicated IE-focused landing page with local pricing, IRL trust signals, and .ie hreflang consideration.</div>
+        <div class="action-metric">Potential: +3,600 clicks/month at 5% CTR</div>
       </div>
     </div>
-    <div class="action-item quick">
-      <div class="bullet">🟢</div>
-      <div class="content">
-        <div class="title">Capitalise on position improvements — avg position improved from 10.25 to 8.80 (↑1.45pts)</div>
-        <div class="desc">The significant average position improvement (-1.44 points) this period shows positive momentum. Identify which specific pages drove this improvement and double down on the content/link strategy used. Also push "near-#1" keywords: airport-parking.html is at position 10.0 with 350k impressions — one position push to page 1 top could unlock 5,000+ extra clicks/28d.</div>
+    <div class="action-col">
+      <div class="action-col-title action-quick">&#x1F7E2; Quick Wins</div>
+      <div class="action-item action-quick-border">
+        <div class="action-kw">Departures/Arrivals pages &#8212; 500K+ impressions, &lt;1.4% CTR</div>
+        <div class="action-desc">Heathrow departures (136K), Manchester departures (108K), Heathrow arrivals (104K) combined have 500K+ impressions with CTRs of 0.4&#8211;2.2%. Add real-time flight data widgets, FAQ schema, and event markup. Titles with &#8220;Live Departures&#8221; wording typically improve CTR by 2-3x on these queries.</div>
+        <div class="action-metric">Quick win: Add FAQ/Event schema &#8212; est. +5K clicks/month</div>
+      </div>
+      <div class="action-item action-quick-border">
+        <div class="action-kw">Heathrow Parking &#8212; pos 3.5, 71K impressions, 1.86% CTR</div>
+        <div class="action-desc">"heathrow parking" shows 71K impressions at position 3.5 with 1,328 clicks (1.86% CTR). At pos 3 the expected CTR is &#8776;10-14%. Adding price or rating to the SERP snippet (via aggregate rating schema) is a quick, high-impact change that should 3-5x the click-through rate.</div>
+        <div class="action-metric">Est. +5,700 clicks/month at 10% CTR</div>
+      </div>
+      <div class="action-item action-quick-border">
+        <div class="action-kw">Avg position improved 28d (10.25 &#8594; 8.80) &#8212; capitalise now</div>
+        <div class="action-desc">Average position improved significantly from 10.25 (prev 28d) to 8.80 (current 28d) &#8212; a 14% improvement. Despite this, clicks declined 2%, suggesting traffic is shifting to lower-volume queries. Use this ranking momentum to push the top parking pages from positions 3-5 into the top 3 with targeted link building.</div>
+        <div class="action-metric">Signal: Build on ranking gains with authority links</div>
+      </div>
+      <div class="action-item action-quick-border">
+        <div class="action-kw">Tablet CTR (1.96%) outperforms desktop (0.95%) &#8212; audit UX</div>
+        <div class="action-desc">Tablet users have 2x the CTR of desktop users (1.96% vs 0.95%) despite desktop having a much lower avg position (12.0 vs 5.3). This suggests desktop SERP results for HX have poor title/description quality or face stronger competition. Run a desktop-specific SERP audit and rewrite meta for desktop intent.</div>
+        <div class="action-metric">Desktop: 128K clicks &#8212; improve CTR by 1% = +16K clicks/month</div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-</div><!-- /main -->
+</main>
 
 <script>
-// Active sidebar link on scroll
-const sections = document.querySelectorAll('section, #header');
-const links = document.querySelectorAll('#sidebar nav a');
+function switchBrand(brand, el) {
+  document.querySelectorAll('.brand-tab').forEach(t => t.className = 'brand-tab');
+  el.className = 'brand-tab active-' + brand;
+  ['hx','pp','ap'].forEach(b => document.getElementById('kpi-' + b).style.display = 'none');
+  document.getElementById('kpi-' + brand).style.display = 'grid';
+}
 
-const observer = new IntersectionObserver((entries) => {
+function parseCell(text) {
+  text = text.replace(/[&#x25B2;&#x25BC;+&#x163;%,]/g,'').trim();
+  if (text.endsWith('K')) return parseFloat(text) * 1000;
+  if (text.endsWith('M')) return parseFloat(text) * 1000000;
+  const n = parseFloat(text);
+  return isNaN(n) ? text : n;
+}
+
+document.querySelectorAll('table').forEach(table => {
+  table.querySelectorAll('th').forEach((th, col) => {
+    let asc = false;
+    th.addEventListener('click', () => {
+      table.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc','sort-desc'));
+      asc = !asc;
+      th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort((a, b) => {
+        const aVal = parseCell(a.cells[col] ? a.cells[col].innerText : '');
+        const bVal = parseCell(b.cells[col] ? b.cells[col].innerText : '');
+        if (typeof aVal === 'number' && typeof bVal === 'number') return asc ? aVal - bVal : bVal - aVal;
+        return asc ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+});
+
+const sectionIds = ['header-section','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12'];
+const navLinks = document.querySelectorAll('#sidebar nav a');
+const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      const id = entry.target.id;
-      links.forEach(l => {
-        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + entry.target.id) link.classList.add('active');
       });
     }
   });
-}, { rootMargin: '-20% 0px -70% 0px' });
-
-sections.forEach(s => observer.observe(s));
-
-// Add header to observed sections
-const header = document.getElementById('header');
-if (header) observer.observe(header);
+}, {rootMargin:'-15% 0px -70% 0px'});
+document.querySelectorAll('[id]').forEach(el => {
+  if (sectionIds.includes(el.id)) observer.observe(el);
+});
 </script>
-
 </body>
 </html>
