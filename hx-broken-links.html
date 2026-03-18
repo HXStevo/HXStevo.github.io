@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HX Broken Links Audit</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 1.8rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
+  .subtitle { color: #94a3b8; font-size: 0.85rem; margin-bottom: 28px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .stat-card { background: #1e2130; border: 1px solid #2d3148; border-radius: 10px; padding: 18px 20px; }
+  .stat-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 6px; }
+  .stat-card .value { font-size: 2rem; font-weight: 700; line-height: 1; }
+  .value-total { color: #60a5fa; }
+  .value-ok { color: #34d399; }
+  .value-broken { color: #f87171; }
+  .value-404 { color: #fb923c; }
+  .value-500 { color: #f43f5e; }
+  .value-other { color: #a78bfa; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn { border: none; border-radius: 6px; padding: 7px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; }
+  .btn-filter { background: #1e2130; color: #94a3b8; border: 1px solid #2d3148; }
+  .btn-filter:hover { background: #252840; color: #e2e8f0; }
+  .btn-filter.active { background: #3b4fd8; color: #fff; border-color: #3b4fd8; }
+  .btn-filter.active-404 { background: #c2410c; border-color: #c2410c; color: #fff; }
+  .btn-filter.active-500 { background: #9f1239; border-color: #9f1239; color: #fff; }
+  .btn-filter.active-other { background: #5b21b6; border-color: #5b21b6; color: #fff; }
+  .btn-csv { background: #0f766e; color: #fff; border: 1px solid #0d9488; margin-left: auto; }
+  .btn-csv:hover { background: #0d9488; }
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #2d3148; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: #1a1e2e; }
+  th { padding: 11px 14px; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; white-space: nowrap; cursor: pointer; user-select: none; border-bottom: 1px solid #2d3148; }
+  th:hover { color: #94a3b8; }
+  th .sort-arrow { display: inline-block; margin-left: 4px; opacity: 0.4; }
+  th.sorted .sort-arrow { opacity: 1; color: #60a5fa; }
+  tbody tr { border-bottom: 1px solid #1a1e2e; transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #1a1e2e; }
+  td { padding: 10px 14px; vertical-align: top; }
+  .td-url { max-width: 560px; }
+  .td-url a { color: #60a5fa; text-decoration: none; word-break: break-all; font-size: 0.82rem; }
+  .td-url a:hover { text-decoration: underline; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap; }
+  .badge-404 { background: #431407; color: #fb923c; border: 1px solid #7c2d12; }
+  .badge-403 { background: #3b0764; color: #c084fc; border: 1px solid #6b21a8; }
+  .badge-500 { background: #4c0519; color: #f43f5e; border: 1px solid #9f1239; }
+  .badge-0   { background: #1e3a5f; color: #93c5fd; border: 1px solid #1d4ed8; }
+  .badge-other { background: #1e2130; color: #94a3b8; border: 1px solid #374151; }
+  .td-error { color: #94a3b8; font-size: 0.8rem; word-break: break-word; max-width: 300px; }
+  .no-results { text-align: center; padding: 40px; color: #475569; }
+  .row-count { color: #64748b; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>HX Broken Links Audit</h1>
+  <div class="subtitle">Generated: 18 March 2026 &nbsp;|&nbsp; Source: holidayextras.com sitemap</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total Checked</div>
+      <div class="value value-total" id="stat-total">10,329</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">OK (2xx/3xx)</div>
+      <div class="value value-ok" id="stat-ok">10,296</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Broken</div>
+      <div class="value value-broken" id="stat-broken">33</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">404 Not Found</div>
+      <div class="value value-404" id="stat-404">2</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">403 Forbidden</div>
+      <div class="value value-other" id="stat-403">1</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Timeout / Error</div>
+      <div class="value value-other" id="stat-0">30</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-group">
+      <button class="btn btn-filter active" id="btn-all" onclick="setFilter('all')">All (<span id="cnt-all">33</span>)</button>
+      <button class="btn btn-filter" id="btn-404" onclick="setFilter('404')">404 (<span id="cnt-404">2</span>)</button>
+      <button class="btn btn-filter" id="btn-403" onclick="setFilter('403')">403 (<span id="cnt-403">1</span>)</button>
+      <button class="btn btn-filter" id="btn-0" onclick="setFilter('0')">Timeout/Error (<span id="cnt-0">30</span>)</button>
+      <button class="btn btn-filter" id="btn-500" onclick="setFilter('500')">5xx (<span id="cnt-500">0</span>)</button>
+    </div>
+    <span class="row-count" id="row-count">Showing 33 of 33</span>
+    <button class="btn btn-csv" onclick="copyCSV()">Copy as CSV</button>
+  </div>
+
+  <div class="table-wrap">
+    <table id="results-table">
+      <thead>
+        <tr>
+          <th onclick="sortBy('url')"># &amp; URL <span class="sort-arrow">&#8597;</span></th>
+          <th onclick="sortBy('status')" class="sorted">Status <span class="sort-arrow">&#8593;</span></th>
+          <th>Error / Reason</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const RAW_DATA = [
+  {"url":"https://www.holidayextras.com/airport-parking%2Fmanchester%2Fdrop-and-go%2Freviews-test.html","status":404,"error":"HTTP Error 404: Not Found"},
+  {"url":"https://www.holidayextras.com/portal/page/baa+id+centre%5egeneral%5eapplication+forms%5egatwick+vehicle+forms/86f0b4f6831f0210vgnvcm10000036821c0a____/448c6a4c7f1b0010vgnvcm200000357e120a____.html","status":404,"error":"HTTP Error 404: Not Found"},
+  {"url":"https://www.holidayextras.com/email/discount-exclusions.html","status":403,"error":"HTTP Error 403: Forbidden"},
+  {"url":"https://www.holidayextras.com/travel-blog/before-you-go/family-travel-tips.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/reviews-gatwick-north-terminal-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/airport-hotels/stansted/days-inn/parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-undercover-airport-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-airport-short-and-long-stay-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-airport-off-airport-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/reviews-heathrow-hotels-terminal-5.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/reviews-heathrow-hotels-terminal-2.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/newcastle-airport-hotels-star-rating.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/newcastle-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/luton-undercover-airport-hotels.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/luton-off-airport-hotels.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/luton-on-airport-hotels.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/luton-airport-hotels-star-rating.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/luton-airport-hotels-without-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/luton-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/liverpool-airport-parking-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/glasgow-airport-hotels-without-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/glasgow-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/gatwick-off-airport-hotels.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/gatwick-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/airport-hotels/belfast-city/stormont-hotel/reviews.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/edinburgh-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/eastmidlands-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-airport-hotels-without-parking.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-airport-hotels-upgrades.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-airport-hotels-star-rating.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/east-midlands-airport-hotels-family-rooms.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/dublin-airport-hotels-sitemap.html","status":0,"error":"The read operation timed out"},
+  {"url":"https://www.holidayextras.com/airport-parking/heathrow/business-parking-t4/reviews.html","status":0,"error":"The read operation timed out"}
+];
+
+let currentFilter = 'all';
+let sortCol = 'status';
+let sortAsc = true;
+
+function badgeClass(status) {
+  if (status === 404) return 'badge-404';
+  if (status === 403) return 'badge-403';
+  if (status >= 500) return 'badge-500';
+  if (status === 0) return 'badge-0';
+  return 'badge-other';
+}
+
+function statusLabel(status) {
+  if (status === 0) return 'Timeout';
+  return status;
+}
+
+function filterData(data) {
+  if (currentFilter === 'all') return data;
+  if (currentFilter === '500') return data.filter(r => r.status >= 500);
+  return data.filter(r => String(r.status) === currentFilter);
+}
+
+function sortData(data) {
+  return [...data].sort((a, b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return sortAsc ? -1 : 1;
+    if (va > vb) return sortAsc ? 1 : -1;
+    return 0;
+  });
+}
+
+function render() {
+  const filtered = filterData(RAW_DATA);
+  const sorted = sortData(filtered);
+  const tbody = document.getElementById('table-body');
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" class="no-results">No results for this filter.</td></tr>';
+  } else {
+    tbody.innerHTML = sorted.map((r, i) => `
+      <tr data-status="${r.status}">
+        <td class="td-url"><span style="color:#475569;margin-right:8px;">${i+1}.</span><a href="${r.url}" target="_blank" rel="noopener">${r.url}</a></td>
+        <td><span class="badge ${badgeClass(r.status)}">${statusLabel(r.status)}</span></td>
+        <td class="td-error">${r.error || '—'}</td>
+      </tr>`).join('');
+  }
+  document.getElementById('row-count').textContent = `Showing ${sorted.length} of ${RAW_DATA.length}`;
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.btn-filter').forEach(b => {
+    b.classList.remove('active','active-404','active-500','active-other');
+  });
+  const btn = document.getElementById('btn-' + f);
+  if (f === 'all') btn.classList.add('active');
+  else if (f === '404') btn.classList.add('active-404');
+  else if (f === '500') btn.classList.add('active-500');
+  else btn.classList.add('active-other');
+  render();
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = true; }
+  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
+  render();
+}
+
+function copyCSV() {
+  const filtered = filterData(RAW_DATA);
+  const sorted = sortData(filtered);
+  const lines = ['URL,Status,Error'];
+  sorted.forEach(r => lines.push(`"${r.url}","${statusLabel(r.status)}","${(r.error||'').replace(/"/g,'""')}"`));
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const btn = document.querySelector('.btn-csv');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  });
+}
+
+// Init counts
+document.getElementById('cnt-all').textContent = RAW_DATA.length;
+document.getElementById('cnt-404').textContent = RAW_DATA.filter(r => r.status === 404).length;
+document.getElementById('cnt-403').textContent = RAW_DATA.filter(r => r.status === 403).length;
+document.getElementById('cnt-0').textContent = RAW_DATA.filter(r => r.status === 0).length;
+document.getElementById('cnt-500').textContent = RAW_DATA.filter(r => r.status >= 500 && r.status < 600).length;
+
+render();
+</script>
+</body>
+</html>
