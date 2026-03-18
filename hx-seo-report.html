@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HX SEO Performance Report</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1e293b;
+    --border: #334155;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --orange: #f97316;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --sidebar-w: 240px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
+
+  /* Sidebar */
+  #sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
+    background: #0a0d14; border-right: 1px solid var(--border);
+    overflow-y: auto; z-index: 100; display: flex; flex-direction: column;
+  }
+  #sidebar .logo {
+    padding: 20px 16px 16px; border-bottom: 1px solid var(--border);
+  }
+  #sidebar .logo h1 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+  #sidebar .logo p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  #sidebar nav { padding: 12px 8px; flex: 1; }
+  #sidebar nav a {
+    display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    color: var(--muted); text-decoration: none; border-radius: 6px;
+    font-size: 12px; font-weight: 500; margin-bottom: 2px; transition: all 0.15s;
+  }
+  #sidebar nav a:hover, #sidebar nav a.active { background: var(--card); color: var(--text); }
+  #sidebar nav a .icon { font-size: 14px; width: 20px; text-align: center; }
+  #sidebar .generated { padding: 12px 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); }
+
+  /* Main content */
+  #main { margin-left: var(--sidebar-w); padding: 0; }
+
+  /* Header */
+  #header {
+    background: linear-gradient(135deg, #0f1117 0%, #1e2d4a 100%);
+    border-bottom: 1px solid var(--border); padding: 32px 32px 24px;
+  }
+  #header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  #header h1 span { color: var(--blue); }
+  #header .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+  .kpi-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--blue);
+  }
+  .kpi-card.green::before { background: var(--green); }
+  .kpi-card.yellow::before { background: var(--yellow); }
+  .kpi-card.red::before { background: var(--red); }
+  .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-value { font-size: 32px; font-weight: 800; margin: 8px 0 4px; letter-spacing: -1px; }
+  .kpi-change { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .kpi-change.up { color: var(--green); }
+  .kpi-change.down { color: var(--red); }
+  .kpi-change.good-down { color: var(--green); }
+
+  /* Section */
+  section { padding: 32px; border-bottom: 1px solid var(--border); scroll-margin-top: 0; }
+  section h2 {
+    font-size: 20px; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  section h2 .icon { font-size: 22px; }
+  h3 { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+
+  /* Cards grid */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: #152035; }
+  th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  td { padding: 9px 14px; border-top: 1px solid var(--border); font-size: 13px; }
+  tbody tr:hover { background: rgba(59,130,246,0.05); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* Position badges */
+  .pos { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .pos-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .pos-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+  .pos-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .pos-red { background: rgba(239,68,68,0.15); color: var(--red); }
+
+  /* Score badges */
+  .score-green { color: var(--green); font-weight: 700; }
+  .score-yellow { color: var(--yellow); font-weight: 700; }
+  .score-red { color: var(--red); font-weight: 700; }
+
+  /* LCP */
+  .lcp-green { color: var(--green); }
+  .lcp-yellow { color: var(--yellow); }
+  .lcp-red { color: var(--red); }
+
+  /* Bar chart */
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bar-label { width: 130px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 20px; position: relative; }
+  .bar-fill { height: 100%; border-radius: 4px; background: var(--blue); transition: width 0.3s; display: flex; align-items: center; }
+  .bar-val { font-size: 12px; font-weight: 600; padding: 0 6px; white-space: nowrap; }
+
+  /* Sparkline */
+  .sparkline-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .sparkline-wrap svg { width: 100%; height: 80px; display: block; }
+
+  /* Opportunity cards */
+  .opp-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .opp-card .kw { font-weight: 600; font-size: 13px; }
+  .opp-card .metrics { display: flex; gap: 12px; flex-wrap: wrap; }
+  .opp-card .metric { font-size: 11px; color: var(--muted); }
+  .opp-card .metric span { color: var(--text); font-weight: 600; }
+  .opp-card .uplift { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: 6px; padding: 6px 10px; font-size: 12px; color: var(--green); font-weight: 600; margin-top: 4px; }
+  .opps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
+
+  /* Review cards */
+  .review-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .review-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .review-name { font-weight: 600; font-size: 13px; }
+  .review-site { font-size: 11px; color: var(--muted); }
+  .review-score { font-size: 18px; font-weight: 800; }
+  .review-score.s10 { color: var(--green); }
+  .review-score.s9 { color: #86efac; }
+  .review-score.s7-8 { color: var(--yellow); }
+  .review-score.s5-6 { color: var(--orange); }
+  .review-score.slow { color: var(--red); }
+  .review-comment { font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.4; }
+  .review-airport { font-size: 11px; color: var(--blue); font-weight: 600; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+
+  /* Action plan */
+  .action-group { margin-bottom: 24px; }
+  .action-group h3 { margin-bottom: 12px; }
+  .action-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 12px;
+  }
+  .action-item .bullet { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .action-item .content { flex: 1; }
+  .action-item .title { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+  .action-item .desc { font-size: 12px; color: var(--muted); }
+  .action-item.critical { border-left: 3px solid var(--red); }
+  .action-item.high { border-left: 3px solid var(--yellow); }
+  .action-item.quick { border-left: 3px solid var(--green); }
+
+  /* Metric row */
+  .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-name { font-size: 13px; color: var(--muted); }
+  .metric-val { font-size: 15px; font-weight: 700; }
+  .metric-change { font-size: 12px; font-weight: 600; }
+  .metric-change.up { color: var(--green); }
+  .metric-change.down { color: var(--red); }
+  .metric-change.good-down { color: var(--green); }
+
+  /* Stars */
+  .stars { color: var(--yellow); font-size: 18px; letter-spacing: 2px; }
+
+  /* CWV summary */
+  .cwv-summary { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .cwv-stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px 28px; text-align: center; }
+  .cwv-stat .val { font-size: 36px; font-weight: 800; }
+  .cwv-stat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* Score dist */
+  .score-dist { margin: 16px 0; }
+  .score-dist .row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .score-dist .row .lbl { width: 20px; font-size: 13px; font-weight: 700; text-align: right; }
+  .score-dist .row .bar-track { flex: 1; }
+  .score-dist .row .cnt { width: 60px; font-size: 12px; text-align: right; color: var(--muted); }
+
+  /* Country flag */
+  .flag { font-size: 18px; margin-right: 6px; }
+
+  /* Competitor */
+  .comp-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-rank { width: 28px; height: 28px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .comp-domain { flex: 1; font-weight: 600; font-size: 13px; }
+  .comp-bar { flex: 2; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .cards-4 { grid-template-columns: repeat(2, 1fr); }
+    .cards-3 { grid-template-columns: 1fr; }
+    .cards-2 { grid-template-columns: 1fr; }
+    section { padding: 20px; }
+    #header { padding: 20px; }
+    #header h1 { font-size: 22px; }
+    .kpi-value { font-size: 24px; }
+  }
+  @media (max-width: 480px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+
+  /* URL truncate */
+  .url-cell { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .url-cell a { color: var(--blue); text-decoration: none; }
+  .url-cell a:hover { text-decoration: underline; }
+
+  /* Period table */
+  .period-table th, .period-table td { padding: 12px 16px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+  /* Divider */
+  .section-divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* Tag */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="logo">
+    <h1>HX SEO Report</h1>
+    <p>holidayextras.com</p>
+  </div>
+  <nav>
+    <a href="#header" class="active"><span class="icon">🏠</span> Overview</a>
+    <a href="#sc-overview"><span class="icon">📊</span> Search Console</a>
+    <a href="#keywords"><span class="icon">🔑</span> Top Keywords</a>
+    <a href="#opportunities"><span class="icon">💡</span> Opportunities</a>
+    <a href="#pages"><span class="icon">📄</span> Top Pages</a>
+    <a href="#ga4"><span class="icon">📈</span> Google Analytics 4</a>
+    <a href="#cwv"><span class="icon">⚡</span> Core Web Vitals</a>
+    <a href="#geo"><span class="icon">🌍</span> Geographic</a>
+    <a href="#competitors"><span class="icon">🏆</span> Competitors</a>
+    <a href="#reviews"><span class="icon">⭐</span> Reviews</a>
+    <a href="#actions"><span class="icon">🎯</span> Action Plan</a>
+  </nav>
+  <div class="generated">Generated 18 Mar 2026</div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- HEADER -->
+<div id="header">
+  <h1>HX SEO <span>Performance Report</span></h1>
+  <p class="subtitle">holidayextras.com &nbsp;·&nbsp; 28-day report &nbsp;·&nbsp; Generated 18 Mar 2026</p>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Clicks (28d)</div>
+      <div class="kpi-value">450,607</div>
+      <div class="kpi-change down">▼ 2.0% vs prev 28d <span style="color:var(--muted);font-weight:400">(was 459,593)</span></div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Total Impressions (28d)</div>
+      <div class="kpi-value">41.4M</div>
+      <div class="kpi-change up">▲ 2.5% vs prev 28d <span style="color:var(--muted);font-weight:400">(was 40.4M)</span></div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-label">Avg. Position (28d)</div>
+      <div class="kpi-value">8.80</div>
+      <div class="kpi-change up">▲ Improved from 10.25 <span style="color:var(--muted);font-weight:400">(↑ 1.44 pts)</span></div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Organic Sessions (GA4)</div>
+      <div class="kpi-value">25,651</div>
+      <div class="kpi-change up">▲ 6.3% vs prev period <span style="color:var(--muted);font-weight:400">(was 24,137)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH CONSOLE OVERVIEW -->
+<section id="sc-overview">
+  <h2><span class="icon">📊</span> Search Console Overview</h2>
+
+  <div class="cards-2" style="margin-bottom:20px;">
+    <!-- Period table -->
+    <div class="card">
+      <h3>Period Comparison</h3>
+      <div class="table-wrap">
+        <table class="period-table">
+          <thead><tr><th>Period</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tag tag-blue">7d</span></td><td class="num">107,823</td><td class="num">10,202,531</td><td class="num">1.06%</td><td class="num">8.46</td></tr>
+            <tr><td><span class="tag tag-blue">28d</span></td><td class="num">450,607</td><td class="num">41,408,512</td><td class="num">1.09%</td><td class="num">8.80</td></tr>
+            <tr><td><span class="tag tag-green">90d</span></td><td class="num">1,373,288</td><td class="num">129,632,153</td><td class="num">1.06%</td><td class="num">9.71</td></tr>
+            <tr><td style="color:var(--muted);">Prev 28d</td><td class="num" style="color:var(--muted);">459,593</td><td class="num" style="color:var(--muted);">40,395,574</td><td class="num" style="color:var(--muted);">1.14%</td><td class="num" style="color:var(--muted);">10.25</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- CTR / Position metrics -->
+    <div class="card">
+      <h3>Key Metrics</h3>
+      <div class="metric-row">
+        <span class="metric-name">Click-Through Rate (28d)</span>
+        <div style="text-align:right">
+          <div class="metric-val">1.09%</div>
+          <div class="metric-change down">▼ from 1.14%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Average Position (28d)</span>
+        <div style="text-align:right">
+          <div class="metric-val">8.80</div>
+          <div class="metric-change up">▲ improved from 10.25</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Total Organic Keywords</span>
+        <div style="text-align:right">
+          <div class="metric-val">251,394</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">SEMrush Organic Traffic Est.</span>
+        <div style="text-align:right">
+          <div class="metric-val">1,091,590</div>
+          <div style="font-size:11px;color:var(--muted);">monthly est.</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Organic Traffic Value</span>
+        <div style="text-align:right">
+          <div class="metric-val">£983,919</div>
+          <div style="font-size:11px;color:var(--muted);">monthly est.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sparkline chart -->
+  <div class="sparkline-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h3 style="margin:0">Daily Clicks (28 Days)</h3>
+      <div style="display:flex;gap:16px;font-size:12px;">
+        <span style="color:var(--blue);">⬤ Clicks</span>
+        <span style="color:var(--muted);">Peak: 19,949 (1 Mar)</span>
+        <span style="color:var(--muted);">Low: 13,828 (14 Mar)</span>
+      </div>
+    </div>
+    <svg viewBox="0 0 800 80" preserveAspectRatio="none" style="height:90px">
+      <defs>
+        <linearGradient id="clickGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <!-- Grid lines -->
+      <line x1="0" y1="20" x2="800" y2="20" stroke="#334155" stroke-width="0.5"/>
+      <line x1="0" y1="40" x2="800" y2="40" stroke="#334155" stroke-width="0.5"/>
+      <line x1="0" y1="60" x2="800" y2="60" stroke="#334155" stroke-width="0.5"/>
+      <!-- Labels -->
+      <text x="2" y="18" fill="#64748b" font-size="8">20k</text>
+      <text x="2" y="58" fill="#64748b" font-size="8">15k</text>
+      <!-- Area fill -->
+      <path d="M0,22 L28.6,30 L57.1,42 L85.7,43 L114.3,45 L142.9,47 L171.4,47 L200,31 L228.6,32 L257.1,39 L285.7,44 L314.3,45 L342.9,45 L371.4,40 L400,21 L428.6,29 L457.1,38 L485.7,44 L514.3,47 L542.9,48 L571.4,47 L600,39 L628.6,37 L657.1,44 L685.7,44 L714.3,44 L742.9,47 L771.4,53 L800,57 L800,80 L0,80 Z" fill="url(#clickGrad)"/>
+      <!-- Line -->
+      <polyline fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"
+        points="0,22 28.6,30 57.1,42 85.7,43 114.3,45 142.9,47 171.4,47 200,31 228.6,32 257.1,39 285.7,44 314.3,45 342.9,45 371.4,40 400,21 428.6,29 457.1,38 485.7,44 514.3,47 542.9,48 571.4,47 600,39 628.6,37 657.1,44 685.7,44 714.3,44 742.9,47 771.4,53 800,57"/>
+      <!-- Dots for peaks -->
+      <circle cx="400" cy="21" r="4" fill="#3b82f6" stroke="#0f1117" stroke-width="2"/>
+      <circle cx="800" cy="57" r="4" fill="#ef4444" stroke="#0f1117" stroke-width="2"/>
+      <!-- Date labels -->
+      <text x="0" y="78" fill="#64748b" font-size="7.5">15 Feb</text>
+      <text x="185" y="78" fill="#64748b" font-size="7.5">22 Feb</text>
+      <text x="385" y="78" fill="#64748b" font-size="7.5">1 Mar</text>
+      <text x="585" y="78" fill="#64748b" font-size="7.5">9 Mar</text>
+      <text x="762" y="78" fill="#64748b" font-size="7.5">14 Mar</text>
+    </svg>
+  </div>
+</section>
+
+<!-- TOP 25 KEYWORDS -->
+<section id="keywords">
+  <h2><span class="icon">🔑</span> Top 25 Keywords</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Keyword</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Position</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>holiday extras</td><td class="num">19,157</td><td class="num">112,584</td><td class="num">17.02%</td><td class="num"><span class="pos pos-green">1.1</span></td></tr>
+        <tr><td>2</td><td>holiday extras discount code</td><td class="num">5,126</td><td class="num">15,861</td><td class="num">32.32%</td><td class="num"><span class="pos pos-green">3.1</span></td></tr>
+        <tr><td>3</td><td>holiday extras agent login</td><td class="num">4,673</td><td class="num">5,733</td><td class="num">81.51%</td><td class="num"><span class="pos pos-green">1.6</span></td></tr>
+        <tr><td>4</td><td>manchester airport parking</td><td class="num">3,657</td><td class="num">142,432</td><td class="num">2.57%</td><td class="num"><span class="pos pos-green">3.0</span></td></tr>
+        <tr><td>5</td><td>birmingham airport parking</td><td class="num">2,710</td><td class="num">63,493</td><td class="num">4.27%</td><td class="num"><span class="pos pos-green">2.7</span></td></tr>
+        <tr><td>6</td><td>stansted airport parking</td><td class="num">2,383</td><td class="num">92,845</td><td class="num">2.57%</td><td class="num"><span class="pos pos-green">3.4</span></td></tr>
+        <tr><td>7</td><td>gatwick parking</td><td class="num">2,108</td><td class="num">82,749</td><td class="num">2.55%</td><td class="num"><span class="pos pos-green">2.6</span></td></tr>
+        <tr><td>8</td><td>bristol airport parking</td><td class="num">2,025</td><td class="num">75,038</td><td class="num">2.70%</td><td class="num"><span class="pos pos-green">3.4</span></td></tr>
+        <tr><td>9</td><td>edinburgh airport parking</td><td class="num">1,571</td><td class="num">62,595</td><td class="num">2.51%</td><td class="num"><span class="pos pos-green">2.5</span></td></tr>
+        <tr><td>10</td><td>airport parking</td><td class="num">1,414</td><td class="num">38,410</td><td class="num">3.68%</td><td class="num"><span class="pos pos-green">3.0</span></td></tr>
+        <tr><td>11</td><td>holidayextras</td><td class="num">1,395</td><td class="num">6,976</td><td class="num">20.00%</td><td class="num"><span class="pos pos-green">1.1</span></td></tr>
+        <tr><td>12</td><td>manchester airport arrivals</td><td class="num">1,359</td><td class="num">62,289</td><td class="num">2.18%</td><td class="num"><span class="pos pos-yellow">6.3</span></td></tr>
+        <tr><td>13</td><td>heathrow parking</td><td class="num">1,328</td><td class="num">71,372</td><td class="num">1.86%</td><td class="num"><span class="pos pos-green">3.5</span></td></tr>
+        <tr><td>14</td><td>stansted parking</td><td class="num">1,325</td><td class="num">34,788</td><td class="num">3.81%</td><td class="num"><span class="pos pos-green">3.5</span></td></tr>
+        <tr><td>15</td><td>holiday extras login</td><td class="num">1,267</td><td class="num">1,632</td><td class="num">77.63%</td><td class="num"><span class="pos pos-green">2.0</span></td></tr>
+        <tr><td>16</td><td>gatwick departures</td><td class="num">1,148</td><td class="num">81,487</td><td class="num">1.41%</td><td class="num"><span class="pos pos-yellow">6.2</span></td></tr>
+        <tr><td>17</td><td>holiday extras contact number</td><td class="num">1,114</td><td class="num">2,277</td><td class="num">48.92%</td><td class="num"><span class="pos pos-green">2.3</span></td></tr>
+        <tr><td>18</td><td>airport parking manchester</td><td class="num">1,016</td><td class="num">16,098</td><td class="num">6.31%</td><td class="num"><span class="pos pos-green">2.7</span></td></tr>
+        <tr><td>19</td><td>newcastle airport parking</td><td class="num">1,016</td><td class="num">25,368</td><td class="num">4.01%</td><td class="num"><span class="pos pos-green">3.0</span></td></tr>
+        <tr><td>20</td><td>holiday extra</td><td class="num">1,014</td><td class="num">5,125</td><td class="num">19.79%</td><td class="num"><span class="pos pos-green">1.2</span></td></tr>
+        <tr><td>21</td><td>glasgow airport parking</td><td class="num">984</td><td class="num">33,504</td><td class="num">2.94%</td><td class="num"><span class="pos pos-green">2.9</span></td></tr>
+        <tr><td>22</td><td>heathrow departures</td><td class="num">965</td><td class="num">135,586</td><td class="num">0.71%</td><td class="num"><span class="pos pos-yellow">5.8</span></td></tr>
+        <tr><td>23</td><td>gatwick airport parking</td><td class="num">960</td><td class="num">45,102</td><td class="num">2.13%</td><td class="num"><span class="pos pos-green">2.9</span></td></tr>
+        <tr><td>24</td><td>heathrow arrivals</td><td class="num">960</td><td class="num">104,343</td><td class="num">0.92%</td><td class="num"><span class="pos pos-yellow">5.7</span></td></tr>
+        <tr><td>25</td><td>holiday extras reisebüro login</td><td class="num">922</td><td class="num">993</td><td class="num">92.85%</td><td class="num"><span class="pos pos-green">1.5</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:10px;">Position colour coding: <span class="pos pos-green">≤3</span> <span class="pos pos-yellow">4–10</span> <span class="pos pos-orange">11–20</span> <span class="pos pos-red">&gt;20</span></p>
+</section>
+
+<!-- OPPORTUNITIES -->
+<section id="opportunities">
+  <h2><span class="icon">💡</span> SEO Opportunities</h2>
+
+  <h3 style="margin-bottom:6px;">A) Low CTR / High Impression Keywords</h3>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Keywords with &gt;500 impressions, CTR &lt;5%, position 5–20. Estimated uplift if CTR improves to 10%.</p>
+  <div class="opps-grid">
+    <div class="opp-card">
+      <div class="kw">travel insurance</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>151,846</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.02%</span></div>
+        <div class="metric">Pos: <span>13.1</span></div>
+      </div>
+      <div class="uplift">Est. +15,150 clicks/28d at 10% CTR (+15,116 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">fcdo travel advice</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>145,414</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.20%</span></div>
+        <div class="metric">Pos: <span>5.5</span></div>
+      </div>
+      <div class="uplift">Est. +14,541 clicks/28d at 10% CTR (+14,245 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">heathrow departures</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>135,586</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.71%</span></div>
+        <div class="metric">Pos: <span>5.8</span></div>
+      </div>
+      <div class="uplift">Est. +13,559 clicks/28d at 10% CTR (+12,594 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">benidorm weather</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>115,734</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.23%</span></div>
+        <div class="metric">Pos: <span>10.5</span></div>
+      </div>
+      <div class="uplift">Est. +11,573 clicks/28d at 10% CTR (+11,309 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">manchester airport departures</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>107,675</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.39%</span></div>
+        <div class="metric">Pos: <span>7.2</span></div>
+      </div>
+      <div class="uplift">Est. +10,768 clicks/28d at 10% CTR (+10,344 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">heathrow arrivals</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>104,343</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.92%</span></div>
+        <div class="metric">Pos: <span>5.7</span></div>
+      </div>
+      <div class="uplift">Est. +10,434 clicks/28d at 10% CTR (+9,474 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">gatwick departures</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>81,487</span></div>
+        <div class="metric">CTR: <span style="color:var(--yellow)">1.41%</span></div>
+        <div class="metric">Pos: <span>6.2</span></div>
+      </div>
+      <div class="uplift">Est. +8,149 clicks/28d at 10% CTR (+7,001 net)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">tenerife weather</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>82,823</span></div>
+        <div class="metric">CTR: <span style="color:var(--red)">0.29%</span></div>
+        <div class="metric">Pos: <span>10.1</span></div>
+      </div>
+      <div class="uplift">Est. +8,282 clicks/28d at 10% CTR (+8,041 net)</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <h3 style="margin-bottom:6px;">B) Near #1 Opportunities (Position 4–10, &gt;200 impressions)</h3>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Small ranking improvements could significantly increase clicks for these high-volume terms.</p>
+  <div class="opps-grid">
+    <div class="opp-card">
+      <div class="kw">manchester airport parking</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>142,432</span></div>
+        <div class="metric">CTR: <span>2.57%</span></div>
+        <div class="metric">Pos: <span style="color:var(--green)">3.0</span></div>
+      </div>
+      <div class="uplift">Move to #1: est. +~7k clicks/28d (25% CTR)</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">fcdo travel advice</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>145,414</span></div>
+        <div class="metric">CTR: <span>0.20%</span></div>
+        <div class="metric">Pos: <span style="color:var(--yellow)">5.5</span></div>
+      </div>
+      <div class="uplift">Move to top 3: est. +14,000 clicks/28d</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">heathrow departures</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>135,586</span></div>
+        <div class="metric">CTR: <span>0.71%</span></div>
+        <div class="metric">Pos: <span style="color:var(--yellow)">5.8</span></div>
+      </div>
+      <div class="uplift">Move to top 3: est. +12,000 clicks/28d</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">heathrow arrivals</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>104,343</span></div>
+        <div class="metric">CTR: <span>0.92%</span></div>
+        <div class="metric">Pos: <span style="color:var(--yellow)">5.7</span></div>
+      </div>
+      <div class="uplift">Move to top 3: est. +10,000 clicks/28d</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">stansted airport parking</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>92,845</span></div>
+        <div class="metric">CTR: <span>2.57%</span></div>
+        <div class="metric">Pos: <span style="color:var(--green)">3.4</span></div>
+      </div>
+      <div class="uplift">Move to #1: est. +5,000 clicks/28d</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">gatwick departures</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>81,487</span></div>
+        <div class="metric">CTR: <span>1.41%</span></div>
+        <div class="metric">Pos: <span style="color:var(--yellow)">6.2</span></div>
+      </div>
+      <div class="uplift">Move to top 3: est. +6,500 clicks/28d</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">luton airport parking</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>72,564</span></div>
+        <div class="metric">CTR: <span>1.25%</span></div>
+        <div class="metric">Pos: <span style="color:var(--green)">3.8</span></div>
+      </div>
+      <div class="uplift">Move to #1: est. +5,000 clicks/28d</div>
+    </div>
+    <div class="opp-card">
+      <div class="kw">heathrow parking</div>
+      <div class="metrics">
+        <div class="metric">Impressions: <span>71,372</span></div>
+        <div class="metric">CTR: <span>1.86%</span></div>
+        <div class="metric">Pos: <span style="color:var(--green)">3.5</span></div>
+      </div>
+      <div class="uplift">Move to #1: est. +4,000 clicks/28d</div>
+    </div>
+  </div>
+</section>
+
+<!-- TOP 25 PAGES -->
+<section id="pages">
+  <h2><span class="icon">📄</span> Top 25 Pages (Search Console)</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Page URL</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr>
+      </thead>
+      <tbody id="pages-tbody">
+        <tr><td>1</td><td class="url-cell"><a href="https://www.holidayextras.com/" target="_blank">holidayextras.com/</a></td><td class="num">15,313</td><td class="num">363,786</td><td class="num">4.21%</td><td class="num"><span class="pos pos-red">22.9</span></td></tr>
+        <tr><td>2</td><td class="url-cell"><a href="https://www.holidayextras.com/discount-codes.html" target="_blank">/discount-codes.html</a></td><td class="num">9,232</td><td class="num">196,940</td><td class="num">4.69%</td><td class="num"><span class="pos pos-yellow">7.7</span></td></tr>
+        <tr><td>3</td><td class="url-cell"><a href="https://www.holidayextras.com/stansted-airport-parking.html" target="_blank">/stansted-airport-parking.html</a></td><td class="num">8,952</td><td class="num">368,159</td><td class="num">2.43%</td><td class="num"><span class="pos pos-yellow">6.5</span></td></tr>
+        <tr><td>4</td><td class="url-cell"><a href="https://www.holidayextras.com/manchester-airport-parking.html" target="_blank">/manchester-airport-parking.html</a></td><td class="num">8,002</td><td class="num">344,318</td><td class="num">2.32%</td><td class="num"><span class="pos pos-yellow">4.8</span></td></tr>
+        <tr><td>5</td><td class="url-cell"><a href="https://www.holidayextras.com/de/" target="_blank">holidayextras.com/de/</a></td><td class="num">7,790</td><td class="num">60,135</td><td class="num">12.95%</td><td class="num"><span class="pos pos-red">35.9</span></td></tr>
+        <tr><td>6</td><td class="url-cell"><a href="https://www.holidayextras.com/login.php" target="_blank">/login.php</a></td><td class="num">7,432</td><td class="num">20,799</td><td class="num">35.73%</td><td class="num"><span class="pos pos-yellow">5.1</span></td></tr>
+        <tr><td>7</td><td class="url-cell"><a href="https://www.holidayextras.com/birmingham-airport-parking.html" target="_blank">/birmingham-airport-parking.html</a></td><td class="num">6,133</td><td class="num">198,990</td><td class="num">3.08%</td><td class="num"><span class="pos pos-green">3.9</span></td></tr>
+        <tr><td>8</td><td class="url-cell"><a href="https://www.holidayextras.com/gatwick-airport-parking.html" target="_blank">/gatwick-airport-parking.html</a></td><td class="num">5,677</td><td class="num">354,601</td><td class="num">1.60%</td><td class="num"><span class="pos pos-yellow">4.7</span></td></tr>
+        <tr><td>9</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-parking.html" target="_blank">/airport-parking.html</a></td><td class="num">5,085</td><td class="num">349,895</td><td class="num">1.45%</td><td class="num"><span class="pos pos-yellow">10.0</span></td></tr>
+        <tr><td>10</td><td class="url-cell"><a href="https://www.holidayextras.com/heathrow-airport-parking.html" target="_blank">/heathrow-airport-parking.html</a></td><td class="num">4,964</td><td class="num">422,272</td><td class="num">1.18%</td><td class="num"><span class="pos pos-yellow">7.0</span></td></tr>
+        <tr><td>11</td><td class="url-cell"><a href="https://www.holidayextras.com/de/login.html" target="_blank">/de/login.html</a></td><td class="num">4,433</td><td class="num">18,833</td><td class="num">23.54%</td><td class="num"><span class="pos pos-green">2.0</span></td></tr>
+        <tr><td>12</td><td class="url-cell"><a href="https://www.holidayextras.com/de/flughafen-stuttgart-abflug.html" target="_blank">/de/flughafen-stuttgart-abflug.html</a></td><td class="num">4,366</td><td class="num">129,384</td><td class="num">3.37%</td><td class="num"><span class="pos pos-yellow">6.4</span></td></tr>
+        <tr><td>13</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-parking-discount-code.html" target="_blank">/airport-parking-discount-code.html</a></td><td class="num">4,329</td><td class="num">159,598</td><td class="num">2.71%</td><td class="num"><span class="pos pos-yellow">6.5</span></td></tr>
+        <tr><td>14</td><td class="url-cell"><a href="https://www.holidayextras.com/flights/gatwick-departures.html" target="_blank">/flights/gatwick-departures.html</a></td><td class="num">4,144</td><td class="num">287,225</td><td class="num">1.44%</td><td class="num"><span class="pos pos-yellow">6.7</span></td></tr>
+        <tr><td>15</td><td class="url-cell"><a href="https://www.holidayextras.com/bristol-airport-parking.html" target="_blank">/bristol-airport-parking.html</a></td><td class="num">3,995</td><td class="num">174,723</td><td class="num">2.29%</td><td class="num"><span class="pos pos-green">3.6</span></td></tr>
+        <tr><td>16</td><td class="url-cell"><a href="https://www.holidayextras.com/de/flughafen-bremen-abflug.html" target="_blank">/de/flughafen-bremen-abflug.html</a></td><td class="num">3,771</td><td class="num">55,913</td><td class="num">6.74%</td><td class="num"><span class="pos pos-yellow">5.8</span></td></tr>
+        <tr><td>17</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-lounges.html" target="_blank">/airport-lounges.html</a></td><td class="num">3,757</td><td class="num">318,383</td><td class="num">1.18%</td><td class="num"><span class="pos pos-yellow">6.2</span></td></tr>
+        <tr><td>18</td><td class="url-cell"><a href="https://www.holidayextras.com/about-us/can-i-contact-holiday-extras-by-phone.html" target="_blank">/about-us/can-i-contact...</a></td><td class="num">3,578</td><td class="num">17,096</td><td class="num">20.93%</td><td class="num"><span class="pos pos-green">3.6</span></td></tr>
+        <tr><td>19</td><td class="url-cell"><a href="https://www.holidayextras.com/airport-transfers.html" target="_blank">/airport-transfers.html</a></td><td class="num">3,531</td><td class="num">325,953</td><td class="num">1.08%</td><td class="num"><span class="pos pos-yellow">6.2</span></td></tr>
+        <tr><td>20</td><td class="url-cell"><a href="https://www.holidayextras.com/edinburgh-airport-parking.html" target="_blank">/edinburgh-airport-parking.html</a></td><td class="num">3,106</td><td class="num">147,253</td><td class="num">2.11%</td><td class="num"><span class="pos pos-green">3.6</span></td></tr>
+        <tr><td>21</td><td class="url-cell"><a href="https://www.holidayextras.com/luton-airport-parking.html" target="_blank">/luton-airport-parking.html</a></td><td class="num">2,608</td><td class="num">211,211</td><td class="num">1.23%</td><td class="num"><span class="pos pos-yellow">4.9</span></td></tr>
+        <tr><td>22</td><td class="url-cell"><a href="https://www.holidayextras.com/about-us/can-i-speak-to-someone-at-holiday-extras.html" target="_blank">/about-us/can-i-speak-to...</a></td><td class="num">2,224</td><td class="num">16,687</td><td class="num">13.33%</td><td class="num"><span class="pos pos-green">4.0</span></td></tr>
+        <tr><td>23</td><td class="url-cell"><a href="https://www.holidayextras.com/flights/manchester-airport-arrivals.html" target="_blank">/flights/manchester-airport-arrivals.html</a></td><td class="num">2,223</td><td class="num">151,618</td><td class="num">1.47%</td><td class="num"><span class="pos pos-yellow">7.2</span></td></tr>
+        <tr><td>24</td><td class="url-cell"><a href="https://www.holidayextras.com/manchester-airport-lounges-terminal-2.html" target="_blank">/manchester-airport-lounges-t2.html</a></td><td class="num">2,203</td><td class="num">92,539</td><td class="num">2.38%</td><td class="num"><span class="pos pos-yellow">7.8</span></td></tr>
+        <tr><td>25</td><td class="url-cell"><a href="https://www.holidayextras.com/gatwick-parking-promo-code.html" target="_blank">/gatwick-parking-promo-code.html</a></td><td class="num">2,181</td><td class="num">46,467</td><td class="num">4.69%</td><td class="num"><span class="pos pos-yellow">4.9</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- GOOGLE ANALYTICS 4 -->
+<section id="ga4">
+  <h2><span class="icon">📈</span> Google Analytics 4</h2>
+
+  <div class="cards-3" style="margin-bottom:20px;">
+    <div class="card">
+      <h3>Core Metrics (28d)</h3>
+      <div class="metric-row">
+        <span class="metric-name">Sessions</span>
+        <div style="text-align:right">
+          <div class="metric-val">25,651</div>
+          <div class="metric-change up">▲ +6.3%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Active Users</span>
+        <div style="text-align:right">
+          <div class="metric-val">22,343</div>
+          <div class="metric-change up">▲ +4.7%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">New Users</span>
+        <div style="text-align:right">
+          <div class="metric-val">19,749</div>
+          <div class="metric-change up">▲ +6.6%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Bounce Rate</span>
+        <div style="text-align:right">
+          <div class="metric-val">48.5%</div>
+          <div class="metric-change good-down">▼ improved from 50.1%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Avg Session Duration</span>
+        <div style="text-align:right">
+          <div class="metric-val">1m 54s</div>
+          <div class="metric-change up">▲ +2.9%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Engagement Rate</span>
+        <div style="text-align:right">
+          <div class="metric-val">51.5%</div>
+          <div class="metric-change up">▲ from 49.9%</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Page Views</span>
+        <div style="text-align:right">
+          <div class="metric-val">87,820</div>
+          <div class="metric-change up">▲ +11.7%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Traffic Channels</h3>
+      <div class="bar-row">
+        <div class="bar-label">Direct</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:67%;background:var(--blue)">
+            <span class="bar-val" style="color:#fff">16,355</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Referral</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:24%;background:#6366f1">
+            <span class="bar-val" style="color:#fff">5,991</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Organic Search</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:5.6%;background:var(--green)">
+            <span class="bar-val" style="color:#fff;font-size:11px">1,351</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Unassigned</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:2.4%;background:var(--muted)">
+            <span class="bar-val" style="color:#fff;font-size:11px">571</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Email</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:1.0%;background:var(--yellow);min-width:50px">
+            <span class="bar-val" style="color:#1e293b;font-size:11px">251</span>
+          </div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Organic Social</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:0.2%;background:var(--orange);min-width:40px">
+            <span class="bar-val" style="color:#1e293b;font-size:11px">12</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Device Split (GA4 Sessions)</h3>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;">📱 Mobile</span>
+            <span style="font-weight:700">16,257 <span style="color:var(--muted);font-weight:400;font-size:12px">(63.4%)</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:63.4%;background:var(--blue)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;">🖥️ Desktop</span>
+            <span style="font-weight:700">7,689 <span style="color:var(--muted);font-weight:400;font-size:12px">(30.0%)</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:30%;background:#6366f1"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;">📟 Tablet</span>
+            <span style="font-weight:700">433 <span style="color:var(--muted);font-weight:400;font-size:12px">(1.7%)</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:1.7%;background:var(--yellow);min-width:30px"></div></div>
+        </div>
+        <div class="section-divider"></div>
+        <div style="font-size:12px;color:var(--muted)">
+          <strong style="color:var(--text)">SC Device Split:</strong><br>
+          Mobile: 306k clicks (67.9%) · Desktop: 129k (28.5%) · Tablet: 16k (3.5%)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:12px;">Top 20 Landing Pages (GA4)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Page Path</th><th class="num">Sessions</th><th class="num">Users</th><th class="num">Avg Duration</th><th class="num">Engagement</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>/static//carpark</td><td class="num">20,776</td><td class="num">5,311</td><td class="num">1m 05s</td><td class="num">19.4%</td></tr>
+        <tr><td>2</td><td>/static//categories</td><td class="num">7,085</td><td class="num">4,407</td><td class="num">0m 21s</td><td class="num">3.3%</td></tr>
+        <tr><td>3</td><td>/static//hotel_with_parking</td><td class="num">2,066</td><td class="num">1,214</td><td class="num">0m 41s</td><td class="num">41.1%</td></tr>
+        <tr><td>4</td><td>/booking/parking.html</td><td class="num">1,630</td><td class="num">996</td><td class="num">0m 60s</td><td class="num">70.2%</td></tr>
+        <tr><td>5</td><td>/static//feedback/amend</td><td class="num">1,113</td><td class="num">951</td><td class="num">0m 39s</td><td class="num">3.2%</td></tr>
+        <tr><td>6</td><td>/static//users/new_sign_in</td><td class="num">935</td><td class="num">653</td><td class="num">0m 41s</td><td class="num">5.6%</td></tr>
+        <tr><td>7</td><td>/de/booking/parking.html</td><td class="num">786</td><td class="num">512</td><td class="num">1m 13s</td><td class="num">68.2%</td></tr>
+        <tr><td>8</td><td>/it/booking/parking.html</td><td class="num">559</td><td class="num">348</td><td class="num">1m 02s</td><td class="num">71.8%</td></tr>
+        <tr><td>9</td><td>/fr/booking/parking.html</td><td class="num">545</td><td class="num">397</td><td class="num">0m 55s</td><td class="num">76.5%</td></tr>
+        <tr><td>10</td><td>/static//users/otpLogin</td><td class="num">519</td><td class="num">418</td><td class="num">0m 20s</td><td class="num">5.0%</td></tr>
+        <tr><td>11</td><td>/en/documents/terms</td><td class="num">518</td><td class="num">464</td><td class="num">0m 25s</td><td class="num">94.5%</td></tr>
+        <tr><td>12</td><td>/static//users/password/edit</td><td class="num">514</td><td class="num">210</td><td class="num">1m 07s</td><td class="num">12.7%</td></tr>
+        <tr><td>13</td><td>/static//mytrips</td><td class="num">478</td><td class="num">274</td><td class="num">12m 03s</td><td class="num">6.0%</td></tr>
+        <tr><td>14</td><td>/static//users/sign_in</td><td class="num">436</td><td class="num">224</td><td class="num">0m 26s</td><td class="num">4.5%</td></tr>
+        <tr><td>15</td><td>/es/</td><td class="num">342</td><td class="num">182</td><td class="num">1m 49s</td><td class="num">54.9%</td></tr>
+        <tr><td>16</td><td>/static//users/password/new</td><td class="num">307</td><td class="num">234</td><td class="num">0m 22s</td><td class="num">56.6%</td></tr>
+        <tr><td>17</td><td>/es/booking/parking.html</td><td class="num">243</td><td class="num">147</td><td class="num">1m 36s</td><td class="num">69.2%</td></tr>
+        <tr><td>18</td><td>/static/carpark/carpark</td><td class="num">210</td><td class="num">83</td><td class="num">1m 32s</td><td class="num">27.3%</td></tr>
+        <tr><td>19</td><td>/static//users/passwordLogin</td><td class="num">203</td><td class="num">158</td><td class="num">0m 31s</td><td class="num">5.7%</td></tr>
+        <tr><td>20</td><td>/da/hittegods-koebenhavns-lufthavn.html</td><td class="num">200</td><td class="num">145</td><td class="num">0m 13s</td><td class="num">92.8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CORE WEB VITALS -->
+<section id="cwv">
+  <h2><span class="icon">⚡</span> Core Web Vitals</h2>
+
+  <div class="cwv-summary">
+    <div class="cwv-stat">
+      <div class="val" style="color:var(--red)">40</div>
+      <div class="lbl">Avg Performance Score</div>
+    </div>
+    <div class="cwv-stat">
+      <div class="val" style="color:var(--green)">0</div>
+      <div class="lbl">Good Pages (≥90)</div>
+    </div>
+    <div class="cwv-stat">
+      <div class="val" style="color:var(--yellow)">3</div>
+      <div class="lbl">Needs Improvement (50-89)</div>
+    </div>
+    <div class="cwv-stat">
+      <div class="val" style="color:var(--red)">16</div>
+      <div class="lbl">Poor Pages (&lt;50)</div>
+    </div>
+    <div class="cwv-stat">
+      <div class="val" style="color:var(--muted)">1</div>
+      <div class="lbl">Error / No Data</div>
+    </div>
+  </div>
+
+  <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px 16px;margin-bottom:20px;">
+    <strong style="color:var(--red);">Critical CWV Issue:</strong> <span style="color:var(--muted)">0 out of 19 tested pages achieve a Good performance score. The average score of 40 is well below Google's recommended threshold of 90. This is directly impacting rankings and user experience.</span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Page</th><th class="num">Perf Score</th><th class="num">LCP</th><th class="num">CLS</th><th class="num">TBT</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td class="url-cell"><span style="color:var(--red)">⚠</span> /stansted-airport-parking.html</td><td class="num"><span style="color:var(--muted)">Error</span></td><td class="num">–</td><td class="num">–</td><td class="num">–</td></tr>
+        <tr><td>2</td><td class="url-cell">/login.php</td><td class="num"><span class="score-yellow">54</span></td><td class="num"><span class="lcp-red">14.7s</span></td><td class="num">0</td><td class="num">740ms</td></tr>
+        <tr><td>3</td><td class="url-cell">/ (homepage)</td><td class="num"><span class="score-yellow">59</span></td><td class="num"><span class="lcp-red">4.6s</span></td><td class="num">0.041</td><td class="num">610ms</td></tr>
+        <tr><td>4</td><td class="url-cell">/de/login.html</td><td class="num"><span class="score-red">45</span></td><td class="num"><span class="lcp-red">20.6s</span></td><td class="num">0</td><td class="num">610ms</td></tr>
+        <tr><td>5</td><td class="url-cell">/airport-parking.html</td><td class="num"><span class="score-red">41</span></td><td class="num"><span class="lcp-red">12.9s</span></td><td class="num">0</td><td class="num">690ms</td></tr>
+        <tr><td>6</td><td class="url-cell">/birmingham-airport-parking.html</td><td class="num"><span class="score-red">34</span></td><td class="num"><span class="lcp-red">15.2s</span></td><td class="num">0.004</td><td class="num">1,100ms</td></tr>
+        <tr><td>7</td><td class="url-cell">/discount-codes.html</td><td class="num"><span class="score-red">36</span></td><td class="num"><span class="lcp-red">10.1s</span></td><td class="num">0.042</td><td class="num">1,460ms</td></tr>
+        <tr><td>8</td><td class="url-cell">/gatwick-airport-parking.html</td><td class="num"><span class="score-red">44</span></td><td class="num"><span class="lcp-red">8.2s</span></td><td class="num">0.004</td><td class="num">1,370ms</td></tr>
+        <tr><td>9</td><td class="url-cell">/de/ (German homepage)</td><td class="num"><span class="score-red">29</span></td><td class="num"><span class="lcp-red">10.6s</span></td><td class="num">0</td><td class="num">2,170ms</td></tr>
+        <tr><td>10</td><td class="url-cell">/manchester-airport-parking.html</td><td class="num"><span class="score-red">29</span></td><td class="num"><span class="lcp-red">22.0s</span></td><td class="num" style="color:var(--red)">0.104</td><td class="num">1,430ms</td></tr>
+        <tr><td>11</td><td class="url-cell">/heathrow-airport-parking.html</td><td class="num"><span class="score-red">45</span></td><td class="num"><span class="lcp-red">4.8s</span></td><td class="num" style="color:var(--red)">0.095</td><td class="num">1,520ms</td></tr>
+        <tr><td>12</td><td class="url-cell">/airport-parking-discount-code.html</td><td class="num"><span class="score-yellow">50</span></td><td class="num"><span class="lcp-red">7.0s</span></td><td class="num" style="color:var(--yellow)">0.068</td><td class="num">650ms</td></tr>
+        <tr><td>13</td><td class="url-cell">/de/flughafen-stuttgart-abflug.html</td><td class="num"><span class="score-red">41</span></td><td class="num"><span class="lcp-green">4.0s</span></td><td class="num" style="color:var(--red)">0.353</td><td class="num">1,240ms</td></tr>
+        <tr><td>14</td><td class="url-cell">/flights/gatwick-departures.html</td><td class="num"><span class="score-red">37</span></td><td class="num"><span class="lcp-yellow">5.3s</span></td><td class="num" style="color:var(--red)">0.188</td><td class="num">1,180ms</td></tr>
+        <tr><td>15</td><td class="url-cell">/de/flughafen-bremen-abflug.html</td><td class="num"><span class="score-red">38</span></td><td class="num"><span class="lcp-yellow">6.0s</span></td><td class="num" style="color:var(--red)">0.376</td><td class="num">660ms</td></tr>
+        <tr><td>16</td><td class="url-cell">/airport-lounges.html</td><td class="num"><span class="score-red">22</span></td><td class="num"><span class="lcp-red">11.1s</span></td><td class="num" style="color:var(--red)">0.403</td><td class="num">740ms</td></tr>
+        <tr><td>17</td><td class="url-cell">/about-us/can-i-contact...by-phone.html</td><td class="num"><span class="score-red">43</span></td><td class="num"><span class="lcp-red">9.4s</span></td><td class="num">0</td><td class="num">960ms</td></tr>
+        <tr><td>18</td><td class="url-cell">/bristol-airport-parking.html</td><td class="num"><span class="score-red">29</span></td><td class="num"><span class="lcp-red">22.6s</span></td><td class="num" style="color:var(--red)">0.105</td><td class="num">1,360ms</td></tr>
+        <tr><td>19</td><td class="url-cell">/airport-transfers.html</td><td class="num"><span class="score-red">39</span></td><td class="num"><span class="lcp-red">20.0s</span></td><td class="num">0.024</td><td class="num">690ms</td></tr>
+        <tr><td>20</td><td class="url-cell">/edinburgh-airport-parking.html</td><td class="num"><span class="score-red">39</span></td><td class="num"><span class="lcp-red">7.4s</span></td><td class="num">0.004</td><td class="num">1,320ms</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:10px;">Score: <span class="score-green">≥90 Good</span> · <span class="score-yellow">50–89 Needs Improvement</span> · <span class="score-red">&lt;50 Poor</span> &nbsp;|&nbsp; LCP: <span class="lcp-green">≤2.5s</span> · <span class="lcp-yellow">≤4s</span> · <span class="lcp-red">&gt;4s</span></p>
+</section>
+
+<!-- GEOGRAPHIC PERFORMANCE -->
+<section id="geo">
+  <h2><span class="icon">🌍</span> Geographic Performance</h2>
+  <div class="cards-2">
+    <div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Country</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Avg Pos</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="flag">🇬🇧</span>United Kingdom</td><td class="num">307,561</td><td class="num">24,092,138</td><td class="num">1.28%</td><td class="num">8.87</td></tr>
+            <tr><td><span class="flag">🇩🇪</span>Germany</td><td class="num">80,232</td><td class="num">6,793,555</td><td class="num">1.18%</td><td class="num">7.32</td></tr>
+            <tr><td><span class="flag">🇪🇸</span>Spain</td><td class="num">7,803</td><td class="num">799,939</td><td class="num">0.98%</td><td class="num">7.97</td></tr>
+            <tr><td><span class="flag">🇫🇷</span>France</td><td class="num">5,830</td><td class="num">821,840</td><td class="num">0.71%</td><td class="num">11.05</td></tr>
+            <tr><td><span class="flag">🇮🇪</span>Ireland</td><td class="num">5,094</td><td class="num">839,681</td><td class="num">0.61%</td><td class="num">7.56</td></tr>
+            <tr><td><span class="flag">🇳🇱</span>Netherlands</td><td class="num">4,756</td><td class="num">596,403</td><td class="num">0.80%</td><td class="num">7.73</td></tr>
+            <tr><td><span class="flag">🇺🇸</span>United States</td><td class="num">3,965</td><td class="num">1,836,898</td><td class="num">0.22%</td><td class="num">13.76</td></tr>
+            <tr><td><span class="flag">🇦🇹</span>Austria</td><td class="num">2,808</td><td class="num">318,260</td><td class="num">0.88%</td><td class="num">7.43</td></tr>
+            <tr><td><span class="flag">🇧🇪</span>Belgium</td><td class="num">2,643</td><td class="num">255,942</td><td class="num">1.03%</td><td class="num">6.65</td></tr>
+            <tr><td><span class="flag">🇮🇹</span>Italy</td><td class="num">2,248</td><td class="num">469,225</td><td class="num">0.48%</td><td class="num">9.44</td></tr>
+            <tr><td><span class="flag">🇨🇭</span>Switzerland</td><td class="num">2,208</td><td class="num">374,780</td><td class="num">0.59%</td><td class="num">9.62</td></tr>
+            <tr><td><span class="flag">🇮🇳</span>India</td><td class="num">1,343</td><td class="num">286,567</td><td class="num">0.47%</td><td class="num">9.54</td></tr>
+            <tr><td><span class="flag">🇨🇦</span>Canada</td><td class="num">1,286</td><td class="num">253,226</td><td class="num">0.51%</td><td class="num">10.42</td></tr>
+            <tr><td><span class="flag">🇦🇺</span>Australia</td><td class="num">1,275</td><td class="num">191,074</td><td class="num">0.67%</td><td class="num">14.79</td></tr>
+            <tr><td><span class="flag">🇩🇰</span>Denmark</td><td class="num">1,221</td><td class="num">176,448</td><td class="num">0.69%</td><td class="num">7.08</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Traffic Share by Country</h3>
+      <div class="bar-row">
+        <div class="bar-label">🇬🇧 United Kingdom</div>
+        <div class="bar-track"><div class="bar-fill" style="width:68.3%;background:var(--blue)"><span class="bar-val" style="color:#fff">68.3%</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇩🇪 Germany</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.8%;background:#6366f1"><span class="bar-val" style="color:#fff">17.8%</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇪🇸 Spain</div>
+        <div class="bar-track"><div class="bar-fill" style="width:1.7%;background:var(--green);min-width:40px"><span class="bar-val" style="color:#fff;font-size:11px">1.7%</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇫🇷 France</div>
+        <div class="bar-track"><div class="bar-fill" style="width:1.3%;background:var(--yellow);min-width:35px"><span class="bar-val" style="color:#1e293b;font-size:11px">1.3%</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇮🇪 Ireland</div>
+        <div class="bar-track"><div class="bar-fill" style="width:1.1%;background:var(--orange);min-width:30px"><span class="bar-val" style="color:#fff;font-size:11px">1.1%</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">🇳🇱 Netherlands</div>
+        <div class="bar-track"><div class="bar-fill" style="width:1.1%;background:#ec4899;min-width:30px"><span class="bar-val" style="color:#fff;font-size:11px">1.1%</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Other</div>
+        <div class="bar-track"><div class="bar-fill" style="width:8.7%;background:var(--muted)"><span class="bar-val" style="color:#fff">8.7%</span></div></div>
+      </div>
+      <div class="section-divider"></div>
+      <div style="font-size:12px;color:var(--muted)">
+        <strong style="color:var(--text);">Key insight:</strong> UK + Germany account for 86% of all clicks. Strong German-language presence via /de/ subdirectory performing well (avg pos 7.3). Low CTR in USA (0.22%) and France (0.71%) suggest ranking/intent mismatch.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETITORS -->
+<section id="competitors">
+  <h2><span class="icon">🏆</span> Competitor Intelligence (SEMrush)</h2>
+
+  <div class="cards-2">
+    <div class="card">
+      <h3>Holiday Extras vs Competitors</h3>
+      <div style="margin-bottom:16px;padding:12px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">holidayextras.com (SEMrush Rank #680)</div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          <div><div style="font-size:11px;color:var(--muted)">Organic KWs</div><div style="font-weight:700;font-size:16px">251,394</div></div>
+          <div><div style="font-size:11px;color:var(--muted)">Est. Traffic</div><div style="font-weight:700;font-size:16px">1,091,590</div></div>
+          <div><div style="font-size:11px;color:var(--muted)">Traffic Value</div><div style="font-weight:700;font-size:16px">£983,919</div></div>
+        </div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-rank" style="background:var(--yellow);color:#1e293b">1</div>
+        <div class="comp-domain">airparks.co.uk</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"><span class="bar-val" style="color:#fff;font-size:11px">18,818 common KWs</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">2</div>
+        <div class="comp-domain">purpleparking.com</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:97.8%;background:var(--orange)"><span class="bar-val" style="color:#fff;font-size:11px">18,402</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">3</div>
+        <div class="comp-domain">aph.com</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:67.1%;background:var(--yellow)"><span class="bar-val" style="color:#1e293b;font-size:11px">12,621</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">4</div>
+        <div class="comp-domain">heathrow.com</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:48.9%;background:var(--blue)"><span class="bar-val" style="color:#fff;font-size:11px">9,205</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">5</div>
+        <div class="comp-domain">travelsupermarket.com</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:59.0%;background:#6366f1"><span class="bar-val" style="color:#fff;font-size:11px">11,109</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">6</div>
+        <div class="comp-domain">skyparksecure.com</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:47.7%;background:var(--muted)"><span class="bar-val" style="color:#fff;font-size:11px">8,970</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">7</div>
+        <div class="comp-domain">manchesterairport.co.uk</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:43.8%;background:#14b8a6"><span class="bar-val" style="color:#fff;font-size:11px">8,241</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">8</div>
+        <div class="comp-domain">ncp.co.uk</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:41.7%;background:#8b5cf6"><span class="bar-val" style="color:#fff;font-size:11px">7,848</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">9</div>
+        <div class="comp-domain">gatwickairport.com</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:36.1%;background:#ec4899"><span class="bar-val" style="color:#fff;font-size:11px">6,786</span></div></div>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-rank">10</div>
+        <div class="comp-domain">airport-parking-shop.co.uk</div>
+        <div class="comp-bar">
+          <div class="bar-track"><div class="bar-fill" style="width:31.0%;background:#64748b"><span class="bar-val" style="color:#fff;font-size:11px">5,832</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Competitive Analysis</h3>
+      <div class="table-wrap" style="border:none;border-radius:0;margin-bottom:16px;">
+        <table>
+          <thead><tr><th>Domain</th><th class="num">Relevance</th><th class="num">Org KWs</th><th class="num">Est. Traffic</th></tr></thead>
+          <tbody>
+            <tr><td>airparks.co.uk</td><td class="num"><span style="color:var(--red)">0.51</span></td><td class="num">75,382</td><td class="num">179,131</td></tr>
+            <tr><td>purpleparking.com</td><td class="num"><span style="color:var(--red)">0.48</span></td><td class="num">79,555</td><td class="num">219,086</td></tr>
+            <tr><td>aph.com</td><td class="num"><span style="color:var(--orange)">0.38</span></td><td class="num">68,674</td><td class="num">152,482</td></tr>
+            <tr><td>travelsupermarket.com</td><td class="num"><span style="color:var(--yellow)">0.30</span></td><td class="num">165,274</td><td class="num">406,494</td></tr>
+            <tr><td>heathrow.com</td><td class="num"><span style="color:var(--yellow)">0.21</span></td><td class="num">322,189</td><td class="num">3,649,837</td></tr>
+            <tr><td>manchesterairport.co.uk</td><td class="num"><span style="color:var(--yellow)">0.21</span></td><td class="num">229,396</td><td class="num">1,597,643</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7">
+        <strong style="color:var(--text);">Key Insights:</strong><br>
+        • HX has 3.3x more organic keywords than closest competitor (airparks.co.uk 75k vs HX 251k)<br>
+        • Airport official sites (heathrow.com 3.6M, manchesterairport.co.uk 1.6M) drive far more traffic — opportunity to target their branded/info terms<br>
+        • airparks &amp; purpleparking are highest relevance competitors — monitor keyword overlaps<br>
+        • HX organic traffic value (£984k/mo) exceeds airparks (£176k) and purpleparking (£246k) combined
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER REVIEWS -->
+<section id="reviews">
+  <h2><span class="icon">⭐</span> Customer Reviews</h2>
+
+  <div class="cards-3" style="margin-bottom:24px;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:48px;font-weight:800;color:var(--yellow)">9.29</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">Average Score / 10</div>
+      <div class="stars">★★★★★</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;">Based on 64,227 reviews</div>
+    </div>
+    <div class="card">
+      <h3>Score Distribution</h3>
+      <div class="score-dist">
+        <div class="row">
+          <div class="lbl" style="color:var(--green)">10</div>
+          <div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--green)"></div></div>
+          <div class="cnt">~50,100</div>
+        </div>
+        <div class="row">
+          <div class="lbl" style="color:#86efac">9</div>
+          <div class="bar-track"><div class="bar-fill" style="width:12%;background:#86efac"></div></div>
+          <div class="cnt">~7,707</div>
+        </div>
+        <div class="row">
+          <div class="lbl" style="color:var(--yellow)">8</div>
+          <div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--yellow)"></div></div>
+          <div class="cnt">~3,211</div>
+        </div>
+        <div class="row">
+          <div class="lbl" style="color:var(--orange)">7</div>
+          <div class="bar-track"><div class="bar-fill" style="width:2.5%;background:var(--orange)"></div></div>
+          <div class="cnt">~1,607</div>
+        </div>
+        <div class="row">
+          <div class="lbl" style="color:var(--orange)">6</div>
+          <div class="bar-track"><div class="bar-fill" style="width:1%;background:var(--orange);min-width:6px"></div></div>
+          <div class="cnt">~643</div>
+        </div>
+        <div class="row">
+          <div class="lbl" style="color:var(--red)">5</div>
+          <div class="bar-track"><div class="bar-fill" style="width:2.84%;background:var(--red)"></div></div>
+          <div class="cnt">1,823</div>
+        </div>
+        <div class="row">
+          <div class="lbl" style="color:var(--muted)">1-4</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0.1%;background:var(--muted);min-width:4px"></div></div>
+          <div class="cnt">~136</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Review Summary</h3>
+      <div class="metric-row">
+        <span class="metric-name">Total Reviews</span>
+        <div class="metric-val">64,227</div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Average Score</span>
+        <div class="metric-val" style="color:var(--yellow)">9.29 / 10</div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Score ≥ 9 (Excellent)</span>
+        <div class="metric-val" style="color:var(--green)">~90%</div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Score ≤ 5 (Poor)</span>
+        <div class="metric-val" style="color:var(--red)">~3%</div>
+      </div>
+      <div class="metric-row">
+        <span class="metric-name">Most Recent Review</span>
+        <div style="font-size:12px;text-align:right;color:var(--muted)">17 Mar 2026</div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:6px;font-size:12px;color:var(--green)">
+        Excellent review profile — leverage in meta descriptions and structured data to improve organic CTR
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:12px;">Recent Reviews</h3>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MR I SQUIRES</div><div class="review-site">Airport Meet &amp; Greet East Midlands</div></div>
+        <div><div class="review-score s7-8">7/10</div></div>
+      </div>
+      <div class="review-comment">"Used to be better when coloured parking areas at collection were numbered, otherwise great"</div>
+      <div class="review-airport">✈ East Midlands · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MR P GRIFFITHS</div><div class="review-site">Silver Zone Bristol</div></div>
+        <div><div class="review-score s10">10/10</div></div>
+      </div>
+      <div class="review-comment">"Smooth booking and parking"</div>
+      <div class="review-airport">✈ Bristol · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MISS H SEEKINGS</div><div class="review-site">Manchester Multi Storey T2 West</div></div>
+        <div><div class="review-score s10">10/10</div></div>
+      </div>
+      <div class="review-comment">"All went smoothly no problems at all very happy"</div>
+      <div class="review-airport">✈ Manchester · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MRS H GRIFFITHS</div><div class="review-site">Long Stay Newcastle</div></div>
+        <div><div class="review-score s9">9/10</div></div>
+      </div>
+      <div class="review-comment">"Easy booking system, and hassle free entry and exit system."</div>
+      <div class="review-airport">✈ Newcastle · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MRS D DAVIS</div><div class="review-site">Maple Manor P&amp;R Heathrow</div></div>
+        <div><div class="review-score s10">10/10</div></div>
+      </div>
+      <div class="review-comment">"The carpark was much nearer to the airport than expected. Well organised, buses ran regularly. Good value for money."</div>
+      <div class="review-airport">✈ Heathrow · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MRS D SHORE</div><div class="review-site">Silver Zone Bristol</div></div>
+        <div><div class="review-score s10">10/10</div></div>
+      </div>
+      <div class="review-comment">"Just so easy and hassle free - especially needed on a late flight!!"</div>
+      <div class="review-airport">✈ Bristol · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MISS A BUCHOLC</div><div class="review-site">Maple Manor P&amp;R Heathrow</div></div>
+        <div><div class="review-score s10">10/10</div></div>
+      </div>
+      <div class="review-comment">"Great prices and great service"</div>
+      <div class="review-airport">✈ Heathrow · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MR D RICHARDSON</div><div class="review-site">Short Stay Newcastle</div></div>
+        <div><div class="review-score s9">9/10</div></div>
+      </div>
+      <div class="review-comment">"Nothing you can do, but unfortunately we couldn't get back into the car as car next to us too close!"</div>
+      <div class="review-airport">✈ Newcastle · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MR D EDWARDS</div><div class="review-site">Silver Zone Bristol</div></div>
+        <div><div class="review-score s10">10/10</div></div>
+      </div>
+      <div class="review-comment">"Mostly all good with holiday except we were not booked onto shuttle bus and they charged us £30 to get to the hotel."</div>
+      <div class="review-airport">✈ Bristol · 17 Mar 2026</div>
+    </div>
+    <div class="review-card">
+      <div class="review-header">
+        <div><div class="review-name">MR M INMAN</div><div class="review-site">Maple Manor Parking Gatwick</div></div>
+        <div><div class="review-score s5-6">5/10</div></div>
+      </div>
+      <div class="review-comment">"Trip out was normal great service. Back was a 15/20 mins wait — not really meet and greet."</div>
+      <div class="review-airport">✈ Gatwick · 17 Mar 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIORITY ACTION PLAN -->
+<section id="actions">
+  <h2><span class="icon">🎯</span> Priority Action Plan</h2>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:24px;">10 concrete SEO actions based on data analysis — ordered by impact and urgency.</p>
+
+  <div class="action-group">
+    <h3 style="color:var(--red);">🔴 Critical (Immediate Action Required)</h3>
+    <div class="action-item critical">
+      <div class="bullet">🔴</div>
+      <div class="content">
+        <div class="title">Fix catastrophic LCP on manchester-airport-parking.html (22.0s) and bristol-airport-parking.html (22.6s)</div>
+        <div class="desc">These are top-5 pages by clicks (8k and 4k respectively) with LCP 8x above the 2.5s threshold. CLS is also failing (0.104 and 0.105). Fix image loading, reduce render-blocking resources, implement lazy loading. Expected ranking uplift: significant — Google uses CWV as ranking signal. <strong>Combined monthly traffic at stake: ~14k clicks.</strong></div>
+      </div>
+    </div>
+    <div class="action-item critical">
+      <div class="bullet">🔴</div>
+      <div class="content">
+        <div class="title">Fix CWV sitewide — 0/19 pages pass. Average score 40/100</div>
+        <div class="desc">Every single tested page has Poor performance. airport-lounges.html scores 22/100 with LCP 11.1s and CLS 0.403. de/flughafen-bremen-abflug.html has CLS 0.376. Conduct a comprehensive performance audit: eliminate render-blocking JS, implement proper image sizing, reduce TBT (avg 1,000ms+ on most pages). This is a sitewide infrastructure issue.</div>
+      </div>
+    </div>
+    <div class="action-item critical">
+      <div class="bullet">🔴</div>
+      <div class="content">
+        <div class="title">Fix 500 error on stansted-airport-parking.html — a top-3 page by clicks (8,952/28d)</div>
+        <div class="desc">PageSpeed Insights returns HTTP 500 error for stansted-airport-parking.html — the site's 3rd highest traffic page with 368k impressions. This suggests intermittent server errors that could be causing ranking drops. Investigate server logs, caching configuration, and CDN setup immediately. <strong>368,159 impressions at risk.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-group">
+    <h3 style="color:var(--yellow);">🟡 High Priority</h3>
+    <div class="action-item high">
+      <div class="bullet">🟡</div>
+      <div class="content">
+        <div class="title">Optimise CTR for "heathrow departures" — 135,586 impressions, only 0.71% CTR, position 5.8</div>
+        <div class="desc">This term has massive search volume but terrible CTR. Improve title tag and meta description with compelling copy, add structured data (flight departure table), include year in title for freshness signals. Moving from 0.71% to 5% CTR = +5,800 clicks/28d. Review /flights/gatwick-departures.html as a template for improvement.</div>
+      </div>
+    </div>
+    <div class="action-item high">
+      <div class="bullet">🟡</div>
+      <div class="content">
+        <div class="title">Target "travel insurance" — 151,846 impressions, 0.02% CTR, position 13</div>
+        <div class="desc">Travel insurance is a massive commercial intent keyword with 151k impressions where HX barely registers (34 clicks). Either optimise existing content or create a dedicated travel insurance landing page/comparison tool. Moving to position 3-5 could yield 10,000+ clicks/28d and high-value conversions.</div>
+      </div>
+    </div>
+    <div class="action-item high">
+      <div class="bullet">🟡</div>
+      <div class="content">
+        <div class="title">Improve Gatwick Airport Parking page CTR — 354k impressions but only 1.6% CTR at position 4.7</div>
+        <div class="desc">gatwick-airport-parking.html has the highest impression count of any page (354,601) but very low CTR. At position 4.7 this should be getting 5%+ CTR. A/B test new title tags: add price points, star ratings, or "Best Price Guarantee" messaging. Add Review schema to show 9.29/10 in SERPs. Potential uplift: +11,900 clicks/28d.</div>
+      </div>
+    </div>
+    <div class="action-item high">
+      <div class="bullet">🟡</div>
+      <div class="content">
+        <div class="title">Add Review schema markup across all parking pages — leverage 9.29/10 from 64,227 reviews</div>
+        <div class="desc">HX has an exceptional review score (9.29/10 from 64k reviews) but this isn't visible in SERPs. Implementing AggregateRating schema on all parking pages will display star ratings in search results, typically improving CTR by 10–30%. Priority pages: all airport parking pages (collectively 2M+ impressions/28d).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-group">
+    <h3 style="color:var(--green);">🟢 Quick Wins</h3>
+    <div class="action-item quick">
+      <div class="bullet">🟢</div>
+      <div class="content">
+        <div class="title">Optimise "airport-transfers.html" — 325k impressions, only 1.08% CTR at position 6.2</div>
+        <div class="desc">airport-transfers.html has 325,953 impressions with a very low 1.08% CTR. Rewrite title tag to be more specific and compelling (e.g. "Airport Transfers UK — Book &amp; Save | Holiday Extras"). Add FAQ schema for common transfer questions. Potential: +3,000 clicks/28d just from CTR improvement.</div>
+      </div>
+    </div>
+    <div class="action-item quick">
+      <div class="bullet">🟢</div>
+      <div class="content">
+        <div class="title">Optimise US/France/Australia rankings — low CTR markets with high impression volume</div>
+        <div class="desc">USA has 1.8M impressions but only 0.22% CTR (avg pos 13.8). France has 821k impressions at 0.71% CTR. These markets are clearly discovering HX but not clicking. Review localised content, hreflang tags, and whether pages are truly relevant to US/FR searcher intent. Quick fix: ensure correct hreflang implementation across all international pages.</div>
+      </div>
+    </div>
+    <div class="action-item quick">
+      <div class="bullet">🟢</div>
+      <div class="content">
+        <div class="title">Capitalise on position improvements — avg position improved from 10.25 to 8.80 (↑1.45pts)</div>
+        <div class="desc">The significant average position improvement (-1.44 points) this period shows positive momentum. Identify which specific pages drove this improvement and double down on the content/link strategy used. Also push "near-#1" keywords: airport-parking.html is at position 10.0 with 350k impressions — one position push to page 1 top could unlock 5,000+ extra clicks/28d.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<script>
+// Active sidebar link on scroll
+const sections = document.querySelectorAll('section, #header');
+const links = document.querySelectorAll('#sidebar nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// Add header to observed sections
+const header = document.getElementById('header');
+if (header) observer.observe(header);
+</script>
+
+</body>
+</html>
