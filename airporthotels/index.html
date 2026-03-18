@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airport Hotels UK | Book Hotels Near Every UK Airport | AirportHotels.co.uk</title>
-  <meta name="description" content="Book the perfect hotel near your UK airport. Heathrow, Gatwick, Manchester and more — best rates, free parking, early check-in & 24/7 support.">
+  <meta name="description" content="Book the perfect hotel near your UK airport. Heathrow, Gatwick, Manchester and more — best rates, hotel and parking packages, early check-in and 24/7 support.">
   <meta name="robots" content="index, follow">
-
-  <!-- Canonical & Hreflang -->
   <link rel="canonical" href="https://www.airporthotels.co.uk/">
   <link rel="alternate" hreflang="en-gb" href="https://www.airporthotels.co.uk/">
   <link rel="alternate" hreflang="fr" href="https://www.airporthotels.co.uk/fr/">
@@ -17,355 +15,230 @@
   <link rel="alternate" hreflang="nl" href="https://www.airporthotels.co.uk/nl/">
   <link rel="alternate" hreflang="de-at" href="https://www.airporthotels.co.uk/at/">
   <link rel="alternate" hreflang="x-default" href="https://www.airporthotels.co.uk/">
-
-  <!-- CWV: Preload hero image (LCP element) -->
+  <!-- CWV: Preload hero LCP image -->
   <link rel="preload" as="image" href="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=75&fm=webp" type="image/webp" fetchpriority="high">
-
-  <!-- Preconnect to image CDN -->
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-
-  <!-- Open Graph -->
+  <!-- OG -->
   <meta property="og:title" content="Airport Hotels UK | AirportHotels.co.uk">
-  <meta property="og:description" content="Book the perfect hotel near your UK airport. Best rates, free parking, early check-in & 24/7 support.">
+  <meta property="og:description" content="Book the perfect hotel near your UK airport. Best rates, hotel and parking packages, early check-in.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.airporthotels.co.uk/">
   <meta property="og:image" content="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=75">
-
-  <!-- Schema Markup -->
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.airporthotels.co.uk/#website","url":"https://www.airporthotels.co.uk/","name":"AirportHotels.co.uk","description":"Book hotels near every UK airport","inLanguage":"en-GB","potentialAction":{"@type":"SearchAction","target":"https://www.airporthotels.co.uk/search?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"TravelAgency","@id":"https://www.airporthotels.co.uk/#organization","name":"AirportHotels.co.uk","url":"https://www.airporthotels.co.uk","description":"The UK airport hotel specialist","areaServed":"GB","aggregateRating":{"@type":"AggregateRating","ratingValue":"9.3","bestRating":"10","reviewCount":"64227"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is included in an airport hotel package?","acceptedAnswer":{"@type":"Answer","text":"Most packages include accommodation, free parking and a shuttle to the terminal. Many also include breakfast and early check-in."}},{"@type":"Question","name":"How far in advance should I book?","acceptedAnswer":{"@type":"Answer","text":"We recommend 2-4 weeks in advance, especially during school holidays and summer. Early booking secures the best rates."}},{"@type":"Question","name":"Is parking included?","acceptedAnswer":{"@type":"Answer","text":"Hotel + parking packages include secured parking for 7-15 days with a free shuttle to the terminal."}},{"@type":"Question","name":"Can I check in early?","acceptedAnswer":{"@type":"Answer","text":"Yes, many hotels offer early check-in from 6am or even midnight for those with very early flights."}},{"@type":"Question","name":"Which airports do you cover?","acceptedAnswer":{"@type":"Answer","text":"All major UK airports: Heathrow, Gatwick, Stansted, Luton, Manchester, Birmingham, Edinburgh, Glasgow, Bristol, Leeds Bradford, Newcastle, Liverpool and more."}}]}]}
-  </script>
+  <!-- Schema -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.airporthotels.co.uk/#website","url":"https://www.airporthotels.co.uk/","name":"AirportHotels.co.uk","description":"Book hotels near every UK airport","inLanguage":"en-GB","potentialAction":{"@type":"SearchAction","target":"https://www.airporthotels.co.uk/search?airport={airport}&checkin={checkin}","query-input":"required name=airport"}},{"@type":"TravelAgency","@id":"https://www.airporthotels.co.uk/#organization","name":"AirportHotels.co.uk","url":"https://www.airporthotels.co.uk","description":"The UK airport hotel specialist","areaServed":"GB","aggregateRating":{"@type":"AggregateRating","ratingValue":"9.3","bestRating":"10","reviewCount":"64227"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is included in an airport hotel package?","acceptedAnswer":{"@type":"Answer","text":"Most packages include accommodation, free parking for up to 15 days, and a complimentary shuttle to the terminal. Many also include breakfast and early check-in options."}},{"@type":"Question","name":"How far in advance should I book an airport hotel?","acceptedAnswer":{"@type":"Answer","text":"We recommend booking 2 to 4 weeks in advance, particularly during school holidays and summer. Booking early secures the best rates and availability."}},{"@type":"Question","name":"Is parking included with airport hotels?","acceptedAnswer":{"@type":"Answer","text":"Hotel and parking packages include secured, monitored parking for 7 to 15 days with a complimentary shuttle to the terminal."}},{"@type":"Question","name":"Can I check in early at airport hotels?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many airport hotels offer early check-in from 6am, or even midnight for guests with very early flights. This can be selected or added during booking."}},{"@type":"Question","name":"Which UK airports do you cover?","acceptedAnswer":{"@type":"Answer","text":"We cover all major UK airports including London Heathrow, Gatwick, Stansted, Luton, City, Manchester, Birmingham, Edinburgh, Glasgow, Bristol, Leeds Bradford, Newcastle, Liverpool, East Midlands and Belfast International."}}]}]}</script>
 
   <style>
-    /* === RESET === */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --navy:#0B1D3A;--navy-mid:#162D55;--navy-light:#1E3A6E;
-      --gold:#F5A623;--gold-d:#D4891A;--gold-l:#FFD47F;
+      --gold:#C8960C;--gold-h:#A87800;--gold-l:#E8B422;
       --white:#fff;--off:#F7F9FC;--surface:#EEF2F8;
       --txt:#1A2B3C;--txt-m:#4A5568;--txt-l:#718096;
-      --border:#E2E8F0;
-      --r-sm:8px;--r-md:14px;--r-lg:20px;
-      --sh-sm:0 2px 8px rgba(0,0,0,.06);
-      --sh-md:0 8px 24px rgba(0,0,0,.1);
-      --sh-lg:0 20px 50px rgba(0,0,0,.15);
+      --border:#E2E8F0;--green:#1A7F37;
+      --r-sm:6px;--r-md:12px;--r-lg:18px;
     }
     html{scroll-behavior:smooth;font-size:16px}
     body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--txt);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
-    img{max-width:100%;display:block}
-    a{text-decoration:none;color:inherit}
-    button{font-family:inherit}
+    img{max-width:100%;display:block} a{text-decoration:none;color:inherit} button,select,input{font-family:inherit}
 
-    /* === NAV === */
-    .nav{
-      position:fixed;top:0;left:0;right:0;z-index:200;
-      height:64px;padding:0 1.5rem;
-      display:flex;align-items:center;justify-content:space-between;
-      background:rgba(11,29,58,.97);
-      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav-logo{font-size:1.35rem;font-weight:900;color:#fff;letter-spacing:-.5px}
-    .nav-logo span{color:var(--gold)}
-    .nav-logo sub{font-size:.58rem;font-weight:400;color:rgba(255,255,255,.45);letter-spacing:0;vertical-align:baseline}
-    .nav-links{display:flex;align-items:center;gap:.2rem;list-style:none}
-    .nav-links a{color:rgba(255,255,255,.8);font-size:.875rem;font-weight:500;padding:.5rem .8rem;border-radius:6px;transition:all .2s;min-height:44px;display:flex;align-items:center}
-    .nav-links a:hover{color:#fff;background:rgba(255,255,255,.08)}
-    .nav-cta{background:var(--gold)!important;color:var(--navy)!important;font-weight:700!important;border-radius:8px!important}
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(11,29,58,.98);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav-logo{font-size:1.35rem;font-weight:900;color:#fff;letter-spacing:-.5px} .nav-logo span{color:var(--gold-l)} .nav-logo sub{font-size:.55rem;font-weight:400;color:rgba(255,255,255,.4);letter-spacing:0;vertical-align:baseline}
+    .nav-links{display:flex;align-items:center;gap:.15rem;list-style:none}
+    .nav-links a{color:rgba(255,255,255,.78);font-size:.85rem;font-weight:500;padding:.5rem .85rem;border-radius:var(--r-sm);transition:all .18s;min-height:44px;display:flex;align-items:center}
+    .nav-links a:hover{color:#fff;background:rgba(255,255,255,.09)}
+    .nav-cta{background:var(--gold)!important;color:var(--navy)!important;font-weight:700!important;border-radius:var(--r-sm)!important}
     .nav-cta:hover{background:var(--gold-l)!important}
-    .nav-langs{display:flex;gap:.25rem;margin-left:.75rem;padding-left:.75rem;border-left:1px solid rgba(255,255,255,.12)}
-    .nav-langs a{font-size:.8rem;padding:.3rem .45rem;border-radius:4px;color:rgba(255,255,255,.55);transition:color .2s;min-height:44px;display:flex;align-items:center}
-    .nav-langs a:hover{color:var(--gold)}
+    .nav-langs{display:flex;gap:.2rem;margin-left:.75rem;padding-left:.75rem;border-left:1px solid rgba(255,255,255,.12)}
+    .nav-langs a{font-size:.78rem;padding:.3rem .45rem;border-radius:4px;color:rgba(255,255,255,.5);transition:color .18s;min-height:44px;display:flex;align-items:center}
+    .nav-langs a:hover{color:var(--gold-l)}
 
-    /* === HERO === */
+    /* HERO */
     .hero{min-height:100svh;position:relative;overflow:hidden;background:var(--navy);display:flex;align-items:center}
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;opacity:.3}
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,29,58,.75) 0%,rgba(11,29,58,.3) 100%)}
-    .hero-content{
-      position:relative;z-index:2;max-width:1240px;margin:0 auto;
-      padding:6rem 1.5rem 3rem;width:100%;
-      display:grid;grid-template-columns:1.1fr 1fr;gap:3rem;align-items:center;
-    }
-    .hero-badge{
-      display:inline-flex;align-items:center;gap:.45rem;
-      background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.35);
-      color:var(--gold);padding:.4rem .9rem;border-radius:50px;
-      font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1.25rem;
-    }
-    .hero h1{
-      font-size:clamp(2.4rem,5vw,4.25rem);font-weight:900;color:#fff;
-      line-height:1.04;letter-spacing:-2px;margin-bottom:1.1rem;
-    }
-    .hero h1 em{color:var(--gold);font-style:normal}
-    .hero-sub{font-size:1.05rem;color:rgba(255,255,255,.72);max-width:460px;margin-bottom:1.75rem;line-height:1.7}
-    .hero-stats{display:flex;gap:1.75rem;flex-wrap:wrap}
-    .hero-stat .n{font-size:1.65rem;font-weight:900;color:var(--gold);line-height:1;display:block}
-    .hero-stat .l{font-size:.75rem;color:rgba(255,255,255,.5);font-weight:500}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.28}
+    .hero-ov{position:absolute;inset:0;background:linear-gradient(140deg,rgba(11,29,58,.8) 0%,rgba(11,29,58,.25) 100%)}
+    .hero-c{position:relative;z-index:2;max-width:1260px;margin:0 auto;padding:6.5rem 2rem 3rem;width:100%;display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:center}
+    .eyebrow-badge{display:inline-block;background:rgba(200,150,12,.15);border:1px solid rgba(200,150,12,.35);color:var(--gold-l);padding:.38rem .9rem;border-radius:50px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:1.25rem}
+    h1{font-size:clamp(2.4rem,5vw,4.25rem);font-weight:900;color:#fff;line-height:1.04;letter-spacing:-2px;margin-bottom:1.1rem}
+    h1 em{color:var(--gold-l);font-style:normal}
+    .hero-sub{font-size:1.05rem;color:rgba(255,255,255,.7);max-width:470px;margin-bottom:1.75rem;line-height:1.7}
+    .hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
+    .stat-n{font-size:1.7rem;font-weight:900;color:var(--gold-l);line-height:1;display:block}
+    .stat-l{font-size:.72rem;color:rgba(255,255,255,.48);font-weight:500;letter-spacing:.2px}
 
-    /* === SEARCH CARD === */
-    .search-card{background:#fff;border-radius:var(--r-lg);padding:1.75rem;box-shadow:0 30px 80px rgba(0,0,0,.45)}
-    .sc-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.35rem}
-    .sc-icon{width:40px;height:40px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-    .sc-head h2{font-size:1rem;font-weight:800;color:var(--navy)}
-    .sc-head p{font-size:.75rem;color:var(--txt-l)}
-    .sc-fields{display:grid;gap:.8rem}
-    .sc-row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
-    .sc-field label{display:block;font-size:.68rem;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.35rem}
-    /* 16px min prevents iOS zoom on focus */
-    .sc-field select,.sc-field input{
-      width:100%;padding:.8rem 1rem;border:2px solid var(--border);
-      border-radius:var(--r-sm);font-size:1rem;color:var(--txt);
-      background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;
-      -webkit-appearance:none;appearance:none;min-height:48px;
-    }
-    .sc-field select:focus,.sc-field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,.12)}
-    .nights-row{display:flex;align-items:center;gap:.75rem}
-    .n-btn{
-      width:44px;height:44px;border-radius:50%;background:var(--surface);
-      border:2px solid var(--border);cursor:pointer;font-size:1.35rem;
-      font-weight:700;color:var(--navy);display:flex;align-items:center;
-      justify-content:center;transition:all .2s;flex-shrink:0;
-    }
-    .n-btn:hover{background:var(--gold);border-color:var(--gold)}
+    /* SEARCH WIDGET */
+    .search-widget{background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.45)}
+
+    /* Tab bar */
+    .sw-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid var(--border)}
+    .sw-tab{padding:.875rem .75rem;font-size:.8rem;font-weight:700;color:var(--txt-l);background:none;border:none;cursor:pointer;text-align:center;transition:all .18s;border-bottom:3px solid transparent;margin-bottom:-2px;letter-spacing:.2px}
+    .sw-tab.active{color:var(--navy);border-bottom-color:var(--gold)}
+    .sw-tab:hover:not(.active){color:var(--txt-m)}
+
+    /* Form body */
+    .sw-body{padding:1.5rem}
+    .sw-panel{display:none} .sw-panel.active{display:block}
+    .sw-fields{display:grid;gap:.7rem}
+    .sw-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    .sw-field label{display:block;font-size:.65rem;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:.65px;margin-bottom:.3rem}
+    .sw-field select,.sw-field input[type="date"]{width:100%;padding:.78rem .9rem;border:2px solid var(--border);border-radius:var(--r-sm);font-size:1rem;color:var(--txt);background:#fff;outline:none;-webkit-appearance:none;appearance:none;min-height:48px;transition:border-color .18s,box-shadow .18s;cursor:pointer}
+    .sw-field select:focus,.sw-field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,150,12,.12)}
+    .sw-link{font-size:.8rem;color:var(--navy);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px;margin-top:.2rem;display:inline-block;transition:color .18s}
+    .sw-link:hover{color:var(--gold)}
+    .nights-ctrl{display:flex;align-items:center;gap:.75rem;padding:.45rem 0}
+    .n-btn{width:42px;height:42px;border-radius:50%;background:var(--surface);border:2px solid var(--border);cursor:pointer;font-size:1.3rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
+    .n-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
     .n-val{font-size:1.25rem;font-weight:900;color:var(--navy);min-width:2.5rem;text-align:center}
-    .sc-btn{
-      width:100%;margin-top:.875rem;background:var(--gold);color:var(--navy);
-      border:none;padding:1rem 1.5rem;border-radius:10px;
-      font-size:1.05rem;font-weight:800;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;gap:.5rem;
-      transition:background .2s,transform .1s;min-height:54px;
-    }
-    .sc-btn:hover{background:var(--gold-d)}
-    .sc-btn:active{transform:scale(.99)}
-    .sc-note{text-align:center;margin-top:.75rem;font-size:.75rem;color:var(--txt-l)}
-    .sc-note strong{color:var(--navy)}
+    .n-lbl{font-size:.82rem;color:var(--txt-l)}
+    .sw-submit{width:100%;margin-top:.9rem;background:var(--gold);color:var(--navy);border:none;padding:1rem 1.5rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:.2px;transition:background .18s,transform .1s;min-height:52px}
+    .sw-submit:hover{background:var(--gold-h)}
+    .sw-submit:active{transform:scale(.99)}
+    .sw-guarantee{text-align:center;margin-top:.65rem;font-size:.72rem;color:var(--txt-l)}
+    .sw-guarantee strong{color:var(--navy)}
 
-    /* === TRUST BAR === */
-    .trust{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,.06);padding:.875rem 1.5rem}
-    .trust-inner{max-width:1240px;margin:0 auto;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
-    .ti{display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.8);font-size:.82rem;font-weight:500}
+    /* TRUST BAR */
+    .trust-bar{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,.06);padding:.875rem 2rem}
+    .trust-inner{max-width:1260px;margin:0 auto;display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap}
+    .ti{display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.78);font-size:.82rem;font-weight:500}
+    .ti-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-l);flex-shrink:0}
 
-    /* === SECTIONS === */
-    .s{padding:5rem 1.5rem}
-    .s-alt{background:var(--off)}
-    .s-dark{background:var(--navy)}
-    .c{max-width:1240px;margin:0 auto}
-    .eyebrow{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:.5rem;display:block}
+    /* SECTIONS */
+    .s{padding:5rem 2rem} .s-alt{background:var(--off)} .s-dark{background:var(--navy)}
+    .c{max-width:1260px;margin:0 auto}
+    .s-ey{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:.5rem;display:block}
     .h2{font-size:clamp(1.75rem,4vw,2.65rem);font-weight:900;color:var(--navy);letter-spacing:-1.5px;line-height:1.08;margin-bottom:.75rem}
     .h2-light{color:#fff}
-    .desc{color:var(--txt-l);font-size:1rem;max-width:520px;line-height:1.7;margin-bottom:2.5rem}
-    .desc-light{color:rgba(255,255,255,.6)}
+    .s-desc{color:var(--txt-l);font-size:1rem;max-width:520px;line-height:1.7;margin-bottom:2.5rem}
+    .s-desc-light{color:rgba(255,255,255,.6)}
 
-    /* === AIRPORT GRID === */
+    /* AIRPORT GRID */
     .ag{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
-    .ac{
-      background:#fff;border-radius:var(--r-md);overflow:hidden;
-      box-shadow:var(--sh-sm);transition:transform .25s,box-shadow .25s;
-      border:1px solid var(--border);display:block;color:inherit;
-    }
-    .ac:hover{transform:translateY(-5px);box-shadow:var(--sh-lg)}
-    .ac-img{width:100%;height:160px;object-fit:cover;display:block;background:var(--surface)}
+    .ac{background:#fff;border-radius:var(--r-md);overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:transform .22s,box-shadow .22s;border:1px solid var(--border);display:block;color:inherit}
+    .ac:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.12)}
+    .ac-img{width:100%;height:158px;object-fit:cover;display:block;background:var(--surface)}
     .ac-body{padding:1rem}
-    .ac-code{font-size:.65rem;font-weight:800;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.2rem}
+    .ac-code{font-size:.62rem;font-weight:800;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.2rem}
     .ac-name{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:.25rem;line-height:1.2}
     .ac-desc{font-size:.78rem;color:var(--txt-l);margin-bottom:.75rem;line-height:1.45}
     .ac-foot{display:flex;justify-content:space-between;align-items:center}
-    .ac-price{font-size:.7rem;color:var(--txt-l)}
+    .ac-price{font-size:.68rem;color:var(--txt-l)}
     .ac-price strong{display:block;font-size:1.05rem;font-weight:900;color:var(--navy);letter-spacing:-.5px}
-    .ac-cta{background:var(--navy);color:#fff;padding:.4rem .8rem;border-radius:6px;font-size:.78rem;font-weight:700;transition:background .2s}
+    .ac-cta{background:var(--navy);color:#fff;padding:.38rem .78rem;border-radius:var(--r-sm);font-size:.78rem;font-weight:700;transition:background .18s}
     .ac:hover .ac-cta{background:var(--gold);color:var(--navy)}
 
-    /* === POPULAR TAGS === */
-    .tags{display:flex;flex-wrap:wrap;gap:.6rem}
-    .tag{
-      background:#fff;border:1.5px solid var(--border);color:var(--txt-m);
-      padding:.45rem .9rem;border-radius:50px;font-size:.82rem;font-weight:500;
-      transition:all .2s;display:inline-block;
-    }
-    .tag:hover{border-color:var(--gold);color:var(--navy);background:rgba(245,166,35,.06)}
+    /* POPULAR TAGS */
+    .tags{display:flex;flex-wrap:wrap;gap:.55rem}
+    .tag{background:#fff;border:1.5px solid var(--border);color:var(--txt-m);padding:.42rem .88rem;border-radius:50px;font-size:.81rem;font-weight:500;transition:all .18s;display:inline-block}
+    .tag:hover{border-color:var(--gold);color:var(--navy);background:rgba(200,150,12,.05)}
 
-    /* === WHY US === */
+    /* WHY US */
     .wg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
-    .wc{
-      background:#fff;border-radius:var(--r-md);padding:1.75rem;
-      border:1px solid var(--border);transition:border-color .2s,box-shadow .2s,transform .2s;
-    }
-    .wc:hover{border-color:var(--gold);box-shadow:0 8px 30px rgba(245,166,35,.12);transform:translateY(-2px)}
-    .wi{font-size:2rem;margin-bottom:.875rem;display:block;line-height:1}
+    .wc{background:#fff;border-radius:var(--r-md);padding:1.75rem;border:1px solid var(--border);transition:border-color .18s,box-shadow .18s,transform .18s}
+    .wc:hover{border-color:var(--gold);box-shadow:0 6px 24px rgba(200,150,12,.1);transform:translateY(-2px)}
+    .wc-icon{width:44px;height:44px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;flex-shrink:0}
+    .wc-icon svg{width:22px;height:22px;fill:var(--gold-l)}
     .wc h3{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:.4rem}
     .wc p{font-size:.85rem;color:var(--txt-l);line-height:1.65}
 
-    /* === FEATURE BANNER === */
-    .fb{
-      background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);
-      border-radius:var(--r-lg);padding:3rem;
-      display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;
-      margin:0 1.5rem;position:relative;overflow:hidden;
-    }
-    .fb::before{content:"✈";position:absolute;right:-20px;top:-20px;font-size:10rem;opacity:.04}
+    /* FEATURE BANNER */
+    .fb{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);border-radius:var(--r-lg);padding:3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin:0 2rem;position:relative;overflow:hidden}
     .fb h2{font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:.75rem;line-height:1.1}
-    .fb p{color:rgba(255,255,255,.65);line-height:1.7}
+    .fb p{color:rgba(255,255,255,.62);line-height:1.7;font-size:.95rem}
     .fl{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
-    .fi{display:flex;align-items:flex-start;gap:.65rem}
+    .fi{display:flex;align-items:flex-start;gap:.6rem}
     .fck{width:20px;height:20px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
-    .ft{font-size:.85rem;color:rgba(255,255,255,.85);font-weight:500;line-height:1.4}
+    .ft{font-size:.85rem;color:rgba(255,255,255,.82);font-weight:500;line-height:1.4}
 
-    /* === STEPS === */
+    /* HOW IT WORKS */
     .sg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
     .step{text-align:center;padding:1.5rem .875rem}
-    .s-num{width:50px;height:50px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:1.2rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto .875rem}
-    .s-ico{font-size:1.6rem;margin-bottom:.65rem;display:block}
+    .s-num{width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--navy);font-size:1.15rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto .875rem}
     .step h3{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:.35rem}
     .step p{font-size:.82rem;color:var(--txt-l);line-height:1.6}
 
-    /* === REVIEWS === */
+    /* REVIEWS */
     .rg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
-    .rc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:1.4rem;transition:background .2s}
+    .rc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:1.4rem;transition:background .18s}
     .rc:hover{background:rgba(255,255,255,.08)}
     .rc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.875rem}
-    .rs{background:var(--gold);color:var(--navy);font-size:.875rem;font-weight:900;padding:.28rem .6rem;border-radius:6px}
-    .ra{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:500}
+    .rs{background:var(--green);color:#fff;font-size:.875rem;font-weight:900;padding:.28rem .6rem;border-radius:var(--r-sm)}
+    .ra{font-size:.72rem;color:rgba(255,255,255,.4);font-weight:500;text-align:right}
     .rt{font-size:.875rem;color:rgba(255,255,255,.82);line-height:1.7;font-style:italic;margin-bottom:1.1rem}
     .rf{display:flex;align-items:center;gap:.65rem}
-    .rav{width:34px;height:34px;border-radius:50%;background:var(--navy-light);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .rav{width:34px;height:34px;border-radius:50%;background:var(--navy-light);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;border:1px solid rgba(255,255,255,.15)}
     .rn{font-size:.82rem;font-weight:700;color:#fff}
     .rd{font-size:.72rem;color:rgba(255,255,255,.4)}
     .agg{text-align:center;margin-bottom:2.25rem}
-    .agg-n{font-size:3.5rem;font-weight:900;color:var(--gold);letter-spacing:-2px;line-height:1}
-    .stars{color:var(--gold);font-size:.95rem;letter-spacing:2px;margin:.2rem 0}
-    .agg-l{color:rgba(255,255,255,.55);font-size:.85rem}
+    .agg-n{font-size:3.5rem;font-weight:900;color:var(--gold-l);letter-spacing:-2px;line-height:1}
+    .agg-l{color:rgba(255,255,255,.5);font-size:.85rem;margin-top:.25rem}
 
-    /* === FAQ === */
-    .faq-list{max-width:800px}
+    /* FAQ */
+    .faq-l{max-width:800px}
     .fq{border-bottom:1px solid var(--border)}
-    .fq-q{
-      display:flex;justify-content:space-between;align-items:center;gap:1rem;
-      width:100%;text-align:left;background:none;border:none;cursor:pointer;
-      padding:1.35rem 0;font-size:.95rem;font-weight:700;color:var(--navy);
-      line-height:1.4;transition:color .2s;min-height:44px;
-    }
+    .fq-q{display:flex;justify-content:space-between;align-items:center;gap:1rem;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:1.3rem 0;font-size:.95rem;font-weight:700;color:var(--navy);min-height:44px;transition:color .18s;line-height:1.4}
     .fq-q:hover{color:var(--gold)}
-    .fq-ico{width:26px;height:26px;border-radius:50%;background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:transform .3s,background .2s}
+    .fq-ico{width:26px;height:26px;border-radius:50%;background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:transform .3s,background .18s;font-weight:700;color:var(--navy)}
     .fq.open .fq-ico{transform:rotate(45deg);background:var(--gold)}
     .fq-a{font-size:.9rem;color:var(--txt-l);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s}
     .fq.open .fq-a{max-height:400px;padding-bottom:1.4rem}
 
-    /* === CTA === */
-    .cta-s{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-d) 100%);padding:5rem 1.5rem;text-align:center}
-    .cta-s h2{font-size:clamp(1.85rem,4vw,2.75rem);font-weight:900;color:var(--navy);letter-spacing:-1.5px;margin-bottom:.875rem}
-    .cta-s p{color:rgba(11,29,58,.7);font-size:1rem;margin-bottom:1.75rem}
-    .cta-btn{
-      display:inline-flex;align-items:center;gap:.5rem;
-      background:var(--navy);color:#fff;padding:.95rem 2rem;border-radius:10px;
-      font-size:.95rem;font-weight:800;transition:transform .15s,box-shadow .15s;
-      box-shadow:0 4px 16px rgba(11,29,58,.3);min-height:54px;
-    }
-    .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(11,29,58,.4)}
+    /* CTA */
+    .cta-s{background:var(--navy);padding:5rem 2rem;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+    .cta-s h2{font-size:clamp(1.85rem,4vw,2.75rem);font-weight:900;color:#fff;letter-spacing:-1.5px;margin-bottom:.875rem}
+    .cta-s p{color:rgba(255,255,255,.6);font-size:1rem;margin-bottom:1.75rem;max-width:480px;margin-left:auto;margin-right:auto}
+    .cta-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:var(--navy);padding:.95rem 2rem;border-radius:var(--r-sm);font-size:.95rem;font-weight:800;transition:background .18s,transform .12s;min-height:52px}
+    .cta-btn:hover{background:var(--gold-l);transform:translateY(-2px)}
 
-    /* === FOOTER === */
-    footer{background:var(--navy);padding:3.5rem 1.5rem 2rem}
-    .ft-inner{max-width:1240px;margin:0 auto}
-    .ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+    /* FOOTER */
+    footer{background:#060F1E;padding:3.5rem 2rem 2rem}
+    .ft-inner{max-width:1260px;margin:0 auto}
+    .ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.07)}
     .ft-brand{font-size:1.3rem;font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:.65rem}
-    .ft-brand span{color:var(--gold)}
-    .ft-tag{font-size:.82rem;color:rgba(255,255,255,.45);line-height:1.7;max-width:240px;margin-bottom:1.25rem}
+    .ft-brand span{color:var(--gold-l)}
+    .ft-tag{font-size:.82rem;color:rgba(255,255,255,.4);line-height:1.7;max-width:240px;margin-bottom:1.25rem}
     .ft-langs{display:flex;flex-wrap:wrap;gap:.4rem}
-    .ft-lang{font-size:.72rem;color:rgba(255,255,255,.5);padding:.28rem .65rem;border-radius:50px;border:1px solid rgba(255,255,255,.1);transition:all .2s}
-    .ft-lang:hover{color:var(--gold);border-color:var(--gold)}
-    .ft-col h4{font-size:.68rem;font-weight:800;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:1px;margin-bottom:.875rem}
-    .ft-col ul{list-style:none}
-    .ft-col li{margin-bottom:.4rem}
-    .ft-col a{font-size:.82rem;color:rgba(255,255,255,.45);transition:color .2s}
-    .ft-col a:hover{color:var(--gold)}
+    .ft-lang{font-size:.72rem;color:rgba(255,255,255,.45);padding:.28rem .65rem;border-radius:50px;border:1px solid rgba(255,255,255,.1);transition:all .18s}
+    .ft-lang:hover{color:var(--gold-l);border-color:var(--gold)}
+    .ft-col h4{font-size:.65rem;font-weight:800;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:1px;margin-bottom:.875rem}
+    .ft-col ul{list-style:none} .ft-col li{margin-bottom:.4rem}
+    .ft-col a{font-size:.82rem;color:rgba(255,255,255,.4);transition:color .18s}
+    .ft-col a:hover{color:var(--gold-l)}
     .ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
-    .ft-copy{font-size:.75rem;color:rgba(255,255,255,.3)}
+    .ft-copy{font-size:.75rem;color:rgba(255,255,255,.28)}
     .ft-legal{display:flex;gap:1.25rem}
-    .ft-legal a{font-size:.75rem;color:rgba(255,255,255,.3);transition:color .2s}
-    .ft-legal a:hover{color:var(--gold)}
+    .ft-legal a{font-size:.75rem;color:rgba(255,255,255,.28);transition:color .18s}
+    .ft-legal a:hover{color:var(--gold-l)}
 
-    /* === MOBILE SEARCH DRAWER === */
-    .mob-search-bar{
-      display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;
-      background:#fff;border-top:2px solid var(--border);
-      padding:.875rem 1rem;
-      box-shadow:0 -8px 24px rgba(0,0,0,.15);
-    }
-    .msb-btn{
-      width:100%;background:var(--gold);color:var(--navy);
-      border:none;padding:.875rem;border-radius:10px;
-      font-size:1rem;font-weight:800;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;gap:.5rem;
-      min-height:52px;
-    }
-    .mob-drawer{
-      display:none;position:fixed;inset:0;z-index:300;
-      background:rgba(0,0,0,.6);
-      align-items:flex-end;
-    }
+    /* MOBILE SEARCH BAR */
+    .mob-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:#fff;border-top:2px solid var(--border);padding:.875rem 1rem;box-shadow:0 -6px 20px rgba(0,0,0,.12)}
+    .mob-bar-btn{width:100%;background:var(--gold);color:var(--navy);border:none;padding:.875rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:.2px;min-height:52px}
+    .mob-drawer{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);align-items:flex-end}
     .mob-drawer.open{display:flex}
-    .mob-drawer-panel{
-      background:#fff;width:100%;border-radius:20px 20px 0 0;
-      padding:1.5rem 1.25rem 2rem;
-      max-height:90svh;overflow-y:auto;
-    }
-    .mob-drawer-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 1.5rem}
-    .mob-drawer-panel h3{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:1.25rem}
-    .mob-fields{display:grid;gap:.75rem}
-    .mob-field label{display:block;font-size:.72rem;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem}
-    .mob-field select,.mob-field input{
-      width:100%;padding:.875rem 1rem;border:2px solid var(--border);border-radius:10px;
-      font-size:1rem;color:var(--txt);background:#fff;outline:none;
-      -webkit-appearance:none;appearance:none;min-height:52px;
-    }
-    .mob-field select:focus,.mob-field input:focus{border-color:var(--gold)}
+    .mob-dp{background:#fff;width:100%;border-radius:18px 18px 0 0;padding:1.5rem 1.25rem 2rem;max-height:92svh;overflow-y:auto}
+    .mob-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 1.5rem}
+    .mob-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.35rem}
+    .mob-hdr h3{font-size:1.1rem;font-weight:800;color:var(--navy)}
+    .mob-close{background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--txt-l);padding:.25rem;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);transition:background .18s}
+    .mob-close:hover{background:var(--surface)}
+    .mob-tabs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.25rem}
+    .mob-tab{padding:.65rem;font-size:.8rem;font-weight:700;color:var(--txt-l);background:var(--surface);border:2px solid transparent;border-radius:var(--r-sm);cursor:pointer;text-align:center;transition:all .18s}
+    .mob-tab.active{background:#fff;border-color:var(--gold);color:var(--navy)}
+    .mf{display:grid;gap:.7rem}
+    .mf label{display:block;font-size:.68rem;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:.55px;margin-bottom:.3rem}
+    .mf select,.mf input[type="date"]{width:100%;padding:.85rem 1rem;border:2px solid var(--border);border-radius:var(--r-sm);font-size:1rem;background:#fff;outline:none;-webkit-appearance:none;appearance:none;min-height:52px;transition:border-color .18s;color:var(--txt)}
+    .mf select:focus,.mf input:focus{border-color:var(--gold)}
     .mob-nights{display:flex;align-items:center;justify-content:center;gap:1.25rem;padding:.5rem 0}
-    .mob-n-btn{width:52px;height:52px;border-radius:50%;background:var(--surface);border:2px solid var(--border);cursor:pointer;font-size:1.5rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:all .2s}
-    .mob-n-btn:hover,.mob-n-btn:active{background:var(--gold);border-color:var(--gold)}
-    .mob-n-val{font-size:1.75rem;font-weight:900;color:var(--navy);min-width:3rem;text-align:center}
-    .mob-search-submit{
-      width:100%;margin-top:1.25rem;background:var(--gold);color:var(--navy);
-      border:none;padding:1.1rem;border-radius:12px;
-      font-size:1.05rem;font-weight:800;cursor:pointer;min-height:56px;
-    }
-    .mob-close{
-      float:right;background:none;border:none;cursor:pointer;
-      font-size:1.5rem;color:var(--txt-l);margin-top:-.25rem;
-      padding:.25rem;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;
-    }
+    .mob-nb{width:52px;height:52px;border-radius:50%;background:var(--surface);border:2px solid var(--border);cursor:pointer;font-size:1.5rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:all .18s}
+    .mob-nb:hover,.mob-nb:active{background:var(--gold);border-color:var(--gold)}
+    .mob-nv{font-size:1.75rem;font-weight:900;color:var(--navy);min-width:3rem;text-align:center}
+    .mob-submit{width:100%;margin-top:1.25rem;background:var(--gold);color:var(--navy);border:none;padding:1.1rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;min-height:54px;letter-spacing:.2px;transition:background .18s}
+    .mob-submit:hover{background:var(--gold-h)}
 
-    /* === RESPONSIVE === */
-    @media(max-width:1024px){
-      .ag{grid-template-columns:repeat(3,1fr)}
-      .rg{grid-template-columns:repeat(2,1fr)}
-      .ft-top{grid-template-columns:1fr 1fr}
-      .sg{grid-template-columns:repeat(2,1fr)}
-    }
-    @media(max-width:768px){
-      .hero-content{grid-template-columns:1fr;gap:0;padding-top:5rem;padding-bottom:2rem}
-      .search-card{display:none}
-      .nav-links{display:none}
-      .mob-search-bar{display:block}
-      .ag{grid-template-columns:repeat(2,1fr)}
-      .wg{grid-template-columns:1fr}
-      .fb{grid-template-columns:1fr;margin:0;padding:2rem 1.25rem}
-      .fl{grid-template-columns:1fr}
-      .ft-top{grid-template-columns:1fr;gap:1.75rem}
-      .hero-stats{gap:1.25rem}
-      .nav-langs{display:none}
-    }
-    @media(max-width:480px){
-      .ag{grid-template-columns:1fr}
-      .rg{grid-template-columns:1fr}
-      .sg{grid-template-columns:1fr}
-      .hero h1{letter-spacing:-1.5px}
-      .sc-row{grid-template-columns:1fr}
-      .ft-bot{flex-direction:column;align-items:flex-start}
-    }
-
-    /* === REDUCED MOTION === */
-    @media(prefers-reduced-motion:reduce){
-      *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
-    }
+    /* RESPONSIVE */
+    @media(max-width:1024px){.ag{grid-template-columns:repeat(3,1fr)}.rg{grid-template-columns:repeat(2,1fr)}.ft-top{grid-template-columns:1fr 1fr}.sg{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:768px){.hero-c{grid-template-columns:1fr;padding-top:5rem;padding-bottom:2rem}.search-widget{display:none}.mob-bar{display:block}.nav-links{display:none}.ag{grid-template-columns:repeat(2,1fr)}.wg{grid-template-columns:1fr}.fb{grid-template-columns:1fr;margin:0;padding:2rem 1.25rem}.fl{grid-template-columns:1fr}.ft-top{grid-template-columns:1fr;gap:1.75rem}.hero-stats{gap:1.25rem}.trust-bar{padding:.75rem 1rem}.ti{font-size:.78rem}}
+    @media(max-width:480px){.ag{grid-template-columns:1fr}.rg{grid-template-columns:1fr}.sg{grid-template-columns:1fr}.h1{letter-spacing:-1.5px}.sw-row{grid-template-columns:1fr}.ft-bot{flex-direction:column;align-items:flex-start}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
@@ -379,284 +252,349 @@
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#airports" class="nav-cta">Book a Hotel</a></li>
+    <li><a href="#airports" class="nav-cta">Search Hotels</a></li>
   </ul>
   <div class="nav-langs">
-    <a href="/fr/" title="Français">🇫🇷</a>
-    <a href="/es/" title="Español">🇪🇸</a>
-    <a href="/de/" title="Deutsch">🇩🇪</a>
-    <a href="/it/" title="Italiano">🇮🇹</a>
-    <a href="/nl/" title="Nederlands">🇳🇱</a>
-    <a href="/at/" title="Österreich">🇦🇹</a>
+    <a href="/fr/" title="Francais">FR</a>
+    <a href="/es/" title="Espanol">ES</a>
+    <a href="/de/" title="Deutsch">DE</a>
+    <a href="/it/" title="Italiano">IT</a>
+    <a href="/nl/" title="Nederlands">NL</a>
+    <a href="/at/" title="Osterreich">AT</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <!-- img element for LCP — fetchpriority high, no lazy load -->
-  <img class="hero-img" 
+  <img class="hero-img"
     src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=75&fm=webp"
     srcset="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=75&fm=webp 800w, https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=75&fm=webp 1200w, https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&q=65&fm=webp 1920w"
-    sizes="100vw"
-    alt="Airplane wing over UK"
-    width="1920" height="1080"
-    fetchpriority="high">
-  <div class="hero-overlay" aria-hidden="true"></div>
-  <div class="hero-content">
-    <div class="hero-left">
-      <div class="hero-badge">✈️ UK's #1 Airport Hotel Specialist</div>
+    sizes="100vw" alt="Airplane wing in flight over the UK" width="1920" height="1080" fetchpriority="high">
+  <div class="hero-ov" aria-hidden="true"></div>
+
+  <div class="hero-c">
+    <div>
+      <div class="eyebrow-badge">The UK's Airport Hotel Specialist</div>
       <h1>Hotels near <em>every</em> UK airport</h1>
       <p class="hero-sub">From London Heathrow to Edinburgh — find the perfect hotel with free parking, early check-in and the best rates guaranteed.</p>
       <div class="hero-stats">
-        <div class="hero-stat"><span class="n">500+</span><span class="l">Hotels UK-wide</span></div>
-        <div class="hero-stat"><span class="n">9.3<small style="font-size:.9rem">/10</small></span><span class="l">Average rating</span></div>
-        <div class="hero-stat"><span class="n">64k+</span><span class="l">Happy guests</span></div>
+        <div class="hero-stat"><span class="stat-n">500+</span><span class="stat-l">Hotels UK-wide</span></div>
+        <div class="hero-stat"><span class="stat-n">9.3<small style="font-size:.85rem">/10</small></span><span class="stat-l">Average rating</span></div>
+        <div class="hero-stat"><span class="stat-n">64,000+</span><span class="stat-l">Happy guests</span></div>
       </div>
     </div>
-    <!-- Desktop search card -->
-    <div class="search-card" id="desktop-search">
-      <div class="sc-head">
-        <div class="sc-icon">🏨</div>
-        <div>
-          <h2>Find your airport hotel</h2>
-          <p>Best price guaranteed · Free cancellation available</p>
+
+    <!-- SEARCH WIDGET — desktop -->
+    <div class="search-widget" id="desktop-widget">
+      <!-- Tab bar -->
+      <div class="sw-tabs">
+        <button class="sw-tab active" onclick="switchTab('hotel-parking',this)">Hotel &amp; Parking</button>
+        <button class="sw-tab" onclick="switchTab('hotel-only',this)">Hotel Only</button>
+      </div>
+
+      <!-- Panel: Hotel + Parking -->
+      <div class="sw-body">
+        <div class="sw-panel active" id="panel-hotel-parking">
+          <div class="sw-fields">
+            <div class="sw-field">
+              <label for="d-airport-hp">Flying from</label>
+              <select id="d-airport-hp">
+                <option value="">Select airport...</option>
+                <option value="ABZ">Aberdeen (ABZ)</option>
+                <option value="BHD">Belfast City (BHD)</option>
+                <option value="BFS">Belfast International (BFS)</option>
+                <option value="BHX">Birmingham (BHX)</option>
+                <option value="BOH">Bournemouth (BOH)</option>
+                <option value="BRS">Bristol (BRS)</option>
+                <option value="CWL">Cardiff (CWL)</option>
+                <option value="EMA">East Midlands (EMA)</option>
+                <option value="EDI">Edinburgh (EDI)</option>
+                <option value="EXT">Exeter (EXT)</option>
+                <option value="LGW">London Gatwick (LGW)</option>
+                <option value="GLA">Glasgow International (GLA)</option>
+                <option value="LHR">London Heathrow (LHR)</option>
+                <option value="LBA">Leeds Bradford (LBA)</option>
+                <option value="LPL">Liverpool (LPL)</option>
+                <option value="LCY">London City (LCY)</option>
+                <option value="LTN">London Luton (LTN)</option>
+                <option value="MAN">Manchester (MAN)</option>
+                <option value="NCL">Newcastle (NCL)</option>
+                <option value="NWI">Norwich (NWI)</option>
+                <option value="SOU">Southampton (SOU)</option>
+                <option value="STN">London Stansted (STN)</option>
+                <option value="MME">Teesside International (MME)</option>
+              </select>
+            </div>
+            <div class="sw-field">
+              <label for="d-room-hp">Room type</label>
+              <select id="d-room-hp">
+                <option value="D20">Double — 2 adults</option>
+                <option value="TW2">Twin — 2 adults</option>
+                <option value="S1">Single — 1 adult</option>
+                <option value="TW1C">Twin — 1 adult, 1 child</option>
+                <option value="TR2C1">Triple — 2 adults, 1 child</option>
+                <option value="TR3">Triple — 3 adults</option>
+                <option value="FM2C2">Family — 2 adults, 2 children</option>
+                <option value="FM2C3">Family — 2 adults, 3 children</option>
+                <option value="FM3C1">Family — 3 adults, 1 child</option>
+              </select>
+            </div>
+            <div class="sw-row">
+              <div class="sw-field">
+                <label for="d-checkin-hp">Hotel check-in</label>
+                <input type="date" id="d-checkin-hp">
+              </div>
+              <div class="sw-field">
+                <label for="d-collect-hp">Collect car</label>
+                <input type="date" id="d-collect-hp">
+              </div>
+            </div>
+            <div class="sw-field">
+              <label>Parking nights</label>
+              <div class="nights-ctrl">
+                <button class="n-btn" onclick="chgN(-1,'d')" aria-label="Fewer nights">&#8722;</button>
+                <span class="n-val" id="d-nval">8</span>
+                <button class="n-btn" onclick="chgN(1,'d')" aria-label="More nights">+</button>
+                <span class="n-lbl">nights parking</span>
+              </div>
+            </div>
+          </div>
+          <button class="sw-submit" onclick="doSearch('d','hp')">Search Available Hotels</button>
+          <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation on most hotels</p>
+        </div>
+
+        <!-- Panel: Hotel only -->
+        <div class="sw-panel" id="panel-hotel-only">
+          <div class="sw-fields">
+            <div class="sw-field">
+              <label for="d-airport-ho">Flying from</label>
+              <select id="d-airport-ho">
+                <option value="">Select airport...</option>
+                <option value="ABZ">Aberdeen (ABZ)</option>
+                <option value="BHD">Belfast City (BHD)</option>
+                <option value="BFS">Belfast International (BFS)</option>
+                <option value="BHX">Birmingham (BHX)</option>
+                <option value="BOH">Bournemouth (BOH)</option>
+                <option value="BRS">Bristol (BRS)</option>
+                <option value="EMA">East Midlands (EMA)</option>
+                <option value="EDI">Edinburgh (EDI)</option>
+                <option value="EXT">Exeter (EXT)</option>
+                <option value="LGW">London Gatwick (LGW)</option>
+                <option value="GLA">Glasgow International (GLA)</option>
+                <option value="LHR">London Heathrow (LHR)</option>
+                <option value="LBA">Leeds Bradford (LBA)</option>
+                <option value="LPL">Liverpool (LPL)</option>
+                <option value="LCY">London City (LCY)</option>
+                <option value="LTN">London Luton (LTN)</option>
+                <option value="MAN">Manchester (MAN)</option>
+                <option value="NCL">Newcastle (NCL)</option>
+                <option value="STN">London Stansted (STN)</option>
+              </select>
+            </div>
+            <div class="sw-field">
+              <label for="d-room-ho">Room type</label>
+              <select id="d-room-ho">
+                <option value="D20">Double — 2 adults</option>
+                <option value="TW2">Twin — 2 adults</option>
+                <option value="S1">Single — 1 adult</option>
+                <option value="TW1C">Twin — 1 adult, 1 child</option>
+                <option value="TR2C1">Triple — 2 adults, 1 child</option>
+                <option value="TR3">Triple — 3 adults</option>
+                <option value="FM2C2">Family — 2 adults, 2 children</option>
+              </select>
+            </div>
+            <div class="sw-row">
+              <div class="sw-field">
+                <label for="d-checkin-ho">Check-in date</label>
+                <input type="date" id="d-checkin-ho">
+              </div>
+              <div class="sw-field">
+                <label for="d-checkout-ho">Check-out date</label>
+                <input type="date" id="d-checkout-ho">
+              </div>
+            </div>
+          </div>
+          <button class="sw-submit" onclick="doSearch('d','ho')">Search Hotels</button>
+          <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation on most hotels</p>
         </div>
       </div>
-      <div class="sc-fields">
-        <div class="sc-field">
-          <label for="d-airport">Airport</label>
-          <select id="d-airport">
-            <option value="">Select your airport...</option>
-            <optgroup label="London">
-              <option value="LHR">London Heathrow (LHR)</option>
-              <option value="LGW">London Gatwick (LGW)</option>
-              <option value="STN">London Stansted (STN)</option>
-              <option value="LTN">London Luton (LTN)</option>
-              <option value="LCY">London City (LCY)</option>
-            </optgroup>
-            <optgroup label="North">
-              <option value="MAN">Manchester (MAN)</option>
-              <option value="LBA">Leeds Bradford (LBA)</option>
-              <option value="NCL">Newcastle (NCL)</option>
-              <option value="LPL">Liverpool John Lennon (LPL)</option>
-            </optgroup>
-            <optgroup label="Midlands">
-              <option value="BHX">Birmingham (BHX)</option>
-              <option value="EMA">East Midlands (EMA)</option>
-            </optgroup>
-            <optgroup label="Scotland">
-              <option value="EDI">Edinburgh (EDI)</option>
-              <option value="GLA">Glasgow (GLA)</option>
-              <option value="ABZ">Aberdeen (ABZ)</option>
-            </optgroup>
-            <optgroup label="South West">
-              <option value="BRS">Bristol (BRS)</option>
-              <option value="EXT">Exeter (EXT)</option>
-            </optgroup>
-            <optgroup label="Northern Ireland">
-              <option value="BFS">Belfast International (BFS)</option>
-              <option value="BHD">Belfast City (BHD)</option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="sc-row">
-          <div class="sc-field">
-            <label for="d-checkin">Check-in date</label>
-            <input type="date" id="d-checkin">
-          </div>
-          <div class="sc-field">
-            <label for="d-checkout">Check-out date</label>
-            <input type="date" id="d-checkout">
-          </div>
-        </div>
-        <div class="sc-field">
-          <label>Number of nights</label>
-          <div class="nights-row">
-            <button class="n-btn" onclick="chgN(-1,'d')" aria-label="Decrease nights">−</button>
-            <span class="n-val" id="d-nights-val">1</span>
-            <button class="n-btn" onclick="chgN(1,'d')" aria-label="Increase nights">+</button>
-            <span style="font-size:.85rem;color:var(--txt-l)">night(s) hotel stay</span>
-          </div>
-        </div>
-      </div>
-      <button class="sc-btn" onclick="doSearch('d')">🔍 Search Available Hotels</button>
-      <p class="sc-note">✓ <strong>Best price guarantee</strong> · No booking fees · Free cancellation on most hotels</p>
     </div>
+    <!-- /search widget -->
   </div>
 </section>
 
 <!-- TRUST BAR -->
-<div class="trust">
+<div class="trust-bar">
   <div class="trust-inner">
-    <div class="ti">⭐ 9.3/10 guest rating</div>
-    <div class="ti">🏨 500+ hotels</div>
-    <div class="ti">💰 Best price guarantee</div>
-    <div class="ti">🅿️ Hotel + parking packages</div>
-    <div class="ti">🚌 Free terminal transfers</div>
-    <div class="ti">📞 24/7 UK support</div>
+    <div class="ti"><span class="ti-dot"></span>9.3/10 average guest rating</div>
+    <div class="ti"><span class="ti-dot"></span>500+ hotels across the UK</div>
+    <div class="ti"><span class="ti-dot"></span>Best price guarantee</div>
+    <div class="ti"><span class="ti-dot"></span>Hotel and parking packages</div>
+    <div class="ti"><span class="ti-dot"></span>Free terminal transfers</div>
+    <div class="ti"><span class="ti-dot"></span>24/7 UK support</div>
   </div>
 </div>
 
 <!-- AIRPORTS -->
 <section class="s s-alt" id="airports">
   <div class="c">
-    <span class="eyebrow">Explore airports</span>
+    <span class="s-ey">Explore airports</span>
     <h2 class="h2">Choose your airport</h2>
-    <p class="desc">Every major UK airport covered — find a hotel that fits your flight, your budget and your style.</p>
+    <p class="s-desc">Every major UK airport covered. Find a hotel that fits your flight, your budget and your style.</p>
     <div class="ag">
 
       <a href="/heathrow-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=480&h=320&fit=crop&q=75" alt="London Heathrow hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=480&h=320&fit=crop&q=75" alt="London Heathrow airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">LHR</div>
           <h3 class="ac-name">London Heathrow</h3>
-          <p class="ac-desc">World's busiest airport · 5 terminals · 200+ destinations</p>
+          <p class="ac-desc">The world's busiest airport. Five terminals, 200+ destinations, hotels from budget to luxury.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£89/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£89/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/gatwick-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=480&h=320&fit=crop&q=75" alt="London Gatwick hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=480&h=320&fit=crop&q=75" alt="London Gatwick airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">LGW</div>
           <h3 class="ac-name">London Gatwick</h3>
-          <p class="ac-desc">London's second airport · North & South terminals · 200+ routes</p>
+          <p class="ac-desc">London's second airport — North and South terminals, 200+ routes across the globe.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£75/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£75/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/manchester-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1565026057742-a48c4d3a0c61?w=480&h=320&fit=crop&q=75" alt="Manchester Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1565026057742-a48c4d3a0c61?w=480&h=320&fit=crop&q=75" alt="Manchester airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">MAN</div>
           <h3 class="ac-name">Manchester</h3>
-          <p class="ac-desc">The North's gateway · Busiest UK airport outside London</p>
+          <p class="ac-desc">The North's gateway to the world. The UK's busiest airport outside London.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£72/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£72/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/stansted-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1519449556851-5720b33024e7?w=480&h=320&fit=crop&q=75" alt="London Stansted hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1519449556851-5720b33024e7?w=480&h=320&fit=crop&q=75" alt="London Stansted airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">STN</div>
           <h3 class="ac-name">London Stansted</h3>
-          <p class="ac-desc">Budget traveller favourite · 160+ European destinations</p>
+          <p class="ac-desc">A favourite with budget travellers. 160+ European destinations year-round.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£65/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£65/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/edinburgh-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?w=480&h=320&fit=crop&q=75" alt="Edinburgh Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?w=480&h=320&fit=crop&q=75" alt="Edinburgh airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">EDI</div>
           <h3 class="ac-name">Edinburgh</h3>
-          <p class="ac-desc">Scotland's busiest airport · 130+ routes · Castle city views</p>
+          <p class="ac-desc">Scotland's busiest airport. 130+ routes, city views and a short drive to the castle.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£82/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£82/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/birmingham-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1551882547-ff40c63fe2fa?w=480&h=320&fit=crop&q=75" alt="Birmingham Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1551882547-ff40c63fe2fa?w=480&h=320&fit=crop&q=75" alt="Birmingham airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">BHX</div>
           <h3 class="ac-name">Birmingham</h3>
-          <p class="ac-desc">Heart of the Midlands · Excellent on-site hotel choice</p>
+          <p class="ac-desc">Heart of the Midlands. Excellent connections and a strong selection of on-site hotels.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£68/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£68/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/bristol-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=480&h=320&fit=crop&q=75" alt="Bristol Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=480&h=320&fit=crop&q=75" alt="Bristol airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">BRS</div>
           <h3 class="ac-name">Bristol</h3>
-          <p class="ac-desc">South West's leading airport · Easy M5 access</p>
+          <p class="ac-desc">The South West's leading airport. Easy motorway access and great-value hotel packages.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£63/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£63/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/luton-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=480&h=320&fit=crop&q=75" alt="London Luton Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=480&h=320&fit=crop&q=75" alt="London Luton airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">LTN</div>
           <h3 class="ac-name">London Luton</h3>
-          <p class="ac-desc">Great value packages · Rail & motorway connections</p>
+          <p class="ac-desc">A go-to for budget airlines. Great value hotels with rail and road connections.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£59/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£59/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/glasgow-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=480&h=320&fit=crop&q=75" alt="Glasgow Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=480&h=320&fit=crop&q=75" alt="Glasgow airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">GLA</div>
           <h3 class="ac-name">Glasgow</h3>
-          <p class="ac-desc">Scotland's second city gateway · 8 miles from centre</p>
+          <p class="ac-desc">Scotland's second airport, eight miles from the vibrant city centre.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£74/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£74/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/newcastle-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=480&h=320&fit=crop&q=75" alt="Newcastle Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=480&h=320&fit=crop&q=75" alt="Newcastle airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">NCL</div>
           <h3 class="ac-name">Newcastle</h3>
-          <p class="ac-desc">North East's gateway · Right on the Metro line</p>
+          <p class="ac-desc">The North East's gateway. Friendly, compact and right on the Metro line.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£61/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£61/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/leeds-bradford-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=480&h=320&fit=crop&q=75" alt="Leeds Bradford Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=480&h=320&fit=crop&q=75" alt="Leeds Bradford airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">LBA</div>
           <h3 class="ac-name">Leeds Bradford</h3>
-          <p class="ac-desc">Yorkshire's airport · Compact, stress-free & scenic</p>
+          <p class="ac-desc">Yorkshire's airport. Compact, stress-free and surrounded by countryside hotels.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£57/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£57/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
 
       <a href="/liverpool-airport-hotels/" class="ac">
-        <img class="ac-img" src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=480&h=320&fit=crop&q=75" alt="Liverpool John Lennon Airport hotel" loading="lazy" width="480" height="320">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=480&h=320&fit=crop&q=75" alt="Liverpool John Lennon airport hotel" loading="lazy" width="480" height="320">
         <div class="ac-body">
           <div class="ac-code">LPL</div>
           <h3 class="ac-name">Liverpool John Lennon</h3>
-          <p class="ac-desc">Above us, only sky · Great value in the North West</p>
+          <p class="ac-desc">Above us, only sky. Great value hotels in the North West with easy M56 access.</p>
           <div class="ac-foot">
-            <div class="ac-price">from<strong>£58/night</strong></div>
-            <span class="ac-cta">View →</span>
+            <div class="ac-price">Hotels from<strong>£58/night</strong></div>
+            <span class="ac-cta">View</span>
           </div>
         </div>
       </a>
@@ -665,17 +603,17 @@
 
     <!-- Popular searches -->
     <div style="margin-top:2.5rem">
-      <h3 style="font-size:.75rem;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:1px;margin-bottom:.875rem">Popular searches</h3>
+      <h3 style="font-size:.72rem;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:1px;margin-bottom:.875rem">Popular searches</h3>
       <div class="tags">
         <a href="#" class="tag">Heathrow hotel with parking</a>
         <a href="#" class="tag">Gatwick hotel and parking 7 days</a>
         <a href="#" class="tag">Manchester airport hotel overnight</a>
         <a href="#" class="tag">Stansted hotel early check-in</a>
-        <a href="#" class="tag">Edinburgh airport hotel breakfast</a>
-        <a href="#" class="tag">Birmingham airport hotel 14 days parking</a>
+        <a href="#" class="tag">Edinburgh airport hotel with breakfast</a>
+        <a href="#" class="tag">Birmingham hotel 14 days parking</a>
         <a href="#" class="tag">Bristol airport hotel family room</a>
         <a href="#" class="tag">Luton airport hotel budget</a>
-        <a href="#" class="tag">Glasgow airport hotel 4 star</a>
+        <a href="#" class="tag">Glasgow airport 4 star hotel</a>
         <a href="#" class="tag">Newcastle hotel near airport</a>
       </div>
     </div>
@@ -685,16 +623,40 @@
 <!-- WHY US -->
 <section class="s" id="why-us">
   <div class="c">
-    <span class="eyebrow">Why choose us</span>
+    <span class="s-ey">Why choose us</span>
     <h2 class="h2">The smarter way to book your airport hotel</h2>
-    <p class="desc">We've been helping UK travellers start their journeys the right way since 1983. Here's what makes us different.</p>
+    <p class="s-desc">Helping UK travellers start their journey the right way since 1983.</p>
     <div class="wg">
-      <div class="wc"><span class="wi">💰</span><h3>Best Price Guarantee</h3><p>Found it cheaper elsewhere? We'll match it, every time. Prices include all taxes — no nasty surprises at checkout.</p></div>
-      <div class="wc"><span class="wi">🅿️</span><h3>Hotel + Parking Packages</h3><p>Save up to 60% by bundling your hotel stay with long-stay airport parking. One booking, one price, zero hassle.</p></div>
-      <div class="wc"><span class="wi">🚌</span><h3>Free Shuttle Transfers</h3><p>Every hotel includes a complimentary shuttle to the terminal — running 24 hours a day, 365 days a year.</p></div>
-      <div class="wc"><span class="wi">⏰</span><h3>Early &amp; Late Check-In</h3><p>Got a 5am flight? Many hotels offer check-in from midnight so you can sleep before your early departure.</p></div>
-      <div class="wc"><span class="wi">🔒</span><h3>Secure Monitored Parking</h3><p>All car parks are CCTV monitored, access-controlled and patrolled 24/7. Your car is in safe hands.</p></div>
-      <div class="wc"><span class="wi">📞</span><h3>24/7 UK Support</h3><p>Our UK-based team is here around the clock — by phone, email or chat — ready to sort anything fast.</p></div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg></div>
+        <h3>Best Price Guarantee</h3>
+        <p>Found it cheaper elsewhere? We match it, every time, no questions asked. Our prices include all taxes so you always know exactly what you pay.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
+        <h3>Hotel and Parking Packages</h3>
+        <p>Save up to 60% by bundling your hotel stay with long-stay airport parking. One booking, one price, zero hassle — and your car is secure while you travel.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg></div>
+        <h3>Free Terminal Transfers</h3>
+        <p>Every hotel we list offers a complimentary shuttle to the terminal, running 24 hours a day. No taxis, no stress — just a smooth start to your trip.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+        <h3>Early and Late Check-In</h3>
+        <p>Early morning flight? Many hotels offer check-in from midnight so you can rest before your journey starts, however early your departure may be.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div>
+        <h3>Secure Monitored Parking</h3>
+        <p>All car parks are CCTV monitored, access-controlled and patrolled 24/7. Many hold Park Mark accreditation from the British Parking Association.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+        <h3>24/7 UK Customer Support</h3>
+        <p>Our UK-based team is available around the clock by phone, email or live chat — ready to help with any change, question or issue, day or night.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -702,33 +664,33 @@
 <!-- FEATURE BANNER -->
 <div class="fb">
   <div>
-    <span class="eyebrow" style="color:rgba(245,166,35,.8)">Everything included</span>
+    <span class="s-ey" style="color:rgba(232,180,34,.7)">Everything included</span>
     <h2>One booking.<br>Everything sorted.</h2>
-    <p>From the moment you book to the moment you land home, everything is handled. No surprises, no hidden fees, no stress.</p>
+    <p>From the moment you book to the moment you land back home, we make sure everything runs smoothly. No surprises, no hidden fees.</p>
   </div>
   <div class="fl">
-    <div class="fi"><div class="fck">✓</div><span class="ft">Free terminal shuttle included</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Secure monitored parking</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Breakfast options available</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Early check-in from 6am</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Late checkout options</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Family &amp; accessible rooms</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Free Wi-Fi in all hotels</span></div>
-    <div class="fi"><div class="fck">✓</div><span class="ft">Instant booking confirmation</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Free terminal shuttle included</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Secure monitored parking</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Breakfast options available</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Early check-in from 6am</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Late checkout options</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Family and accessible rooms</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Free Wi-Fi in all hotels</span></div>
+    <div class="fi"><div class="fck">&#10003;</div><span class="ft">Instant booking confirmation</span></div>
   </div>
 </div>
 
 <!-- HOW IT WORKS -->
 <section class="s" id="how-it-works">
   <div class="c">
-    <span class="eyebrow">Simple booking</span>
-    <h2 class="h2">Book in 4 easy steps</h2>
-    <p class="desc">From search to confirmation in under 3 minutes — we've made it as simple as possible.</p>
+    <span class="s-ey">Simple booking</span>
+    <h2 class="h2">Book in four easy steps</h2>
+    <p class="s-desc">From search to confirmation in under three minutes.</p>
     <div class="sg">
-      <div class="step"><div class="s-num">1</div><span class="s-ico">✈️</span><h3>Choose your airport</h3><p>Select from our full list — every UK airport covered from Heathrow to Belfast.</p></div>
-      <div class="step"><div class="s-num">2</div><span class="s-ico">📅</span><h3>Pick your dates</h3><p>Tell us your arrival date and nights needed. We'll show all available hotels instantly.</p></div>
-      <div class="step"><div class="s-num">3</div><span class="s-ico">🏨</span><h3>Compare &amp; choose</h3><p>Filter by price, stars or rating. Read real reviews and pick your perfect match.</p></div>
-      <div class="step"><div class="s-num">4</div><span class="s-ico">✅</span><h3>Instant confirmation</h3><p>Book securely in seconds. Confirmation hits your inbox immediately — you're all set.</p></div>
+      <div class="step"><div class="s-num">1</div><h3>Choose your airport</h3><p>Select from our full list of UK airports. Every terminal covered from Heathrow to Belfast.</p></div>
+      <div class="step"><div class="s-num">2</div><h3>Pick your dates</h3><p>Tell us your check-in date and how many nights you need. Available hotels shown in real time.</p></div>
+      <div class="step"><div class="s-num">3</div><h3>Compare and choose</h3><p>Filter by price, star rating, distance or guest rating. Read real reviews and pick your match.</p></div>
+      <div class="step"><div class="s-num">4</div><h3>Instant confirmation</h3><p>Book securely in seconds. Your confirmation arrives immediately — you are all set.</p></div>
     </div>
   </div>
 </section>
@@ -736,34 +698,34 @@
 <!-- REVIEWS -->
 <section class="s s-dark" id="reviews">
   <div class="c">
-    <span class="eyebrow">Guest reviews</span>
-    <h2 class="h2 h2-light">Loved by 64,000+ travellers</h2>
-    <p class="desc desc-light">Don't take our word for it — here's what real guests say.</p>
+    <span class="s-ey">Guest reviews</span>
+    <h2 class="h2 h2-light">Loved by 64,000 travellers</h2>
+    <p class="s-desc s-desc-light">What real guests say about their airport hotel experience.</p>
     <div class="agg">
       <div class="agg-n">9.3</div>
-      <div class="stars">★★★★★</div>
+      <div style="color:var(--gold-l);font-size:.95rem;letter-spacing:2px;margin:.25rem 0">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <div class="agg-l">Based on 64,227 verified guest reviews</div>
     </div>
     <div class="rg">
       <div class="rc">
-        <div class="rc-top"><span class="rs">9.8</span><span class="ra">Heathrow · Hilton T4</span></div>
+        <div class="rc-top"><span class="rs">9.8</span><span class="ra">Heathrow<br>Hilton T4</span></div>
         <p class="rt">"Absolutely perfect start to our holiday. The shuttle arrived within minutes, the room was immaculate and breakfast was brilliant. Will never book any other way."</p>
-        <div class="rf"><div class="rav">👩</div><div><div class="rn">Sarah M.</div><div class="rd">March 2026</div></div></div>
+        <div class="rf"><div class="rav">SM</div><div><div class="rn">Sarah M.</div><div class="rd">March 2026</div></div></div>
       </div>
       <div class="rc">
-        <div class="rc-top"><span class="rs">9.5</span><span class="ra">Gatwick · Sofitel</span></div>
-        <p class="rt">"Incredible value. Hotel AND 14 days parking for less than the parking alone. Kids loved the pool, we all slept brilliantly before our early flight."</p>
-        <div class="rf"><div class="rav">👨</div><div><div class="rn">James T.</div><div class="rd">February 2026</div></div></div>
+        <div class="rc-top"><span class="rs">9.5</span><span class="ra">Gatwick<br>Sofitel</span></div>
+        <p class="rt">"Incredible value. Hotel and 14 days parking for less than the parking alone. Kids loved the pool and we all slept brilliantly before our early morning flight."</p>
+        <div class="rf"><div class="rav">JT</div><div><div class="rn">James T.</div><div class="rd">February 2026</div></div></div>
       </div>
       <div class="rc">
-        <div class="rc-top"><span class="rs">9.7</span><span class="ra">Manchester · Crowne Plaza</span></div>
-        <p class="rt">"We use AirportHotels every time we fly from Manchester. The booking process is so easy and we always find the best deals here. Highly recommend."</p>
-        <div class="rf"><div class="rav">👩</div><div><div class="rn">Lisa K.</div><div class="rd">January 2026</div></div></div>
+        <div class="rc-top"><span class="rs">9.7</span><span class="ra">Manchester<br>Crowne Plaza</span></div>
+        <p class="rt">"We use AirportHotels every time we fly from Manchester. The booking process is simple and we always find the best deals here. Highly recommend to anyone flying from the North."</p>
+        <div class="rf"><div class="rav">LK</div><div><div class="rn">Lisa K.</div><div class="rd">January 2026</div></div></div>
       </div>
       <div class="rc">
-        <div class="rc-top"><span class="rs">9.4</span><span class="ra">Edinburgh · Marriott</span></div>
+        <div class="rc-top"><span class="rs">9.4</span><span class="ra">Edinburgh<br>Marriott</span></div>
         <p class="rt">"Used early check-in for a 6am flight. Room was ready at 11pm the night before. The shuttle was right on time. Perfect experience from start to finish."</p>
-        <div class="rf"><div class="rav">👴</div><div><div class="rn">Robert H.</div><div class="rd">March 2026</div></div></div>
+        <div class="rf"><div class="rav">RH</div><div><div class="rn">Robert H.</div><div class="rd">March 2026</div></div></div>
       </div>
     </div>
   </div>
@@ -772,17 +734,17 @@
 <!-- FAQ -->
 <section class="s" id="faq">
   <div class="c">
-    <span class="eyebrow">Common questions</span>
+    <span class="s-ey">Common questions</span>
     <h2 class="h2">Frequently asked questions</h2>
-    <p class="desc">Everything you need to know about booking an airport hotel in the UK.</p>
-    <div class="faq-list">
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">What's included in an airport hotel package?<span class="fq-ico">+</span></button><div class="fq-a">Most packages include accommodation, free parking (7–15 days), and a 24-hour shuttle to the terminal. Many include breakfast, early check-in and late checkout. Always check the package details before booking.</div></div>
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">How far in advance should I book?<span class="fq-ico">+</span></button><div class="fq-a">We recommend 2–4 weeks ahead, especially during school holidays and summer. Booking early secures better prices and availability at the most popular hotels.</div></div>
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Is parking always included?<span class="fq-ico">+</span></button><div class="fq-a">Not always — it depends on your package. We clearly label "hotel + parking" packages, which include secured parking for 7, 8, 14 or 15 days with a free shuttle. Room-only rates are available if you don't need parking.</div></div>
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Can I check in early?<span class="fq-ico">+</span></button><div class="fq-a">Yes — most airport hotels offer early check-in, sometimes from midnight for very early flights. Available as an add-on or included in premium packages. Filter by "early check-in" when you search.</div></div>
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Which UK airports do you cover?<span class="fq-ico">+</span></button><div class="fq-a">All major UK airports: Heathrow, Gatwick, Stansted, Luton, City, Manchester, Birmingham, Edinburgh, Glasgow, Bristol, Leeds Bradford, Newcastle, Liverpool, East Midlands, Belfast International, Belfast City, Aberdeen and Exeter.</div></div>
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Are the car parks safe and secure?<span class="fq-ico">+</span></button><div class="fq-a">Absolutely. All car parks are 24/7 CCTV monitored, access-controlled, fenced and regularly patrolled. Many are Park Mark accredited — the Safer Parking Award from the British Parking Association and Police.</div></div>
-      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Can I cancel or amend my booking?<span class="fq-ico">+</span></button><div class="fq-a">Most bookings offer free cancellation up to 24–48 hours before check-in. The exact policy is shown before you confirm. To amend dates or add extras, contact our 24/7 UK customer service team.</div></div>
+    <p class="s-desc">Everything you need to know about booking an airport hotel in the UK.</p>
+    <div class="faq-l">
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">What is included in an airport hotel package?<span class="fq-ico">+</span></button><div class="fq-a">Most airport hotel packages include overnight accommodation, free parking for the duration of your trip — usually 7 to 15 days — and a complimentary shuttle to the terminal. Many packages also include breakfast, early check-in from 6am or midnight, and late checkout options. Always check the package details before booking to confirm what is included.</div></div>
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">How far in advance should I book an airport hotel?<span class="fq-ico">+</span></button><div class="fq-a">We recommend booking at least two to four weeks in advance, particularly during school holidays, summer and Christmas. The earlier you book, the better the price — and availability at popular hotels fills up quickly. Last-minute deals can also be found if your dates are flexible.</div></div>
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Is parking always included at airport hotels?<span class="fq-ico">+</span></button><div class="fq-a">Not always — it depends on the package you choose. We clearly label which packages include parking and for how many days. Hotel and parking packages typically include secured parking for 7, 8, 14 or 15 days in a monitored car park with a complimentary shuttle to the terminal. Room-only rates are available if you do not need parking.</div></div>
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Can I check in early at airport hotels?<span class="fq-ico">+</span></button><div class="fq-a">Yes. Most airport hotels offer early check-in, sometimes from midnight for guests with very early morning flights. This is often available as an add-on or included in certain packages. We show which hotels offer early check-in in the search results so you can filter by this option.</div></div>
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Which UK airports do you cover?<span class="fq-ico">+</span></button><div class="fq-a">We cover all major UK airports including London Heathrow, Gatwick, Stansted, Luton and City; Manchester, Birmingham, Edinburgh, Glasgow, Bristol, Leeds Bradford, Newcastle, Liverpool John Lennon, East Midlands, Belfast International, Belfast City, Aberdeen and Exeter. If you cannot find your airport, please contact our support team.</div></div>
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Are the car parks safe and secure?<span class="fq-ico">+</span></button><div class="fq-a">All car parks associated with our hotel packages are secured facilities with 24/7 CCTV monitoring, perimeter fencing, access-controlled barriers and regular patrols. Many are also Park Mark accredited — the Safer Parking Award given to car parks that meet standards set by the British Parking Association and the police.</div></div>
+      <div class="fq"><button class="fq-q" onclick="tfaq(this)" aria-expanded="false">Can I cancel or amend my booking?<span class="fq-ico">+</span></button><div class="fq-a">Most of our hotel bookings offer free cancellation up to 24 or 48 hours before your check-in date. The exact cancellation policy varies by hotel and is shown clearly before you complete your booking. To amend your dates or add extras, contact our UK customer service team who are available 24 hours a day.</div></div>
     </div>
   </div>
 </section>
@@ -791,8 +753,8 @@
 <section class="cta-s">
   <div class="c">
     <h2>Ready to book your airport hotel?</h2>
-    <p>Join over 64,000 happy travellers who've started their journey the right way.</p>
-    <a href="#airports" class="cta-btn">✈️ Find My Airport Hotel</a>
+    <p>Join over 64,000 happy travellers who started their journey the right way.</p>
+    <a href="#airports" class="cta-btn">Find My Airport Hotel</a>
   </div>
 </section>
 
@@ -802,14 +764,14 @@
     <div class="ft-top">
       <div>
         <div class="ft-brand">Airport<span>Hotels</span>.co.uk</div>
-        <p class="ft-tag">The UK's airport hotel specialist since 1983. Trusted by over a million travellers every year.</p>
+        <p class="ft-tag">The UK airport hotel specialist since 1983. Trusted by over a million travellers every year.</p>
         <div class="ft-langs">
-          <a href="/fr/" class="ft-lang">🇫🇷 Français</a>
-          <a href="/es/" class="ft-lang">🇪🇸 Español</a>
-          <a href="/de/" class="ft-lang">🇩🇪 Deutsch</a>
-          <a href="/it/" class="ft-lang">🇮🇹 Italiano</a>
-          <a href="/nl/" class="ft-lang">🇳🇱 Nederlands</a>
-          <a href="/at/" class="ft-lang">🇦🇹 Österreich</a>
+          <a href="/fr/" class="ft-lang">FR — Francais</a>
+          <a href="/es/" class="ft-lang">ES — Espanol</a>
+          <a href="/de/" class="ft-lang">DE — Deutsch</a>
+          <a href="/it/" class="ft-lang">IT — Italiano</a>
+          <a href="/nl/" class="ft-lang">NL — Nederlands</a>
+          <a href="/at/" class="ft-lang">AT — Osterreich</a>
         </div>
       </div>
       <div class="ft-col"><h4>Airports</h4><ul>
@@ -836,135 +798,247 @@
       </ul></div>
     </div>
     <div class="ft-bot">
-      <p class="ft-copy">© 2026 AirportHotels.co.uk · Part of the Holiday Extras Group · Registered in England &amp; Wales</p>
+      <p class="ft-copy">&copy; 2026 AirportHotels.co.uk &middot; Part of the Holiday Extras Group &middot; Registered in England and Wales</p>
       <div class="ft-legal">
-        <a href="/privacy/">Privacy</a>
-        <a href="/terms/">Terms</a>
-        <a href="/cookies/">Cookies</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms and Conditions</a>
+        <a href="/cookies/">Cookie Policy</a>
       </div>
     </div>
   </div>
 </footer>
 
-<!-- MOBILE SEARCH DRAWER (shown on mobile via fixed bottom bar) -->
-<div class="mob-search-bar" id="mob-bar">
-  <button class="msb-btn" onclick="openDrawer()">🔍 Search Airport Hotels</button>
+<!-- MOBILE SEARCH BAR (fixed bottom) -->
+<div class="mob-bar" id="mob-bar">
+  <button class="mob-bar-btn" onclick="openDrw()">Search Airport Hotels</button>
 </div>
 
-<div class="mob-drawer" id="mob-drawer" role="dialog" aria-modal="true" aria-label="Search hotels">
-  <div class="mob-drawer-panel">
-    <div class="mob-drawer-handle"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
-      <h3 style="margin-bottom:0">Find your hotel ✈️</h3>
-      <button class="mob-close" onclick="closeDrawer()" aria-label="Close search">✕</button>
+<!-- MOBILE SEARCH DRAWER -->
+<div class="mob-drawer" id="mob-drw" role="dialog" aria-modal="true" aria-label="Search hotels">
+  <div class="mob-dp">
+    <div class="mob-handle"></div>
+    <div class="mob-hdr">
+      <h3>Find your hotel</h3>
+      <button class="mob-close" onclick="closeDrw()" aria-label="Close">&#10005;</button>
     </div>
-    <div class="mob-fields">
-      <div class="mob-field">
-        <label for="m-airport">Airport</label>
-        <select id="m-airport">
-          <option value="">Select your airport...</option>
-          <optgroup label="London">
-            <option value="LHR">London Heathrow (LHR)</option>
-            <option value="LGW">London Gatwick (LGW)</option>
-            <option value="STN">London Stansted (STN)</option>
-            <option value="LTN">London Luton (LTN)</option>
-            <option value="LCY">London City (LCY)</option>
-          </optgroup>
-          <optgroup label="North">
-            <option value="MAN">Manchester (MAN)</option>
-            <option value="LBA">Leeds Bradford (LBA)</option>
-            <option value="NCL">Newcastle (NCL)</option>
-            <option value="LPL">Liverpool (LPL)</option>
-          </optgroup>
-          <optgroup label="Midlands">
-            <option value="BHX">Birmingham (BHX)</option>
-            <option value="EMA">East Midlands (EMA)</option>
-          </optgroup>
-          <optgroup label="Scotland">
-            <option value="EDI">Edinburgh (EDI)</option>
-            <option value="GLA">Glasgow (GLA)</option>
-          </optgroup>
-          <optgroup label="South West">
-            <option value="BRS">Bristol (BRS)</option>
-          </optgroup>
-          <optgroup label="Northern Ireland">
+    <!-- Mobile tabs -->
+    <div class="mob-tabs">
+      <button class="mob-tab active" onclick="switchMobTab('hp',this)">Hotel &amp; Parking</button>
+      <button class="mob-tab" onclick="switchMobTab('ho',this)">Hotel Only</button>
+    </div>
+
+    <!-- Mobile: Hotel + Parking -->
+    <div id="m-panel-hp">
+      <div class="mf">
+        <div><label for="m-airport-hp">Flying from</label>
+          <select id="m-airport-hp">
+            <option value="">Select airport...</option>
+            <option value="ABZ">Aberdeen (ABZ)</option>
+            <option value="BHD">Belfast City (BHD)</option>
             <option value="BFS">Belfast International (BFS)</option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="mob-field">
-        <label for="m-checkin">Check-in date</label>
-        <input type="date" id="m-checkin">
-      </div>
-      <div class="mob-field">
-        <label>Nights</label>
-        <div class="mob-nights">
-          <button class="mob-n-btn" onclick="chgN(-1,'m')" aria-label="Fewer nights">−</button>
-          <span class="mob-n-val" id="m-nights-val">1</span>
-          <button class="mob-n-btn" onclick="chgN(1,'m')" aria-label="More nights">+</button>
+            <option value="BHX">Birmingham (BHX)</option>
+            <option value="BRS">Bristol (BRS)</option>
+            <option value="EMA">East Midlands (EMA)</option>
+            <option value="EDI">Edinburgh (EDI)</option>
+            <option value="LGW">London Gatwick (LGW)</option>
+            <option value="GLA">Glasgow International (GLA)</option>
+            <option value="LHR">London Heathrow (LHR)</option>
+            <option value="LBA">Leeds Bradford (LBA)</option>
+            <option value="LPL">Liverpool (LPL)</option>
+            <option value="LTN">London Luton (LTN)</option>
+            <option value="MAN">Manchester (MAN)</option>
+            <option value="NCL">Newcastle (NCL)</option>
+            <option value="STN">London Stansted (STN)</option>
+          </select>
+        </div>
+        <div><label for="m-room-hp">Room type</label>
+          <select id="m-room-hp">
+            <option value="D20">Double — 2 adults</option>
+            <option value="TW2">Twin — 2 adults</option>
+            <option value="S1">Single — 1 adult</option>
+            <option value="FM2C2">Family — 2 adults, 2 children</option>
+          </select>
+        </div>
+        <div><label for="m-checkin-hp">Hotel check-in</label><input type="date" id="m-checkin-hp"></div>
+        <div><label>Parking nights</label>
+          <div class="mob-nights">
+            <button class="mob-nb" onclick="chgN(-1,'m')" aria-label="Fewer">&#8722;</button>
+            <span class="mob-nv" id="m-nval">8</span>
+            <button class="mob-nb" onclick="chgN(1,'m')" aria-label="More">+</button>
+          </div>
         </div>
       </div>
+      <button class="mob-submit" onclick="doSearch('m','hp')">Search Hotels with Parking</button>
     </div>
-    <button class="mob-search-submit" onclick="doSearch('m')">🔍 Search Hotels</button>
-    <p style="text-align:center;margin-top:.875rem;font-size:.78rem;color:var(--txt-l)">✓ Best price guarantee · Free cancellation on most hotels</p>
+
+    <!-- Mobile: Hotel Only -->
+    <div id="m-panel-ho" style="display:none">
+      <div class="mf">
+        <div><label for="m-airport-ho">Flying from</label>
+          <select id="m-airport-ho">
+            <option value="">Select airport...</option>
+            <option value="LHR">London Heathrow (LHR)</option>
+            <option value="LGW">London Gatwick (LGW)</option>
+            <option value="MAN">Manchester (MAN)</option>
+            <option value="STN">London Stansted (STN)</option>
+            <option value="EDI">Edinburgh (EDI)</option>
+            <option value="BHX">Birmingham (BHX)</option>
+            <option value="BRS">Bristol (BRS)</option>
+            <option value="LTN">London Luton (LTN)</option>
+          </select>
+        </div>
+        <div><label for="m-room-ho">Room type</label>
+          <select id="m-room-ho">
+            <option value="D20">Double — 2 adults</option>
+            <option value="TW2">Twin — 2 adults</option>
+            <option value="S1">Single — 1 adult</option>
+            <option value="FM2C2">Family — 2 adults, 2 children</option>
+          </select>
+        </div>
+        <div><label for="m-checkin-ho">Check-in date</label><input type="date" id="m-checkin-ho"></div>
+        <div><label for="m-checkout-ho">Check-out date</label><input type="date" id="m-checkout-ho"></div>
+      </div>
+      <button class="mob-submit" onclick="doSearch('m','ho')">Search Hotels</button>
+    </div>
+
+    <p style="text-align:center;margin-top:.875rem;font-size:.75rem;color:var(--txt-l)">Best price guarantee &middot; Free cancellation on most hotels</p>
   </div>
 </div>
 
-<!-- MINIMAL JS — defer all non-critical -->
+<!-- MINIMAL JS -->
 <script>
-  var nights = {d:1, m:1};
+  var pkgNights = {d:8, m:8};
+  var activeTab = {d:'hp', m:'hp'};
 
+  // Nights counter
   function chgN(d, p) {
-    nights[p] = Math.max(1, Math.min(30, nights[p] + d));
-    document.getElementById(p + '-nights-val').textContent = nights[p];
-    if (p === 'd') syncCheckout();
+    pkgNights[p] = Math.max(1, Math.min(30, pkgNights[p] + d));
+    document.getElementById(p + '-nval').textContent = pkgNights[p];
+    if (p === 'd') syncCollect();
   }
 
-  function syncCheckout() {
-    var ci = document.getElementById('d-checkin').value;
+  // Sync collect date from check-in + nights
+  function syncCollect() {
+    var ci = document.getElementById('d-checkin-hp').value;
     if (!ci) return;
     var dt = new Date(ci);
-    dt.setDate(dt.getDate() + nights.d);
-    document.getElementById('d-checkout').value = dt.toISOString().split('T')[0];
+    dt.setDate(dt.getDate() + pkgNights.d);
+    document.getElementById('d-collect-hp').value = dt.toISOString().split('T')[0];
   }
 
-  document.getElementById('d-checkin').addEventListener('change', syncCheckout);
+  // Sync hotel-only checkout
+  function syncCheckout() {
+    var ci = document.getElementById('d-checkin-ho').value;
+    if (!ci) return;
+    var dt = new Date(ci);
+    dt.setDate(dt.getDate() + 1);
+    document.getElementById('d-checkout-ho').value = dt.toISOString().split('T')[0];
+  }
 
-  // Set tomorrow as default
+  document.getElementById('d-checkin-hp').addEventListener('change', syncCollect);
+  document.getElementById('d-checkin-ho').addEventListener('change', syncCheckout);
+
+  // Set defaults
   var tmrw = new Date(); tmrw.setDate(tmrw.getDate() + 1);
-  var tmrwStr = tmrw.toISOString().split('T')[0];
-  document.getElementById('d-checkin').value = tmrwStr;
-  document.getElementById('m-checkin').value = tmrwStr;
-  syncCheckout();
+  var ts = tmrw.toISOString().split('T')[0];
+  ['d-checkin-hp','d-checkin-ho','m-checkin-hp','m-checkin-ho','m-checkout-ho'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = ts;
+  });
+  syncCollect(); syncCheckout();
 
-  function doSearch(p) {
-    var ap = document.getElementById(p === 'd' ? 'd-airport' : 'm-airport').value;
-    var ci = document.getElementById(p === 'd' ? 'd-checkin' : 'm-checkin').value;
-    if (!ap) { alert('Please select an airport first'); return; }
-    window.location.href = '/search/?airport=' + encodeURIComponent(ap) + '&checkin=' + ci + '&nights=' + nights[p];
+  // Desktop tab switch
+  function switchTab(panel, btn) {
+    document.querySelectorAll('.sw-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.sw-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('panel-' + panel).classList.add('active');
+    btn.classList.add('active');
+    activeTab.d = (panel === 'hotel-parking') ? 'hp' : 'ho';
   }
 
-  function openDrawer() {
-    var d = document.getElementById('mob-drawer');
-    d.classList.add('open');
+  // Mobile tab switch
+  function switchMobTab(tab, btn) {
+    document.querySelectorAll('.mob-tab').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('m-panel-hp').style.display = tab === 'hp' ? 'block' : 'none';
+    document.getElementById('m-panel-ho').style.display = tab === 'ho' ? 'block' : 'none';
+    activeTab.m = tab;
+  }
+
+  // Build HX search URL and navigate
+  function doSearch(prefix, tab) {
+    var airport = document.getElementById(prefix + '-airport-' + tab).value;
+    if (!airport) { alert('Please select an airport first.'); return; }
+    var room = document.getElementById(prefix + '-room-' + tab).value || 'D20';
+    var url;
+
+    if (tab === 'hp') {
+      // Hotel + Parking
+      var checkin = document.getElementById(prefix + '-checkin-hp').value;
+      var collect = prefix === 'd'
+        ? document.getElementById('d-collect-hp').value
+        : (function() {
+            var dt = new Date(document.getElementById('m-checkin-hp').value || ts);
+            dt.setDate(dt.getDate() + pkgNights[prefix]);
+            return dt.toISOString().split('T')[0];
+          })();
+      url = 'https://www.holidayextras.com/static/?selectProduct=hcp&#/hotel_with_parking'
+        + '?agent=WEB1&ppts=0&lang=en'
+        + '&depart=' + encodeURIComponent(airport)
+        + '&flight=default'
+        + '&in=' + checkin
+        + '&out=' + collect
+        + '&stay=' + checkin
+        + '&room_1=' + room;
+    } else {
+      // Hotel Only
+      var cin = document.getElementById(prefix + '-checkin-ho').value;
+      var cout = prefix === 'd'
+        ? document.getElementById('d-checkout-ho').value
+        : (function() {
+            var dt = new Date(cin);
+            dt.setDate(dt.getDate() + 1);
+            return dt.toISOString().split('T')[0];
+          })();
+      url = 'https://www.holidayextras.com/static/?selectProduct=hotel&#/hotels'
+        + '?agent=WEB1&ppts=0&lang=en'
+        + '&depart=' + encodeURIComponent(airport)
+        + '&flight=default'
+        + '&in=' + cin
+        + '&out=' + cout
+        + '&stay=' + cin
+        + '&room_1=' + room;
+    }
+    window.location.href = url;
+  }
+
+  // Drawer
+  function openDrw() {
+    document.getElementById('mob-drw').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
-  function closeDrawer() {
-    document.getElementById('mob-drawer').classList.remove('open');
+  function closeDrw() {
+    document.getElementById('mob-drw').classList.remove('open');
     document.body.style.overflow = '';
   }
-
-  // Close drawer on overlay click
-  document.getElementById('mob-drawer').addEventListener('click', function(e) {
-    if (e.target === this) closeDrawer();
+  document.getElementById('mob-drw').addEventListener('click', function(e) {
+    if (e.target === this) closeDrw();
   });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDrw(); });
 
-  // Close on Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeDrawer();
-  });
+  // FAQ
+  function tfaq(btn) {
+    var item = btn.parentElement;
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.fq.open').forEach(function(i) { i.classList.remove('open'); });
+    if (!isOpen) item.classList.add('open');
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  // Subtle nav shadow on scroll
+  window.addEventListener('scroll', function() {
+    document.querySelector('.nav').style.boxShadow = window.scrollY > 8 ? '0 4px 20px rgba(0,0,0,.3)' : 'none';
+  }, {passive:true});
 </script>
-
 </body>
 </html>
