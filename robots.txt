@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /
-
-# This is an internal SEO tools site - not for public indexing
