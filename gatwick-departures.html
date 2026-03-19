@@ -1,48 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gatwick Live Departures &amp; Arrivals</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gatwick Live Departures & Arrivals | HXStevo</title>
+  <meta name="description" content="Live Gatwick Airport (LGW) departures and arrivals board. Check flight times, status, and airline information." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --purple: #542E91;
-      --purple-dark: #3d1f6d;
-      --purple-light: #F8F6FC;
+      --purple: #6B21A8;
+      --purple-light: #7C3AED;
+      --purple-dark: #4C1D95;
       --yellow: #FBBF24;
-      --yellow-dark: #D97706;
-      --bg: #F8F7FF;
+      --yellow-light: #FDE68A;
       --white: #FFFFFF;
-      --text: #1E1B4B;
-      --text-muted: #6B7280;
-      --border: #E5E7EB;
-      --shadow: 0 4px 6px -1px rgba(124,58,237,0.08), 0 2px 4px -2px rgba(124,58,237,0.05);
-      --shadow-md: 0 10px 15px -3px rgba(124,58,237,0.10), 0 4px 6px -4px rgba(124,58,237,0.07);
-      --radius: 12px;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --green: #059669;
+      --green-bg: #D1FAE5;
+      --red: #DC2626;
+      --red-bg: #FEE2E2;
+      --orange: #D97706;
+      --orange-bg: #FEF3C7;
+      --blue: #2563EB;
+      --blue-bg: #DBEAFE;
     }
 
     body {
-      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
     }
 
     /* ── NAV ── */
     nav {
-      background: var(--purple);
+      background: var(--purple-dark);
       padding: 0 1.5rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-    nav .nav-inner {
+    .nav-inner {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
@@ -50,37 +55,47 @@
       justify-content: space-between;
       height: 60px;
     }
-    nav .brand {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--white);
+    .nav-brand {
+      color: var(--yellow);
+      font-weight: 800;
+      font-size: 1.3rem;
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      letter-spacing: -0.5px;
     }
-    nav .brand span { color: var(--yellow); }
-    nav ul {
-      list-style: none;
+    .nav-brand span { color: var(--white); }
+    .nav-links {
       display: flex;
       gap: 0.25rem;
+      list-style: none;
     }
-    nav ul a {
+    .nav-links a {
       color: rgba(255,255,255,0.85);
       text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 0.4rem 0.75rem;
+      padding: 0.45rem 0.9rem;
       border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
       transition: background 0.2s, color 0.2s;
     }
-    nav ul a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(251,191,36,0.18);
+      color: var(--yellow);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 60%, var(--purple) 100%);
-      color: white;
-      padding: 3rem 1.5rem 2.5rem;
+      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 50%, var(--purple-light) 100%);
+      color: var(--white);
+      padding: 3.5rem 1.5rem 3rem;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -88,277 +103,279 @@
     .hero::before {
       content: '';
       position: absolute;
-      top: -60px; right: -80px;
-      width: 300px; height: 300px;
-      background: rgba(251,191,36,0.12);
-      border-radius: 50%;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -60px;
-      width: 250px; height: 250px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 50%;
+    .hero-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
     }
-    .hero-content { position: relative; z-index: 1; }
     .hero h1 {
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.5px;
     }
-    .hero h1 .accent { color: var(--yellow); }
-    .hero p {
-      font-size: 0.95rem;
-      opacity: 0.85;
-      margin-bottom: 1rem;
+    .hero h1 span { color: var(--yellow); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 500px;
+      margin: 0 auto 1.25rem;
     }
-    .hero .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(251,191,36,0.2);
-      border: 1px solid rgba(251,191,36,0.4);
-      color: var(--yellow);
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .hero-badges {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
-    .hero .live-badge::before {
-      content: '';
-      width: 7px; height: 7px;
+    .hero-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white);
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    /* ── TIMESTAMP BAR ── */
+    .timestamp-bar {
       background: var(--yellow);
-      border-radius: 50%;
-      animation: pulse 1.5s ease-in-out infinite;
+      color: var(--purple-dark);
+      text-align: center;
+      padding: 0.55rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
+    .timestamp-bar .note {
+      font-weight: 400;
+      font-size: 0.82rem;
+      margin-left: 0.75rem;
+      color: rgba(76,29,149,0.75);
     }
 
     /* ── MAIN CONTAINER ── */
-    main {
+    .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1.5rem;
-      flex: 1;
-      width: 100%;
+      padding: 2rem 1.5rem 4rem;
     }
 
-    /* ── CONTROLS ── */
-    .controls {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: center;
-    }
-    .tab-group {
-      display: flex;
-      background: var(--purple-light);
+    /* ── DATA NOTE ── */
+    .data-note {
+      background: var(--blue-bg);
+      border: 1px solid #93C5FD;
+      border-left: 4px solid var(--blue);
       border-radius: 8px;
-      padding: 3px;
-      gap: 0;
-    }
-    .tab-btn {
-      padding: 0.55rem 1.4rem;
-      border: none;
-      background: transparent;
-      border-radius: 6px;
-      font-family: inherit;
+      padding: 0.85rem 1.2rem;
+      margin-bottom: 2rem;
       font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--purple);
-      cursor: pointer;
-      transition: all 0.2s;
+      color: #1E40AF;
       display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .tab-btn.active {
-      background: var(--purple);
-      color: white;
-      box-shadow: 0 2px 8px rgba(124,58,237,0.3);
-    }
-    .tab-btn:hover:not(.active) { background: rgba(124,58,237,0.1); }
-
-    .search-wrap {
-      flex: 1;
-      min-width: 200px;
-      position: relative;
-    }
-    .search-wrap svg {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      pointer-events: none;
-    }
-    .search-input {
-      width: 100%;
-      padding: 0.6rem 0.75rem 0.6rem 2.5rem;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.88rem;
-      color: var(--text);
-      background: var(--bg);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-    }
-    .search-input:focus {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
-    }
-    .search-input::placeholder { color: var(--text-muted); }
-
-    .result-count {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-    .result-count strong { color: var(--purple); }
-
-    /* ── TABLE CARD ── */
-    .table-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-    }
-    .table-card[hidden] { display: none; }
-
-    .table-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 0.6rem;
     }
-    .table-header h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
+    .data-note-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05rem; }
+
+    /* ── SEARCH BAR ── */
+    .search-wrap {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
     }
-    .table-header .icon {
-      width: 32px; height: 32px;
-      background: var(--purple-light);
-      border-radius: 8px;
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 1rem;
+      background: var(--white);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 0.85rem center;
+      transition: border-color 0.2s;
+    }
+    .search-box:focus {
+      outline: none;
+      border-color: var(--purple-light);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+    }
+    .filter-select {
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: var(--white);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--purple-light);
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 3px solid var(--purple);
+    }
+    .section-icon {
+      background: var(--purple);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      flex-shrink: 0;
     }
-    .source-tag {
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    .flight-count {
       margin-left: auto;
-      font-size: 0.72rem;
-      font-weight: 500;
-      background: #DCFCE7;
-      color: #166534;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
+      background: var(--purple);
+      color: var(--white);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
 
-    .table-wrap { overflow-x: auto; }
+    /* ── TABLES ── */
+    .table-wrap {
+      background: var(--white);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+      margin-bottom: 3rem;
+      overflow-x: auto;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.875rem;
+      min-width: 600px;
     }
-    thead tr {
-      background: var(--bg);
-      border-bottom: 1.5px solid var(--border);
+    thead {
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
     }
-    th {
-      padding: 0.85rem 1.25rem;
+    thead th {
+      color: var(--white);
       text-align: left;
+      padding: 1rem 1.1rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      font-size: 0.75rem;
-      text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--text-muted);
+      text-transform: uppercase;
       white-space: nowrap;
     }
+    thead th:first-child { border-radius: 0; }
+    tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F5F3FF; }
+    tbody tr.hidden-row { display: none; }
     td {
-      padding: 0.9rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.92rem;
+      vertical-align: middle;
     }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: rgba(124,58,237,0.03); }
-
-    .flight-num {
+    .flight-no {
       font-weight: 700;
-      font-size: 0.88rem;
       color: var(--purple);
       font-family: 'Courier New', monospace;
-      letter-spacing: 0.03em;
-    }
-    .destination {
-      font-weight: 500;
-      color: var(--text);
-    }
-    .airline-name {
-      color: var(--text-muted);
-      font-size: 0.82rem;
-    }
-    .sched-time {
-      font-variant-numeric: tabular-nums;
-      font-weight: 500;
-    }
-
-    /* ── STATUS BADGES ── */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.3rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: 0.95rem;
       white-space: nowrap;
     }
-    .badge::before {
-      content: '';
-      width: 6px; height: 6px;
+    .airline-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .airline-dot {
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      background: currentColor;
+      flex-shrink: 0;
     }
-    .badge-green  { background: #DCFCE7; color: #166534; }
-    .badge-orange { background: #FEF3C7; color: #92400E; }
-    .badge-blue   { background: #DBEAFE; color: #1E40AF; }
-    .badge-purple { background: var(--purple-light); color: var(--purple-dark); }
-    .badge-red    { background: #FEE2E2; color: #991B1B; }
+    .dest-name { font-weight: 600; color: var(--gray-900); }
+    .dest-iata {
+      font-size: 0.78rem;
+      color: var(--gray-600);
+      font-family: monospace;
+    }
+    .time-cell { font-weight: 600; white-space: nowrap; }
+    .gate-cell {
+      font-weight: 700;
+      color: var(--purple);
+      background: var(--gray-100);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      display: inline-block;
+      font-size: 0.88rem;
+    }
 
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      padding: 3rem 1.5rem;
-      text-align: center;
-      color: var(--text-muted);
+    /* STATUS BADGES */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
     }
-    .empty-state .emoji { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
-    .empty-state p { font-size: 0.9rem; }
+    .status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-ontime    { background: var(--green-bg);  color: #065F46; }
+    .status-ontime::before { background: var(--green); }
+    .status-delayed   { background: var(--red-bg);    color: #991B1B; }
+    .status-delayed::before { background: var(--red); }
+    .status-departed  { background: var(--blue-bg);   color: #1E40AF; }
+    .status-departed::before { background: var(--blue); }
+    .status-landed    { background: var(--green-bg);  color: #065F46; }
+    .status-landed::before { background: var(--green); }
+    .status-boarding  { background: var(--orange-bg); color: #92400E; }
+    .status-boarding::before { background: var(--orange); }
+    .status-cancelled { background: #F3F4F6; color: #6B7280; }
+    .status-cancelled::before { background: #9CA3AF; }
+
+    /* ── NO RESULTS ── */
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: var(--gray-600);
+      display: none;
+    }
+    .no-results-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--text);
+      background: var(--purple-dark);
       color: rgba(255,255,255,0.7);
       text-align: center;
       padding: 2rem 1.5rem;
-      font-size: 0.82rem;
-      margin-top: auto;
+      font-size: 0.85rem;
     }
     footer a { color: var(--yellow); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
     footer .footer-links {
       display: flex;
       justify-content: center;
@@ -366,557 +383,484 @@
       margin-bottom: 0.75rem;
       flex-wrap: wrap;
     }
-    footer p { opacity: 0.6; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      nav ul { gap: 0; }
-      nav ul a { padding: 0.35rem 0.5rem; font-size: 0.78rem; }
-      .hero { padding: 2rem 1rem 1.75rem; }
-      main { padding: 1.25rem 1rem; }
-      .controls { flex-direction: column; align-items: stretch; }
-      .tab-group { width: 100%; }
-      .tab-btn { flex: 1; justify-content: center; }
-      th, td { padding: 0.75rem 0.9rem; }
-      th:nth-child(3), td:nth-child(3) { display: none; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--purple-dark); padding: 0.5rem; }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: block; }
+      .nav-inner { position: relative; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .search-wrap { flex-direction: column; }
+      .filter-select { width: 100%; }
+      td, th { padding: 0.7rem 0.75rem; }
+      .section-title { font-size: 1.2rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
+<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="/" class="brand"><img src="https://d17s4kc6349e5h.cloudfront.net/holidayextras/assets/images/logos/HolidayExtras-logo-horizontal-transparent.svg" alt="Holiday Extras" style="height:28px;width:auto;" /></a>
-    <ul>
+    <a class="nav-brand" href="/">HX<span>Stevo</span></a>
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/gatwick-parking.html">Parking</a></li>
       <li><a href="/gatwick-hotels.html">Hotels</a></li>
+      <li><a href="/gatwick-departures.html" class="active">Flights</a></li>
     </ul>
   </div>
 </nav>
 
-<!-- ── HERO ── -->
-<div class="hero">
-  <div class="hero-content">
-    <h1>Gatwick <span class="accent">Live Flights</span></h1>
-    <p>Real-time departures &amp; arrivals for London Gatwick Airport (LGW / EGKK)</p>
-    <span class="live-badge">Live Data &mdash; Updated 16 Mar 2026, 14:26 UTC</span>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-icon">✈️</div>
+  <h1>Gatwick <span>Live</span> Departures &amp; Arrivals</h1>
+  <p class="hero-sub">Real-time flight information for London Gatwick Airport (LGW / EGKK)</p>
+  <div class="hero-badges">
+    <span class="hero-badge">🏢 North &amp; South Terminal</span>
+    <span class="hero-badge">🕐 Updated Daily</span>
+    <span class="hero-badge">🌍 200+ Destinations</span>
   </div>
+</section>
+
+<!-- TIMESTAMP BAR -->
+<div class="timestamp-bar">
+  🕐 Last updated: <strong>Thursday, 19 March 2026 — 07:01 GMT</strong>
+  <span class="note">Data refreshes daily · Times shown in local (GMT)</span>
 </div>
 
-<!-- ── MAIN ── -->
-<main>
-  <!-- Controls -->
-  <div class="controls">
-    <div class="tab-group" role="tablist">
-      <button class="tab-btn active" id="tab-dep" role="tab" aria-selected="true" aria-controls="panel-dep" onclick="switchTab('dep')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><polyline points="12 17 12 21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
-        Departures
-      </button>
-      <button class="tab-btn" id="tab-arr" role="tab" aria-selected="false" aria-controls="panel-arr" onclick="switchTab('arr')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Arrivals
-      </button>
-    </div>
+<!-- MAIN CONTENT -->
+<div class="container">
 
-    <div class="search-wrap">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      <input type="search" class="search-input" id="searchInput" placeholder="Search flight or destination..." oninput="filterFlights()" />
-    </div>
-
-    <span class="result-count" id="resultCount"><strong>20</strong> flights shown</span>
-  </div>
-
-  <!-- ── DEPARTURES TABLE ── -->
-  <div class="table-card" id="panel-dep" role="tabpanel">
-    <div class="table-header">
-      <div class="icon"><img src="https://dmy0b9oeprz0f.cloudfront.net/holidayextras.co.uk/brand-guidelines/product-icons/flextras.svg" alt="" style="width:32px;height:32px;" /></div>
-      <h2>Departures from Gatwick</h2>
-      <span class="source-tag">Live via OpenSky</span>
-    </div>
-    <div class="table-wrap">
-      <table id="depTable">
-        <thead>
-          <tr>
-            <th>Flight</th>
-            <th>Destination</th>
-            <th>Airline</th>
-            <th>Scheduled</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="depBody">
-          <tr data-flight="EFW69H" data-dest="Malaga" data-airline="easyJet">
-            <td><span class="flight-num">EFW69H</span></td>
-            <td class="destination">Malaga</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:26</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="UBT78G" data-dest="Antalya" data-airline="Corendon Airlines">
-            <td><span class="flight-num">UBT78G</span></td>
-            <td class="destination">Antalya</td>
-            <td class="airline-name">Corendon Airlines</td>
-            <td class="sched-time">14:24</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="VLG33XN" data-dest="Barcelona" data-airline="Vueling">
-            <td><span class="flight-num">VLG33XN</span></td>
-            <td class="destination">Barcelona</td>
-            <td class="airline-name">Vueling</td>
-            <td class="sched-time">14:22</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="EZY39EM" data-dest="Malaga" data-airline="easyJet">
-            <td><span class="flight-num">EZY39EM</span></td>
-            <td class="destination">Malaga</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:21</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="RYR8762" data-dest="Dublin" data-airline="Ryanair">
-            <td><span class="flight-num">RYR8762</span></td>
-            <td class="destination">Dublin</td>
-            <td class="airline-name">Ryanair</td>
-            <td class="sched-time">14:20</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="EZY47HQ" data-dest="Barcelona" data-airline="easyJet">
-            <td><span class="flight-num">EZY47HQ</span></td>
-            <td class="destination">Barcelona</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:15</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="NSZ3MC" data-dest="Tenerife" data-airline="Smartlynx">
-            <td><span class="flight-num">NSZ3MC</span></td>
-            <td class="destination">Tenerife</td>
-            <td class="airline-name">Smartlynx</td>
-            <td class="sched-time">14:14</td>
-            <td><span class="badge badge-blue">Departing</span></td>
-          </tr>
-          <tr data-flight="EZY39UA" data-dest="Alicante" data-airline="easyJet">
-            <td><span class="flight-num">EZY39UA</span></td>
-            <td class="destination">Alicante</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:11</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY59ZN" data-dest="Palma" data-airline="easyJet">
-            <td><span class="flight-num">EZY59ZN</span></td>
-            <td class="destination">Palma de Mallorca</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:10</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY15NU" data-dest="Amsterdam" data-airline="easyJet">
-            <td><span class="flight-num">EZY15NU</span></td>
-            <td class="destination">Amsterdam</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:08</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="WUK7ZY" data-dest="Sofia" data-airline="Wizz Air UK">
-            <td><span class="flight-num">WUK7ZY</span></td>
-            <td class="destination">Sofia</td>
-            <td class="airline-name">Wizz Air UK</td>
-            <td class="sched-time">14:04</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY92KZ" data-dest="Paris CDG" data-airline="easyJet">
-            <td><span class="flight-num">EZY92KZ</span></td>
-            <td class="destination">Paris CDG</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:03</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY91PQ" data-dest="Tenerife" data-airline="easyJet">
-            <td><span class="flight-num">EZY91PQ</span></td>
-            <td class="destination">Tenerife</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:58</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EFW4LY" data-dest="Barcelona" data-airline="easyJet">
-            <td><span class="flight-num">EFW4LY</span></td>
-            <td class="destination">Barcelona</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:56</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY6403" data-dest="Ibiza" data-airline="easyJet">
-            <td><span class="flight-num">EZY6403</span></td>
-            <td class="destination">Ibiza</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:48</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY64TV" data-dest="Faro" data-airline="easyJet">
-            <td><span class="flight-num">EZY64TV</span></td>
-            <td class="destination">Faro</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:45</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="RYR78WP" data-dest="Madrid" data-airline="Ryanair">
-            <td><span class="flight-num">RYR78WP</span></td>
-            <td class="destination">Madrid</td>
-            <td class="airline-name">Ryanair</td>
-            <td class="sched-time">13:42</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY91CA" data-dest="Rome" data-airline="easyJet">
-            <td><span class="flight-num">EZY91CA</span></td>
-            <td class="destination">Rome Fiumicino</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:39</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EFW9ED" data-dest="Alicante" data-airline="easyJet">
-            <td><span class="flight-num">EFW9ED</span></td>
-            <td class="destination">Alicante</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:36</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EZY259P" data-dest="Lanzarote" data-airline="easyJet">
-            <td><span class="flight-num">EZY259P</span></td>
-            <td class="destination">Lanzarote</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:34</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="BAW23K" data-dest="New York JFK" data-airline="British Airways">
-            <td><span class="flight-num">BAW23K</span></td>
-            <td class="destination">New York JFK</td>
-            <td class="airline-name">British Airways</td>
-            <td class="sched-time">13:26</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="TOM1FN" data-dest="Cancun" data-airline="TUI Airways">
-            <td><span class="flight-num">TOM1FN</span></td>
-            <td class="destination">Cancun</td>
-            <td class="airline-name">TUI Airways</td>
-            <td class="sched-time">12:54</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="ICE19A" data-dest="Reykjavik" data-airline="Icelandair">
-            <td><span class="flight-num">ICE19A</span></td>
-            <td class="destination">Reykjavik</td>
-            <td class="airline-name">Icelandair</td>
-            <td class="sched-time">12:40</td>
-            <td><span class="badge badge-orange">Delayed</span></td>
-          </tr>
-          <tr data-flight="AHY108" data-dest="Baku" data-airline="Azerbaijan Airlines">
-            <td><span class="flight-num">AHY108</span></td>
-            <td class="destination">Baku</td>
-            <td class="airline-name">Azerbaijan Airlines</td>
-            <td class="sched-time">12:07</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="EJU62EA" data-dest="Nice" data-airline="easyJet Europe">
-            <td><span class="flight-num">EJU62EA</span></td>
-            <td class="destination">Nice Côte d'Azur</td>
-            <td class="airline-name">easyJet Europe</td>
-            <td class="sched-time">11:51</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-          <tr data-flight="VLG5QR" data-dest="Bilbao" data-airline="Vueling">
-            <td><span class="flight-num">VLG5QR</span></td>
-            <td class="destination">Bilbao</td>
-            <td class="airline-name">Vueling</td>
-            <td class="sched-time">11:27</td>
-            <td><span class="badge badge-purple">Departed</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="empty-state" id="depEmpty" style="display:none">
-        <span class="emoji"></span>
-        <p>No departures match your search.</p>
-      </div>
+  <!-- DATA NOTE -->
+  <div class="data-note">
+    <span class="data-note-icon">ℹ️</span>
+    <div>
+      <strong>Illustrative flight data:</strong> Live API feeds were unavailable at the time of this update. The flights shown below are realistic examples typical for Gatwick Airport and are provided for layout demonstration purposes. For real-time flight status, please check the <a href="https://www.gatwickairport.com/flight-information/live-arrivals-departures/" style="color:#1D4ED8;font-weight:600;" target="_blank" rel="noopener">official Gatwick Airport website</a>.
     </div>
   </div>
 
-  <!-- ── ARRIVALS TABLE ── -->
-  <div class="table-card" id="panel-arr" role="tabpanel" hidden>
-    <div class="table-header">
-      <div class="icon">🛬</div>
-      <h2>Arrivals at Gatwick</h2>
-      <span class="source-tag">Scheduled + Live</span>
-    </div>
-    <div class="table-wrap">
-      <table id="arrTable">
-        <thead>
-          <tr>
-            <th>Flight</th>
-            <th>Origin</th>
-            <th>Airline</th>
-            <th>Scheduled</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="arrBody">
-          <tr data-flight="EZY6840" data-dest="Malaga" data-airline="easyJet">
-            <td><span class="flight-num">EZY6840</span></td>
-            <td class="destination">Malaga</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">14:30</td>
-            <td><span class="badge badge-blue">In Air</span></td>
-          </tr>
-          <tr data-flight="BAW2551" data-dest="Dubai" data-airline="British Airways">
-            <td><span class="flight-num">BAW2551</span></td>
-            <td class="destination">Dubai</td>
-            <td class="airline-name">British Airways</td>
-            <td class="sched-time">14:15</td>
-            <td><span class="badge badge-blue">In Air</span></td>
-          </tr>
-          <tr data-flight="TOM82C" data-dest="Tenerife" data-airline="TUI Airways">
-            <td><span class="flight-num">TOM82C</span></td>
-            <td class="destination">Tenerife South</td>
-            <td class="airline-name">TUI Airways</td>
-            <td class="sched-time">14:05</td>
-            <td><span class="badge badge-blue">In Air</span></td>
-          </tr>
-          <tr data-flight="RYR7812" data-dest="Dublin" data-airline="Ryanair">
-            <td><span class="flight-num">RYR7812</span></td>
-            <td class="destination">Dublin</td>
-            <td class="airline-name">Ryanair</td>
-            <td class="sched-time">13:55</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="EZY8901" data-dest="Barcelona" data-airline="easyJet">
-            <td><span class="flight-num">EZY8901</span></td>
-            <td class="destination">Barcelona</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:45</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="VLG4102" data-dest="Palma" data-airline="Vueling">
-            <td><span class="flight-num">VLG4102</span></td>
-            <td class="destination">Palma de Mallorca</td>
-            <td class="airline-name">Vueling</td>
-            <td class="sched-time">13:35</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="WUK301" data-dest="Budapest" data-airline="Wizz Air UK">
-            <td><span class="flight-num">WUK301</span></td>
-            <td class="destination">Budapest</td>
-            <td class="airline-name">Wizz Air UK</td>
-            <td class="sched-time">13:20</td>
-            <td><span class="badge badge-orange">Delayed</span></td>
-          </tr>
-          <tr data-flight="EZY3406" data-dest="Alicante" data-airline="easyJet">
-            <td><span class="flight-num">EZY3406</span></td>
-            <td class="destination">Alicante</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">13:10</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="BAW115" data-dest="New York JFK" data-airline="British Airways">
-            <td><span class="flight-num">BAW115</span></td>
-            <td class="destination">New York JFK</td>
-            <td class="airline-name">British Airways</td>
-            <td class="sched-time">13:00</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="EZY1204" data-dest="Faro" data-airline="easyJet">
-            <td><span class="flight-num">EZY1204</span></td>
-            <td class="destination">Faro</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">12:50</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="TOM490" data-dest="Lanzarote" data-airline="TUI Airways">
-            <td><span class="flight-num">TOM490</span></td>
-            <td class="destination">Lanzarote</td>
-            <td class="airline-name">TUI Airways</td>
-            <td class="sched-time">12:40</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="RYR3241" data-dest="Madrid" data-airline="Ryanair">
-            <td><span class="flight-num">RYR3241</span></td>
-            <td class="destination">Madrid</td>
-            <td class="airline-name">Ryanair</td>
-            <td class="sched-time">12:25</td>
-            <td><span class="badge badge-orange">Delayed</span></td>
-          </tr>
-          <tr data-flight="EZY7712" data-dest="Amsterdam" data-airline="easyJet">
-            <td><span class="flight-num">EZY7712</span></td>
-            <td class="destination">Amsterdam</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">12:15</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="ICE451" data-dest="Reykjavik" data-airline="Icelandair">
-            <td><span class="flight-num">ICE451</span></td>
-            <td class="destination">Reykjavik</td>
-            <td class="airline-name">Icelandair</td>
-            <td class="sched-time">12:05</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="NSZ812" data-dest="Gran Canaria" data-airline="Smartlynx">
-            <td><span class="flight-num">NSZ812</span></td>
-            <td class="destination">Gran Canaria</td>
-            <td class="airline-name">Smartlynx</td>
-            <td class="sched-time">11:55</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="EZY2109" data-dest="Ibiza" data-airline="easyJet">
-            <td><span class="flight-num">EZY2109</span></td>
-            <td class="destination">Ibiza</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">11:40</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="BAW691" data-dest="Los Angeles" data-airline="British Airways">
-            <td><span class="flight-num">BAW691</span></td>
-            <td class="destination">Los Angeles</td>
-            <td class="airline-name">British Airways</td>
-            <td class="sched-time">11:25</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="VLG8823" data-dest="Seville" data-airline="Vueling">
-            <td><span class="flight-num">VLG8823</span></td>
-            <td class="destination">Seville</td>
-            <td class="airline-name">Vueling</td>
-            <td class="sched-time">11:10</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="TOM663" data-dest="Corfu" data-airline="TUI Airways">
-            <td><span class="flight-num">TOM663</span></td>
-            <td class="destination">Corfu</td>
-            <td class="airline-name">TUI Airways</td>
-            <td class="sched-time">10:55</td>
-            <td><span class="badge badge-orange">Delayed</span></td>
-          </tr>
-          <tr data-flight="EZY5530" data-dest="Rome" data-airline="easyJet">
-            <td><span class="flight-num">EZY5530</span></td>
-            <td class="destination">Rome Fiumicino</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">10:40</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="AHY109" data-dest="Baku" data-airline="Azerbaijan Airlines">
-            <td><span class="flight-num">AHY109</span></td>
-            <td class="destination">Baku</td>
-            <td class="airline-name">Azerbaijan Airlines</td>
-            <td class="sched-time">10:20</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="KMM117" data-dest="Almaty" data-airline="Air Astana">
-            <td><span class="flight-num">KMM117</span></td>
-            <td class="destination">Almaty</td>
-            <td class="airline-name">Air Astana</td>
-            <td class="sched-time">09:55</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="EZY4417" data-dest="Paris CDG" data-airline="easyJet">
-            <td><span class="flight-num">EZY4417</span></td>
-            <td class="destination">Paris CDG</td>
-            <td class="airline-name">easyJet</td>
-            <td class="sched-time">09:30</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="RYR9034" data-dest="Warsaw" data-airline="Ryanair">
-            <td><span class="flight-num">RYR9034</span></td>
-            <td class="destination">Warsaw Modlin</td>
-            <td class="airline-name">Ryanair</td>
-            <td class="sched-time">09:10</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-          <tr data-flight="BAW6281" data-dest="Cape Town" data-airline="British Airways">
-            <td><span class="flight-num">BAW6281</span></td>
-            <td class="destination">Cape Town</td>
-            <td class="airline-name">British Airways</td>
-            <td class="sched-time">08:45</td>
-            <td><span class="badge badge-green">Landed</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="empty-state" id="arrEmpty" style="display:none">
-        <span class="emoji"></span>
-        <p>No arrivals match your search.</p>
-      </div>
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input class="search-box" type="search" id="searchInput" placeholder="Search by destination, flight number or airline…" oninput="filterFlights()" />
+    <select class="filter-select" id="statusFilter" onchange="filterFlights()">
+      <option value="">All Statuses</option>
+      <option value="On Time">On Time</option>
+      <option value="Boarding">Boarding</option>
+      <option value="Departed">Departed</option>
+      <option value="Delayed">Delayed</option>
+      <option value="Landed">Landed</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+  </div>
+
+  <!-- DEPARTURES -->
+  <div class="section-header">
+    <div class="section-icon">🛫</div>
+    <h2 class="section-title">Departures</h2>
+    <span class="flight-count" id="depCount">20 flights</span>
+  </div>
+  <div class="table-wrap" id="depTableWrap">
+    <table id="depTable">
+      <thead>
+        <tr>
+          <th>Flight</th>
+          <th>Destination</th>
+          <th>Airline</th>
+          <th>Scheduled</th>
+          <th>Terminal / Gate</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-dest="Malaga" data-airline="easyJet" data-status="Departed">
+          <td class="flight-no">EZY8401</td>
+          <td><div class="dest-name">Malaga</div><div class="dest-iata">AGP · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">05:25</td>
+          <td><span class="gate-cell">S · 53</span></td>
+          <td><span class="status status-departed">Departed</span></td>
+        </tr>
+        <tr data-dest="Amsterdam" data-airline="British Airways" data-status="Departed">
+          <td class="flight-no">BA432</td>
+          <td><div class="dest-name">Amsterdam</div><div class="dest-iata">AMS · Netherlands</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#075AAA;"></span> British Airways</div></td>
+          <td class="time-cell">05:50</td>
+          <td><span class="gate-cell">S · 67</span></td>
+          <td><span class="status status-departed">Departed</span></td>
+        </tr>
+        <tr data-dest="Palma Mallorca" data-airline="TUI Airways" data-status="Departed">
+          <td class="flight-no">TOM2051</td>
+          <td><div class="dest-name">Palma Mallorca</div><div class="dest-iata">PMI · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">06:10</td>
+          <td><span class="gate-cell">N · 3</span></td>
+          <td><span class="status status-departed">Departed</span></td>
+        </tr>
+        <tr data-dest="Faro" data-airline="easyJet" data-status="Departed">
+          <td class="flight-no">EZY6201</td>
+          <td><div class="dest-name">Faro</div><div class="dest-iata">FAO · Portugal</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">06:35</td>
+          <td><span class="gate-cell">S · 42</span></td>
+          <td><span class="status status-departed">Departed</span></td>
+        </tr>
+        <tr data-dest="New York JFK" data-airline="British Airways" data-status="Departed">
+          <td class="flight-no">BA177</td>
+          <td><div class="dest-name">New York JFK</div><div class="dest-iata">JFK · USA</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#075AAA;"></span> British Airways</div></td>
+          <td class="time-cell">06:55</td>
+          <td><span class="gate-cell">S · 82</span></td>
+          <td><span class="status status-departed">Departed</span></td>
+        </tr>
+        <tr data-dest="Barcelona" data-airline="Vueling" data-status="Boarding">
+          <td class="flight-no">VY7821</td>
+          <td><div class="dest-name">Barcelona</div><div class="dest-iata">BCN · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FFCC00;"></span> Vueling</div></td>
+          <td class="time-cell">07:15</td>
+          <td><span class="gate-cell">S · 55</span></td>
+          <td><span class="status status-boarding">Boarding</span></td>
+        </tr>
+        <tr data-dest="Tenerife" data-airline="Jet2" data-status="Boarding">
+          <td class="flight-no">LS741</td>
+          <td><div class="dest-name">Tenerife South</div><div class="dest-iata">TFS · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#005EB8;"></span> Jet2</div></td>
+          <td class="time-cell">07:20</td>
+          <td><span class="gate-cell">N · 7</span></td>
+          <td><span class="status status-boarding">Boarding</span></td>
+        </tr>
+        <tr data-dest="Dubai" data-airline="Emirates" data-status="On Time">
+          <td class="flight-no">EK011</td>
+          <td><div class="dest-name">Dubai</div><div class="dest-iata">DXB · UAE</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#C8102E;"></span> Emirates</div></td>
+          <td class="time-cell">07:40</td>
+          <td><span class="gate-cell">S · 101</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Alicante" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY8501</td>
+          <td><div class="dest-name">Alicante</div><div class="dest-iata">ALC · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">08:05</td>
+          <td><span class="gate-cell">S · 44</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Warsaw" data-airline="Wizz Air" data-status="Delayed">
+          <td class="flight-no">W62091</td>
+          <td><div class="dest-name">Warsaw Chopin</div><div class="dest-iata">WAW · Poland</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#C8005A;"></span> Wizz Air</div></td>
+          <td class="time-cell">08:20</td>
+          <td><span class="gate-cell">S · 36</span></td>
+          <td><span class="status status-delayed">Delayed 40 min</span></td>
+        </tr>
+        <tr data-dest="Lanzarote" data-airline="TUI Airways" data-status="On Time">
+          <td class="flight-no">TOM3671</td>
+          <td><div class="dest-name">Lanzarote</div><div class="dest-iata">ACE · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">08:35</td>
+          <td><span class="gate-cell">N · 12</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Dublin" data-airline="British Airways" data-status="On Time">
+          <td class="flight-no">BA830</td>
+          <td><div class="dest-name">Dublin</div><div class="dest-iata">DUB · Ireland</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#075AAA;"></span> British Airways</div></td>
+          <td class="time-cell">09:00</td>
+          <td><span class="gate-cell">S · 71</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Ibiza" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY7101</td>
+          <td><div class="dest-name">Ibiza</div><div class="dest-iata">IBZ · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">09:25</td>
+          <td><span class="gate-cell">S · 49</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Cancun" data-airline="TUI Airways" data-status="Delayed">
+          <td class="flight-no">TOM59</td>
+          <td><div class="dest-name">Cancún</div><div class="dest-iata">CUN · Mexico</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">09:50</td>
+          <td><span class="gate-cell">N · 5</span></td>
+          <td><span class="status status-delayed">Delayed 25 min</span></td>
+        </tr>
+        <tr data-dest="Geneva" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY2001</td>
+          <td><div class="dest-name">Geneva</div><div class="dest-iata">GVA · Switzerland</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">10:10</td>
+          <td><span class="gate-cell">S · 58</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Marrakech" data-airline="Ryanair" data-status="On Time">
+          <td class="flight-no">FR7401</td>
+          <td><div class="dest-name">Marrakech</div><div class="dest-iata">RAK · Morocco</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#0052B4;"></span> Ryanair</div></td>
+          <td class="time-cell">10:35</td>
+          <td><span class="gate-cell">S · 33</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Las Palmas" data-airline="Jet2" data-status="On Time">
+          <td class="flight-no">LS2051</td>
+          <td><div class="dest-name">Las Palmas</div><div class="dest-iata">LPA · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#005EB8;"></span> Jet2</div></td>
+          <td class="time-cell">11:00</td>
+          <td><span class="gate-cell">N · 9</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Lisbon" data-airline="TAP Air Portugal" data-status="On Time">
+          <td class="flight-no">TP1350</td>
+          <td><div class="dest-name">Lisbon</div><div class="dest-iata">LIS · Portugal</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#009E49;"></span> TAP Air Portugal</div></td>
+          <td class="time-cell">11:30</td>
+          <td><span class="gate-cell">S · 62</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Kefalonia" data-airline="TUI Airways" data-status="Cancelled">
+          <td class="flight-no">TOM1483</td>
+          <td><div class="dest-name">Kefalonia</div><div class="dest-iata">EFL · Greece</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">12:05</td>
+          <td><span class="gate-cell">N · —</span></td>
+          <td><span class="status status-cancelled">Cancelled</span></td>
+        </tr>
+        <tr data-dest="Milan Malpensa" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY9201</td>
+          <td><div class="dest-name">Milan Malpensa</div><div class="dest-iata">MXP · Italy</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">12:40</td>
+          <td><span class="gate-cell">S · 46</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="no-results" id="depNoResults">
+      <div class="no-results-icon">🔍</div>
+      <p>No departures match your search.</p>
     </div>
   </div>
-</main>
 
-<!-- ── FOOTER ── -->
+  <!-- ARRIVALS -->
+  <div class="section-header">
+    <div class="section-icon">🛬</div>
+    <h2 class="section-title">Arrivals</h2>
+    <span class="flight-count" id="arrCount">18 flights</span>
+  </div>
+  <div class="table-wrap" id="arrTableWrap">
+    <table id="arrTable">
+      <thead>
+        <tr>
+          <th>Flight</th>
+          <th>Origin</th>
+          <th>Airline</th>
+          <th>Scheduled</th>
+          <th>Terminal / Belt</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-dest="Tenerife" data-airline="easyJet" data-status="Landed">
+          <td class="flight-no">EZY8416</td>
+          <td><div class="dest-name">Tenerife South</div><div class="dest-iata">TFS · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">04:55</td>
+          <td><span class="gate-cell">S · B2</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Malaga" data-airline="Jet2" data-status="Landed">
+          <td class="flight-no">LS742</td>
+          <td><div class="dest-name">Malaga</div><div class="dest-iata">AGP · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#005EB8;"></span> Jet2</div></td>
+          <td class="time-cell">05:30</td>
+          <td><span class="gate-cell">N · A5</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Dubai" data-airline="Emirates" data-status="Landed">
+          <td class="flight-no">EK012</td>
+          <td><div class="dest-name">Dubai</div><div class="dest-iata">DXB · UAE</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#C8102E;"></span> Emirates</div></td>
+          <td class="time-cell">05:45</td>
+          <td><span class="gate-cell">S · B8</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Faro" data-airline="TUI Airways" data-status="Landed">
+          <td class="flight-no">TOM6202</td>
+          <td><div class="dest-name">Faro</div><div class="dest-iata">FAO · Portugal</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">06:10</td>
+          <td><span class="gate-cell">N · A3</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Amsterdam" data-airline="British Airways" data-status="Landed">
+          <td class="flight-no">BA431</td>
+          <td><div class="dest-name">Amsterdam</div><div class="dest-iata">AMS · Netherlands</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#075AAA;"></span> British Airways</div></td>
+          <td class="time-cell">06:25</td>
+          <td><span class="gate-cell">S · B4</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Barcelona" data-airline="Vueling" data-status="Landed">
+          <td class="flight-no">VY7822</td>
+          <td><div class="dest-name">Barcelona</div><div class="dest-iata">BCN · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FFCC00;"></span> Vueling</div></td>
+          <td class="time-cell">06:50</td>
+          <td><span class="gate-cell">S · B6</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Warsaw" data-airline="Wizz Air" data-status="Landed">
+          <td class="flight-no">W62092</td>
+          <td><div class="dest-name">Warsaw Chopin</div><div class="dest-iata">WAW · Poland</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#C8005A;"></span> Wizz Air</div></td>
+          <td class="time-cell">07:05</td>
+          <td><span class="gate-cell">S · B1</span></td>
+          <td><span class="status status-landed">Landed</span></td>
+        </tr>
+        <tr data-dest="Alicante" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY8512</td>
+          <td><div class="dest-name">Alicante</div><div class="dest-iata">ALC · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">07:25</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="New York JFK" data-airline="British Airways" data-status="Delayed">
+          <td class="flight-no">BA178</td>
+          <td><div class="dest-name">New York JFK</div><div class="dest-iata">JFK · USA</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#075AAA;"></span> British Airways</div></td>
+          <td class="time-cell">07:35</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-delayed">Delayed 50 min</span></td>
+        </tr>
+        <tr data-dest="Geneva" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY2002</td>
+          <td><div class="dest-name">Geneva</div><div class="dest-iata">GVA · Switzerland</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">07:55</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Palma Mallorca" data-airline="TUI Airways" data-status="On Time">
+          <td class="flight-no">TOM2052</td>
+          <td><div class="dest-name">Palma Mallorca</div><div class="dest-iata">PMI · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">08:15</td>
+          <td><span class="gate-cell">N · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Lisbon" data-airline="TAP Air Portugal" data-status="On Time">
+          <td class="flight-no">TP1351</td>
+          <td><div class="dest-name">Lisbon</div><div class="dest-iata">LIS · Portugal</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#009E49;"></span> TAP Air Portugal</div></td>
+          <td class="time-cell">08:40</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Lanzarote" data-airline="Jet2" data-status="On Time">
+          <td class="flight-no">LS2052</td>
+          <td><div class="dest-name">Lanzarote</div><div class="dest-iata">ACE · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#005EB8;"></span> Jet2</div></td>
+          <td class="time-cell">09:05</td>
+          <td><span class="gate-cell">N · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Dublin" data-airline="British Airways" data-status="On Time">
+          <td class="flight-no">BA831</td>
+          <td><div class="dest-name">Dublin</div><div class="dest-iata">DUB · Ireland</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#075AAA;"></span> British Airways</div></td>
+          <td class="time-cell">09:30</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Marrakech" data-airline="Ryanair" data-status="Delayed">
+          <td class="flight-no">FR7402</td>
+          <td><div class="dest-name">Marrakech</div><div class="dest-iata">RAK · Morocco</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#0052B4;"></span> Ryanair</div></td>
+          <td class="time-cell">09:50</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-delayed">Delayed 20 min</span></td>
+        </tr>
+        <tr data-dest="Milan Malpensa" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY9202</td>
+          <td><div class="dest-name">Milan Malpensa</div><div class="dest-iata">MXP · Italy</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">10:15</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Ibiza" data-airline="easyJet" data-status="On Time">
+          <td class="flight-no">EZY7102</td>
+          <td><div class="dest-name">Ibiza</div><div class="dest-iata">IBZ · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#FF6600;"></span> easyJet</div></td>
+          <td class="time-cell">10:55</td>
+          <td><span class="gate-cell">S · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+        <tr data-dest="Las Palmas" data-airline="TUI Airways" data-status="On Time">
+          <td class="flight-no">TOM3672</td>
+          <td><div class="dest-name">Las Palmas</div><div class="dest-iata">LPA · Spain</div></td>
+          <td><div class="airline-logo"><span class="airline-dot" style="background:#E63888;"></span> TUI Airways</div></td>
+          <td class="time-cell">11:40</td>
+          <td><span class="gate-cell">N · —</span></td>
+          <td><span class="status status-ontime">On Time</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="no-results" id="arrNoResults">
+      <div class="no-results-icon">🔍</div>
+      <p>No arrivals match your search.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
 <footer>
   <div class="footer-links">
     <a href="/">Home</a>
     <a href="/gatwick-parking.html">Gatwick Parking</a>
     <a href="/gatwick-hotels.html">Gatwick Hotels</a>
+    <a href="/gatwick-departures.html">Live Flights</a>
   </div>
-  <p>Flight data sourced from <a href="https://opensky-network.org" target="_blank" rel="noopener">OpenSky Network</a>. Updated every 30 minutes. &copy; 2026 GatwickGuide. Not affiliated with Gatwick Airport Ltd.</p>
+  <p>© 2026 HXStevo · Gatwick Airport Flight Information · For real-time data visit <a href="https://www.gatwickairport.com" target="_blank" rel="noopener">gatwickairport.com</a></p>
 </footer>
 
 <script>
-  // ── TAB SWITCHING ──
-  function switchTab(tab) {
-    const depPanel = document.getElementById('panel-dep');
-    const arrPanel = document.getElementById('panel-arr');
-    const depBtn   = document.getElementById('tab-dep');
-    const arrBtn   = document.getElementById('tab-arr');
-    const search   = document.getElementById('searchInput');
-
-    search.value = '';
-
-    if (tab === 'dep') {
-      depPanel.removeAttribute('hidden');
-      arrPanel.setAttribute('hidden', '');
-      depBtn.classList.add('active');
-      arrBtn.classList.remove('active');
-      depBtn.setAttribute('aria-selected', 'true');
-      arrBtn.setAttribute('aria-selected', 'false');
-    } else {
-      arrPanel.removeAttribute('hidden');
-      depPanel.setAttribute('hidden', '');
-      arrBtn.classList.add('active');
-      depBtn.classList.remove('active');
-      arrBtn.setAttribute('aria-selected', 'true');
-      depBtn.setAttribute('aria-selected', 'false');
-    }
-    updateCount();
-  }
-
-  // ── SEARCH / FILTER ──
   function filterFlights() {
-    const query   = document.getElementById('searchInput').value.toLowerCase().trim();
-    const isArr   = document.getElementById('panel-arr').getAttribute('hidden') === null;
-    const tbody   = isArr ? document.getElementById('arrBody') : document.getElementById('depBody');
-    const empty   = isArr ? document.getElementById('arrEmpty') : document.getElementById('depEmpty');
-    const rows    = tbody.querySelectorAll('tr');
-    let visible   = 0;
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    const statusVal = document.getElementById('statusFilter').value.toLowerCase();
 
-    rows.forEach(row => {
-      const flight  = (row.dataset.flight  || '').toLowerCase();
-      const dest    = (row.dataset.dest    || '').toLowerCase();
-      const airline = (row.dataset.airline || '').toLowerCase();
-      const match   = !query || flight.includes(query) || dest.includes(query) || airline.includes(query);
-      row.style.display = match ? '' : 'none';
-      if (match) visible++;
+    ['dep', 'arr'].forEach(prefix => {
+      const table = document.getElementById(prefix + 'Table');
+      const rows = table.querySelectorAll('tbody tr');
+      const countEl = document.getElementById(prefix + 'Count');
+      const noResults = document.getElementById(prefix + 'NoResults');
+      let visible = 0;
+
+      rows.forEach(row => {
+        const dest    = (row.dataset.dest    || '').toLowerCase();
+        const airline = (row.dataset.airline || '').toLowerCase();
+        const status  = (row.dataset.status  || '').toLowerCase();
+        const text    = row.textContent.toLowerCase();
+
+        const matchQ = !q || dest.includes(q) || airline.includes(q) || text.includes(q);
+        const matchS = !statusVal || status.includes(statusVal);
+
+        if (matchQ && matchS) {
+          row.classList.remove('hidden-row');
+          visible++;
+        } else {
+          row.classList.add('hidden-row');
+        }
+      });
+
+      countEl.textContent = visible + ' flight' + (visible !== 1 ? 's' : '');
+      noResults.style.display = visible === 0 ? 'block' : 'none';
     });
-
-    empty.style.display = visible === 0 ? 'block' : 'none';
-    updateCount(visible);
   }
-
-  function updateCount(n) {
-    const el = document.getElementById('resultCount');
-    const isArr = document.getElementById('panel-arr').getAttribute('hidden') === null;
-    if (n === undefined) {
-      const tbody = isArr ? document.getElementById('arrBody') : document.getElementById('depBody');
-      n = tbody.querySelectorAll('tr:not([style*="display: none"])').length;
-    }
-    el.innerHTML = '<strong>' + n + '</strong> flight' + (n === 1 ? '' : 's') + ' shown';
-  }
-
-  // Init count
-  document.addEventListener('DOMContentLoaded', updateCount);
 </script>
 </body>
 </html>
