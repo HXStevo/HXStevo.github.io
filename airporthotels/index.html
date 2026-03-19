@@ -286,20 +286,37 @@
 
     <!-- SEARCH WIDGET — desktop -->
     <div class="search-widget" id="desktop-widget">
-      <!-- Tab bar -->
       <div class="sw-tabs">
-        <button class="sw-tab active" onclick="switchTab('hotel-parking',this)">Hotel &amp; Parking</button>
-        <button class="sw-tab" onclick="switchTab('hotel-only',this)">Hotel Only</button>
+        <button class="sw-tab active" onclick="switchTab('hotel-only',this)">Airport Hotels</button>
+        <button class="sw-tab" onclick="switchTab('hotel-parking',this)">Hotel &amp; Parking</button>
       </div>
 
-      <!-- Panel: Hotel + Parking -->
       <div class="sw-body">
-        <div class="sw-panel active" id="panel-hotel-parking">
+
+        <!-- Panel: Airport Hotels (hotel only) -->
+        <form class="sw-panel active" id="panel-hotel-only"
+          onsubmit="doSearch('d','ho'); return false;">
+          <input type="hidden" name="hotelAction" value="https://secure.airporthotels.com/search/from-landing-page">
+          <input type="hidden" name="select_product" value="ho">
+          <input type="hidden" name="product" value="ho">
+          <input type="hidden" name="agentgroup" value="SB">
+          <input type="hidden" name="channel" value="D">
+          <input type="hidden" name="agent" value="WO162">
+          <input type="hidden" name="request" value="21">
+          <input type="hidden" name="profile" value="airport-hotels">
+          <input type="hidden" name="Referer" value="https://www.airporthotels.co.uk">
+          <input type="hidden" name="form_type" value="knot-bootstrap-airporthotels">
+          <input type="hidden" name="domain" value="www.airporthotels.co.uk">
+          <input type="hidden" name="numCarParking" value="0">
+          <input type="hidden" name="lang" value="en">
+          <input type="hidden" name="Nights" value="1">
+          <input type="hidden" name="Email" value="">
+          <input type="hidden" name="ppcmsg" value="">
           <div class="sw-fields">
             <div class="sw-field">
-              <label for="d-airport-hp">Flying from</label>
-              <select id="d-airport-hp">
-                <option value="">Select airport...</option>
+              <label for="d-airport-ho">Flying from</label>
+              <select id="d-airport-ho" name="location" required>
+                <option value="">Select airport…</option>
                 <option value="ABZ">Aberdeen (ABZ)</option>
                 <option value="BHD">Belfast City (BHD)</option>
                 <option value="BFS">Belfast International (BFS)</option>
@@ -307,12 +324,16 @@
                 <option value="BOH">Bournemouth (BOH)</option>
                 <option value="BRS">Bristol (BRS)</option>
                 <option value="CWL">Cardiff (CWL)</option>
+                <option value="DSA">Doncaster Sheffield (DSA)</option>
+                <option value="DUB">Dublin (DUB)</option>
                 <option value="EMA">East Midlands (EMA)</option>
                 <option value="EDI">Edinburgh (EDI)</option>
                 <option value="EXT">Exeter (EXT)</option>
                 <option value="LGW">London Gatwick (LGW)</option>
-                <option value="GLA">Glasgow International (GLA)</option>
+                <option value="GLA">Glasgow (GLA)</option>
+                <option value="PIK">Glasgow Prestwick (PIK)</option>
                 <option value="LHR">London Heathrow (LHR)</option>
+                <option value="HUY">Humberside (HUY)</option>
                 <option value="LBA">Leeds Bradford (LBA)</option>
                 <option value="LPL">Liverpool (LPL)</option>
                 <option value="LCY">London City (LCY)</option>
@@ -321,13 +342,104 @@
                 <option value="NCL">Newcastle (NCL)</option>
                 <option value="NWI">Norwich (NWI)</option>
                 <option value="SOU">Southampton (SOU)</option>
+                <option value="SEN">Southend (SEN)</option>
+                <option value="STN">London Stansted (STN)</option>
+                <option value="MME">Teesside International (MME)</option>
+              </select>
+            </div>
+            <div class="sw-field">
+              <label for="d-room-ho">Room type</label>
+              <select id="d-room-ho" name="roomtype_0">
+                <option value="D20">Double — 2 adults</option>
+                <option value="TW2">Twin — 2 adults</option>
+                <option value="S1">Single — 1 adult</option>
+                <option value="TW1C">Twin — 1 adult, 1 child</option>
+                <option value="TR2C1">Triple — 2 adults, 1 child</option>
+                <option value="TR3">Triple — 3 adults</option>
+                <option value="FM2C2">Family — 2 adults, 2 children</option>
+                <option value="FM2C3">Family — 2 adults, 3 children</option>
+                <option value="FM3C1">Family — 3 adults, 1 child</option>
+              </select>
+            </div>
+            <div class="sw-row">
+              <div class="sw-field">
+                <label for="d-checkin-ho">Check-in</label>
+                <input type="date" id="d-checkin-ho" data-fname="arrival_date" required>
+              </div>
+              <div class="sw-field">
+                <label for="d-checkout-ho">Check-out</label>
+                <input type="date" id="d-checkout-ho" data-fname="depart_date" required>
+              </div>
+            </div>
+            <div class="sw-field">
+              <label for="d-ppts-ho">Staying</label>
+              <select id="d-ppts-ho" name="ppts">
+                <option value="0">Before I fly</option>
+                <option value="1">On my return</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="sw-submit">Search Hotels</button>
+          <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation on most hotels</p>
+        </form>
+
+        <!-- Panel: Hotel + Parking -->
+        <form class="sw-panel" id="panel-hotel-parking"
+          onsubmit="doSearch('d','hp'); return false;">
+          <input type="hidden" name="hotelAction" value="https://secure.airporthotels.com/search/from-landing-page">
+          <input type="hidden" name="select_product" value="hcp">
+          <input type="hidden" name="product" value="hcp">
+          <input type="hidden" name="agentgroup" value="SB">
+          <input type="hidden" name="channel" value="D">
+          <input type="hidden" name="agent" value="WO162">
+          <input type="hidden" name="request" value="21">
+          <input type="hidden" name="profile" value="airport-hotels">
+          <input type="hidden" name="Referer" value="https://www.airporthotels.co.uk">
+          <input type="hidden" name="form_type" value="knot-bootstrap-airporthotels">
+          <input type="hidden" name="domain" value="www.airporthotels.co.uk">
+          <input type="hidden" name="numCarParking" value="1">
+          <input type="hidden" name="lang" value="en">
+          <input type="hidden" name="Nights" id="d-nights-hidden" value="8">
+          <input type="hidden" name="Email" value="">
+          <input type="hidden" name="ppcmsg" value="">
+          <div class="sw-fields">
+            <div class="sw-field">
+              <label for="d-airport-hp">Flying from</label>
+              <select id="d-airport-hp" name="location" required>
+                <option value="">Select airport…</option>
+                <option value="ABZ">Aberdeen (ABZ)</option>
+                <option value="BHD">Belfast City (BHD)</option>
+                <option value="BFS">Belfast International (BFS)</option>
+                <option value="BHX">Birmingham (BHX)</option>
+                <option value="BOH">Bournemouth (BOH)</option>
+                <option value="BRS">Bristol (BRS)</option>
+                <option value="CWL">Cardiff (CWL)</option>
+                <option value="DSA">Doncaster Sheffield (DSA)</option>
+                <option value="DUB">Dublin (DUB)</option>
+                <option value="EMA">East Midlands (EMA)</option>
+                <option value="EDI">Edinburgh (EDI)</option>
+                <option value="EXT">Exeter (EXT)</option>
+                <option value="LGW">London Gatwick (LGW)</option>
+                <option value="GLA">Glasgow (GLA)</option>
+                <option value="PIK">Glasgow Prestwick (PIK)</option>
+                <option value="LHR">London Heathrow (LHR)</option>
+                <option value="HUY">Humberside (HUY)</option>
+                <option value="LBA">Leeds Bradford (LBA)</option>
+                <option value="LPL">Liverpool (LPL)</option>
+                <option value="LCY">London City (LCY)</option>
+                <option value="LTN">London Luton (LTN)</option>
+                <option value="MAN">Manchester (MAN)</option>
+                <option value="NCL">Newcastle (NCL)</option>
+                <option value="NWI">Norwich (NWI)</option>
+                <option value="SOU">Southampton (SOU)</option>
+                <option value="SEN">Southend (SEN)</option>
                 <option value="STN">London Stansted (STN)</option>
                 <option value="MME">Teesside International (MME)</option>
               </select>
             </div>
             <div class="sw-field">
               <label for="d-room-hp">Room type</label>
-              <select id="d-room-hp">
+              <select id="d-room-hp" name="roomtype_0">
                 <option value="D20">Double — 2 adults</option>
                 <option value="TW2">Twin — 2 adults</option>
                 <option value="S1">Single — 1 adult</option>
@@ -342,81 +454,27 @@
             <div class="sw-row">
               <div class="sw-field">
                 <label for="d-checkin-hp">Hotel check-in</label>
-                <input type="date" id="d-checkin-hp">
+                <input type="date" id="d-checkin-hp" data-fname="arrival_date" required>
               </div>
               <div class="sw-field">
                 <label for="d-collect-hp">Collect car</label>
-                <input type="date" id="d-collect-hp">
+                <input type="date" id="d-collect-hp" data-fname="depart_date" required>
               </div>
             </div>
             <div class="sw-field">
               <label>Parking nights</label>
               <div class="nights-ctrl">
-                <button class="n-btn" onclick="chgN(-1,'d')" aria-label="Fewer nights">&#8722;</button>
+                <button type="button" class="n-btn" onclick="chgN(-1,'d')" aria-label="Fewer nights">&#8722;</button>
                 <span class="n-val" id="d-nval">8</span>
-                <button class="n-btn" onclick="chgN(1,'d')" aria-label="More nights">+</button>
+                <button type="button" class="n-btn" onclick="chgN(1,'d')" aria-label="More nights">+</button>
                 <span class="n-lbl">nights parking</span>
               </div>
             </div>
           </div>
-          <button class="sw-submit" onclick="doSearch('d','hp')">Search Available Hotels</button>
+          <button type="submit" class="sw-submit">Search Hotel &amp; Parking</button>
           <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation on most hotels</p>
-        </div>
+        </form>
 
-        <!-- Panel: Hotel only -->
-        <div class="sw-panel" id="panel-hotel-only">
-          <div class="sw-fields">
-            <div class="sw-field">
-              <label for="d-airport-ho">Flying from</label>
-              <select id="d-airport-ho">
-                <option value="">Select airport...</option>
-                <option value="ABZ">Aberdeen (ABZ)</option>
-                <option value="BHD">Belfast City (BHD)</option>
-                <option value="BFS">Belfast International (BFS)</option>
-                <option value="BHX">Birmingham (BHX)</option>
-                <option value="BOH">Bournemouth (BOH)</option>
-                <option value="BRS">Bristol (BRS)</option>
-                <option value="EMA">East Midlands (EMA)</option>
-                <option value="EDI">Edinburgh (EDI)</option>
-                <option value="EXT">Exeter (EXT)</option>
-                <option value="LGW">London Gatwick (LGW)</option>
-                <option value="GLA">Glasgow International (GLA)</option>
-                <option value="LHR">London Heathrow (LHR)</option>
-                <option value="LBA">Leeds Bradford (LBA)</option>
-                <option value="LPL">Liverpool (LPL)</option>
-                <option value="LCY">London City (LCY)</option>
-                <option value="LTN">London Luton (LTN)</option>
-                <option value="MAN">Manchester (MAN)</option>
-                <option value="NCL">Newcastle (NCL)</option>
-                <option value="STN">London Stansted (STN)</option>
-              </select>
-            </div>
-            <div class="sw-field">
-              <label for="d-room-ho">Room type</label>
-              <select id="d-room-ho">
-                <option value="D20">Double — 2 adults</option>
-                <option value="TW2">Twin — 2 adults</option>
-                <option value="S1">Single — 1 adult</option>
-                <option value="TW1C">Twin — 1 adult, 1 child</option>
-                <option value="TR2C1">Triple — 2 adults, 1 child</option>
-                <option value="TR3">Triple — 3 adults</option>
-                <option value="FM2C2">Family — 2 adults, 2 children</option>
-              </select>
-            </div>
-            <div class="sw-row">
-              <div class="sw-field">
-                <label for="d-checkin-ho">Check-in date</label>
-                <input type="date" id="d-checkin-ho">
-              </div>
-              <div class="sw-field">
-                <label for="d-checkout-ho">Check-out date</label>
-                <input type="date" id="d-checkout-ho">
-              </div>
-            </div>
-          </div>
-          <button class="sw-submit" onclick="doSearch('d','ho')">Search Hotels</button>
-          <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation on most hotels</p>
-        </div>
       </div>
     </div>
     <!-- /search widget -->
@@ -620,8 +678,62 @@
   </div>
 </section>
 
+<!-- FEATURED HOTELS -->
+<section class="s" id="featured-hotels">
+  <div class="c">
+    <span class="s-ey">Top picks</span>
+    <h2 class="h2">Featured airport hotels</h2>
+    <p class="s-desc">Handpicked hotels at the UK's busiest airports — rated by thousands of real guests.</p>
+    <div class="ag" style="grid-template-columns:repeat(3,1fr)">
+
+      <div class="ac" style="cursor:default">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=480&h=320&fit=crop&q=75" alt="Hilton London Heathrow Airport Terminal 5" loading="lazy" width="480" height="320">
+        <div class="ac-body">
+          <div class="ac-code" style="display:flex;justify-content:space-between;align-items:center"><span>LHR</span><span style="background:var(--green);color:#fff;padding:.18rem .45rem;border-radius:4px;font-size:.68rem;font-weight:800">9.4/10</span></div>
+          <h3 class="ac-name">Hilton Heathrow Terminal 5</h3>
+          <p class="ac-desc">On-site at T5 — connected to the terminal by covered walkway. Spa, pool, multiple restaurants and 24hr shuttle for other terminals.</p>
+          <div class="ac-foot">
+            <div class="ac-price">Hotel + Parking from<strong>£129/night</strong></div>
+            <a href="/heathrow-airport-hotels/" class="ac-cta">View deals</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ac" style="cursor:default">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=480&h=320&fit=crop&q=75" alt="Sofitel London Gatwick" loading="lazy" width="480" height="320">
+        <div class="ac-body">
+          <div class="ac-code" style="display:flex;justify-content:space-between;align-items:center"><span>LGW</span><span style="background:var(--green);color:#fff;padding:.18rem .45rem;border-radius:4px;font-size:.68rem;font-weight:800">9.2/10</span></div>
+          <h3 class="ac-name">Sofitel London Gatwick</h3>
+          <p class="ac-desc">Five-star luxury directly connected to the North Terminal. Stunning atrium, Club Millesime lounge, fine dining and spa facilities.</p>
+          <div class="ac-foot">
+            <div class="ac-price">Hotel + Parking from<strong>£98/night</strong></div>
+            <a href="/gatwick-airport-hotels/" class="ac-cta">View deals</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ac" style="cursor:default">
+        <img class="ac-img" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=480&h=320&fit=crop&q=75" alt="Crowne Plaza Manchester Airport" loading="lazy" width="480" height="320">
+        <div class="ac-body">
+          <div class="ac-code" style="display:flex;justify-content:space-between;align-items:center"><span>MAN</span><span style="background:var(--green);color:#fff;padding:.18rem .45rem;border-radius:4px;font-size:.68rem;font-weight:800">9.1/10</span></div>
+          <h3 class="ac-name">Crowne Plaza Manchester Airport</h3>
+          <p class="ac-desc">On the airport grounds with a free 24hr shuttle. Gym, restaurant and bar — perfect for early flights or long stays.</p>
+          <div class="ac-foot">
+            <div class="ac-price">Hotel + Parking from<strong>£85/night</strong></div>
+            <a href="/manchester-airport-hotels/" class="ac-cta">View deals</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:2rem">
+      <a href="#airports" class="cta-btn" style="display:inline-flex">Browse all airports &rarr;</a>
+    </div>
+  </div>
+</section>
+
 <!-- WHY US -->
-<section class="s" id="why-us">
+<section class="s s-alt" id="why-us">
   <div class="c">
     <span class="s-ey">Why choose us</span>
     <h2 class="h2">The smarter way to book your airport hotel</h2>
@@ -877,14 +989,24 @@
         <div><label for="m-airport-ho">Flying from</label>
           <select id="m-airport-ho">
             <option value="">Select airport...</option>
-            <option value="LHR">London Heathrow (LHR)</option>
-            <option value="LGW">London Gatwick (LGW)</option>
-            <option value="MAN">Manchester (MAN)</option>
-            <option value="STN">London Stansted (STN)</option>
-            <option value="EDI">Edinburgh (EDI)</option>
+            <option value="ABZ">Aberdeen (ABZ)</option>
+            <option value="BHD">Belfast City (BHD)</option>
+            <option value="BFS">Belfast International (BFS)</option>
             <option value="BHX">Birmingham (BHX)</option>
             <option value="BRS">Bristol (BRS)</option>
+            <option value="EMA">East Midlands (EMA)</option>
+            <option value="EDI">Edinburgh (EDI)</option>
+            <option value="LGW">London Gatwick (LGW)</option>
+            <option value="GLA">Glasgow International (GLA)</option>
+            <option value="LHR">London Heathrow (LHR)</option>
+            <option value="LBA">Leeds Bradford (LBA)</option>
+            <option value="LPL">Liverpool (LPL)</option>
+            <option value="LCY">London City (LCY)</option>
             <option value="LTN">London Luton (LTN)</option>
+            <option value="MAN">Manchester (MAN)</option>
+            <option value="NCL">Newcastle (NCL)</option>
+            <option value="SOU">Southampton (SOU)</option>
+            <option value="STN">London Stansted (STN)</option>
           </select>
         </div>
         <div><label for="m-room-ho">Room type</label>
@@ -965,31 +1087,31 @@
     activeTab.m = tab;
   }
 
-  // Build HX search URL and navigate
+  // Build search URL and navigate
   function doSearch(prefix, tab) {
     var airport = document.getElementById(prefix + '-airport-' + tab).value;
     if (!airport) { alert('Please select an airport first.'); return; }
     var room = document.getElementById(prefix + '-room-' + tab).value || 'D20';
+    var base = 'https://secure.airporthotels.com/hotels/availability';
     var url;
 
     if (tab === 'hp') {
       // Hotel + Parking
       var checkin = document.getElementById(prefix + '-checkin-hp').value;
-      var collect = prefix === 'd'
+      var parkto = prefix === 'd'
         ? document.getElementById('d-collect-hp').value
         : (function() {
             var dt = new Date(document.getElementById('m-checkin-hp').value || ts);
             dt.setDate(dt.getDate() + pkgNights[prefix]);
             return dt.toISOString().split('T')[0];
           })();
-      url = 'https://www.holidayextras.com/static/?selectProduct=hcp&#/hotel_with_parking'
-        + '?agent=WEB1&ppts=0&lang=en'
-        + '&depart=' + encodeURIComponent(airport)
-        + '&flight=default'
-        + '&in=' + checkin
-        + '&out=' + collect
-        + '&stay=' + checkin
-        + '&room_1=' + room;
+      url = base
+        + '?check_in=' + checkin
+        + '&park_from=' + checkin
+        + '&park_to=' + parkto
+        + '&location=' + encodeURIComponent(airport)
+        + '&room_types%5B0%5D=' + encodeURIComponent(room)
+        + '&agent=WO162&operator_initials=RDR';
     } else {
       // Hotel Only
       var cin = document.getElementById(prefix + '-checkin-ho').value;
@@ -1000,14 +1122,12 @@
             dt.setDate(dt.getDate() + 1);
             return dt.toISOString().split('T')[0];
           })();
-      url = 'https://www.holidayextras.com/static/?selectProduct=hotel&#/hotels'
-        + '?agent=WEB1&ppts=0&lang=en'
-        + '&depart=' + encodeURIComponent(airport)
-        + '&flight=default'
-        + '&in=' + cin
-        + '&out=' + cout
-        + '&stay=' + cin
-        + '&room_1=' + room;
+      url = base
+        + '?check_in=' + cin
+        + '&check_out=' + cout
+        + '&location=' + encodeURIComponent(airport)
+        + '&room_types%5B0%5D=' + encodeURIComponent(room)
+        + '&agent=WO162&operator_initials=RDR';
     }
     window.location.href = url;
   }
