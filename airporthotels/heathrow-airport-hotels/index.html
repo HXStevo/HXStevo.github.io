@@ -892,17 +892,22 @@ const fmtNice = d => { const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; c
 function switchTab(id,btn){document.querySelectorAll('.sw-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');document.querySelectorAll('.sw-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 function switchMobTab(id,btn){document.querySelectorAll('.mob-dp .mf').forEach(f=>f.style.display='none');document.getElementById(id).style.display='grid';document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 
-/* Nights counter + return date */
+/* Nights counter + return date + sync collect car */
 function updateReturnDate(prefix){
   const ciId = prefix==='d' ? 'd-checkin-hp' : 'm-ci-hp';
+  const ccId = prefix==='d' ? 'd-collect-hp' : 'm-cc-hp';
   const ci = document.getElementById(ciId);
+  const cc = document.getElementById(ccId);
   const nEl = document.getElementById(prefix+'-nval');
   const rdEl = document.getElementById(prefix+'-return-date');
-  if(!ci || !nEl || !rdEl) return;
-  if(!ci.value){ rdEl.textContent=''; return; }
+  if(!ci || !nEl) return;
+  if(!ci.value){ if(rdEl) rdEl.textContent=''; return; }
   const d = new Date(ci.value);
   d.setDate(d.getDate() + parseInt(nEl.textContent));
-  rdEl.textContent = 'Return date: ' + fmtNice(d);
+  /* Update collect car date to match */
+  if(cc) cc.value = fmt(d);
+  /* Show friendly return date */
+  if(rdEl) rdEl.textContent = 'Return date: ' + fmtNice(d);
 }
 function chgN(delta,prefix){
   const el=document.getElementById(prefix+'-nval');
