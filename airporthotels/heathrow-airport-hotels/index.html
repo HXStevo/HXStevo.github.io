@@ -130,9 +130,14 @@
     .n-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
     .n-val{font-size:1.25rem;font-weight:900;color:var(--navy);min-width:2.5rem;text-align:center}
     .n-lbl{font-size:.82rem;color:var(--txt-l)}
-    .sw-submit{width:100%;margin-top:.9rem;background:var(--gold);color:var(--navy);border:none;padding:1rem 1.5rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:.2px;transition:background .18s,transform .1s;min-height:52px}
+    .sw-submit{width:100%;margin-top:.9rem;background:var(--gold);color:var(--navy);border:none;padding:1rem 1.5rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:.2px;transition:background .18s,transform .1s;min-height:52px;display:flex;align-items:center;justify-content:center;gap:.6rem}
     .sw-submit:hover{background:var(--gold-h)}
     .sw-submit:active{transform:scale(.99)}
+    .sw-submit.loading{pointer-events:none;opacity:.85}
+    .spinner{display:none;width:20px;height:20px;border:3px solid rgba(11,29,58,.25);border-top-color:var(--navy);border-radius:50%;animation:spin .6s linear infinite}
+    .loading .spinner{display:block}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .return-date{font-size:.78rem;color:var(--gold);font-weight:600;margin-top:.25rem;min-height:1.2em}
     .sw-guarantee{text-align:center;margin-top:.65rem;font-size:.72rem;color:var(--txt-l)}
     .sw-guarantee strong{color:var(--navy)}
 
@@ -272,8 +277,9 @@
     .mob-nb{width:52px;height:52px;border-radius:50%;background:var(--surface);border:2px solid var(--border);cursor:pointer;font-size:1.5rem;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:all .18s}
     .mob-nb:hover,.mob-nb:active{background:var(--gold);border-color:var(--gold)}
     .mob-nv{font-size:1.75rem;font-weight:900;color:var(--navy);min-width:3rem;text-align:center}
-    .mob-submit{width:100%;margin-top:1.25rem;background:var(--gold);color:var(--navy);border:none;padding:1.1rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;min-height:54px;letter-spacing:.2px;transition:background .18s}
+    .mob-submit{width:100%;margin-top:1.25rem;background:var(--gold);color:var(--navy);border:none;padding:1.1rem;border-radius:var(--r-sm);font-size:1rem;font-weight:800;cursor:pointer;min-height:54px;letter-spacing:.2px;transition:background .18s;display:flex;align-items:center;justify-content:center;gap:.6rem}
     .mob-submit:hover{background:var(--gold-h)}
+    .mob-submit.loading{pointer-events:none;opacity:.85}
 
     /* RESPONSIVE */
     @media(max-width:1024px){.term-grid{grid-template-columns:repeat(2,1fr)}.hotel-grid{grid-template-columns:repeat(2,1fr)}.rg{grid-template-columns:repeat(2,1fr)}.ft-top{grid-template-columns:1fr 1fr}}
@@ -391,7 +397,7 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="sw-submit">Search Heathrow Hotels</button>
+          <button type="submit" class="sw-submit"><span>Search Heathrow Hotels</span><span class="spinner"></span></button>
           <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation</p>
         </form>
 
@@ -445,9 +451,10 @@
                 <button type="button" class="n-btn" onclick="chgN(1,'d')" aria-label="More nights">+</button>
                 <span class="n-lbl">nights parking</span>
               </div>
+              <div class="return-date" id="d-return-date"></div>
             </div>
           </div>
-          <button type="submit" class="sw-submit">Search Hotel &amp; Parking</button>
+          <button type="submit" class="sw-submit"><span>Search Hotel &amp; Parking</span><span class="spinner"></span></button>
           <p class="sw-guarantee">Best price guarantee &middot; No booking fees &middot; Free cancellation</p>
         </form>
       </div>
@@ -862,7 +869,7 @@
       <div><label for="m-room-ho">Room type</label><select id="m-room-ho" name="roomtype_0"><option value="D20">Double — 2 adults</option><option value="TW2">Twin — 2 adults</option><option value="S1">Single — 1 adult</option><option value="FM2C2">Family — 2 adults, 2 children</option></select></div>
       <div><label for="m-ci-ho">Check-in</label><input type="date" id="m-ci-ho" required></div>
       <div><label for="m-co-ho">Check-out</label><input type="date" id="m-co-ho" required></div>
-      <button type="submit" class="mob-submit">Search Hotels</button>
+      <button type="submit" class="mob-submit"><span>Search Hotels</span><span class="spinner"></span></button>
     </form>
     <!-- Hotel + Parking (mobile) -->
     <form id="m-hp" class="mf" style="display:none" onsubmit="doSearch('m','hp'); return false;">
@@ -870,40 +877,147 @@
       <div><label for="m-room-hp">Room type</label><select id="m-room-hp" name="roomtype_0"><option value="D20">Double — 2 adults</option><option value="TW2">Twin — 2 adults</option><option value="S1">Single — 1 adult</option><option value="FM2C2">Family — 2 adults, 2 children</option></select></div>
       <div><label for="m-ci-hp">Hotel check-in</label><input type="date" id="m-ci-hp" required></div>
       <div><label for="m-cc-hp">Collect car</label><input type="date" id="m-cc-hp" required></div>
-      <div><label>Parking nights</label><div class="mob-nights"><button type="button" class="mob-nb" onclick="chgN(-1,'m')">&#8722;</button><span class="mob-nv" id="m-nval">8</span><button type="button" class="mob-nb" onclick="chgN(1,'m')">+</button></div></div>
-      <button type="submit" class="mob-submit">Search Hotel &amp; Parking</button>
+      <div><label>Parking nights</label><div class="mob-nights"><button type="button" class="mob-nb" onclick="chgN(-1,'m')">&#8722;</button><span class="mob-nv" id="m-nval">8</span><button type="button" class="mob-nb" onclick="chgN(1,'m')">+</button></div><div class="return-date" id="m-return-date"></div></div>
+      <button type="submit" class="mob-submit"><span>Search Hotel &amp; Parking</span><span class="spinner"></span></button>
     </form>
   </div>
 </div>
 
 <script>
+/* Helpers */
+const fmt = d => { const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+dd; };
+const fmtNice = d => { const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear(); };
+
 /* Tab switching */
 function switchTab(id,btn){document.querySelectorAll('.sw-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');document.querySelectorAll('.sw-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 function switchMobTab(id,btn){document.querySelectorAll('.mob-dp .mf').forEach(f=>f.style.display='none');document.getElementById(id).style.display='grid';document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 
-/* Nights counter */
-function chgN(d,prefix){const el=document.getElementById(prefix+'-nval');let v=parseInt(el.textContent)+d;if(v<1)v=1;if(v>21)v=21;el.textContent=v;const h=document.getElementById(prefix+'-nights-hidden');if(h)h.value=v}
+/* Nights counter + return date */
+function updateReturnDate(prefix){
+  const ciId = prefix==='d' ? 'd-checkin-hp' : 'm-ci-hp';
+  const ci = document.getElementById(ciId);
+  const nEl = document.getElementById(prefix+'-nval');
+  const rdEl = document.getElementById(prefix+'-return-date');
+  if(!ci || !nEl || !rdEl) return;
+  if(!ci.value){ rdEl.textContent=''; return; }
+  const d = new Date(ci.value);
+  d.setDate(d.getDate() + parseInt(nEl.textContent));
+  rdEl.textContent = 'Return date: ' + fmtNice(d);
+}
+function chgN(delta,prefix){
+  const el=document.getElementById(prefix+'-nval');
+  let v=parseInt(el.textContent)+delta;
+  if(v<1)v=1; if(v>21)v=21;
+  el.textContent=v;
+  const h=document.getElementById(prefix+'-nights-hidden');
+  if(h) h.value=v;
+  updateReturnDate(prefix);
+}
 
-/* Date sync */
+/* Default dates + sync */
 document.addEventListener('DOMContentLoaded',function(){
-  const today=new Date();const fmt=d=>{const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+dd};
-  document.querySelectorAll('input[type="date"]').forEach(i=>{if(!i.value)i.min=fmt(today)});
-  ['d-checkin-ho','m-ci-ho'].forEach(id=>{const ci=document.getElementById(id);if(ci)ci.addEventListener('change',function(){const co=document.getElementById(id.replace('ci','co').replace('checkin','checkout'));if(co){const nd=new Date(this.value);nd.setDate(nd.getDate()+1);co.value=fmt(nd);co.min=fmt(nd)}})});
-  ['d-checkin-hp','m-ci-hp'].forEach(id=>{const ci=document.getElementById(id);if(ci)ci.addEventListener('change',function(){const cc=document.getElementById(id.replace('ci','cc').replace('checkin','collect'));if(cc){const nd=new Date(this.value);nd.setDate(nd.getDate()+8);cc.value=fmt(nd);cc.min=this.value}})});
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate()+1);
+
+  /* Set min on all date inputs */
+  document.querySelectorAll('input[type="date"]').forEach(i=>{ i.min=fmt(today); });
+
+  /* Default check-in to today, check-out to tomorrow (hotel only) */
+  ['d-checkin-ho','m-ci-ho'].forEach(id=>{
+    const ci=document.getElementById(id);
+    if(ci){ ci.value=fmt(today); }
+  });
+  ['d-checkout-ho','m-co-ho'].forEach(id=>{
+    const co=document.getElementById(id);
+    if(co){ co.value=fmt(tomorrow); co.min=fmt(tomorrow); }
+  });
+
+  /* Default check-in to today, collect car to today+8 (hotel+parking) */
+  ['d-checkin-hp','m-ci-hp'].forEach(id=>{
+    const ci=document.getElementById(id);
+    if(ci){ ci.value=fmt(today); }
+  });
+  ['d-collect-hp','m-cc-hp'].forEach(id=>{
+    const cc=document.getElementById(id);
+    if(cc){ const d8=new Date(today); d8.setDate(d8.getDate()+8); cc.value=fmt(d8); cc.min=fmt(today); }
+  });
+
+  /* Hotel-only: check-in changes -> checkout = checkin + 1 day */
+  ['d-checkin-ho','m-ci-ho'].forEach(id=>{
+    const ci=document.getElementById(id);
+    if(ci) ci.addEventListener('change',function(){
+      const coId = id.replace('ci','co').replace('checkin','checkout');
+      const co=document.getElementById(coId);
+      if(co){ const nd=new Date(this.value); nd.setDate(nd.getDate()+1); co.value=fmt(nd); co.min=fmt(nd); }
+    });
+  });
+
+  /* Hotel+parking: check-in changes -> collect car = checkin + nights */
+  ['d-checkin-hp','m-ci-hp'].forEach(id=>{
+    const ci=document.getElementById(id);
+    if(ci) ci.addEventListener('change',function(){
+      const ccId = id.replace('ci','cc').replace('checkin','collect');
+      const cc=document.getElementById(ccId);
+      const prefix = id.startsWith('d') ? 'd' : 'm';
+      const nights = parseInt(document.getElementById(prefix+'-nval').textContent);
+      if(cc){ const nd=new Date(this.value); nd.setDate(nd.getDate()+nights); cc.value=fmt(nd); cc.min=this.value; }
+      updateReturnDate(prefix);
+    });
+  });
+
+  /* Show initial return dates */
+  updateReturnDate('d');
+  updateReturnDate('m');
 });
 
-/* Search redirect */
+/* Search redirect with spinner */
 function doSearch(prefix,type){
-  const base='https://secure.airporthotels.com/search/from-landing-page';
-  const form=type==='ho'?(prefix==='d'?document.getElementById('panel-hotel-only'):document.getElementById('m-ho')):(prefix==='d'?document.getElementById('panel-hotel-parking'):document.getElementById('m-hp'));
-  if(!form.checkValidity()){form.reportValidity();return}
-  const fd=new FormData(form);
-  /* date fields */
-  form.querySelectorAll('input[type="date"]').forEach(i=>{if(i.dataset.fname)fd.set(i.dataset.fname,i.value.replace(/-/g,'/'));else{const n=i.id.includes('ci')?'arrival_date':'depart_date';fd.set(n,i.value.replace(/-/g,'/'))}});
-  fd.set('location','LHR');
-  if(type==='hp'){const nv=document.getElementById(prefix+'-nval');if(nv)fd.set('Nights',nv.textContent)}
-  const qs=new URLSearchParams(fd).toString();
-  window.open(base+'?'+qs,'_blank')
+  const form = type==='ho'
+    ? (prefix==='d' ? document.getElementById('panel-hotel-only') : document.getElementById('m-ho'))
+    : (prefix==='d' ? document.getElementById('panel-hotel-parking') : document.getElementById('m-hp'));
+  if(!form.checkValidity()){ form.reportValidity(); return; }
+
+  /* Show spinner */
+  const btn = form.querySelector('button[type="submit"]');
+  if(btn) btn.classList.add('loading');
+
+  /* Build URL */
+  const checkinId = type==='ho'
+    ? (prefix==='d' ? 'd-checkin-ho' : 'm-ci-ho')
+    : (prefix==='d' ? 'd-checkin-hp' : 'm-ci-hp');
+  const checkoutId = type==='ho'
+    ? (prefix==='d' ? 'd-checkout-ho' : 'm-co-ho')
+    : (prefix==='d' ? 'd-collect-hp' : 'm-cc-hp');
+  const roomId = type==='ho'
+    ? (prefix==='d' ? 'd-room-ho' : 'm-room-ho')
+    : (prefix==='d' ? 'd-room-hp' : 'm-room-hp');
+
+  const checkin = document.getElementById(checkinId).value;
+  const room = document.getElementById(roomId).value;
+
+  let url;
+  if(type==='ho'){
+    /* Hotel only */
+    url = 'https://secure.airporthotels.com/hotels/availability'
+      + '?check_in=' + encodeURIComponent(checkin)
+      + '&room_types%5B0%5D=' + encodeURIComponent(room)
+      + '&agent=WO162&location=LHR&operator_initials=RDR';
+  } else {
+    /* Hotel + Parking */
+    const parkTo = document.getElementById(checkoutId).value;
+    url = 'https://secure.airporthotels.com/hotels/availability'
+      + '?check_in=' + encodeURIComponent(checkin)
+      + '&park_from=' + encodeURIComponent(checkin)
+      + '&park_to=' + encodeURIComponent(parkTo)
+      + '&room_types%5B0%5D=' + encodeURIComponent(room)
+      + '&agent=WO162&location=LHR&operator_initials=RDR';
+  }
+
+  /* Brief delay so user sees the spinner, then redirect */
+  setTimeout(function(){
+    window.open(url, '_blank');
+    if(btn) btn.classList.remove('loading');
+  }, 600);
 }
 
 /* FAQ accordion */
