@@ -1,717 +1,1374 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HX SEO Dashboard</title>
-<style>
-  :root {
-    --hx-blue: #003F7D;
-    --hx-yellow: #FFD100;
-    --hx-light: #f0f4f8;
-    --green: #16a34a;
-    --red: #dc2626;
-    --orange: #ea580c;
-    --purple: #7c3aed;
-    --gray: #6b7280;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: var(--hx-light); color: #111; min-height: 100vh; }
-
-  .topbar { background: var(--hx-blue); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-  .topbar h1 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-  .topbar .badge { background: var(--hx-yellow); color: var(--hx-blue); font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
-  .topbar .status { font-size: 0.8rem; opacity: 0.8; }
-  .topbar .status.live { color: #86efac; }
-
-  .range-bar { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 24px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .range-btn { padding: 5px 14px; border-radius: 20px; border: 1.5px solid #d1d5db; background: white; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #374151; transition: all 0.15s; }
-  .range-btn.active { background: var(--hx-blue); color: white; border-color: var(--hx-blue); }
-  .range-btn:hover:not(.active) { border-color: var(--hx-blue); color: var(--hx-blue); }
-
-  .container { max-width: 1400px; margin: 0 auto; padding: 20px 20px 60px; }
-
-  .section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin: 28px 0 12px; display: flex; align-items: center; gap: 8px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
-
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 8px; }
-  .card { background: white; border-radius: var(--radius); padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; position: relative; overflow: hidden; }
-  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--hx-blue); }
-  .card.green::before { background: var(--green); }
-  .card.yellow::before { background: var(--hx-yellow); }
-  .card.purple::before { background: var(--purple); }
-  .card.orange::before { background: var(--orange); }
-  .card-label { font-size: 0.72rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-  .card-value { font-size: 1.9rem; font-weight: 800; color: var(--hx-blue); line-height: 1; }
-  .card-change { font-size: 0.78rem; margin-top: 6px; font-weight: 600; }
-  .card-change.up { color: var(--green); }
-  .card-change.down { color: var(--red); }
-  .card-change.neutral { color: var(--gray); }
-  .card-sub { font-size: 0.72rem; color: var(--gray); margin-top: 4px; }
-
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-  @media(max-width: 900px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
-
-  .panel { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
-  .panel h3 { font-size: 0.85rem; font-weight: 700; color: var(--hx-blue); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-  .panel.full { grid-column: 1 / -1; }
-
-  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  th { text-align: left; padding: 7px 10px; background: var(--hx-light); color: var(--gray); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e5e7eb; }
-  th:not(:first-child) { text-align: right; }
-  td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
-  td:not(:first-child) { text-align: right; }
-  tr:hover td { background: #f9fafb; }
-  tr:last-child td { border-bottom: none; }
-  .kw { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
-  .pg { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--hx-blue); font-size: 0.78rem; }
-
-  .pos-badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
-  .pos-1 { background: #fef9c3; color: #854d0e; }
-  .pos-3 { background: #dcfce7; color: #166534; }
-  .pos-10 { background: #dbeafe; color: #1e40af; }
-  .pos-20 { background: #f3e8ff; color: #6b21a8; }
-  .pos-out { background: #fee2e2; color: #991b1b; }
-
-  .bar-wrap { background: #f3f4f6; border-radius: 4px; height: 6px; overflow: hidden; min-width: 60px; }
-  .bar-fill { height: 100%; border-radius: 4px; background: var(--hx-blue); }
-  .bar-fill.green { background: var(--green); }
-  .bar-fill.orange { background: var(--orange); }
-  .bar-fill.red { background: var(--red); }
-
-  .ctr-good { color: var(--green); font-weight: 600; }
-  .ctr-mid { color: var(--orange); font-weight: 600; }
-  .ctr-low { color: var(--red); font-weight: 600; }
-
-  .loading { text-align: center; padding: 40px; color: var(--gray); }
-  .loading .spin { display: inline-block; width: 32px; height: 32px; border: 3px solid #e5e7eb; border-top-color: var(--hx-blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .err { background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; color: var(--red); font-size: 0.85rem; margin: 8px 0; }
-  .refresh-btn { background: var(--hx-yellow); color: var(--hx-blue); border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 0.8rem; }
-  .refresh-btn:hover { opacity: 0.9; }
-
-  .opp-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
-  .opp-ctr { background: #fef3c7; color: #92400e; }
-  .opp-pos { background: #dbeafe; color: #1e40af; }
-
-  .channel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .channel-name { width: 120px; font-size: 0.82rem; font-weight: 600; }
-  .channel-val { width: 70px; text-align: right; font-size: 0.82rem; font-weight: 700; color: var(--hx-blue); }
-  .channel-pct { width: 40px; text-align: right; font-size: 0.75rem; color: var(--gray); }
-
-  .tabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 2px solid #e5e7eb; }
-  .tab { padding: 7px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px; }
-  .tab.active { color: var(--hx-blue); border-bottom-color: var(--hx-blue); }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .sparkline { display: flex; align-items: flex-end; gap: 2px; height: 40px; }
-  .sparkline-bar { flex: 1; background: var(--hx-blue); border-radius: 2px 2px 0 0; opacity: 0.7; min-width: 4px; }
-
-  .updated { font-size: 0.72rem; color: var(--gray); text-align: right; margin-top: 16px; }
-
-  .summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-  .summary-item { text-align: center; padding: 10px; background: var(--hx-light); border-radius: 8px; }
-  .summary-item .val { font-size: 1.2rem; font-weight: 800; color: var(--hx-blue); }
-  .summary-item .lbl { font-size: 0.68rem; color: var(--gray); font-weight: 600; text-transform: uppercase; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HX Dashboard — Steven Hill</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    body { background: #0f1117; color: #e2e8f0; }
+    .card { background: #1a1d27; border: 1px solid #2d3148; }
+    .badge-pass { background:#14532d; color:#4ade80; }
+    .badge-fail { background:#450a0a; color:#f87171; }
+    .badge-warn { background:#422006; color:#fb923c; }
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#1a1d27; }
+    ::-webkit-scrollbar-thumb { background:#4b5563; border-radius:2px; }
+    th { color:#94a3b8; font-weight:500; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; }
+    .loading { animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+    .tab-btn { transition: all .2s; }
+    .tab-btn.active { background:#4f46e5; color:white; }
+  </style>
 </head>
-<body>
+<body class="min-h-screen p-6">
 
-<div class="topbar">
-  <h1>
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 13h4v8H3v-8zm7-6h4v14h-4V7zm7-4h4v18h-4V3z" fill="currentColor"/></svg>
-    HX SEO Dashboard
-    <span class="badge">LIVE</span>
-  </h1>
-  <div style="display:flex;align-items:center;gap:12px;">
-    <span class="status live" id="statusText">● Connecting...</span>
-    <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
-  </div>
-</div>
-
-<div class="range-bar">
-  <span style="font-size:0.8rem;font-weight:600;color:#374151;">Date range:</span>
-  <button class="range-btn" onclick="setRange(7,this)">7 days</button>
-  <button class="range-btn active" onclick="setRange(28,this)">28 days</button>
-  <button class="range-btn" onclick="setRange(90,this)">90 days</button>
-  <button class="range-btn" onclick="setRange(180,this)">6 months</button>
-  <span style="margin-left:auto;font-size:0.78rem;color:var(--gray);" id="dateRangeLabel"></span>
-</div>
-
-<div class="container">
-
-  <!-- Overview Cards -->
-  <div class="section-title">📡 Search Console — Organic Performance</div>
-  <div class="cards" id="scCards">
-    <div class="loading"><div class="spin"></div><br>Loading Search Console...</div>
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-white">HX Dashboard</h1>
+      <p class="text-slate-400 text-sm mt-1">holidayextras.com · Last 28 days</p>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="refreshAll()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition">↻ Refresh all</button>
+    </div>
   </div>
 
-  <div class="section-title">📊 Google Analytics — Site Metrics</div>
-  <div class="cards" id="gaCards">
-    <div class="loading"><div class="spin"></div><br>Loading Analytics...</div>
+  <!-- Tabs -->
+  <div class="flex flex-wrap gap-2 mb-6">
+    <button id="tab-btn-seo" class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium" onclick="showTab('seo', this)">SEO Performance</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('bing', this)">Bing</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('semrush', this)">SEMrush</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('awr', this)">AWR Rankings</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('parking-aio', this)">Parking AIO</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('hotel-aio', this)">Hotel AIO</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('international', this)">EU</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('ga4', this)">GA4</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('serp', this)">SerpAPI</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('similarweb', this)">SimilarWeb</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('inspect', this)">URL Inspector</button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700" onclick="showTab('trips', this)">My Trips</button>
   </div>
 
-  <!-- Main panels -->
-  <div class="section-title">🔍 Keyword Intelligence</div>
-  <div class="grid2">
-    <div class="panel">
-      <div class="tabs">
-        <div class="tab active" onclick="switchTab('kw','top',this)">Top Keywords</div>
-        <div class="tab" onclick="switchTab('kw','opp',this)">Opportunities</div>
-        <div class="tab" onclick="switchTab('kw','pos',this)">By Position</div>
-      </div>
-      <div class="tab-content active" id="kw-top">
-        <div class="loading"><div class="spin"></div></div>
-      </div>
-      <div class="tab-content" id="kw-opp">
-        <div class="loading"><div class="spin"></div></div>
-      </div>
-      <div class="tab-content" id="kw-pos">
-        <div class="loading"><div class="spin"></div></div>
-      </div>
+  <!-- SEO Tab -->
+  <div id="tab-seo">
+    <!-- Stat cards -->
+    <div class="grid grid-cols-4 gap-4 mb-6" id="stat-cards">
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Total Clicks</div><div class="text-2xl font-bold text-white" id="stat-clicks">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Impressions</div><div class="text-2xl font-bold text-white" id="stat-impr">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Avg CTR</div><div class="text-2xl font-bold text-white" id="stat-ctr">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Avg Position</div><div class="text-2xl font-bold text-white" id="stat-pos">—</div></div>
     </div>
 
-    <div class="panel">
-      <div class="tabs">
-        <div class="tab active" onclick="switchTab('pg','top',this)">Top Pages</div>
-        <div class="tab" onclick="switchTab('pg','ga',this)">GA4 Traffic</div>
+    <!-- Chart -->
+    <div class="card rounded-xl p-5 mb-6">
+      <h2 class="text-sm font-semibold text-slate-300 mb-4">Clicks & Impressions (28 days)</h2>
+      <canvas id="perfChart" height="80"></canvas>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Top Pages -->
+      <div class="card rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-slate-300 mb-4">Top Pages by Clicks</h2>
+        <div id="top-pages-loading" class="loading text-slate-500 text-sm">Loading…</div>
+        <table class="w-full text-sm hidden" id="top-pages-table">
+          <thead><tr class="border-b border-slate-700"><th class="text-left pb-2">Page</th><th class="text-right pb-2">Clicks</th><th class="text-right pb-2">Pos</th><th class="text-right pb-2">CTR</th></tr></thead>
+          <tbody id="top-pages-body"></tbody>
+        </table>
       </div>
-      <div class="tab-content active" id="pg-top">
-        <div class="loading"><div class="spin"></div></div>
-      </div>
-      <div class="tab-content" id="pg-ga">
-        <div class="loading"><div class="spin"></div></div>
+      <!-- Top Queries -->
+      <div class="card rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-slate-300 mb-4">Top Queries by Clicks</h2>
+        <div id="top-queries-loading" class="loading text-slate-500 text-sm">Loading…</div>
+        <table class="w-full text-sm hidden" id="top-queries-table">
+          <thead><tr class="border-b border-slate-700"><th class="text-left pb-2">Query</th><th class="text-right pb-2">Clicks</th><th class="text-right pb-2">Pos</th><th class="text-right pb-2">CTR</th></tr></thead>
+          <tbody id="top-queries-body"></tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <div class="section-title">📈 Traffic Channels & Engagement</div>
-  <div class="grid3">
-    <div class="panel">
-      <h3>🚦 Traffic by Channel</h3>
-      <div id="channelPanel"><div class="loading"><div class="spin"></div></div></div>
+  <!-- Bing Tab -->
+  <div id="tab-bing" class="hidden">
+    <!-- API Migration Notice -->
+    <div class="card rounded-xl p-5 mb-4 border border-amber-500/30 bg-amber-900/10">
+      <div class="flex items-start gap-4">
+        <div class="text-3xl">⚠️</div>
+        <div class="flex-1">
+          <h2 class="text-base font-semibold text-amber-400 mb-1">Bing Webmaster Tools — API Migration Required</h2>
+          <p class="text-sm text-slate-400 mb-3">Microsoft deprecated API key authentication for the Bing Webmaster Tools API in 2024. Access now requires <strong class="text-white">Microsoft OAuth (Azure AD)</strong>. The old API key is no longer accepted.</p>
+          <div class="bg-slate-800 rounded-lg p-4 text-sm mb-3">
+            <p class="text-slate-300 font-medium mb-2">To restore Bing data, you need to:</p>
+            <ol class="text-slate-400 space-y-1 list-decimal list-inside">
+              <li>Go to <a href="https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank" class="text-indigo-400 hover:text-indigo-300">portal.azure.com → App Registrations</a></li>
+              <li>Create a new app → <strong class="text-white">Single tenant</strong> → copy the <strong class="text-white">Client ID</strong></li>
+              <li>Add a Client Secret → copy the <strong class="text-white">Client Secret value</strong></li>
+              <li>In <a href="https://www.bing.com/webmasters/about" target="_blank" class="text-indigo-400 hover:text-indigo-300">Bing Webmaster Tools</a> → Settings → API Access → grant your app access</li>
+              <li>Save Client ID + Secret into <code class="text-green-400">/Users/steven.hill/nanoclaw/secrets/bing-oauth.json</code></li>
+            </ol>
+          </div>
+          <p class="text-xs text-slate-500">Once set up, the dashboard will auto-use OAuth tokens and this notice will disappear.</p>
+        </div>
+      </div>
     </div>
-    <div class="panel">
-      <h3>⏱ Engagement Metrics</h3>
-      <div id="engagePanel"><div class="loading"><div class="spin"></div></div></div>
-    </div>
-    <div class="panel">
-      <h3>📍 Position Distribution</h3>
-      <div id="posDistPanel"><div class="loading"><div class="spin"></div></div></div>
+    <!-- Data table (shown if OAuth is ever configured) -->
+    <div class="card rounded-xl p-5">
+      <h2 class="text-sm font-semibold text-slate-300 mb-4">Top Bing Queries (28 days)</h2>
+      <div id="bing-loading" class="hidden"></div>
+      <div id="bing-unavailable" class="py-6 text-center">
+        <div class="text-slate-500 text-sm">Data unavailable — see setup instructions above</div>
+        <div class="mt-2 text-xs text-slate-600">Bing Webmaster API v1 (API key) was sunset by Microsoft</div>
+      </div>
+      <table class="w-full text-sm hidden" id="bing-table">
+        <thead><tr class="border-b border-slate-700"><th class="text-left pb-2">Query</th><th class="text-right pb-2">Clicks</th><th class="text-right pb-2">Impressions</th><th class="text-right pb-2">CTR</th></tr></thead>
+        <tbody id="bing-body"></tbody>
+      </table>
     </div>
   </div>
 
-  <div class="section-title">🔥 SEO Opportunities</div>
-  <div class="panel full" style="grid-column:1/-1">
-    <h3>🎯 Quick Wins — High Impressions, Low CTR (push these up)</h3>
-    <div id="oppPanel"><div class="loading"><div class="spin"></div></div></div>
+  <!-- URL Inspector Tab -->
+  <div id="tab-inspect" class="hidden">
+    <div class="card rounded-xl p-5 mb-4">
+      <h2 class="text-sm font-semibold text-slate-300 mb-4">Google Search Console URL Inspector</h2>
+      <div class="flex gap-3">
+        <input id="inspect-url" type="text" placeholder="https://www.holidayextras.com/gatwick-airport-parking.html"
+          class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+          value="https://www.holidayextras.com/gatwick-airport-parking.html">
+        <button onclick="inspectUrl()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium">Inspect</button>
+      </div>
+    </div>
+    <div id="inspect-result" class="hidden card rounded-xl p-5">
+      <div class="grid grid-cols-3 gap-4">
+        <div><div class="text-slate-500 text-xs mb-1">Verdict</div><div id="ir-verdict" class="font-semibold"></div></div>
+        <div><div class="text-slate-500 text-xs mb-1">Coverage</div><div id="ir-coverage" class="text-white text-sm"></div></div>
+        <div><div class="text-slate-500 text-xs mb-1">Last Crawled</div><div id="ir-crawled" class="text-white text-sm"></div></div>
+        <div><div class="text-slate-500 text-xs mb-1">Crawled As</div><div id="ir-crawledas" class="text-white text-sm"></div></div>
+        <div><div class="text-slate-500 text-xs mb-1">Mobile Usability</div><div id="ir-mobile" class="font-semibold"></div></div>
+        <div><div class="text-slate-500 text-xs mb-1">Canonical</div><div id="ir-canonical" class="text-white text-xs break-all"></div></div>
+      </div>
+    </div>
+    <div id="inspect-loading" class="hidden loading text-slate-500 text-sm mt-4">Inspecting…</div>
   </div>
 
-  <p class="updated" id="lastUpdated"></p>
-</div>
+  <!-- SEMrush Tab -->
+  <div id="tab-semrush" class="hidden">
+    <!-- Market selector + actions -->
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-slate-400 text-sm">Market:</div>
+      <select id="sr-db-select" onchange="srLoaded=false;loadSemrush()" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <option value="uk">🇬🇧 UK</option>
+        <option value="de">🇩🇪 Germany</option>
+        <option value="fr">🇫🇷 France</option>
+        <option value="es">🇪🇸 Spain</option>
+        <option value="it">🇮🇹 Italy</option>
+        <option value="nl">🇳🇱 Netherlands</option>
+        <option value="us">🇺🇸 USA</option>
+        <option value="au">🇦🇺 Australia</option>
+        <option value="ca">🇨🇦 Canada</option>
+      </select>
+      <button onclick="srLoaded=false;loadSemrush()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg">↻ Refresh</button>
+      <span id="sr-status" class="text-slate-500 text-xs"></span>
+    </div>
+
+    <!-- Overview stat cards row 1 -->
+    <div class="grid grid-cols-4 gap-4 mb-3" id="semrush-cards">
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Global Rank</div><div class="text-2xl font-bold text-white" id="sr-rank">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Organic Keywords</div><div class="text-2xl font-bold text-white" id="sr-kws">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Est. Monthly Traffic</div><div class="text-2xl font-bold text-indigo-400" id="sr-traffic">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Est. Traffic Value</div><div class="text-2xl font-bold text-amber-400" id="sr-cost">—</div></div>
+    </div>
+
+    <!-- Keyword stats row 2 -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="card rounded-xl p-4 border border-green-500/30">
+        <div class="text-xs text-slate-500 mb-1">Top 3 Keywords</div>
+        <div class="text-2xl font-bold text-green-400" id="sr-top3">—</div>
+      </div>
+      <div class="card rounded-xl p-4 border border-amber-500/20">
+        <div class="text-xs text-slate-500 mb-1">Top 10 Keywords</div>
+        <div class="text-2xl font-bold text-amber-400" id="sr-top10">—</div>
+      </div>
+      <div class="card rounded-xl p-4">
+        <div class="text-xs text-slate-500 mb-1">Avg Position (top 100)</div>
+        <div class="text-2xl font-bold text-white" id="sr-avgpos">—</div>
+      </div>
+      <div class="card rounded-xl p-4">
+        <div class="text-xs text-slate-500 mb-1">Avg Keyword Difficulty</div>
+        <div class="text-2xl font-bold text-purple-400" id="sr-avgkd">—</div>
+        <div class="text-xs text-slate-600 mt-1">out of 100</div>
+      </div>
+    </div>
+
+    <!-- Keywords table -->
+    <div class="card rounded-xl p-5">
+      <div class="flex justify-between items-center mb-3">
+        <div class="font-semibold text-white text-sm">Top 100 Organic Keywords — Sorted by Search Volume</div>
+        <input id="sr-filter" type="text" placeholder="Filter keywords…" oninput="filterSemrush(this.value)"
+          class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white w-48 focus:outline-none focus:border-indigo-500">
+      </div>
+      <div class="overflow-auto max-h-[520px]">
+        <table class="w-full text-xs">
+          <thead class="sticky top-0 bg-slate-900">
+            <tr class="border-b border-slate-700 text-slate-400">
+              <th class="text-left pb-2 pr-2">Keyword</th>
+              <th class="text-right pb-2 pr-2">Volume</th>
+              <th class="text-right pb-2 pr-2">Pos</th>
+              <th class="text-right pb-2 pr-2">KD</th>
+              <th class="text-right pb-2 pr-2">CPC</th>
+              <th class="text-right pb-2 pr-2">Comp</th>
+              <th class="text-right pb-2 pr-2">Traffic%</th>
+              <th class="text-left pb-2">Page</th>
+            </tr>
+          </thead>
+          <tbody id="semrush-table" class="text-slate-300">
+            <tr><td colspan="8" class="text-slate-500 py-4 text-center">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- International Tab -->
+  <div id="tab-international" class="hidden">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-white">EU / International SEO Overview</h2>
+      <button onclick="intlLoaded=false;loadInternational()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg">↻ Refresh</button>
+    </div>
+
+    <!-- GSC by country -->
+    <div class="card rounded-xl p-5 mb-4">
+      <h3 class="text-sm font-semibold text-slate-300 mb-3">Google Search Console — Traffic by Country (last 28 days)</h3>
+      <div class="overflow-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400">
+              <th class="text-left pb-2 pr-3">Country</th>
+              <th class="text-right pb-2 pr-3">Clicks</th>
+              <th class="text-right pb-2 pr-3">Impressions</th>
+              <th class="text-right pb-2 pr-3">CTR</th>
+              <th class="text-right pb-2 pr-3">Avg Pos</th>
+              <th class="pb-2 pr-3 text-left pl-4">Share</th>
+            </tr>
+          </thead>
+          <tbody id="intl-gsc-table" class="text-slate-300">
+            <tr><td colspan="6" class="text-slate-500 py-4 text-center">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SEMrush by market -->
+    <div class="card rounded-xl p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-slate-300">SEMrush — Organic Performance by Market</h3>
+        <span class="text-xs text-slate-500">holidayextras.com · all markets</span>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400">
+              <th class="text-left pb-2 pr-3">Market</th>
+              <th class="text-right pb-2 pr-3">Global Rank</th>
+              <th class="text-right pb-2 pr-3">Organic KWs</th>
+              <th class="text-right pb-2 pr-3">Est. Traffic</th>
+              <th class="text-right pb-2 pr-3">Traffic Value</th>
+              <th class="text-right pb-2 pr-3">Paid KWs</th>
+              <th class="text-right pb-2">Paid Traffic</th>
+            </tr>
+          </thead>
+          <tbody id="intl-semrush-table" class="text-slate-300">
+            <tr><td colspan="7" class="text-slate-500 py-4 text-center">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Traffic bar chart by market -->
+      <div class="mt-5">
+        <div class="text-xs text-slate-500 mb-3">Organic Traffic by Market (visual)</div>
+        <div id="intl-traffic-bars" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- Per-country page breakdown -->
+    <div class="flex items-center justify-between mt-4 mb-3">
+      <h3 class="text-sm font-semibold text-slate-300">Top 10 Pages by Country — GSC (last 28 days)</h3>
+      <span id="intl-pages-date" class="text-xs text-slate-500"></span>
+    </div>
+    <div id="intl-pages-grid" class="grid grid-cols-2 gap-4">
+      <div class="card rounded-xl p-5 col-span-2 text-slate-500 text-center text-sm loading">Loading country page data…</div>
+    </div>
+  </div>
+
+  <!-- AWR Tab -->
+  <div id="tab-awr" class="hidden">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-slate-400 text-sm">Project: <span class="text-white font-medium">www.holidayextras.com</span> <span id="awr-date" class="text-slate-500 ml-2 text-xs"></span></div>
+      <button onclick="awrLoaded=false;loadAWR()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg">↻ Refresh</button>
+      <span id="awr-status" class="text-slate-500 text-xs"></span>
+    </div>
+
+    <!-- Summary stat cards -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Keywords Tracked</div><div class="text-2xl font-bold text-white" id="awr-total">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Monthly Search Volume</div><div class="text-2xl font-bold text-white" id="awr-volume">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Est. Monthly Traffic</div><div class="text-2xl font-bold text-indigo-400" id="awr-traffic">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Avg CPC</div><div class="text-2xl font-bold text-amber-400" id="awr-cpc">—</div></div>
+    </div>
+
+    <!-- Position breakdown -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="card rounded-xl p-4 border border-green-500/30">
+        <div class="text-xs text-slate-500 mb-1">#1 Rankings</div>
+        <div class="text-2xl font-bold text-green-400" id="awr-p1">—</div>
+      </div>
+      <div class="card rounded-xl p-4 border border-green-500/20">
+        <div class="text-xs text-slate-500 mb-1">Top 3</div>
+        <div class="text-2xl font-bold text-green-400" id="awr-p3">—</div>
+      </div>
+      <div class="card rounded-xl p-4 border border-amber-500/20">
+        <div class="text-xs text-slate-500 mb-1">Top 10</div>
+        <div class="text-2xl font-bold text-amber-400" id="awr-p10">—</div>
+      </div>
+      <div class="card rounded-xl p-4 border border-slate-600">
+        <div class="text-xs text-slate-500 mb-1">Top 20</div>
+        <div class="text-2xl font-bold text-slate-300" id="awr-p20">—</div>
+      </div>
+    </div>
+
+    <!-- Competition + avg position row -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="card rounded-xl p-4">
+        <div class="text-xs text-slate-500 mb-1">Avg Position</div>
+        <div class="text-2xl font-bold text-white" id="awr-avgpos">—</div>
+      </div>
+      <div class="card rounded-xl p-4">
+        <div class="text-xs text-slate-500 mb-2">Competition Mix</div>
+        <div class="flex gap-2 items-center text-xs">
+          <span class="text-red-400 font-bold" id="awr-comp-high">—</span><span class="text-slate-500">High</span>
+          <span class="text-amber-400 font-bold ml-2" id="awr-comp-med">—</span><span class="text-slate-500">Med</span>
+          <span class="text-green-400 font-bold ml-2" id="awr-comp-low">—</span><span class="text-slate-500">Low</span>
+        </div>
+      </div>
+      <div class="card rounded-xl p-4 col-span-2">
+        <div class="text-xs text-slate-500 mb-2">Position Distribution</div>
+        <div class="flex gap-1 h-6 items-end" id="awr-dist-bar"></div>
+      </div>
+    </div>
+
+    <!-- Rankings table -->
+    <div class="card rounded-xl p-5">
+      <div class="flex justify-between items-center mb-3">
+        <div class="font-semibold text-white text-sm">Top 100 Keywords — Sorted by Search Volume</div>
+        <input id="awr-filter" type="text" placeholder="Filter keywords…" oninput="filterAWR(this.value)"
+          class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white w-48 focus:outline-none focus:border-indigo-500">
+      </div>
+      <div class="overflow-auto max-h-[500px]">
+        <table class="w-full text-xs">
+          <thead class="sticky top-0 bg-slate-900">
+            <tr class="border-b border-slate-700 text-slate-400">
+              <th class="text-left pb-2 pr-2">Keyword</th>
+              <th class="text-right pb-2 pr-2">Volume</th>
+              <th class="text-right pb-2 pr-2">Pos</th>
+              <th class="text-right pb-2 pr-2">Best</th>
+              <th class="text-right pb-2 pr-2">Traffic</th>
+              <th class="text-right pb-2 pr-2">CPC</th>
+              <th class="text-center pb-2 pr-2">Comp</th>
+              <th class="text-left pb-2">Page</th>
+            </tr>
+          </thead>
+          <tbody id="awr-table" class="text-slate-300">
+            <tr><td colspan="8" class="text-slate-500 py-4 text-center">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parking AIO Tab -->
+  <div id="tab-parking-aio" class="hidden">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-white">Parking AIO — Google UK <span id="parking-aio-date" class="text-sm font-normal text-slate-500 ml-2"></span></h2>
+      <button onclick="loadParkingAIO(true)" class="px-4 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-white">↻ Refresh</button>
+    </div>
+    <div class="grid grid-cols-5 gap-3 mb-4" id="parking-aio-cards">
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">AIO Keywords</div><div class="text-2xl font-bold text-white" id="paio-total">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">HX Featured</div><div class="text-2xl font-bold text-green-400" id="paio-hx">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">HX Missing</div><div class="text-2xl font-bold text-red-400" id="paio-gap">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Coverage</div><div class="text-2xl font-bold text-amber-400" id="paio-cov">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Avg Position</div><div class="text-2xl font-bold text-indigo-400" id="paio-pos">—</div></div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="card rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-green-400 mb-3">✅ HX Appears in AIO (<span id="paio-hx-count">0</span> keywords)</h3>
+        <div class="overflow-auto max-h-80">
+          <table class="w-full text-xs">
+            <thead><tr class="border-b border-slate-700 text-slate-400"><th class="text-left pb-2 w-8">Pos</th><th class="text-left pb-2">Keyword</th><th class="text-left pb-2">Page</th></tr></thead>
+            <tbody id="paio-hx-table" class="text-slate-300"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-red-400 mb-3">❌ AIO Present — HX Not Featured (<span id="paio-gap-count">0</span> keywords)</h3>
+        <div class="overflow-auto max-h-80">
+          <table class="w-full text-xs">
+            <thead><tr class="border-b border-slate-700 text-slate-400"><th class="text-left pb-2">Keyword</th><th class="text-left pb-2">Winning Competitor</th></tr></thead>
+            <tbody id="paio-gap-table" class="text-slate-300"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card rounded-xl p-5">
+      <h3 class="text-sm font-semibold text-slate-300 mb-4">Competitor Share of AIO Voice — Parking (Google UK)</h3>
+      <div id="paio-comp-bars" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- Hotel AIO Tab -->
+  <div id="tab-hotel-aio" class="hidden">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-white">Hotel AIO — Bing UK <span id="hotel-aio-date" class="text-sm font-normal text-slate-500 ml-2"></span><span class="text-xs text-blue-400 ml-3">ℹ Google doesn't serve AIO for hotel queries</span></h2>
+      <button onclick="loadHotelAIO(true)" class="px-4 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-white">↻ Refresh</button>
+    </div>
+    <div class="grid grid-cols-5 gap-3 mb-4">
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">AIO Keywords</div><div class="text-2xl font-bold text-white" id="haio-total">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">HX Featured</div><div class="text-2xl font-bold text-green-400" id="haio-hx">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">HX Missing</div><div class="text-2xl font-bold text-red-400" id="haio-gap">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Coverage</div><div class="text-2xl font-bold text-amber-400" id="haio-cov">—</div></div>
+      <div class="card rounded-xl p-4"><div class="text-slate-500 text-xs mb-1">Avg Position</div><div class="text-2xl font-bold text-indigo-400" id="haio-pos">—</div></div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="card rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-green-400 mb-3">✅ HX Appears in AIO (<span id="haio-hx-count">0</span> keywords)</h3>
+        <div class="overflow-auto max-h-80">
+          <table class="w-full text-xs">
+            <thead><tr class="border-b border-slate-700 text-slate-400"><th class="text-left pb-2 w-8">Pos</th><th class="text-left pb-2">Keyword</th><th class="text-left pb-2">Page</th></tr></thead>
+            <tbody id="haio-hx-table" class="text-slate-300"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card rounded-xl p-5">
+        <h3 class="text-sm font-semibold text-red-400 mb-3">❌ AIO Present — HX Not Featured (<span id="haio-gap-count">0</span> keywords)</h3>
+        <div class="overflow-auto max-h-80">
+          <table class="w-full text-xs">
+            <thead><tr class="border-b border-slate-700 text-slate-400"><th class="text-left pb-2">Keyword</th><th class="text-left pb-2">Winning Competitor</th></tr></thead>
+            <tbody id="haio-gap-table" class="text-slate-300"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card rounded-xl p-5">
+      <h3 class="text-sm font-semibold text-slate-300 mb-4">Competitor Share of AIO Voice — Hotels (Bing UK)</h3>
+      <div id="haio-comp-bars" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- GA4 Tab -->
+  <div id="tab-ga4" class="hidden">
+    <div class="grid grid-cols-4 gap-4 mb-6" id="ga4-cards">
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Sessions (28d)</div><div class="text-2xl font-bold text-white" id="ga4-sessions">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Active Users</div><div class="text-2xl font-bold text-white" id="ga4-users">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Pageviews</div><div class="text-2xl font-bold text-white" id="ga4-pageviews">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Avg Bounce Rate</div><div class="text-2xl font-bold text-white" id="ga4-bounce">—</div></div>
+    </div>
+    <div class="card rounded-xl p-5 mb-4">
+      <h2 class="text-sm font-semibold text-slate-300 mb-4">Sessions & Users (28 days)</h2>
+      <canvas id="ga4Chart" height="80"></canvas>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-slate-300 mb-4">Top Pages by Sessions</h2>
+        <table class="w-full text-sm">
+          <thead><tr class="border-b border-slate-700"><th class="text-left pb-2">Page</th><th class="text-right pb-2">Sessions</th><th class="text-right pb-2">Bounce</th></tr></thead>
+          <tbody id="ga4-pages-table" class="text-slate-300"></tbody>
+        </table>
+      </div>
+      <div class="card rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-slate-300 mb-4">Channels</h2>
+        <table class="w-full text-sm">
+          <thead><tr class="border-b border-slate-700"><th class="text-left pb-2">Channel</th><th class="text-right pb-2">Sessions</th><th class="text-right pb-2">Users</th><th class="text-right pb-2">Conv.</th></tr></thead>
+          <tbody id="ga4-channels-table" class="text-slate-300"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SerpAPI Tab -->
+  <div id="tab-serp" class="hidden">
+    <div class="card rounded-xl p-5 mb-4">
+      <div class="flex gap-3 items-center">
+        <input id="serp-input" type="text" placeholder="Enter keyword…" value="airport parking"
+          class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-indigo-500">
+        <button onclick="loadSerpKeyword()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-sm font-medium text-white">Search</button>
+        <button onclick="loadSerpBulk()" class="px-5 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-medium text-white">Bulk Check (11 keywords)</button>
+      </div>
+    </div>
+    <div id="serp-bulk" class="hidden card rounded-xl p-5 mb-4">
+      <h2 class="text-sm font-semibold text-slate-300 mb-4">HX Rankings — Key Keywords</h2>
+      <div class="grid grid-cols-2 gap-2" id="serp-bulk-grid"></div>
+    </div>
+    <div id="serp-results-wrap" class="card rounded-xl p-5">
+      <div id="serp-meta" class="flex gap-4 mb-4 text-sm text-slate-400"></div>
+      <table class="w-full text-sm">
+        <thead><tr class="border-b border-slate-700 text-slate-400">
+          <th class="text-left pb-2 w-8">#</th>
+          <th class="text-left pb-2">Title / URL</th>
+          <th class="text-right pb-2">Snippet</th>
+        </tr></thead>
+        <tbody id="serp-table" class="text-slate-300"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SimilarWeb Tab -->
+  <div id="tab-similarweb" class="hidden">
+    <div class="grid grid-cols-4 gap-4 mb-6" id="sw-cards">
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Avg Monthly Visits</div><div class="text-2xl font-bold text-white" id="sw-visits">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Bounce Rate</div><div class="text-2xl font-bold text-white" id="sw-bounce">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Avg Visit Duration</div><div class="text-2xl font-bold text-white" id="sw-duration">—</div></div>
+      <div class="card rounded-xl p-5 loading"><div class="text-slate-500 text-xs mb-1">Pages per Visit</div><div class="text-2xl font-bold text-white" id="sw-pages">—</div></div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="card rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-slate-300 mb-4">Monthly Visits Trend (UK)</h2>
+        <canvas id="swVisitsChart" height="120"></canvas>
+      </div>
+      <div class="card rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-slate-300 mb-4">Traffic Sources</h2>
+        <div id="sw-sources-loading" class="loading text-slate-500 text-sm">Loading…</div>
+        <div id="sw-sources-wrap" class="hidden">
+          <canvas id="swSourcesChart" height="160"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trips Tab -->
+  <div id="tab-trips" class="hidden">
+    <div id="trips-loading" class="loading text-slate-500 text-sm">Loading trips…</div>
+    <div id="trips-grid" class="grid grid-cols-3 gap-4 hidden"></div>
+    <div id="trips-error" class="hidden">
+      <div class="card rounded-xl p-6 max-w-xl">
+        <div class="text-white font-semibold mb-1">Session expired</div>
+        <p class="text-slate-400 text-sm mb-4">Paste your <code class="text-indigo-400">heha_session</code> cookie from heha.ai to reload trips.</p>
+        <p class="text-slate-500 text-xs mb-3">Open heha.ai → DevTools (F12) → Application → Cookies → copy the <strong class="text-slate-400">heha_session</strong> value (starts with eyJ…)</p>
+        <textarea id="cookie-input" rows="3" placeholder="eyJhbGci..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-300 text-xs font-mono resize-none focus:outline-none focus:border-indigo-500 mb-3"></textarea>
+        <button onclick="saveCookie()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition">Save &amp; Load Trips</button>
+        <span id="cookie-status" class="ml-3 text-sm text-slate-400"></span>
+      </div>
+    </div>
+  </div>
 
 <script>
-// ── CONFIG ──
-const SA_EMAIL = 'andy-agent@flight-mission.iam.gserviceaccount.com';
-const SA_KEY_PEM = `-----BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGPw2Xx2ipa7Af
-Cz+t5DR1W57KDSvsY8+IZLck/HCvUCxsuoMzbshAIyPCFZLxHm5ymeXMiwtSOzul
-/bCeDO03meyTxUCbGJtbanU5W9/6lVNYHuIV55npjXDMJ7EZC2lRtWkkTauu1r+Y
-HUKG1GZJhhDJFJaIyqSijbl0Vbc+K/kmcDNdJtbvZZMCBQ11mCfcONi1pKZBP4sj
-2uJu6t2xxxXjROHRFwXhErS8CsboThyT80Gv4xsvZ9zllUsme5NgyGeocEVtga6N
-dOgJ0fAM9YxtnqHtMDLNR79+Itcio15w4dVxl0zQ9S2GTH4itUNT+XMSFo/KbOrr
-m4qZ/ne1AgMBAAECggEAAvLv3x7jQURGS00aEKH133SSNi2yr76is2IOgfhmLeVv
-070MpNEK4Wu3OCl3wmaSQEN1rocv6YOHs1MuHP2lh5c1Gj1kZO3/TlRJ12keSPDa
-LnmR9LAqhALxQqoSXqJ5WdSwW8OYfJueAaVxEsh+anD76/7+72+DyTO16lkpexAi
-RfkRRwuQrzpg4nUVsHMgqbS1ywGxp3SXc2+2CBQ1UPyd3iLQsDmcsm9pQaa23K/f
-zfZtD3pXhWQ67h1di//3WOOR4BkSTWWZF9nbxT4ZxMvyOoEQsNVMq6t4s2cPGdSR
-bSH9cmNQOmrrKNtapigf3VnPppUZQ6T/Ds/XtTgnvQKBgQDqqHwyCWQ3iogvrDht
-0Yt9f9+rngXSvOKA/wEJowFXCEpda7JvF9Mnk9B/8Q/arIAnAzZGEy8Sqw+FbQXB
-vcxGcObF4hAqYZM4jZhxMDFLRUssxD971QrUPYB4VhxrXP9WVau/458MWfVtggOa
-DGlm2k+CXNnEZMtiNUGhWDobbwKBgQDYRsu3Rsem7LABsVB0W4dImGKDl3BAIXRr
-d4qi5V4Lr2PX08e1Ya4V7cTX+Nl0KxVFi6RaxjYYf0g1Pi/TEk98SeVyiHqB3HVu
-GKqAI1PDDUBDTnuU3+gdMuPtWcvGuJUavIlcN5ej37iDI1ZCNZrN5GjBGw0qek7B
-Z/gmnF4dGwKBgCuW7Ksmz3T5yN6CMWFFAZJohJYOnqpM6A5qUDkIDKGsKpQ8A0Nb
-u5+od5ysnPNUA+I7WIOf4KipGhMA84bPyPh01ImButsEkSJ6Ow0blKyUzKgeNGS+
-aGqQmiLAbDsNZWkWNPdKQys6MrsK4bxl/dZbS1W+Bb3Ts2wk1HIyP2kFAoGBANXu
-IXAnCTIqiWcDN6wBJW4/naLA1334Gap70pyS+VXhpYdFqxPVjVePm9huBNsOCrqC
-CI7p5XSR4qEX5EKKqCkvB1ElgtiVc2r15yFc0Gvt3ZU2OrPmTzkir6aF3jWxO3v4
-5n5bVxn4IBFHkPlpALmMp7nrwjg0R1a0OxgmMEnlAoGALp80Jqh4x8URsLN7sibP
-Gls+f3L7pj0lCX9NcjN0Ymg/KtpFR8VVtfQc48weuWjaYu3xosxxx9JjEg+cyhn8
-G2buON8Vq0FEjMNqoakvGEIMRp2BFU5pWuL3AX0AzRIC2U/bZzL5hMxVRgx/Sc0S
-6F4A1iQEGjxhjOHMivb6DWQ=
------END PRIVATE KEY-----`;
-const GA4_PROPERTY = 'properties/404773537';
-const SC_SITE = 'sc-domain:holidayextras.com';
+let perfChart = null;
 
-let DAYS = 28;
-let TOKEN_CACHE = { sc: null, ga: null, exp: 0 };
-
-// ── JWT / AUTH ──
-function b64url(str) {
-  return btoa(str).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-}
-function b64urlBuf(buf) {
-  return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+// ── Tab switching ──────────────────────────────────────────────────────────
+let awrLoaded = false;
+let swLoaded  = false;
+let ga4Loaded = false;
+let srLoaded  = false;
+let intlLoaded = false;
+function showTab(name, btn) {
+  ['seo','bing','semrush','awr','parking-aio','hotel-aio','international','ga4','serp','similarweb','inspect','trips'].forEach(t => {
+    document.getElementById('tab-'+t).classList.add('hidden');
+  });
+  document.getElementById('tab-'+name).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.classList.add('bg-slate-800');
+  });
+  if (btn) { btn.classList.add('active'); btn.classList.remove('bg-slate-800'); }
+  if (name === 'awr' && !awrLoaded)                { awrLoaded = true; loadAWR(); }
+  if (name === 'parking-aio' && !parkingAIOLoaded) { loadParkingAIO(); }
+  if (name === 'hotel-aio'   && !hotelAIOLoaded)   { loadHotelAIO(); }
+  if (name === 'ga4' && !ga4Loaded)                { ga4Loaded = true; loadGA4(); }
+  if (name === 'similarweb' && !swLoaded)          { swLoaded = true; loadSimilarWeb(); }
+  if (name === 'semrush' && !srLoaded)             { srLoaded = true; loadSemrush(); }
+  if (name === 'international' && !intlLoaded)     { intlLoaded = true; loadInternational(); }
 }
 
-async function getToken(scopes) {
-  const now = Math.floor(Date.now()/1000);
-  const cacheKey = scopes.join(',');
-  if (TOKEN_CACHE[cacheKey] && TOKEN_CACHE.exp > now + 60) return TOKEN_CACHE[cacheKey];
+// ── Fetch helpers ──────────────────────────────────────────────────────────
+function fmt(n) { if (n >= 1000000) return (n/1000000).toFixed(1)+'M'; if (n >= 1000) return (n/1000).toFixed(1)+'k'; return n; }
 
-  const header = b64url(JSON.stringify({alg:'RS256',typ:'JWT'}));
-  const payload = b64url(JSON.stringify({
-    iss: SA_EMAIL,
-    scope: scopes.join(' '),
-    aud: 'https://oauth2.googleapis.com/token',
-    exp: now + 3600,
-    iat: now
-  }));
-  const toSign = `${header}.${payload}`;
+function posColor(p) {
+  if (p <= 3)  return 'text-green-400';
+  if (p <= 10) return 'text-yellow-400';
+  return 'text-slate-400';
+}
 
-  const pemBody = SA_KEY_PEM.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
-  const binaryKey = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
-  const cryptoKey = await crypto.subtle.importKey('pkcs8', binaryKey, {name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'}, false, ['sign']);
-  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, new TextEncoder().encode(toSign));
-  const jwt = `${toSign}.${b64urlBuf(sig)}`;
+// ── GSC Performance chart ──────────────────────────────────────────────────
+async function loadPerformance() {
+  const data = await fetch('/api/gsc/performance').then(r=>r.json()).catch(()=>[]);
+  if (data.error || !data.length) return;
 
-  const res = await fetch('https://oauth2.googleapis.com/token', {
+  const totals = data.reduce((a,r)=>({
+    clicks: a.clicks + r.clicks,
+    impressions: a.impressions + r.impressions,
+    ctr: a.ctr + r.ctr,
+    pos: a.pos + r.position,
+    n: a.n+1
+  }), {clicks:0,impressions:0,ctr:0,pos:0,n:0});
+
+  document.getElementById('stat-clicks').textContent = fmt(totals.clicks);
+  document.getElementById('stat-impr').textContent   = fmt(totals.impressions);
+  document.getElementById('stat-ctr').textContent    = (totals.ctr/totals.n).toFixed(1)+'%';
+  document.getElementById('stat-pos').textContent    = (totals.pos/totals.n).toFixed(1);
+  document.querySelectorAll('#stat-cards .card').forEach(c => c.classList.remove('loading'));
+
+  const labels  = data.map(r => r.date.slice(5));
+  const clicks  = data.map(r => r.clicks);
+  const imprs   = data.map(r => r.impressions);
+
+  if (perfChart) perfChart.destroy();
+  perfChart = new Chart(document.getElementById('perfChart'), {
+    data: {
+      labels,
+      datasets: [
+        { type:'line', label:'Clicks', data:clicks, borderColor:'#818cf8', backgroundColor:'rgba(129,140,248,.15)', tension:.3, fill:true, yAxisID:'y' },
+        { type:'bar',  label:'Impressions', data:imprs, backgroundColor:'rgba(99,102,241,.25)', yAxisID:'y2' }
+      ]
+    },
+    options: {
+      responsive:true, interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{ labels:{ color:'#94a3b8', font:{size:11} } } },
+      scales:{
+        x:{ ticks:{color:'#64748b',font:{size:10}}, grid:{color:'#1e2235'} },
+        y:{ ticks:{color:'#94a3b8',font:{size:11}}, grid:{color:'#1e2235'}, position:'left' },
+        y2:{ ticks:{color:'#64748b',font:{size:10}}, grid:{display:false}, position:'right' }
+      }
+    }
+  });
+}
+
+// ── Top Pages ──────────────────────────────────────────────────────────────
+async function loadTopPages() {
+  const data = await fetch('/api/gsc/top-pages').then(r=>r.json()).catch(()=>[]);
+  document.getElementById('top-pages-loading').classList.add('hidden');
+  if (data.error || !data.length) return;
+  const tbody = document.getElementById('top-pages-body');
+  tbody.innerHTML = data.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-2 pr-2 text-slate-300 text-xs truncate max-w-[160px]" title="${r.page}">${r.page || '/'}</td>
+      <td class="py-2 text-right text-white font-medium">${fmt(r.clicks)}</td>
+      <td class="py-2 text-right ${posColor(r.position)}">${r.position}</td>
+      <td class="py-2 text-right text-slate-400">${r.ctr}%</td>
+    </tr>`).join('');
+  document.getElementById('top-pages-table').classList.remove('hidden');
+}
+
+// ── Top Queries ────────────────────────────────────────────────────────────
+async function loadTopQueries() {
+  const data = await fetch('/api/gsc/top-queries').then(r=>r.json()).catch(()=>[]);
+  document.getElementById('top-queries-loading').classList.add('hidden');
+  if (data.error || !data.length) return;
+  const tbody = document.getElementById('top-queries-body');
+  tbody.innerHTML = data.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-2 pr-2 text-slate-300 text-xs">${r.query}</td>
+      <td class="py-2 text-right text-white font-medium">${fmt(r.clicks)}</td>
+      <td class="py-2 text-right ${posColor(r.position)}">${r.position}</td>
+      <td class="py-2 text-right text-slate-400">${r.ctr}%</td>
+    </tr>`).join('');
+  document.getElementById('top-queries-table').classList.remove('hidden');
+}
+
+// ── Bing ───────────────────────────────────────────────────────────────────
+async function loadBing() {
+  const data = await fetch('/api/bing/top-queries').then(r=>r.json()).catch(()=>[]);
+  document.getElementById('bing-loading').classList.add('hidden');
+  if (data.error || !data.length) {
+    document.getElementById('bing-body').innerHTML = `<tr><td colspan="4" class="py-4 text-slate-500 text-center text-sm">Bing API temporarily unavailable — try again later</td></tr>`;
+    document.getElementById('bing-table').classList.remove('hidden');
+    return;
+  }
+  const tbody = document.getElementById('bing-body');
+  tbody.innerHTML = data.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-2 pr-2 text-slate-300 text-sm">${r.query}</td>
+      <td class="py-2 text-right text-white font-medium">${fmt(r.clicks)}</td>
+      <td class="py-2 text-right text-slate-400">${fmt(r.impressions)}</td>
+      <td class="py-2 text-right text-slate-400">${r.ctr}%</td>
+    </tr>`).join('');
+  document.getElementById('bing-table').classList.remove('hidden');
+}
+
+// ── URL Inspector ──────────────────────────────────────────────────────────
+async function inspectUrl() {
+  const url = document.getElementById('inspect-url').value.trim();
+  if (!url) return;
+  document.getElementById('inspect-result').classList.add('hidden');
+  document.getElementById('inspect-loading').classList.remove('hidden');
+  const d = await fetch('/api/inspect?url='+encodeURIComponent(url)).then(r=>r.json()).catch(e=>({error:e.message}));
+  document.getElementById('inspect-loading').classList.add('hidden');
+  if (d.error) return;
+  const badge = v => `<span class="px-2 py-0.5 rounded text-xs font-medium ${v==='PASS'?'badge-pass':'badge-fail'}">${v||'—'}</span>`;
+  document.getElementById('ir-verdict').innerHTML   = badge(d.verdict);
+  document.getElementById('ir-coverage').textContent  = d.coverage || '—';
+  document.getElementById('ir-crawled').textContent   = d.lastCrawled || '—';
+  document.getElementById('ir-crawledas').textContent = d.crawledAs || '—';
+  document.getElementById('ir-mobile').innerHTML      = badge(d.mobile);
+  document.getElementById('ir-canonical').textContent = d.canonical || '—';
+  document.getElementById('inspect-result').classList.remove('hidden');
+}
+
+// ── Trips ──────────────────────────────────────────────────────────────────
+async function saveCookie() {
+  const cookie = document.getElementById('cookie-input').value.trim();
+  if (!cookie) return;
+  const status = document.getElementById('cookie-status');
+  status.textContent = 'Saving…';
+  const res = await fetch('/api/trips/cookie', {
     method: 'POST',
-    headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`
-  });
-  const data = await res.json();
-  if (!data.access_token) throw new Error('Token error: ' + JSON.stringify(data));
-  TOKEN_CACHE[cacheKey] = data.access_token;
-  TOKEN_CACHE.exp = now + 3600;
-  return data.access_token;
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({cookie})
+  }).then(r=>r.json()).catch(e=>({error: e.message}));
+  if (res.error) { status.textContent = '✗ ' + res.error; return; }
+  if (!res.trips_found) { status.textContent = '✗ Cookie saved but returned 0 trips — may be wrong/expired'; return; }
+  status.textContent = '';
+  document.getElementById('trips-error').classList.add('hidden');
+  renderTrips(res.trips);
 }
 
-// ── DATE HELPERS ──
-function dateStr(daysAgo) {
-  const d = new Date(); d.setDate(d.getDate() - daysAgo);
-  return d.toISOString().split('T')[0];
-}
-function fmtDate(d) {
-  return new Date(d).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
-}
-
-function setRange(days, btn) {
-  DAYS = days;
-  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const start = fmtDate(dateStr(days));
-  const end = fmtDate(dateStr(1));
-  document.getElementById('dateRangeLabel').textContent = `${start} → ${end}`;
-  loadAll();
+async function loadTrips() {
+  const data = await fetch('/api/trips').then(r=>r.json()).catch(()=>({trips:[]}));
+  document.getElementById('trips-loading').classList.add('hidden');
+  const trips = data.trips || [];
+  if (!trips.length) {
+    document.getElementById('trips-error').classList.remove('hidden');
+    return;
+  }
+  renderTrips(trips);
 }
 
-// ── API CALLS ──
-async function scQuery(body) {
-  const token = await getToken(['https://www.googleapis.com/auth/webmasters.readonly']);
-  const r = await fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SC_SITE)}/searchAnalytics/query`, {
-    method:'POST', headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
-    body: JSON.stringify(body)
-  });
-  return r.json();
-}
-
-async function gaQuery(body) {
-  const token = await getToken(['https://www.googleapis.com/auth/analytics.readonly']);
-  const r = await fetch(`https://analyticsdata.googleapis.com/v1beta/${GA4_PROPERTY}:runReport`, {
-    method:'POST', headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
-    body: JSON.stringify(body)
-  });
-  return r.json();
-}
-
-// ── FORMATTERS ──
-function fmt(n) { return Number(n).toLocaleString('en-GB'); }
-function fmtPos(p) { return Number(p).toFixed(1); }
-function fmtCtr(c) { return (Number(c)*100).toFixed(1)+'%'; }
-function fmtDur(s) { s=Math.round(s); return `${Math.floor(s/60)}m ${s%60}s`; }
-function fmtPct(n) { return (Number(n)*100).toFixed(1)+'%'; }
-
-function posBadge(p) {
-  p = Number(p);
-  if (p <= 1.5) return `<span class="pos-badge pos-1">🥇 #1</span>`;
-  if (p <= 3.5) return `<span class="pos-badge pos-3">Top 3</span>`;
-  if (p <= 10.5) return `<span class="pos-badge pos-10">Pg 1</span>`;
-  if (p <= 20.5) return `<span class="pos-badge pos-20">Pg 2</span>`;
-  return `<span class="pos-badge pos-out">Pg ${Math.ceil(p/10)}</span>`;
-}
-
-function ctrClass(ctr, pos) {
-  const c = Number(ctr)*100;
-  // Expected CTR by position
-  const expected = pos <= 1.5 ? 25 : pos <= 3 ? 12 : pos <= 5 ? 6 : pos <= 10 ? 3 : 1;
-  if (c >= expected * 0.8) return 'ctr-good';
-  if (c >= expected * 0.4) return 'ctr-mid';
-  return 'ctr-low';
-}
-
-function bar(val, max, cls='') {
-  const pct = Math.min(100, (val/max)*100);
-  return `<div class="bar-wrap"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>`;
-}
-
-function changeArrow(val, suffix='') {
-  if (val > 0) return `<span class="card-change up">▲ ${fmt(val)}${suffix} vs prev period</span>`;
-  if (val < 0) return `<span class="card-change down">▼ ${fmt(Math.abs(val))}${suffix} vs prev period</span>`;
-  return `<span class="card-change neutral">— no change</span>`;
-}
-
-// ── RENDER FUNCTIONS ──
-function renderSCCards(curr, prev) {
-  const dClick = curr.clicks - prev.clicks;
-  const dImpr = curr.impressions - prev.impressions;
-  const dCtr = ((curr.ctr - prev.ctr)*100).toFixed(2);
-  const dPos = (curr.position - prev.position).toFixed(1);
-  document.getElementById('scCards').innerHTML = `
-    <div class="card">
-      <div class="card-label">Total Clicks</div>
-      <div class="card-value">${fmt(curr.clicks)}</div>
-      ${changeArrow(dClick)}
-      <div class="card-sub">organic search traffic</div>
-    </div>
-    <div class="card green">
-      <div class="card-label">Impressions</div>
-      <div class="card-value">${curr.impressions>999999?(curr.impressions/1000000).toFixed(1)+'M':fmt(curr.impressions)}</div>
-      ${changeArrow(dImpr)}
-      <div class="card-sub">times shown in Google</div>
-    </div>
-    <div class="card yellow">
-      <div class="card-label">Click-Through Rate</div>
-      <div class="card-value">${(curr.ctr*100).toFixed(2)}%</div>
-      <span class="card-change ${dCtr>0?'up':dCtr<0?'down':'neutral'}">${dCtr>0?'▲':'▼'} ${Math.abs(dCtr)}% vs prev</span>
-      <div class="card-sub">clicks ÷ impressions</div>
-    </div>
-    <div class="card purple">
-      <div class="card-label">Avg Position</div>
-      <div class="card-value">${fmtPos(curr.position)}</div>
-      <span class="card-change ${dPos<0?'up':dPos>0?'down':'neutral'}">${dPos<0?'▲ improved':'▼ dropped'} ${Math.abs(dPos)} vs prev</span>
-      <div class="card-sub">average rank in Google</div>
+function renderTrips(trips) {
+  document.getElementById('trips-loading').classList.add('hidden');
+  const grid = document.getElementById('trips-grid');
+  const flags = { Portugal:'🇵🇹', Marrakech:'🇲🇦', Amsterdam:'🇳🇱', Podgorica:'🇲🇪', Spain:'🇪🇸', France:'🇫🇷', Italy:'🇮🇹', Greece:'🇬🇷', UK:'🇬🇧' };
+  grid.innerHTML = trips.map(t => {
+    const trip = t.trip || {};
+    const dest = trip.destination || 'Unknown';
+    const flag = Object.entries(flags).find(([k]) => dest.includes(k))?.[1] || '✈️';
+    const flights = t.flights_if_known || [];
+    const outbound = flights[0] || {};
+    return `
+    <div class="card rounded-xl p-5">
+      <div class="text-3xl mb-2">${flag}</div>
+      <div class="font-semibold text-white text-lg">${dest}</div>
+      <div class="text-slate-400 text-sm mt-1">${trip.start_date || '?'} → ${trip.end_date || '?'}</div>
+      ${outbound.flight_number ? `
+      <div class="mt-3 pt-3 border-t border-slate-700 text-xs text-slate-400">
+        <div class="flex justify-between"><span>${outbound.departure_airport} → ${outbound.arrival_airport}</span><span class="text-slate-300">${outbound.flight_number}</span></div>
+        <div class="text-slate-500 mt-0.5">${outbound.departure_time} → ${outbound.arrival_time}</div>
+      </div>` : ''}
+      ${t.people_travelling?.length ? `<div class="mt-2 text-xs text-slate-500">${t.people_travelling.map(p=>p.name).join(', ')}</div>` : ''}
     </div>`;
+  }).join('');
+  grid.classList.remove('hidden');
 }
 
-function renderGACards(data) {
-  const rows = data.rows || [];
-  const get = name => {
-    const hdr = data.metricHeaders || [];
-    const idx = hdr.findIndex(h => h.name === name);
-    return idx >= 0 && rows[0] ? Number(rows[0].metricValues[idx].value) : 0;
-  };
-  const sessions = get('sessions');
-  const users = get('activeUsers');
-  const bounce = get('bounceRate');
-  const duration = get('averageSessionDuration');
-  const engage = get('engagementRate');
-  const newUsers = get('newUsers');
+// ── SEMrush ────────────────────────────────────────────────────────────────
+let srAllRows = [];
 
-  document.getElementById('gaCards').innerHTML = `
-    <div class="card">
-      <div class="card-label">Sessions</div>
-      <div class="card-value">${fmt(sessions)}</div>
-      <div class="card-sub">all channels</div>
-    </div>
-    <div class="card green">
-      <div class="card-label">Active Users</div>
-      <div class="card-value">${fmt(users)}</div>
-      <div class="card-sub">${fmt(newUsers)} new users</div>
-    </div>
-    <div class="card orange">
-      <div class="card-label">Bounce Rate</div>
-      <div class="card-value">${(bounce*100).toFixed(1)}%</div>
-      <div class="card-sub">${bounce < 0.4 ? '✅ Good' : bounce < 0.6 ? '⚠️ Average' : '🔴 High'}</div>
-    </div>
-    <div class="card yellow">
-      <div class="card-label">Avg Session</div>
-      <div class="card-value">${Math.floor(duration/60)}m</div>
-      <div class="card-sub">${fmtDur(duration)} total</div>
-    </div>
-    <div class="card purple">
-      <div class="card-label">Engagement Rate</div>
-      <div class="card-value">${(engage*100).toFixed(1)}%</div>
-      <div class="card-sub">${engage > 0.6 ? '✅ Strong' : '⚠️ Monitor'}</div>
-    </div>`;
+function kdColour(kd) {
+  if (kd >= 80) return 'text-red-400';
+  if (kd >= 60) return 'text-orange-400';
+  if (kd >= 40) return 'text-amber-400';
+  if (kd >= 20) return 'text-yellow-400';
+  return 'text-green-400';
 }
 
-function renderKeywords(rows) {
-  if (!rows || !rows.length) { document.getElementById('kw-top').innerHTML='<p class="loading">No data</p>'; return; }
-  const maxClicks = Math.max(...rows.map(r=>r.clicks));
+function renderSemrushTable(rows) {
+  const db = document.getElementById('sr-db-select').value;
+  const curr = {uk:'£',de:'€',fr:'€',es:'€',it:'€',nl:'€',us:'$',au:'A$',ca:'C$'}[db] || '£';
+  document.getElementById('semrush-table').innerHTML = rows.map(k => `
+    <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+      <td class="py-2 pr-3">${k.keyword}</td>
+      <td class="py-2 pr-3 text-right text-slate-300">${k.volume ? fmt(k.volume) : '—'}</td>
+      <td class="py-2 pr-3 text-right font-mono font-bold ${posClass(k.position)}">${k.position}</td>
+      <td class="py-2 pr-3 text-right font-bold ${kdColour(k.kd)}">${k.kd}</td>
+      <td class="py-2 pr-3 text-right text-amber-300">${k.cpc ? curr+k.cpc.toFixed(2) : '—'}</td>
+      <td class="py-2 pr-3 text-right text-slate-400">${k.competition ? k.competition.toFixed(2) : '—'}</td>
+      <td class="py-2 pr-3 text-right text-indigo-300">${k.traffic ? k.traffic.toFixed(1)+'%' : '—'}</td>
+      <td class="py-2 text-slate-500 truncate max-w-[160px]" title="${k.url}">${k.url || '/'}</td>
+    </tr>`).join('');
+}
 
-  // Top keywords table
-  let topHtml = `<table><thead><tr><th>Keyword</th><th>Clicks</th><th>Impr</th><th>CTR</th><th>Pos</th></tr></thead><tbody>`;
-  rows.slice(0,20).forEach(r => {
-    topHtml += `<tr>
-      <td><div class="kw" title="${r.keys[0]}">${r.keys[0]}</div>${bar(r.clicks,maxClicks)}</td>
-      <td><b>${fmt(r.clicks)}</b></td>
-      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
-      <td class="${ctrClass(r.ctr,r.position)}">${fmtCtr(r.ctr)}</td>
-      <td>${posBadge(r.position)}</td>
-    </tr>`;
-  });
-  topHtml += '</tbody></table>';
-  document.getElementById('kw-top').innerHTML = topHtml;
+function filterSemrush(q) {
+  const filtered = q ? srAllRows.filter(r => r.keyword.toLowerCase().includes(q.toLowerCase())) : srAllRows;
+  renderSemrushTable(filtered);
+}
 
-  // Opportunities: high impressions, low CTR (position 4-20)
-  const opps = rows
-    .filter(r => r.position >= 4 && r.position <= 20 && r.impressions > 1000)
-    .sort((a,b) => b.impressions - a.impressions)
-    .slice(0,20);
-  const maxI = Math.max(...opps.map(r=>r.impressions));
-  let oppHtml = `<table><thead><tr><th>Keyword</th><th>Impr</th><th>CTR</th><th>Pos</th><th>Opportunity</th></tr></thead><tbody>`;
-  opps.forEach(r => {
-    const expectedCtr = r.position <= 5 ? 0.06 : 0.03;
-    const potentialClicks = Math.round(r.impressions * expectedCtr) - r.clicks;
-    oppHtml += `<tr>
-      <td><div class="kw" title="${r.keys[0]}">${r.keys[0]}</div>${bar(r.impressions,maxI,'orange')}</td>
-      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
-      <td class="ctr-low">${fmtCtr(r.ctr)}</td>
-      <td>${posBadge(r.position)}</td>
-      <td><span class="opp-tag opp-ctr">+${fmt(potentialClicks)} clicks potential</span></td>
-    </tr>`;
-  });
-  oppHtml += '</tbody></table>';
-  document.getElementById('kw-opp').innerHTML = oppHtml;
+async function loadSemrush() {
+  srLoaded = true;
+  const db = document.getElementById('sr-db-select').value;
+  const status = document.getElementById('sr-status');
+  status.textContent = 'Loading…';
+  document.getElementById('semrush-table').innerHTML = '<tr><td colspan="8" class="py-6 text-center text-slate-500">Fetching SEMrush data…</td></tr>';
 
-  // By position distribution
-  const p1 = rows.filter(r=>r.position<=1.5).length;
-  const p13 = rows.filter(r=>r.position>1.5&&r.position<=3.5).length;
-  const p110 = rows.filter(r=>r.position>3.5&&r.position<=10.5).length;
-  const p210 = rows.filter(r=>r.position>10.5&&r.position<=20.5).length;
-  const p3 = rows.filter(r=>r.position>20.5).length;
-  const total = rows.length;
-  document.getElementById('kw-pos').innerHTML = `
-    <div style="margin-bottom:16px;">
-      <div class="summary-grid">
-        <div class="summary-item"><div class="val">${p1}</div><div class="lbl">#1 Position</div></div>
-        <div class="summary-item"><div class="val">${p1+p13}</div><div class="lbl">Top 3</div></div>
-        <div class="summary-item"><div class="val">${p1+p13+p110}</div><div class="lbl">Page 1 (Top 10)</div></div>
-      </div>
-    </div>
-    <div style="margin-top:12px;">
-      ${[['#1',p1,'#854d0e'],['2–3',p13,'#166534'],['4–10',p110,'#1e40af'],['11–20',p210,'#6b21a8'],['21+',p3,'#991b1b']].map(([label,count,color])=>`
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-          <div style="width:40px;font-size:0.78rem;font-weight:700;color:${color}">Pos ${label}</div>
-          <div style="flex:1;background:#f3f4f6;border-radius:4px;height:18px;overflow:hidden;">
-            <div style="width:${(count/total*100).toFixed(1)}%;height:100%;background:${color};border-radius:4px;"></div>
+  const [overview, kwData] = await Promise.all([
+    fetch(`/api/semrush/overview?db=${db}`).then(r=>r.json()).catch(()=>({})),
+    fetch(`/api/semrush/keywords?db=${db}`).then(r=>r.json()).catch(()=>({}))
+  ]);
+
+  const curr = {uk:'£',de:'€',fr:'€',es:'€',it:'€',nl:'€',us:'$',au:'A$',ca:'C$'}[db] || '£';
+
+  if (overview.rank !== undefined) {
+    document.getElementById('sr-rank').textContent    = fmt(overview.rank);
+    document.getElementById('sr-kws').textContent     = fmt(overview.organic_keywords);
+    document.getElementById('sr-traffic').textContent = fmt(overview.organic_traffic);
+    document.getElementById('sr-cost').textContent    = curr + fmt(overview.organic_cost);
+    document.querySelectorAll('#semrush-cards .card').forEach(c=>c.classList.remove('loading'));
+  }
+
+  const rows = kwData.rows || [];
+  const s    = kwData.summary || {};
+  if (s.top3 !== undefined) {
+    document.getElementById('sr-top3').textContent   = s.top3;
+    document.getElementById('sr-top10').textContent  = s.top10;
+    document.getElementById('sr-avgpos').textContent = s.avg_pos;
+    document.getElementById('sr-avgkd').textContent  = s.avg_kd;
+  }
+
+  srAllRows = rows;
+  renderSemrushTable(rows);
+  status.textContent = rows.length ? `${rows.length} keywords · ${new Date().toLocaleTimeString()}` : 'No data';
+}
+
+// ── International ──────────────────────────────────────────────────────────
+async function loadInternational() {
+  intlLoaded = true;
+
+  // Load GSC + SEMrush in parallel
+  const [gscData, semrushData] = await Promise.all([
+    fetch('/api/international/gsc').then(r=>r.json()).catch(()=>[]),
+    fetch('/api/international/semrush').then(r=>r.json()).catch(()=>[])
+  ]);
+
+  // ── GSC country table ──
+  const gscTbody = document.getElementById('intl-gsc-table');
+  if (Array.isArray(gscData) && gscData.length) {
+    const totalClicks = gscData.reduce((s,r)=>s+r.clicks,0) || 1;
+    gscTbody.innerHTML = gscData.map(r => {
+      const sharePct = Math.round(r.clicks / totalClicks * 100);
+      const barW = Math.max(1, sharePct);
+      return `<tr class="border-b border-slate-800 hover:bg-slate-800/40">
+        <td class="py-2 pr-3 font-medium text-white">${r.flag} ${r.name}</td>
+        <td class="py-2 pr-3 text-right text-white font-bold">${fmt(r.clicks)}</td>
+        <td class="py-2 pr-3 text-right text-slate-400">${fmt(r.impressions)}</td>
+        <td class="py-2 pr-3 text-right text-slate-400">${r.ctr}%</td>
+        <td class="py-2 pr-3 text-right ${r.position<=5?'text-green-400':r.position<=10?'text-amber-400':'text-slate-400'}">${r.position}</td>
+        <td class="py-2 pr-3 pl-4">
+          <div class="flex items-center gap-2">
+            <div class="w-32 bg-slate-800 rounded-full h-2.5"><div class="h-2.5 rounded-full bg-indigo-500" style="width:${barW}%"></div></div>
+            <span class="text-xs text-slate-400">${sharePct}%</span>
           </div>
-          <div style="width:60px;text-align:right;font-size:0.78rem;font-weight:600;">${count} <span style="color:#9ca3af">(${(count/total*100).toFixed(0)}%)</span></div>
-        </div>`).join('')}
-    </div>`;
-
-  // Position dist for right panel
-  document.getElementById('posDistPanel').innerHTML = `
-    <div class="summary-grid" style="margin-bottom:12px;">
-      <div class="summary-item"><div class="val">${p1}</div><div class="lbl">#1 Ranks</div></div>
-      <div class="summary-item"><div class="val">${p1+p13}</div><div class="lbl">Top 3</div></div>
-      <div class="summary-item"><div class="val">${p1+p13+p110}</div><div class="lbl">Page 1</div></div>
-    </div>
-    <div style="margin-top:8px">
-      ${[['#1 only',p1,'#854d0e'],['Pos 2–3',p13,'#166534'],['Pos 4–10',p110,'#1e40af'],['Pos 11–20',p210,'#6b21a8'],['Pos 21+',p3,'#9ca3af']].map(([l,c,col])=>`
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:0.8rem;">
-          <div style="width:6px;height:6px;background:${col};border-radius:50%;flex-shrink:0;"></div>
-          <div style="flex:1;color:#374151;">${l}</div>
-          <div style="font-weight:700;color:${col};">${c}</div>
-          <div style="color:#9ca3af;width:35px;text-align:right">${(c/total*100).toFixed(0)}%</div>
-        </div>`).join('')}
-    </div>
-    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;font-size:0.78rem;color:#6b7280;">
-      Total keywords tracked: <b style="color:#003F7D">${fmt(total)}</b>
-    </div>`;
-}
-
-function renderPages(scRows, gaRows) {
-  if (!scRows || !scRows.length) { document.getElementById('pg-top').innerHTML='<p>No data</p>'; return; }
-  const maxC = Math.max(...scRows.map(r=>r.clicks));
-  let html = `<table><thead><tr><th>Page</th><th>Clicks</th><th>Impr</th><th>CTR</th><th>Pos</th></tr></thead><tbody>`;
-  scRows.slice(0,20).forEach(r => {
-    const pg = r.keys[0].replace('https://www.holidayextras.com','') || '/';
-    html += `<tr>
-      <td><div class="pg" title="${r.keys[0]}">${pg || '/'}</div>${bar(r.clicks,maxC)}</td>
-      <td><b>${fmt(r.clicks)}</b></td>
-      <td>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</td>
-      <td class="${ctrClass(r.ctr,r.position)}">${fmtCtr(r.ctr)}</td>
-      <td>${posBadge(r.position)}</td>
-    </tr>`;
-  });
-  html += '</tbody></table>';
-  document.getElementById('pg-top').innerHTML = html;
-
-  // GA4 pages
-  if (gaRows && gaRows.length) {
-    const maxS = Math.max(...gaRows.slice(0,20).map(r=>Number(r.metricValues[0].value)));
-    let gaHtml = `<table><thead><tr><th>Page</th><th>Sessions</th><th>Bounce</th><th>Avg Time</th></tr></thead><tbody>`;
-    gaRows.slice(0,20).forEach(r => {
-      const pg = (r.dimensionValues[0].value || '/').replace('https://www.holidayextras.com','') || '/';
-      const sess = Number(r.metricValues[0].value);
-      const bounce = Number(r.metricValues[1].value);
-      const dur = Number(r.metricValues[2].value);
-      gaHtml += `<tr>
-        <td><div class="pg" title="${pg}">${pg}</div>${bar(sess,maxS)}</td>
-        <td><b>${fmt(sess)}</b></td>
-        <td class="${bounce<0.4?'ctr-good':bounce<0.6?'ctr-mid':'ctr-low'}">${(bounce*100).toFixed(0)}%</td>
-        <td>${fmtDur(dur)}</td>
+        </td>
       </tr>`;
-    });
-    gaHtml += '</tbody></table>';
-    document.getElementById('pg-ga').innerHTML = gaHtml;
+    }).join('');
+  } else {
+    const msg = gscData.error ? gscData.error : 'No data';
+    gscTbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500">${msg}</td></tr>`;
   }
+
+  // ── SEMrush market table ──
+  const srTbody = document.getElementById('intl-semrush-table');
+  if (Array.isArray(semrushData) && semrushData.length) {
+    srTbody.innerHTML = semrushData.map(m => `
+      <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+        <td class="py-2 pr-3 font-medium text-white">${m.flag} ${m.name}</td>
+        <td class="py-2 pr-3 text-right text-slate-400">${m.rank ? '#'+fmt(m.rank) : '—'}</td>
+        <td class="py-2 pr-3 text-right text-white">${fmt(m.organic_keywords)}</td>
+        <td class="py-2 pr-3 text-right text-indigo-300 font-bold">${fmt(m.organic_traffic)}</td>
+        <td class="py-2 pr-3 text-right text-amber-300">${m.currency}${fmt(m.organic_cost)}</td>
+        <td class="py-2 pr-3 text-right text-slate-400">${fmt(m.paid_keywords)}</td>
+        <td class="py-2 text-right text-slate-400">${fmt(m.paid_traffic)}</td>
+      </tr>`).join('');
+
+    // Traffic bars
+    const maxT = semrushData[0]?.organic_traffic || 1;
+    document.getElementById('intl-traffic-bars').innerHTML = semrushData.map(m => {
+      const pct = Math.max(1, Math.round(m.organic_traffic / maxT * 100));
+      return `<div class="flex items-center gap-3">
+        <div class="w-36 text-xs truncate text-slate-400">${m.flag} ${m.name}</div>
+        <div class="flex-1 bg-slate-800 rounded-full h-4 relative overflow-hidden">
+          <div class="h-4 rounded-full bg-indigo-500" style="width:${pct}%"></div>
+        </div>
+        <div class="w-24 text-right text-xs font-bold text-indigo-300">${fmt(m.organic_traffic)}</div>
+        <div class="w-20 text-right text-xs text-amber-300">${m.currency}${fmt(m.organic_cost)}</div>
+      </div>`;
+    }).join('');
+  } else {
+    srTbody.innerHTML = '<tr><td colspan="7" class="py-4 text-center text-slate-500">Loading…</td></tr>';
+  }
+
+  // ── Per-country top pages ──
+  loadIntlPages();
 }
 
-function renderChannels(rows, headers) {
-  if (!rows) { document.getElementById('channelPanel').innerHTML='<p>No data</p>'; return; }
-  const total = rows.reduce((s,r) => s + Number(r.metricValues[0].value), 0);
-  const colours = {'Organic Search':'#003F7D','Direct':'#FFD100','Referral':'#16a34a','Paid Search':'#ea580c','Organic Social':'#7c3aed','Email':'#0891b2','(Other)':'#9ca3af'};
-  const maxV = Math.max(...rows.map(r=>Number(r.metricValues[0].value)));
-  let html = '';
-  rows.slice(0,8).forEach(r => {
-    const ch = r.dimensionValues[0].value;
-    const val = Number(r.metricValues[0].value);
-    const pct = (val/total*100).toFixed(1);
-    const col = colours[ch] || '#9ca3af';
-    html += `<div class="channel-row">
-      <div class="channel-name" style="color:${col}">● ${ch}</div>
-      <div style="flex:1"><div class="bar-wrap"><div class="bar-fill" style="width:${(val/maxV*100).toFixed(0)}%;background:${col}"></div></div></div>
-      <div class="channel-val">${fmt(val)}</div>
-      <div class="channel-pct">${pct}%</div>
+async function loadIntlPages() {
+  const grid = document.getElementById('intl-pages-grid');
+  grid.innerHTML = '<div class="card rounded-xl p-5 col-span-2 text-slate-500 text-center text-sm loading">Fetching page data for 14 countries…</div>';
+
+  const data = await fetch('/api/international/pages').then(r=>r.json()).catch(e=>({error:e.message}));
+  if (data.error) {
+    grid.innerHTML = `<div class="card rounded-xl p-5 col-span-2 text-red-400 text-sm">${data.error}</div>`;
+    return;
+  }
+  document.getElementById('intl-pages-date').textContent = data.date_range || '';
+  const countries = data.countries || [];
+
+  grid.innerHTML = countries.map(c => {
+    const devMobile  = c.devices?.mobile?.share  || 0;
+    const devDesktop = c.devices?.desktop?.share || 0;
+    const devTablet  = c.devices?.tablet?.share  || 0;
+
+    const pagesHtml = (c.pages || []).map((p, i) => `
+      <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+        <td class="py-1.5 pr-2 text-slate-500 text-center">${i+1}</td>
+        <td class="py-1.5 pr-2 text-slate-300 truncate max-w-[200px]" title="${p.page}">${p.page || '/'}</td>
+        <td class="py-1.5 pr-2 text-right text-white font-bold">${fmt(p.clicks)}</td>
+        <td class="py-1.5 pr-2 text-right text-slate-400">${fmt(p.impressions)}</td>
+        <td class="py-1.5 pr-2 text-right text-slate-400">${p.ctr}%</td>
+        <td class="py-1.5 text-right font-bold ${p.position<=3?'text-green-400':p.position<=10?'text-amber-400':'text-slate-400'}">${p.position}</td>
+      </tr>`).join('');
+
+    return `<div class="card rounded-xl p-4 ${c.error ? 'border border-red-900/40' : ''}">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <span class="text-base font-semibold text-white">${c.flag} ${c.name}</span>
+          ${c.error ? `<span class="text-xs text-red-400 ml-2">${c.error}</span>` : ''}
+        </div>
+        <div class="flex gap-4 text-right">
+          <div><div class="text-xs text-slate-500">Clicks</div><div class="font-bold text-white">${fmt(c.total_clicks||0)}</div></div>
+          <div><div class="text-xs text-slate-500">Impressions</div><div class="font-bold text-slate-300">${fmt(c.total_impressions||0)}</div></div>
+          <div><div class="text-xs text-slate-500">CTR</div><div class="font-bold text-slate-300">${c.avg_ctr||0}%</div></div>
+          <div><div class="text-xs text-slate-500">Avg Pos</div><div class="font-bold ${(c.avg_pos||99)<=5?'text-green-400':(c.avg_pos||99)<=10?'text-amber-400':'text-slate-400'}">${c.avg_pos||'—'}</div></div>
+        </div>
+      </div>
+      ${devMobile || devDesktop ? `
+      <div class="flex gap-2 mb-3 text-xs">
+        <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-indigo-500"></div><span class="text-slate-400">Mobile ${devMobile}%</span></div>
+        <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-emerald-500"></div><span class="text-slate-400">Desktop ${devDesktop}%</span></div>
+        ${devTablet ? `<div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-amber-500"></div><span class="text-slate-400">Tablet ${devTablet}%</span></div>` : ''}
+        <div class="flex-1 bg-slate-800 rounded-full h-2 overflow-hidden ml-2">
+          <div class="h-2 bg-indigo-500 float-left" style="width:${devMobile}%"></div>
+          <div class="h-2 bg-emerald-500 float-left" style="width:${devDesktop}%"></div>
+          <div class="h-2 bg-amber-500 float-left" style="width:${devTablet}%"></div>
+        </div>
+      </div>` : ''}
+      <table class="w-full text-xs">
+        <thead><tr class="border-b border-slate-700 text-slate-400">
+          <th class="pb-1.5 pr-2 w-6">#</th>
+          <th class="text-left pb-1.5 pr-2">Page</th>
+          <th class="text-right pb-1.5 pr-2">Clicks</th>
+          <th class="text-right pb-1.5 pr-2">Impr</th>
+          <th class="text-right pb-1.5 pr-2">CTR</th>
+          <th class="text-right pb-1.5">Pos</th>
+        </tr></thead>
+        <tbody class="text-slate-300">${pagesHtml || '<tr><td colspan="6" class="py-2 text-slate-600 text-center">No data</td></tr>'}</tbody>
+      </table>
     </div>`;
+  }).join('');
+}
+
+// ── AWR ────────────────────────────────────────────────────────────────────
+let awrAllRows = [];
+
+function fmt(n) { return n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(1)+'K' : String(n); }
+
+function posClass(p) {
+  if (p == 1)    return 'text-green-400 font-bold';
+  if (p <= 3)    return 'text-green-400';
+  if (p <= 10)   return 'text-amber-400';
+  if (p <= 20)   return 'text-slate-300';
+  return 'text-slate-500';
+}
+function compBadge(c) {
+  if (c === 'High')   return '<span class="bg-red-900/50 text-red-400 px-1.5 py-0.5 rounded text-xs">H</span>';
+  if (c === 'Medium') return '<span class="bg-amber-900/50 text-amber-400 px-1.5 py-0.5 rounded text-xs">M</span>';
+  if (c === 'Low')    return '<span class="bg-green-900/50 text-green-400 px-1.5 py-0.5 rounded text-xs">L</span>';
+  return '<span class="text-slate-600 text-xs">—</span>';
+}
+function renderAWRTable(rows) {
+  document.getElementById('awr-table').innerHTML = rows.map(k => `
+    <tr class="border-b border-slate-800/60 hover:bg-slate-800/30">
+      <td class="py-2 pr-3">${k.keyword}</td>
+      <td class="py-2 pr-3 text-right text-slate-300">${k.volume ? fmt(k.volume) : '—'}</td>
+      <td class="py-2 pr-3 text-right font-mono font-bold ${posClass(k.position)}">${k.position}</td>
+      <td class="py-2 pr-3 text-right text-slate-400">${k.best || '—'}</td>
+      <td class="py-2 pr-3 text-right text-indigo-300">${k.traffic ? fmt(k.traffic) : '—'}</td>
+      <td class="py-2 pr-3 text-right text-amber-300">${k.cpc ? '£'+parseFloat(k.cpc).toFixed(2) : '—'}</td>
+      <td class="py-2 pr-3 text-center">${compBadge(k.competition)}</td>
+      <td class="py-2 text-slate-500 truncate max-w-[160px]" title="${k.url}">${k.url || '/'}</td>
+    </tr>`).join('');
+}
+
+function filterAWR(q) {
+  const filtered = q ? awrAllRows.filter(r => r.keyword.toLowerCase().includes(q.toLowerCase())) : awrAllRows;
+  renderAWRTable(filtered);
+}
+
+async function loadAWR() {
+  awrLoaded = true;
+  const status = document.getElementById('awr-status');
+  status.textContent = 'Loading…';
+  document.getElementById('awr-table').innerHTML = '<tr><td colspan="8" class="py-6 text-center text-slate-500">Fetching AWR data…</td></tr>';
+
+  const data = await fetch('/api/awr/rankings').then(r=>r.json()).catch(e=>({error:e.message}));
+  if (data.error) { status.textContent = '✗ ' + data.error; return; }
+
+  const s = data.summary;
+  document.getElementById('awr-date').textContent    = data.date;
+  document.getElementById('awr-total').textContent   = fmt(s.total_keywords);
+  document.getElementById('awr-volume').textContent  = fmt(s.total_volume);
+  document.getElementById('awr-traffic').textContent = fmt(s.est_traffic);
+  document.getElementById('awr-cpc').textContent     = '£' + s.avg_cpc;
+  document.getElementById('awr-p1').textContent      = s.pos1;
+  document.getElementById('awr-p3').textContent      = s.top3;
+  document.getElementById('awr-p10').textContent     = s.top10;
+  document.getElementById('awr-p20').textContent     = s.top20;
+  document.getElementById('awr-avgpos').textContent  = s.avg_position;
+  document.getElementById('awr-comp-high').textContent = s.comp_high;
+  document.getElementById('awr-comp-med').textContent  = s.comp_medium;
+  document.getElementById('awr-comp-low').textContent  = s.comp_low;
+
+  // Distribution bar
+  const total = s.total_keywords;
+  const bands = [
+    { label:'#1', count: s.pos1, colour:'bg-green-500' },
+    { label:'2-3', count: s.top3 - s.pos1, colour:'bg-green-400' },
+    { label:'4-10', count: s.top10 - s.top3, colour:'bg-amber-400' },
+    { label:'11-20', count: s.top20 - s.top10, colour:'bg-slate-400' },
+    { label:'20+', count: total - s.top20, colour:'bg-slate-700' },
+  ];
+  document.getElementById('awr-dist-bar').innerHTML = bands.map(b => {
+    const pct = Math.max(1, Math.round(b.count/total*100));
+    return `<div class="${b.colour} rounded-sm h-5 flex items-center justify-center text-[9px] font-bold text-white" style="width:${pct}%" title="${b.label}: ${b.count}">${b.count}</div>`;
+  }).join('');
+
+  status.textContent = `${s.total_keywords} keywords · ${new Date().toLocaleTimeString()}`;
+  awrAllRows = data.rows;
+  renderAWRTable(awrAllRows);
+}
+
+// ── AIO shared helpers ─────────────────────────────────────────────────────
+function posColour(p) {
+  const n = parseInt(p);
+  if (n === 1) return 'text-green-400';
+  if (n <= 3)  return 'text-amber-400';
+  return 'text-slate-400';
+}
+function compColour(domain) {
+  if (!domain) return 'text-slate-400';
+  if (domain.includes('purpleparking'))    return 'text-purple-400';
+  if (domain.includes('airparks'))         return 'text-amber-400';
+  if (domain.includes('aph.'))             return 'text-teal-400';
+  if (domain.includes('travelsupermarket')) return 'text-violet-400';
+  if (domain.includes('booking.'))         return 'text-blue-400';
+  if (domain.includes('airport') || domain.includes('heathrow') || domain.includes('gatwick') || domain.includes('luton') || domain.includes('stansted') || domain.includes('manchester')) return 'text-sky-400';
+  return 'text-slate-400';
+}
+function renderCompBars(data, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const max = data[0]?.count || 1;
+  el.innerHTML = data.map(c => `
+    <div class="flex items-center gap-3">
+      <div class="w-48 text-xs truncate ${c.is_hx ? 'text-indigo-300 font-bold' : 'text-slate-400'}" title="${c.domain}">${c.domain}${c.is_hx ? ' ◄' : ''}</div>
+      <div class="flex-1 bg-slate-800 rounded-full h-4 relative overflow-hidden">
+        <div class="h-4 rounded-full ${c.is_hx ? 'bg-indigo-500' : 'bg-slate-600'}" style="width:${Math.round(c.count/max*100)}%"></div>
+      </div>
+      <div class="w-10 text-right text-xs font-bold ${c.is_hx ? 'text-indigo-300' : 'text-slate-400'}">${c.share}%</div>
+      <div class="w-8 text-right text-xs text-slate-500">${c.count}</div>
+    </div>`).join('');
+}
+
+// ── Parking AIO ────────────────────────────────────────────────────────────
+let parkingAIOLoaded = false;
+async function loadParkingAIO(force=false) {
+  if (parkingAIOLoaded && !force) return;
+  parkingAIOLoaded = true;
+  ['paio-total','paio-hx','paio-gap','paio-cov','paio-pos'].forEach(id => document.getElementById(id).textContent = '…');
+  document.getElementById('paio-hx-table').innerHTML  = '<tr><td colspan="3" class="py-3 text-slate-500 text-center">Loading AWR data…</td></tr>';
+  document.getElementById('paio-gap-table').innerHTML = '<tr><td colspan="2" class="py-3 text-slate-500 text-center">Loading…</td></tr>';
+
+  const d = await fetch('/api/awr/parking-aio').then(r=>r.json()).catch(e=>({error:e.message}));
+  if (d.error) {
+    document.getElementById('paio-total').textContent = 'Error';
+    document.getElementById('paio-hx-table').innerHTML = `<tr><td colspan="3" class="text-red-400 py-2">${d.error}</td></tr>`;
+    return;
+  }
+
+  document.getElementById('parking-aio-date').textContent = d.date;
+  document.getElementById('paio-total').textContent = d.unique_kws;
+  document.getElementById('paio-hx').textContent   = d.hx_count;
+  document.getElementById('paio-gap').textContent  = d.gap_count;
+  document.getElementById('paio-cov').textContent  = d.coverage + '%';
+  document.getElementById('paio-pos').textContent  = d.avg_pos;
+  document.getElementById('paio-hx-count').textContent  = d.hx_count;
+  document.getElementById('paio-gap-count').textContent = d.gap_count;
+
+  document.getElementById('paio-hx-table').innerHTML = d.hx_keywords.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-1.5 pr-2 font-bold ${posColour(r.pos)}">${r.pos}</td>
+      <td class="py-1.5 pr-2">${r.keyword}</td>
+      <td class="py-1.5 text-slate-500 truncate max-w-[140px]" title="${r.page}">${r.page}</td>
+    </tr>`).join('');
+
+  document.getElementById('paio-gap-table').innerHTML = d.gap_keywords.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-1.5 pr-2">${r.keyword}</td>
+      <td class="py-1.5 font-medium text-xs ${compColour(r.competitor)}">${r.competitor}</td>
+    </tr>`).join('');
+
+  renderCompBars(d.competitors, 'paio-comp-bars');
+}
+
+// ── Hotel AIO ──────────────────────────────────────────────────────────────
+let hotelAIOLoaded = false;
+async function loadHotelAIO(force=false) {
+  if (hotelAIOLoaded && !force) return;
+  hotelAIOLoaded = true;
+  ['haio-total','haio-hx','haio-gap','haio-cov','haio-pos'].forEach(id => document.getElementById(id).textContent = '…');
+  document.getElementById('haio-hx-table').innerHTML  = '<tr><td colspan="3" class="py-3 text-slate-500 text-center">Loading AWR data…</td></tr>';
+  document.getElementById('haio-gap-table').innerHTML = '<tr><td colspan="2" class="py-3 text-slate-500 text-center">Loading…</td></tr>';
+
+  const d = await fetch('/api/awr/hotel-aio').then(r=>r.json()).catch(e=>({error:e.message}));
+  if (d.error) {
+    document.getElementById('haio-total').textContent = 'Error';
+    document.getElementById('haio-hx-table').innerHTML = `<tr><td colspan="3" class="text-red-400 py-2">${d.error}</td></tr>`;
+    return;
+  }
+
+  document.getElementById('hotel-aio-date').textContent = d.date;
+  document.getElementById('haio-total').textContent = d.unique_kws;
+  document.getElementById('haio-hx').textContent   = d.hx_count;
+  document.getElementById('haio-gap').textContent  = d.gap_count;
+  document.getElementById('haio-cov').textContent  = d.coverage + '%';
+  document.getElementById('haio-pos').textContent  = d.avg_pos;
+  document.getElementById('haio-hx-count').textContent  = d.hx_count;
+  document.getElementById('haio-gap-count').textContent = d.gap_count;
+
+  document.getElementById('haio-hx-table').innerHTML = d.hx_keywords.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-1.5 pr-2 font-bold ${posColour(r.pos)}">${r.pos}</td>
+      <td class="py-1.5 pr-2">${r.keyword}</td>
+      <td class="py-1.5 text-slate-500 truncate max-w-[140px]" title="${r.page}">${r.page}</td>
+    </tr>`).join('');
+
+  document.getElementById('haio-gap-table').innerHTML = d.gap_keywords.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-1.5 pr-2">${r.keyword}</td>
+      <td class="py-1.5 font-medium text-xs ${compColour(r.competitor)}">${r.competitor}</td>
+    </tr>`).join('');
+
+  renderCompBars(d.competitors, 'haio-comp-bars');
+}
+
+// ── GA4 ────────────────────────────────────────────────────────────────────
+let ga4Chart = null;
+
+async function loadGA4() {
+  const [overview, pages, channels] = await Promise.all([
+    fetch('/api/ga4/overview').then(r=>r.json()).catch(()=>[]),
+    fetch('/api/ga4/top-pages').then(r=>r.json()).catch(()=>[]),
+    fetch('/api/ga4/channels').then(r=>r.json()).catch(()=>[])
+  ]);
+
+  if (!Array.isArray(overview) || overview.error) {
+    document.getElementById('ga4-sessions').textContent = overview.error || 'Error';
+    return;
+  }
+
+  // Stat cards
+  const totSessions  = overview.reduce((s,r)=>s+r.sessions,0);
+  const totUsers     = overview.reduce((s,r)=>s+r.users,0);
+  const totPageviews = overview.reduce((s,r)=>s+r.pageviews,0);
+  const avgBounce    = overview.reduce((s,r)=>s+r.bounce,0) / overview.length;
+  document.getElementById('ga4-sessions').textContent  = fmt(totSessions);
+  document.getElementById('ga4-users').textContent     = fmt(totUsers);
+  document.getElementById('ga4-pageviews').textContent = fmt(totPageviews);
+  document.getElementById('ga4-bounce').textContent    = avgBounce.toFixed(1)+'%';
+  document.querySelectorAll('#ga4-cards .card').forEach(c=>c.classList.remove('loading'));
+
+  // Chart
+  const labels   = overview.map(r => r.date.slice(4,6)+'/'+r.date.slice(6,8));
+  const sessions = overview.map(r => r.sessions);
+  const users    = overview.map(r => r.users);
+  if (ga4Chart) ga4Chart.destroy();
+  ga4Chart = new Chart(document.getElementById('ga4Chart'), {
+    data: { labels,
+      datasets: [
+        { type:'line', label:'Sessions', data:sessions, borderColor:'#818cf8', backgroundColor:'rgba(129,140,248,.15)', tension:.3, fill:true, yAxisID:'y' },
+        { type:'line', label:'Users',    data:users,    borderColor:'#34d399', backgroundColor:'rgba(52,211,153,.1)',   tension:.3, fill:false, yAxisID:'y' }
+      ]
+    },
+    options: {
+      responsive:true, interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{ labels:{ color:'#94a3b8', font:{size:11} } } },
+      scales:{
+        x:{ ticks:{color:'#64748b',font:{size:10}}, grid:{color:'#1e2235'} },
+        y:{ ticks:{color:'#94a3b8',font:{size:11},callback:v=>fmt(v)}, grid:{color:'#1e2235'} }
+      }
+    }
   });
-  document.getElementById('channelPanel').innerHTML = html;
+
+  // Top pages
+  const ptbody = document.getElementById('ga4-pages-table');
+  ptbody.innerHTML = (Array.isArray(pages)?pages:[]).map(p=>`
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-2 pr-2 text-slate-300 text-xs truncate max-w-[200px]" title="${p.page}">${p.page||'/'}</td>
+      <td class="py-2 text-right text-white font-medium">${fmt(p.sessions)}</td>
+      <td class="py-2 text-right text-slate-400">${p.bounce}%</td>
+    </tr>`).join('');
+
+  // Channels
+  const ctbody = document.getElementById('ga4-channels-table');
+  ctbody.innerHTML = (Array.isArray(channels)?channels:[]).map(c=>`
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40">
+      <td class="py-2 pr-2 text-slate-300 text-sm">${c.channel}</td>
+      <td class="py-2 text-right text-white font-medium">${fmt(c.sessions)}</td>
+      <td class="py-2 text-right text-slate-400">${fmt(c.users)}</td>
+      <td class="py-2 text-right text-green-400">${fmt(c.conversions)}</td>
+    </tr>`).join('');
 }
 
-function renderEngagement(rows, headers) {
-  if (!rows || !rows[0]) return;
-  const vals = rows[0].metricValues;
-  const get = idx => Number(vals[idx]?.value || 0);
-  const sessions = get(0), users = get(1), bounce = get(2), dur = get(3), engage = get(4), pagesPerSess = get(5);
-  document.getElementById('engagePanel').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      ${[
-        ['Sessions', fmt(sessions), ''],
-        ['Active Users', fmt(users), ''],
-        ['Bounce Rate', (bounce*100).toFixed(1)+'%', bounce<0.4?'✅':bounce<0.6?'⚠️':'🔴'],
-        ['Engagement Rate', (engage*100).toFixed(1)+'%', engage>0.6?'✅':'⚠️'],
-        ['Avg Session', fmtDur(dur), dur>90?'✅':'⚠️'],
-        ['Pages/Session', pagesPerSess.toFixed(2), ''],
-      ].map(([l,v,icon])=>`
-        <div style="background:var(--hx-light);border-radius:8px;padding:10px;">
-          <div style="font-size:0.68rem;color:var(--gray);font-weight:700;text-transform:uppercase;">${l}</div>
-          <div style="font-size:1.1rem;font-weight:800;color:var(--hx-blue);">${v} ${icon}</div>
-        </div>`).join('')}
-    </div>`;
-}
-
-function renderOpportunities(rows) {
-  const opps = (rows || [])
-    .filter(r => r.position >= 4 && r.position <= 30 && r.impressions > 2000 && r.ctr < 0.04)
-    .sort((a,b) => b.impressions - a.impressions)
-    .slice(0, 25);
-
-  if (!opps.length) { document.getElementById('oppPanel').innerHTML='<p>No major opportunities found</p>'; return; }
-  const maxI = Math.max(...opps.map(r=>r.impressions));
-  let html = `<table><thead><tr><th>#</th><th>Keyword</th><th>Impressions</th><th>Current CTR</th><th>Avg Pos</th><th>Est. Extra Clicks (if CTR doubles)</th></tr></thead><tbody>`;
-  opps.forEach((r,i) => {
-    const potential = Math.round(r.impressions * Math.min(r.ctr*3, 0.15)) - r.clicks;
-    html += `<tr>
-      <td style="color:#9ca3af;font-size:0.78rem">${i+1}</td>
-      <td>
-        <div class="kw" title="${r.keys[0]}" style="max-width:300px"><b>${r.keys[0]}</b></div>
-        ${bar(r.impressions,maxI,'orange')}
+// ── SerpAPI ────────────────────────────────────────────────────────────────
+async function loadSerpKeyword() {
+  const kw = document.getElementById('serp-input').value.trim() || 'airport parking';
+  document.getElementById('serp-table').innerHTML = '<tr><td colspan="3" class="py-4 text-center text-slate-500">Loading…</td></tr>';
+  document.getElementById('serp-meta').innerHTML = '';
+  const data = await fetch('/api/serp/rankings?q='+encodeURIComponent(kw)).then(r=>r.json()).catch(e=>({error:e.message}));
+  if (data.error) { document.getElementById('serp-meta').innerHTML = `<span class="text-red-400">${data.error}</span>`; return; }
+  document.getElementById('serp-meta').innerHTML = `
+    <span>Keyword: <strong class="text-white">${data.keyword}</strong></span>
+    <span>HX Position: <strong class="${data.hx_position ? 'text-green-400' : 'text-red-400'}">${data.hx_position || 'Not in top 10'}</strong></span>
+    <span>Ads: <strong class="text-yellow-400">${data.ads_top}</strong></span>
+    ${data.featured_snippet ? '<span class="text-indigo-400">Featured Snippet present</span>' : ''}
+  `;
+  document.getElementById('serp-table').innerHTML = data.results.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/40 ${r.is_hx ? 'bg-indigo-950/40' : ''}">
+      <td class="py-2 pr-3 font-bold ${r.is_hx ? 'text-indigo-400' : 'text-slate-500'}">${r.position}</td>
+      <td class="py-2 pr-4">
+        <div class="font-medium text-white text-sm ${r.is_hx ? 'text-indigo-300' : ''}">${r.title}</div>
+        <div class="text-xs text-slate-500 truncate max-w-xs">${r.link}</div>
       </td>
-      <td><b>${r.impressions>9999?(r.impressions/1000).toFixed(0)+'k':fmt(r.impressions)}</b></td>
-      <td class="ctr-low"><b>${fmtCtr(r.ctr)}</b></td>
-      <td>${posBadge(r.position)} <span style="color:#9ca3af;font-size:0.75rem">${fmtPos(r.position)}</span></td>
-      <td><span class="opp-tag opp-ctr" style="font-size:0.8rem">+${fmt(Math.max(0,potential))} clicks/month</span></td>
-    </tr>`;
-  });
-  html += '</tbody></table>';
-  document.getElementById('oppPanel').innerHTML = html;
+      <td class="py-2 text-xs text-slate-400 max-w-sm">${r.snippet||''}</td>
+    </tr>`).join('');
 }
 
-// ── TABS ──
-function switchTab(group, id, el) {
-  document.querySelectorAll(`#${group}-top,#${group}-opp,#${group}-pos,#${group}-ga`).forEach(t => { if(t) t.classList.remove('active'); });
-  const target = document.getElementById(`${group}-${id}`);
-  if (target) target.classList.add('active');
-  el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+async function loadSerpBulk() {
+  const grid = document.getElementById('serp-bulk-grid');
+  document.getElementById('serp-bulk').classList.remove('hidden');
+  grid.innerHTML = '<div class="col-span-2 text-slate-500 text-sm">Fetching 11 keywords… (may take ~20s)</div>';
+  const data = await fetch('/api/serp/bulk').then(r=>r.json()).catch(e=>([{error:e.message}]));
+  if (data.error) { grid.innerHTML = `<div class="text-red-400">${data.error}</div>`; return; }
+  grid.innerHTML = data.map(r => {
+    const pos = r.position;
+    const colour = !pos ? 'text-red-400' : pos <= 3 ? 'text-green-400' : pos <= 10 ? 'text-yellow-400' : 'text-slate-400';
+    return `<div class="flex justify-between items-center bg-slate-800/50 rounded-lg px-4 py-2">
+      <span class="text-slate-300 text-sm">${r.keyword}</span>
+      <span class="font-bold ${colour}">${pos ? '#'+pos : '—'}</span>
+    </div>`;
+  }).join('');
 }
 
-// ── MAIN LOAD ──
-async function loadAll() {
-  document.getElementById('statusText').textContent = '● Loading...';
-  document.getElementById('statusText').className = 'status';
+document.getElementById('serp-input').addEventListener('keydown', e => { if (e.key === 'Enter') loadSerpKeyword(); });
 
-  const end = dateStr(1);
-  const start = dateStr(DAYS);
-  const prevEnd = dateStr(DAYS + 1);
-  const prevStart = dateStr(DAYS * 2);
+// ── SimilarWeb ─────────────────────────────────────────────────────────────
+let swVisitsChart = null, swSourcesChart = null;
 
-  const d = new Date(); d.setDate(d.getDate() - DAYS);
-  document.getElementById('dateRangeLabel').textContent = `${fmtDate(start)} → ${fmtDate(end)}`;
+async function loadSimilarWeb() {
+  const [overview, sources] = await Promise.all([
+    fetch('/api/similarweb/overview').then(r=>r.json()).catch(()=>({})),
+    fetch('/api/similarweb/sources').then(r=>r.json()).catch(()=>[])
+  ]);
 
-  try {
-    // Parallel requests
-    const [scCurr, scPrev, scKw, scPg, gaOverview, gaChannels, gaPages] = await Promise.all([
+  if (overview.error) {
+    document.getElementById('sw-visits').textContent = 'Error';
+    return;
+  }
 
-      // SC: overall metrics current period
-      scQuery({ startDate: start, endDate: end, metrics: ['clicks','impressions','ctr','position'], rowLimit: 1 }),
+  // Summary cards
+  const visits = overview.visits || [];
+  if (visits.length) {
+    const avg = visits.reduce((s,v)=>s+v.visits,0) / visits.length;
+    document.getElementById('sw-visits').textContent = fmt(Math.round(avg));
+  }
+  const bounce = overview.bounce || [];
+  if (bounce.length) {
+    const avg = bounce.reduce((s,v)=>s+v.bounce_rate,0) / bounce.length;
+    document.getElementById('sw-bounce').textContent = (avg*100).toFixed(1)+'%';
+  }
+  const dur = overview.duration || [];
+  if (dur.length) {
+    const avg = dur.reduce((s,v)=>s+v.average_visit_duration,0) / dur.length;
+    const mins = Math.floor(avg/60), secs = Math.round(avg%60);
+    document.getElementById('sw-duration').textContent = `${mins}m ${secs}s`;
+  }
+  const pages = overview.pages || [];
+  if (pages.length) {
+    const avg = pages.reduce((s,v)=>s+v.pages_per_visit,0) / pages.length;
+    document.getElementById('sw-pages').textContent = avg.toFixed(1);
+  }
+  document.querySelectorAll('#sw-cards .card').forEach(c=>c.classList.remove('loading'));
 
-      // SC: overall metrics prev period
-      scQuery({ startDate: prevStart, endDate: prevEnd, metrics: ['clicks','impressions','ctr','position'], rowLimit: 1 }),
+  // Visits trend chart
+  if (visits.length) {
+    const labels = visits.map(v=>v.date.slice(0,7));
+    const vals   = visits.map(v=>Math.round(v.visits));
+    if (swVisitsChart) swVisitsChart.destroy();
+    swVisitsChart = new Chart(document.getElementById('swVisitsChart'), {
+      type: 'line',
+      data: { labels, datasets: [{ label:'Monthly Visits (UK)', data:vals,
+        borderColor:'#34d399', backgroundColor:'rgba(52,211,153,.15)',
+        tension:.3, fill:true }] },
+      options: { responsive:true, plugins:{ legend:{labels:{color:'#94a3b8',font:{size:11}}} },
+        scales:{ x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e2235'}},
+                 y:{ticks:{color:'#94a3b8',font:{size:11},callback:v=>fmt(v)},grid:{color:'#1e2235'}} } }
+    });
+  }
 
-      // SC: top keywords
-      scQuery({ startDate: start, endDate: end, dimensions: ['query'], metrics: ['clicks','impressions','ctr','position'], rowLimit: 500, orderBy: [{fieldName:'clicks',sortOrder:'descending'}] }),
-
-      // SC: top pages
-      scQuery({ startDate: start, endDate: end, dimensions: ['page'], metrics: ['clicks','impressions','ctr','position'], rowLimit: 25, orderBy: [{fieldName:'clicks',sortOrder:'descending'}] }),
-
-      // GA4: overview
-      gaQuery({ dateRanges:[{startDate:start,endDate:end}], metrics:[{name:'sessions'},{name:'activeUsers'},{name:'bounceRate'},{name:'averageSessionDuration'},{name:'engagementRate'},{name:'newUsers'}] }),
-
-      // GA4: channels
-      gaQuery({ dateRanges:[{startDate:start,endDate:end}], dimensions:[{name:'sessionDefaultChannelGroup'}], metrics:[{name:'sessions'},{name:'activeUsers'}], orderBys:[{metric:{metricName:'sessions'},desc:true}] }),
-
-      // GA4: top pages
-      gaQuery({ dateRanges:[{startDate:start,endDate:end}], dimensions:[{name:'pagePath'}], metrics:[{name:'sessions'},{name:'bounceRate'},{name:'averageSessionDuration'}], orderBys:[{metric:{metricName:'sessions'},desc:true}], limit:25 }),
-    ]);
-
-    // Extract summary row from SC
-    const curr = scCurr.rows?.[0] || {clicks:0,impressions:0,ctr:0,position:0};
-    const prev = scPrev.rows?.[0] || {clicks:0,impressions:0,ctr:0,position:0};
-
-    renderSCCards(curr, prev);
-    renderGACards(gaOverview);
-    renderKeywords(scKw.rows || []);
-    renderPages(scPg.rows || [], gaPages.rows || []);
-    renderChannels(gaChannels.rows || [], gaChannels.metricHeaders || []);
-    renderEngagement(gaOverview.rows || [], gaOverview.metricHeaders || []);
-    renderOpportunities(scKw.rows || []);
-
-    document.getElementById('statusText').textContent = '● Live';
-    document.getElementById('statusText').className = 'status live';
-    document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleString('en-GB')}`;
-
-  } catch(e) {
-    document.getElementById('statusText').textContent = '● Error';
-    document.getElementById('statusText').className = 'status';
-    console.error(e);
-    ['scCards','gaCards'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = `<div class="err">Error loading data: ${e.message}</div>`;
+  // Sources donut chart
+  document.getElementById('sw-sources-loading').classList.add('hidden');
+  if (Array.isArray(sources) && sources.length) {
+    document.getElementById('sw-sources-wrap').classList.remove('hidden');
+    const colours = ['#818cf8','#34d399','#fb923c','#f472b6','#60a5fa','#a78bfa','#fbbf24'];
+    if (swSourcesChart) swSourcesChart.destroy();
+    swSourcesChart = new Chart(document.getElementById('swSourcesChart'), {
+      type: 'doughnut',
+      data: {
+        labels: sources.map(s=>s.source_type),
+        datasets: [{ data: sources.map(s=>+(s.share*100).toFixed(1)),
+          backgroundColor: colours, borderWidth: 0 }]
+      },
+      options: { responsive:true, plugins:{
+        legend:{position:'right',labels:{color:'#94a3b8',font:{size:11}}},
+        tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed}%`}}
+      }}
     });
   }
 }
 
-// Init
-loadAll();
+// ── Init ───────────────────────────────────────────────────────────────────
+function refreshAll() {
+  loadPerformance();
+  loadTopPages();
+  loadTopQueries();
+  loadBing();
+  loadTrips();
+  // SEMrush, AWR, AIO, GA4, SimilarWeb, International load on first tab visit
+  // Reset loaded flags so they can refresh if manually triggered
+}
+
+document.addEventListener('enter-keypress', e => {
+  if (e.key === 'Enter') inspectUrl();
+});
+document.getElementById('inspect-url').addEventListener('keypress', e => {
+  if (e.key === 'Enter') inspectUrl();
+});
+
+showTab('seo', document.getElementById('tab-btn-seo'));
+refreshAll();
 </script>
 </body>
 </html>
