@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snatch (2000) — Guy Ritchie</title>
+  <meta name="description" content="Snatch (2000) directed by Guy Ritchie. Starring Brad Pitt, Jason Statham, Vinnie Jones. A masterclass in British crime cinema.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a84c;
+      --red: #b01c2e;
+      --dark: #0a0a0a;
+      --dark2: #111;
+      --dark3: #1a1a1a;
+      --light: #f0ead6;
+      --grey: #888;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      line-height: 1.6;
+    }
+    a { color: var(--gold); text-decoration: none; }
+
+    /* ---- HERO ---- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 60% 40%, rgba(176,28,46,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
+    }
+    .bullet-holes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      background-image:
+        radial-gradient(circle 3px, #fff 100%, transparent 100%),
+        radial-gradient(circle 2px, #fff 100%, transparent 100%),
+        radial-gradient(circle 4px, #fff 100%, transparent 100%),
+        radial-gradient(circle 2px, #fff 100%, transparent 100%),
+        radial-gradient(circle 3px, #fff 100%, transparent 100%);
+      background-position: 15% 25%, 75% 15%, 45% 60%, 85% 75%, 30% 80%;
+      background-repeat: no-repeat;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+    .rating-badge {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 3px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: clamp(4rem, 12vw, 10rem);
+      font-weight: 900;
+      line-height: .95;
+      letter-spacing: -.03em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .hero h1 span {
+      display: block;
+      color: var(--gold);
+      font-size: clamp(1.5rem, 4vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: .2em;
+      margin-top: .5rem;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .meta-item {
+      font-size: .85rem;
+      color: var(--grey);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .meta-item strong {
+      display: block;
+      color: var(--light);
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .hero-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 2rem 0;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: rgba(240,234,214,0.75);
+      max-width: 600px;
+      font-style: italic;
+      line-height: 1.7;
+    }
+    .star-rating {
+      display: flex;
+      gap: 3px;
+      margin-top: 1.5rem;
+      align-items: center;
+    }
+    .star {
+      width: 20px;
+      height: 20px;
+      fill: var(--gold);
+    }
+    .star-label {
+      font-size: .9rem;
+      color: var(--gold);
+      margin-left: .5rem;
+      font-weight: 700;
+    }
+
+    /* ---- SCROLL INDICATOR ---- */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      opacity: .4;
+    }
+    .scroll-hint span { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: .4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ---- SECTIONS ---- */
+    section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .75rem;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ---- SYNOPSIS ---- */
+    .synopsis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .synopsis-text p {
+      color: rgba(240,234,214,0.8);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .film-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: var(--dark3);
+    }
+    .stat-row:hover { background: rgba(201,168,76,0.08); }
+    .stat-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--grey); }
+    .stat-value { font-size: .95rem; font-weight: 600; color: var(--light); text-align: right; }
+
+    /* ---- CAST ---- */
+    .cast-section { background: var(--dark2); padding: 5rem 0; }
+    .cast-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .cast-card {
+      background: var(--dark3);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cast-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform .25s;
+      transform-origin: left;
+    }
+    .cast-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-3px); }
+    .cast-card:hover::before { transform: scaleX(1); }
+    .cast-name { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: .25rem; }
+    .cast-role { font-size: .85rem; color: var(--gold); margin-bottom: .5rem; font-style: italic; }
+    .cast-actor { font-size: .8rem; color: var(--grey); text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ---- QUOTES ---- */
+    .quotes-section { background: var(--red); padding: 5rem 2rem; }
+    .quotes-inner { max-width: 1200px; margin: 0 auto; }
+    .quotes-section h2 { color: #fff; }
+    .quotes-section .section-label { color: rgba(255,255,255,0.6); }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .quote-card {
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      border-left: 4px solid rgba(255,255,255,0.3);
+      transition: border-color .2s;
+    }
+    .quote-card:hover { border-left-color: var(--gold); }
+    .quote-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.9);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .quote-attr { font-size: .8rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: .1em; }
+
+    /* ---- STORYLINES ---- */
+    .storylines {
+      margin-top: 3rem;
+    }
+    .storyline {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      align-items: flex-start;
+    }
+    .storyline:last-child { border-bottom: none; }
+    .storyline-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: rgba(201,168,76,0.2);
+      line-height: 1;
+      min-width: 3rem;
+    }
+    .storyline-content h3 { font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-bottom: .4rem; }
+    .storyline-content p { font-size: .9rem; color: rgba(240,234,214,0.7); line-height: 1.7; }
+
+    /* ---- VERDICT ---- */
+    .verdict-section {
+      text-align: center;
+      padding: 6rem 2rem;
+      background: var(--dark2);
+    }
+    .verdict-inner { max-width: 700px; margin: 0 auto; }
+    .verdict-score {
+      font-size: 8rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--gold);
+      display: block;
+    }
+    .verdict-label { font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--grey); margin-bottom: 2rem; }
+    .verdict-text {
+      font-size: 1.15rem;
+      color: rgba(240,234,214,0.8);
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--grey);
+      letter-spacing: .05em;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .synopsis-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero h1 { font-size: clamp(3rem, 15vw, 5rem); }
+      .cast-grid { grid-template-columns: repeat(2, 1fr); }
+      .verdict-score { font-size: 5rem; }
+    }
+    @media (max-width: 480px) {
+      .cast-grid { grid-template-columns: 1fr; }
+      .hero-meta { gap: 1rem; }
+      section { padding: 3rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="bullet-holes"></div>
+  <div class="hero-content">
+    <div class="rating-badge">18 &nbsp;|&nbsp; Crime &nbsp;|&nbsp; Comedy</div>
+    <h1>Snatch
+      <span>A Guy Ritchie Film &mdash; 2000</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">
+      "You should never underestimate the predictability of stupidity."
+    </p>
+    <div class="hero-meta">
+      <div class="meta-item">Director <strong>Guy Ritchie</strong></div>
+      <div class="meta-item">Released <strong>September 1, 2000</strong></div>
+      <div class="meta-item">Runtime <strong>102 minutes</strong></div>
+      <div class="meta-item">Budget <strong>$10 million</strong></div>
+      <div class="meta-item">Box Office <strong>$83.6 million</strong></div>
+    </div>
+    <div class="star-rating">
+      <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <svg class="star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span class="star-label">5/5 &mdash; An absolute classic</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- SYNOPSIS -->
+<section>
+  <div class="synopsis-grid">
+    <div class="synopsis-text">
+      <div class="section-label">The Story</div>
+      <h2>Diamonds, dogs,<br>and absolute mayhem.</h2>
+      <p>
+        A stolen diamond from Antwerp sets off a chain of spectacularly bad decisions across London's criminal underworld. Turkish and Tommy &mdash; small-time boxing promoters &mdash; get tangled up with ruthless gangster Brick Top when their fighter goes missing. Meanwhile, a group of inept thieves steal the diamond from under the nose of Boris the Blade, a thoroughly unreliable Russian.
+      </p>
+      <p>
+        Add in Bullet Tooth Tony, the most terrifying debt collector in London; Franky Four Fingers, a compulsive gambler who can't stop long enough to deliver the stone; and Mickey O'Neil, a bareknuckle boxing Irish pikey who may or may not be throwing fights &mdash; and you have a perfect storm of organised chaos.
+      </p>
+      <p>
+        Multiple storylines collide at breakneck speed, edited with razor-sharp precision and soaked in Ritchie's signature style: freeze-frames, rewinds, ironic voiceover, and dialogue so quotable it still lives rent-free in the collective British consciousness 25 years on.
+      </p>
+    </div>
+    <div>
+      <div class="film-stats">
+        <div class="stat-row"><span class="stat-label">Director</span><span class="stat-value">Guy Ritchie</span></div>
+        <div class="stat-row"><span class="stat-label">Writers</span><span class="stat-value">Guy Ritchie</span></div>
+        <div class="stat-row"><span class="stat-label">Producers</span><span class="stat-value">Matthew Vaughn</span></div>
+        <div class="stat-row"><span class="stat-label">Cinematography</span><span class="stat-value">Tim Maurice-Jones</span></div>
+        <div class="stat-row"><span class="stat-label">Music</span><span class="stat-value">John Murphy, Oasis</span></div>
+        <div class="stat-row"><span class="stat-label">Studio</span><span class="stat-value">Columbia Pictures</span></div>
+        <div class="stat-row"><span class="stat-label">Country</span><span class="stat-value">United Kingdom</span></div>
+        <div class="stat-row"><span class="stat-label">Language</span><span class="stat-value">English (and Mickey)</span></div>
+        <div class="stat-row"><span class="stat-label">IMDB Rating</span><span class="stat-value">8.3 / 10</span></div>
+        <div class="stat-row"><span class="stat-label">Rotten Tomatoes</span><span class="stat-value">73% Critics &nbsp;|&nbsp; 96% Audience</span></div>
+        <div class="stat-row"><span class="stat-label">Budget</span><span class="stat-value">$10 million</span></div>
+        <div class="stat-row"><span class="stat-label">Worldwide gross</span><span class="stat-value">$83.6 million</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORYLINES -->
+  <div class="storylines">
+    <div class="section-label" style="margin-top:3rem">The Threads</div>
+    <h2>Five storylines.<br>One diamond.</h2>
+    <div class="storyline">
+      <span class="storyline-num">01</span>
+      <div class="storyline-content">
+        <h3>Turkish &amp; Tommy</h3>
+        <p>London boxing promoters in way over their heads with Brick Top after their fighter bites the dust. They hire Mickey the pikey to replace him &mdash; a decision that goes immediately sideways.</p>
+      </div>
+    </div>
+    <div class="storyline">
+      <span class="storyline-num">02</span>
+      <div class="storyline-content">
+        <h3>Franky Four Fingers &amp; the Diamond</h3>
+        <p>Benicio del Toro's Franky steals an 84-carat diamond in Antwerp and is supposed to deliver it to New York jeweller Avi. He can't stop gambling long enough to make the handoff.</p>
+      </div>
+    </div>
+    <div class="storyline">
+      <span class="storyline-num">03</span>
+      <div class="storyline-content">
+        <h3>Boris the Blade</h3>
+        <p>"Boris the Blade. Boris the Bullet-Dodger." He wants the diamond for himself, hires the incompetent Cousin Avi gang to steal it, and keeps ending up shot. Doesn't die. Keeps coming back.</p>
+      </div>
+    </div>
+    <div class="storyline">
+      <span class="storyline-num">04</span>
+      <div class="storyline-content">
+        <h3>Avi &amp; Bullet Tooth Tony</h3>
+        <p>Dennis Farina as the exasperated New York jeweller flying back and forth to London. Enlists the services of Bullet Tooth Tony &mdash; a man so hard he has a bullet embedded in his chest as jewellery.</p>
+      </div>
+    </div>
+    <div class="storyline">
+      <span class="storyline-num">05</span>
+      <div class="storyline-content">
+        <h3>Mickey O'Neil</h3>
+        <p>Brad Pitt in the performance of his career. A traveller who fights bareknuckle for fun, speaks entirely unintelligible Gaelic-tinged English, and whose mother's caravan becomes the fulcrum around which the entire plot pivots.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAST -->
+<div class="cast-section">
+  <div class="cast-inner">
+    <div class="section-label">The Players</div>
+    <h2>An exceptional ensemble.</h2>
+    <div class="cast-grid">
+      <div class="cast-card">
+        <div class="cast-name">Mickey O'Neil</div>
+        <div class="cast-role">The Pikey Boxer</div>
+        <div class="cast-actor">Brad Pitt</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Turkish</div>
+        <div class="cast-role">The Narrator</div>
+        <div class="cast-actor">Jason Statham</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Bullet Tooth Tony</div>
+        <div class="cast-role">The Enforcer</div>
+        <div class="cast-actor">Vinnie Jones</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Brick Top</div>
+        <div class="cast-role">The Gangster</div>
+        <div class="cast-actor">Alan Ford</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Avi</div>
+        <div class="cast-role">The Jeweller</div>
+        <div class="cast-actor">Dennis Farina</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Franky Four Fingers</div>
+        <div class="cast-role">The Thief</div>
+        <div class="cast-actor">Benicio del Toro</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Boris the Blade</div>
+        <div class="cast-role">The Russian</div>
+        <div class="cast-actor">Rade Serbedzija</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Tommy</div>
+        <div class="cast-role">Turkish's Partner</div>
+        <div class="cast-actor">Stephen Graham</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Sol</div>
+        <div class="cast-role">The Fence</div>
+        <div class="cast-actor">Lennie James</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Doug the Head</div>
+        <div class="cast-role">The Middleman</div>
+        <div class="cast-actor">Mike Reid</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Tyrone</div>
+        <div class="cast-role">The Driver</div>
+        <div class="cast-actor">Ade</div>
+      </div>
+      <div class="cast-card">
+        <div class="cast-name">Gorgeous George</div>
+        <div class="cast-role">The Fighter</div>
+        <div class="cast-actor">Adam Fogerty</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTES -->
+<div class="quotes-section">
+  <div class="quotes-inner">
+    <div class="section-label">Quotable Forever</div>
+    <h2>The lines that never leave you.</h2>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <p class="quote-text">"You should never underestimate the predictability of stupidity."</p>
+        <div class="quote-attr">Bullet Tooth Tony</div>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">"In the quiet words of the Virgin Mary, come again?"</p>
+        <div class="quote-attr">Turkish</div>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">"Do you know what 'nemesis' means? A righteous infliction of retribution manifested by an appropriate agent. Personified in this case by an 'orrible c***. Me."</p>
+        <div class="quote-attr">Brick Top</div>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">"I'm tellin' ya, London's changin'. I come 'ere once, I couldn't even get a bloody cup of tea."</p>
+        <div class="quote-attr">Avi</div>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">"Bullshitting the gift of the gab runs in the family. It's what we do."</p>
+        <div class="quote-attr">Tommy</div>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">"Boris the Blade? As in, Boris the Bullet-Dodger?"</p>
+        <div class="quote-attr">Avi</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict-section">
+  <div class="verdict-inner">
+    <div class="section-label">The Verdict</div>
+    <span class="verdict-score">10</span>
+    <div class="verdict-label">Out of 10 &mdash; Perfect</div>
+    <p class="verdict-text">
+      Twenty-five years on and Snatch remains untouchable. The editing is masterful, the performances are electric, and the screenplay is airtight &mdash; every thread pulled tight at exactly the right moment. Brad Pitt is otherworldly. Alan Ford as Brick Top is one of cinema's great villains. Guy Ritchie never made anything better. One of the finest British films ever put to celluloid.
+    </p>
+    <div style="margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://www.imdb.com/title/tt0208092/" target="_blank" rel="noopener" style="display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.4);color:var(--gold);padding:.7rem 1.5rem;border-radius:8px;font-size:.9rem;font-weight:600;letter-spacing:.05em;transition:background .2s;" onmouseover="this.style.background='rgba(201,168,76,0.25)'" onmouseout="this.style.background='rgba(201,168,76,0.15)'">View on IMDB</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Snatch &copy; 2000 Columbia Pictures / SKA Films &mdash; Directed by Guy Ritchie</p>
+</footer>
+
+</body>
+</html>
